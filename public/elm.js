@@ -7879,6 +7879,64 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _user$project$Main$virtualKeyboard = function (model) {
+	var velocityText = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'Velocity is ',
+		_elm_lang$core$Basics$toString(
+			function (_) {
+				return _.velocity;
+			}(model)));
+	var endOctave = _elm_lang$core$Basics$toString(
+		A2(
+			F2(
+				function (x, y) {
+					return x + y;
+				}),
+			1,
+			function (_) {
+				return _.octave;
+			}(model)));
+	var startOctave = _elm_lang$core$Basics$toString(
+		function (_) {
+			return _.octave;
+		}(model));
+	var octaveText = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'Octave is C',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			startOctave,
+			A2(_elm_lang$core$Basics_ops['++'], ' to C', endOctave)));
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('virtual-keyboard')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(octaveText)
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(velocityText)
+					]))
+			]));
+};
+var _user$project$Main$view = function (model) {
+	return _user$project$Main$virtualKeyboard(model);
+};
 var _user$project$Main$octaveUp = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -7968,102 +8026,6 @@ var _user$project$Main$VelocityDown = {ctor: 'VelocityDown'};
 var _user$project$Main$VelocityUp = {ctor: 'VelocityUp'};
 var _user$project$Main$OctaveDown = {ctor: 'OctaveDown'};
 var _user$project$Main$OctaveUp = {ctor: 'OctaveUp'};
-var _user$project$Main$virtualKeyboard = function (model) {
-	var velocityText = _elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			'Velocity is ',
-			_elm_lang$core$Basics$toString(
-				function (_) {
-					return _.velocity;
-				}(model))));
-	var endOctave = _elm_lang$core$Basics$toString(
-		A2(
-			F2(
-				function (x, y) {
-					return x + y;
-				}),
-			1,
-			function (_) {
-				return _.octave;
-			}(model)));
-	var startOctave = _elm_lang$core$Basics$toString(
-		function (_) {
-			return _.octave;
-		}(model));
-	var octaveText = _elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			'Octave is C',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				startOctave,
-				A2(_elm_lang$core$Basics_ops['++'], ' to C', endOctave))));
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('virtual-keyboard')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$OctaveDown)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('-')
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[octaveText])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$OctaveUp)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('+')
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$VelocityDown)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('-')
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[velocityText])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$VelocityUp)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('+')
-					]))
-			]));
-};
-var _user$project$Main$view = function (model) {
-	return _user$project$Main$virtualKeyboard(model);
-};
 var _user$project$Main$NoOp = {ctor: 'NoOp'};
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$keyboard$Keyboard$presses(
@@ -8074,7 +8036,11 @@ var _user$project$Main$subscriptions = function (model) {
 				symbol,
 				_elm_lang$core$Native_Utils.chr('z')) ? _user$project$Main$OctaveDown : (_elm_lang$core$Native_Utils.eq(
 				symbol,
-				_elm_lang$core$Native_Utils.chr('x')) ? _user$project$Main$OctaveUp : _user$project$Main$NoOp);
+				_elm_lang$core$Native_Utils.chr('x')) ? _user$project$Main$OctaveUp : (_elm_lang$core$Native_Utils.eq(
+				symbol,
+				_elm_lang$core$Native_Utils.chr('c')) ? _user$project$Main$VelocityDown : (_elm_lang$core$Native_Utils.eq(
+				symbol,
+				_elm_lang$core$Native_Utils.chr('v')) ? _user$project$Main$VelocityUp : _user$project$Main$NoOp)));
 		});
 };
 var _user$project$Main$main = {

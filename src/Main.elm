@@ -119,19 +119,16 @@ virtualKeyboard model =
       model |> .octave |> (+) 1 |> toString
 
     octaveText = 
-      "Octave is C" ++ startOctave ++ " to C" ++ endOctave |> text
+      "Octave is C" ++ startOctave ++ " to C" ++ endOctave
 
     velocityText = 
-      ("Velocity is " ++ (model |> .velocity |> toString)) |> text
+      ("Velocity is " ++ (model |> .velocity |> toString))
 
   in
-    div [ class "virtual-keyboard" ]
-      [ button [ onClick OctaveDown ] [ text "-" ]
-      , div [] [ octaveText ]
-      , button [ onClick OctaveUp ] [ text "+" ]
-      , button [ onClick VelocityDown ] [ text "-" ]
-      , div [] [ velocityText ]
-      , button [ onClick VelocityUp ] [ text "+" ]
+    div
+      [ class "virtual-keyboard" ]
+      [ div [] [ octaveText |> text ]
+      , div [] [ velocityText |> text ]
       ]
 
 -- Subscriptions
@@ -147,6 +144,12 @@ subscriptions model =
       else if symbol == 'x' then
         OctaveUp
         
+      else if symbol == 'c' then
+        VelocityDown
+        
+      else if symbol == 'v' then
+        VelocityUp
+
       else
         NoOp
   )
