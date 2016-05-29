@@ -9,7 +9,6 @@ import MyPort exposing (..)
 import Note exposing (..)
 import MIDI exposing (..)
 
--- Main
 main : Program Never
 main =
   Html.program
@@ -19,14 +18,12 @@ main =
     , subscriptions = subscriptions
     }
 
--- Model
 type alias Model =
   { octave   : Octave
   , velocity : Velocity
   }
 
 
--- Init
 init : (Model, Cmd msg)
 init =
   (,)
