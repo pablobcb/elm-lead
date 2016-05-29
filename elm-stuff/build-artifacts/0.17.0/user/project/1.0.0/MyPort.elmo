@@ -1,5 +1,0 @@
-var _user$project$MyPort$noteOn = _elm_lang$core$Native_Platform.outgoingPort(
-	'noteOn',
-	function (v) {
-		return [v._0, v._1];
-	});
