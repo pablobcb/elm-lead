@@ -7,6 +7,7 @@ import Debug exposing (..)
 import Char exposing (..)
 import MyPort exposing (..)
 import Note exposing (..)
+import MIDI exposing (..)
 
 -- Main
 main : Program Never
@@ -14,7 +15,7 @@ main =
   Html.program
     { init = init
     , view = view
-    , update = update 
+    , update = update
     , subscriptions = subscriptions
     }
 
@@ -64,10 +65,10 @@ update msg model =
     VelocityUp ->
       (velocityUp model,  Cmd.none)
 
-    KeyOn symbol->
-      (model, noteOn (88, (.velocity model)) )
-      
-    --  let 
+    KeyOn symbol ->
+      (model, makeMidiMessage 44 model.velocity |> noteOn)
+
+    --  let
     --    vel = .velocity model
     --    octave = .octave model
     --  in
@@ -92,21 +93,21 @@ update msg model =
 
     NoteOff note->
       (model, Cmd.none)
-  
+
 
 --noteOn : NoteRepresentation -> Model
 --noteOn {octave, velocity, note} =
---  Debug.log "AEEEEE" 
+--  Debug.log "AEEEEE"
 
 
 
 velocityDown : Model -> Model
 velocityDown model =
-  let 
+  let
     vel = .velocity model
 
-  in 
-    { model | velocity = 
+  in
+    { model | velocity =
       if vel < 40 then
         1
       else if vel == 127 then
@@ -118,16 +119,16 @@ velocityDown model =
 
 velocityUp : Model -> Model
 velocityUp model =
-  let 
+  let
     vel = .velocity model
 
-  in 
+  in
     { model | velocity =
       if vel == 1 then
         20
       else if vel >= 120 then
         127
-      else 
+      else
         vel + 20
     }
 
@@ -156,10 +157,10 @@ virtualKeyboard model =
     endOctave =
       model |> .octave |> (+) 1 |> toString
 
-    octaveText = 
+    octaveText =
       "Octave is C" ++ startOctave ++ " to C" ++ endOctave
 
-    velocityText = 
+    velocityText =
       ("Velocity is " ++ (model |> .velocity |> toString))
 
   in
@@ -171,7 +172,7 @@ virtualKeyboard model =
 
 -- Subscriptions
 handleKey : Keyboard.KeyCode -> Msg
-handleKey keyCode = 
+handleKey keyCode =
   case keyCode |> Char.fromCode |> toLower of
   -- Keyboard Controls
     'z' ->
@@ -194,4 +195,3 @@ handleKey keyCode =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Keyboard.presses handleKey
-  

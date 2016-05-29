@@ -1,0 +1,35 @@
+{
+  "name": "Osiris",
+  "version": "0.0.1",
+  "description": "Browser-based synthetizer",
+  "main": "dist/index.html",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablobcb/elm-osiris.git"
+  },
+  "author": "Pablo Botelho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pablobcb/elm-osiris/issues"
+  },
+  "homepage": "https://github.com/pablobcb/elm-osiris#readme",
+  "devDependencies": {
+    "babel-core": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "css-loader": "^0.23.1",
+    "elm-webpack-loader": "^3.0.3",
+    "eslint": "^2.11.0",
+    "eslint-loader": "^1.3.0",
+    "style-loader": "^0.13.1",
+    "stylint": "^1.3.10",
+    "stylint-loader": "^1.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.1.0",
+    "webpack": "^1.13.1"
+  }
+}

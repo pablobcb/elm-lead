@@ -1,13 +1,23 @@
-module MIDI exposing (..)
+module MIDI exposing (..) -- where
 
 import Note exposing (..)
 
 type alias MidiNote = Int
+type alias MidiMessage =
+  { note     : MidiNote
+  , velocity : Velocity
+  }
+
+makeMidiMessage : MidiNote -> Velocity -> MidiMessage
+makeMidiMessage note velocity =
+  { note     = note
+  , velocity = velocity
+  }
 
 
 --noteToMIDINumber : (Note, Octave) -> MidiNote
---noteToMIDINumber note = 
---  case note of 
+--noteToMIDINumber note =
+--  case note of
 --    (C , -2) -> 0
 --    (Db, -2) -> 1
 --    (D , -2) -> 2

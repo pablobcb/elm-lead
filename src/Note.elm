@@ -1,11 +1,11 @@
-module Note exposing (..)
+module Note exposing (..) -- where
 
 type alias Octave = Int
 
 type alias Velocity = Int
 
 type Note
-  = C 
+  = C
   | Db
   | D
   | Eb
@@ -17,4 +17,3 @@ type Note
   | A
   | Bb
   | B
-
