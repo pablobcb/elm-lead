@@ -1,5 +1,3 @@
-import utils from './utils.js'
-
 export default class AudioEngine {
 
 	context = new AudioContext
@@ -48,13 +46,17 @@ export default class AudioEngine {
 		}
 	}
 
+	frequencyFromNoteNumber = (note : number) : number => (
+		440 * Math.pow(2, (note - 69) / 12)
+	)
+
 	noteOn = (message : Object) => {
 		const { note } = message
 
 		const osc1 = this.context.createOscillator()
 		this.oscillators[note] = [osc1]
 
-		osc1.frequency.value = utils.frequencyFromNoteNumber(note)
+		osc1.frequency.value = this.frequencyFromNoteNumber(note)
 		osc1.type = 'sine'
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)
