@@ -17,15 +17,13 @@ export default class Application {
 	}
 
 	// this is our raw MIDI data, inputs, outputs, and sysex status
-	onMIDISuccess (midiAccess) {
+	onMIDISuccess (midiAccess : MIDIAccess) {
 		this.audioEngine = new AudioEngine(midiAccess)
 
-		this.app.ports.noteOn.subscribe(midiNote =>
-			this.audioEngine.noteOn(midiNote.note, midiNote.velocity)
-		)
+		this.app.ports.noteOn.subscribe(this.audioEngine.noteOn)
 	}
 
-	onMIDIFailure (e) {
+	onMIDIFailure (e : Error) {
 		console.log(`No access to MIDI devices or your browser doesn\'t \
 			support WebMIDI API. Please use WebMIDIAPIShim ${e}`)
 	}

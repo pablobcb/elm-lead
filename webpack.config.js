@@ -35,6 +35,9 @@ module.exports = {
 				query: {
 					presets: ['es2015'],
 					plugins: [
+						'typecheck',
+						'syntax-flow',
+						'transform-flow-strip-types',
 						'transform-class-properties',
 						'transform-function-bind'
 					]

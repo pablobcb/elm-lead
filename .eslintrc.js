@@ -9,6 +9,9 @@ module.exports = {
 	parserOptions: {
 		sourceType: "module"
 	},
+	plugins: [
+		"flowtype"
+	],
 	rules: {
 		"indent": [ "warn", "tab", { "SwitchCase": 1 } ],
 		"linebreak-style": [ "warn", "unix" ],
@@ -24,6 +27,11 @@ module.exports = {
 		"quotes": [ "warn", "single" ],
 		"semi": [ "warn", "never" ],
 		"space-before-function-paren": [ "warn" ],
-		"space-in-parens": ["warn", "never"]
+		"space-in-parens": ["warn", "never"],
+
+		"flowtype/require-parameter-type": ["warn", "always"],
+		"flowtype/require-return-type": ["warn", "always"],
+		"flowtype/space-after-type-colon": ["warn", "always"],
+		"flowtype/space-before-type-colon": ["warn", "always"]
 	}
 }

@@ -6,12 +6,12 @@ export default class AudioEngine {
 
 	oscillators = []
 
-	constructor (midiAccess) {
+	constructor (midiAccess : MIDIAccess) {
 		this.initializeMidiAccess(midiAccess)
 		this.initializeMasterVolume()
 	}
 
-	initializeMidiAccess (midiAccess) {
+	initializeMidiAccess (midiAccess : MIDIAccess) {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
 			console.log(input.value)
@@ -27,7 +27,7 @@ export default class AudioEngine {
 		this.masterVolume.connect(this.context.destination)
 	}
 
-	onMIDIMessage (event) {
+	onMIDIMessage (event : Event) {
 		const data = event.data
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
@@ -48,17 +48,19 @@ export default class AudioEngine {
 		}
 	}
 
-	noteOn (midiNote) {
-		const osc1 = this.context.createOscillator()
-		this.oscillators[midiNote] = [osc1]
+	noteOn = (message : Object) => {
+		const { note } = message
 
-		osc1.frequency.value = utils.frequencyFromNoteNumber(midiNote)
+		const osc1 = this.context.createOscillator()
+		this.oscillators[note] = [osc1]
+
+		osc1.frequency.value = utils.frequencyFromNoteNumber(note)
 		osc1.type = 'sine'
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)
 	}
 
-	noteOff (midiNote, velocity) {
+	noteOff = (midiNote : number, velocity : number) => {
 		console.log(midiNote, velocity)
 	}
 
