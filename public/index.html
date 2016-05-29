@@ -20,7 +20,142 @@
 
 </body>
   <script type="text/javascript">
+    if (navigator.requestMIDIAccess) {
+        navigator.requestMIDIAccess({
+            sysex: false // this defaults to 'false' and we won't be covering sysex in this article. 
+        }).then(onMIDISuccess, onMIDIFailure);
+    } else {
+        alert("No MIDI support in your browser.");
+    }
+
+    // midi functions
+    function onMIDISuccess(midiAccess) {
+        // when we get a succesful response, run this code
+        var inputs = midiAccess.inputs.values()
+
+          // iterate through the devices
+          for ( var input = inputs.next(); input && !input.done; input = inputs.next() ) {
+          console.log( input.value )
+        }
+
+
+        midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
+
+        var inputs = midi.inputs.values();
+        // loop over all available inputs and listen for any MIDI input
+        for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+            // each time there is a midi message call the onMIDIMessage function
+            input.value.onmidimessage = onMIDIMessage;
+        }
+    }
+
+    function onMIDIMessage(event) {
+        data = event.data,
+        cmd = data[0] >> 4,
+        channel = data[0] & 0xf,
+        type = data[0] & 0xf0, // channel agnostic message type. Thanks, Phil Burk.
+        note = data[1],
+        velocity = data[2];
+        // with pressure and tilt off
+        // note off: 128, cmd: 8 
+        // note on: 144, cmd: 9
+        // pressure / tilt on
+        // pressure: 176, cmd 11: 
+        // bend: 224, cmd: 14
+
+        switch (type) {
+            case 144: // noteOn message 
+                 noteOn(note, velocity);
+                 break;
+            case 128: // noteOff message 
+                noteOff(note, velocity);
+                break;
+        }
+
+        //console.log('data', data, 'cmd', cmd, 'channel', channel);
+        logger("breno", 'key data', data);
+    }
+
+    function onStateChange(event) {
+        var port = event.port,
+            state = port.state,
+            name = port.name,
+            type = port.type;
+        if (type == "input") console.log("name", name, "port", port, "state", state);
+    }
+
+    function listInputs(inputs) {
+        var input = inputs.value;
+        log("Input port : [ type:'" + input.type + "' id: '" + input.id +
+            "' manufacturer: '" + input.manufacturer + "' name: '" + input.name +
+            "' version: '" + input.version + "']");
+    }
+
+    function noteOn(midiNote, velocity) {
+        player(midiNote, velocity);
+    }
+
+    function noteOff(midiNote, velocity) {
+        player(midiNote, velocity);
+    }
+
+    function player(note, velocity) {
+      console.log(note)
+      console.log(velocity)
+    }
+
+    function onMIDIFailure(e) {
+        log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
+    }
+
+
+    // utility functions
+    function randomRange(min, max) {
+        return Math.random() * (max + min) + min;
+    }
+
+    function rangeMap(x, a1, a2, b1, b2) {
+        return ((x - a1) / (a2 - a1)) * (b2 - b1) + b1;
+    }
+
+    function frequencyFromNoteNumber(note) {
+        return 440 * Math.pow(2, (note - 69) / 12);
+    }
+
+    function logger(container, label, data) {
+        messages = label + " [channel: " + (data[0] & 0xf) + ", cmd: " + (data[0] >> 4) + ", type: " + (data[0] & 0xf0) + " , note: " + data[1] + " , velocity: " + data[2] + "]";
+
+        console.log(messages)
+    }
+
     var app = Elm.Main.fullscreen()
-    // var app = Elm.fullscreenDebug('Main', './Main.elm')
+
+    var context = new AudioContext
+
+    var frequency = 440
+
+    var midiNote = 'C1'
+
+    var masterVolume = context.createGain()
+
+    masterVolume.gain.value = 0.2
+
+    masterVolume.connect( context.destination )
+
+    //var osc1 = context.createOscillator()
+    //var oscillators = {}
+    //oscillators[midiNote] = [osc1]
+//
+//
+//    //osc1.frequency.value = frequency
+//    //osc1.type = 'sawtooth'
+//    //osc1.connect( masterVolume )
+    //osc1.start( context.currentTime )
+
+    app.ports.noteOn.subscribe(function(note) {
+      console.log(note)
+
+    });
+
   </script>
 </html>

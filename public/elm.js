@@ -7879,6 +7879,29 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _user$project$Note$NoteRepresentation = F3(
+	function (a, b, c) {
+		return {octave: a, velocity: b, note: c};
+	});
+var _user$project$Note$B = {ctor: 'B'};
+var _user$project$Note$Bb = {ctor: 'Bb'};
+var _user$project$Note$A = {ctor: 'A'};
+var _user$project$Note$Ab = {ctor: 'Ab'};
+var _user$project$Note$G = {ctor: 'G'};
+var _user$project$Note$Gb = {ctor: 'Gb'};
+var _user$project$Note$F = {ctor: 'F'};
+var _user$project$Note$E = {ctor: 'E'};
+var _user$project$Note$Eb = {ctor: 'Eb'};
+var _user$project$Note$D = {ctor: 'D'};
+var _user$project$Note$Db = {ctor: 'Db'};
+var _user$project$Note$C = {ctor: 'C'};
+
+var _user$project$MyPort$noteOn = _elm_lang$core$Native_Platform.outgoingPort(
+	'noteOn',
+	function (v) {
+		return {octave: v.octave, velocity: v.velocity, note: v.note};
+	});
+
 var _user$project$Main$virtualKeyboard = function (model) {
 	var velocityText = A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -7989,27 +8012,44 @@ var _user$project$Main$velocityDown = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		return A2(
-			F2(
-				function (v0, v1) {
-					return {ctor: '_Tuple2', _0: v0, _1: v1};
-				}),
-			function () {
-				var _p0 = msg;
-				switch (_p0.ctor) {
-					case 'NoOp':
-						return model;
-					case 'OctaveDown':
-						return _user$project$Main$octaveDown(model);
-					case 'OctaveUp':
-						return _user$project$Main$octaveUp(model);
-					case 'VelocityDown':
-						return _user$project$Main$velocityDown(model);
-					default:
-						return _user$project$Main$velocityUp(model);
-				}
-			}(),
-			_elm_lang$core$Platform_Cmd$none);
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'OctaveDown':
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Main$octaveDown(model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'OctaveUp':
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Main$octaveUp(model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'VelocityDown':
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Main$velocityDown(model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'VelocityUp':
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Main$velocityUp(model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'KeyOn':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MyPort$noteOn(
+						{octave: 3, velocity: 100, note: 88})
+				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
 	});
 var _user$project$Main$init = A2(
 	F2(
@@ -8022,31 +8062,40 @@ var _user$project$Main$Model = F2(
 	function (a, b) {
 		return {octave: a, velocity: b};
 	});
+var _user$project$Main$NoteOff = function (a) {
+	return {ctor: 'NoteOff', _0: a};
+};
+var _user$project$Main$KeyOn = function (a) {
+	return {ctor: 'KeyOn', _0: a};
+};
 var _user$project$Main$VelocityDown = {ctor: 'VelocityDown'};
 var _user$project$Main$VelocityUp = {ctor: 'VelocityUp'};
 var _user$project$Main$OctaveDown = {ctor: 'OctaveDown'};
 var _user$project$Main$OctaveUp = {ctor: 'OctaveUp'};
-var _user$project$Main$NoOp = {ctor: 'NoOp'};
+var _user$project$Main$handleKey = function (keyCode) {
+	var _p1 = _elm_lang$core$Char$toLower(
+		_elm_lang$core$Char$fromCode(keyCode));
+	switch (_p1.valueOf()) {
+		case 'z':
+			return _user$project$Main$OctaveDown;
+		case 'x':
+			return _user$project$Main$OctaveUp;
+		case 'c':
+			return _user$project$Main$VelocityDown;
+		case 'v':
+			return _user$project$Main$VelocityUp;
+		default:
+			return _user$project$Main$KeyOn(_p1);
+	}
+};
 var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$keyboard$Keyboard$presses(
-		function (keyCode) {
-			var symbol = _elm_lang$core$Char$toLower(
-				_elm_lang$core$Char$fromCode(keyCode));
-			return _elm_lang$core$Native_Utils.eq(
-				symbol,
-				_elm_lang$core$Native_Utils.chr('z')) ? _user$project$Main$OctaveDown : (_elm_lang$core$Native_Utils.eq(
-				symbol,
-				_elm_lang$core$Native_Utils.chr('x')) ? _user$project$Main$OctaveUp : (_elm_lang$core$Native_Utils.eq(
-				symbol,
-				_elm_lang$core$Native_Utils.chr('c')) ? _user$project$Main$VelocityDown : (_elm_lang$core$Native_Utils.eq(
-				symbol,
-				_elm_lang$core$Native_Utils.chr('v')) ? _user$project$Main$VelocityUp : _user$project$Main$NoOp)));
-		});
+	return _elm_lang$keyboard$Keyboard$presses(_user$project$Main$handleKey);
 };
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$program(
 		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})
 };
+var _user$project$Main$NoOp = {ctor: 'NoOp'};
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
