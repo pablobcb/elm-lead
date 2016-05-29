@@ -7892,6 +7892,7 @@ var _user$project$Note$D = {ctor: 'D'};
 var _user$project$Note$Db = {ctor: 'Db'};
 var _user$project$Note$C = {ctor: 'C'};
 
+
 var _user$project$MyPort$noteOn = _elm_lang$core$Native_Platform.outgoingPort(
 	'noteOn',
 	function (v) {

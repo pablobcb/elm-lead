@@ -123,9 +123,10 @@
 
 
 
-    app.ports.noteOn.subscribe(function(note) {
-      console.log(note)
-      noteOn(note.note, note.velocity)
+    app.ports.noteOn.subscribe(function(data) {
+      var note = [0]
+      var velocity = [1]
+      noteOn(note, velocity)
 
     });
 
