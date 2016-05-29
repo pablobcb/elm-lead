@@ -1,4 +1,4 @@
-module MIDI exposing (..) -- where
+module Midi exposing (..) -- where
 
 import Dict
 import Note exposing (..)
@@ -16,8 +16,8 @@ makeMidiMessage note velocity =
   }
 
 
-noteToMIDINumber : (Note, Octave) -> MidiNote
-noteToMIDINumber note =
+noteToMidiNumber : (Note, Octave) -> MidiNote
+noteToMidiNumber note =
   let
     midiNoteNumbers = Dict.fromList list
   in
@@ -26,7 +26,7 @@ noteToMIDINumber note =
         midiNoteNumber
       Nothing ->
         Debug.crash
-          ("noteToMIDINumber expected a valid MIDI note" ++ (toString note))
+          ("noteToMidiNumber expected a valid MIDI note" ++ (toString note))
 
 
 list =

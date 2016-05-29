@@ -1,6 +1,6 @@
-port module MyPort exposing (..)
+port module MidiPort exposing (..)
 
 import Note exposing (..)
-import MIDI exposing (..)
+import Midi exposing (..)
 
 port noteOn : MidiMessage -> Cmd msg

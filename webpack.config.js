@@ -24,6 +24,10 @@ module.exports = {
 				loader: 'style!css!postcss!stylus'
 			},
 			{
+				test: /\.css$/,
+				loader: 'style!css!postcss'
+			},
+			{
 				test: /\.elm$/,
 				loader: 'elm-webpack',
 				exclude: [/elm-stuff/, /node_modules/]
@@ -46,7 +50,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: ['', '.js', '.styl', '.elm']
+		extensions: ['', '.js', '.styl', '.elm', '.css']
 	},
 	stylint: {
 		config: `${__dirname}/.stylintrc`

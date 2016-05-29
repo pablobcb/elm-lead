@@ -26,7 +26,6 @@
     "prefixVarsWithDollar": "always",
     "quotePref": false,
     "semicolons": "never",
-    "sortOrder": "grouped",
     "stackedProperties": "never",
     "trailingWhitespace": "never",
     "universal": false,
