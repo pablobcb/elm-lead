@@ -7,17 +7,11 @@ export default class AudioEngine {
 	oscillators = []
 
 	constructor (midiAccess) {
-		this.setupMidiAccess(midiAccess)
-
-		this.masterVolume = this.context.createGain()
-
-		this.masterVolume.gain.value = 0.2
-
-		this.masterVolume.connect(this.context.destination)
+		this.initializeMidiAccess(midiAccess)
+		this.initializeMasterVolume()
 	}
 
-	// midi functions
-	setupMidiAccess (midiAccess) {
+	initializeMidiAccess (midiAccess) {
 		// when we get a succesful response, run this code
 		let inputs = midiAccess.inputs.values()
 
@@ -38,6 +32,12 @@ export default class AudioEngine {
 			// function
 			input.value.onmidimessage = this.onMIDIMessage
 		}
+	}
+
+	initializeMasterVolume () {
+		this.masterVolume = this.context.createGain()
+		this.masterVolume.gain.value = 0.2
+		this.masterVolume.connect(this.context.destination)
 	}
 
 	onMIDIMessage (event) {
