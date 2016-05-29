@@ -1,5 +1,5 @@
 require('./styles/main.styl')
 
-import AudioEngine from './AudioEngine.js'
+import Application from './Application.js'
 
-new AudioEngine()
+new Application()

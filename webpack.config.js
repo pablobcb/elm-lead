@@ -3,7 +3,7 @@ const autoprefixer = require('autoprefixer')
 module.exports = {
 	entry: './src/main.js',
 	output: {
-		path: __dirname + '/dist',
+		path: `${__dirname}/dist`,
 		filename: 'bundle.js'
 	},
 	module: {
@@ -33,7 +33,11 @@ module.exports = {
 				loader: 'babel',
 				exclude: [/(node_modules)/],
 				query: {
-					presets: ['es2015']
+					presets: ['es2015'],
+					plugins: [
+						'transform-class-properties',
+						'transform-function-bind'
+					]
 				}
 			}
 		]
@@ -42,7 +46,7 @@ module.exports = {
 		extensions: ['', '.js', '.styl', '.elm']
 	},
 	stylint: {
-		config: __dirname + '/.stylintrc'
+		config: `${__dirname}/.stylintrc`
 	},
 	postcss: () => [autoprefixer]
 }

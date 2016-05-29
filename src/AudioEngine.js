@@ -1,53 +1,23 @@
-import Elm from './Main.elm'
 import utils from './utils.js'
 
 export default class AudioEngine {
 
-	constructor () {
-		if (navigator.requestMIDIAccess) {
-			navigator.requestMIDIAccess({
-				sysex: false
-				// this defaults to 'false' and we won't be covering sysex in
-				// this article.
-			}).then(this.onMIDISuccess, this.onMIDIFailure)
-		} else {
-			alert('No MIDI support in your browser.')
-		}
+	context = new AudioContext
 
-		this.oscillators = []
+	oscillators = []
 
-		// function logger(container, label, data) {
-		// 	const messages = label + ' [channel: ' + (data[0] & 0xf) +
-		// 		', cmd: ' +
-		// 		(data[0] >> 4) + ', type: ' + (data[0] & 0xf0) + ' , note: ' +
-		// 		data[1] + ' , velocity: ' + data[2] + ']'
-
-		// 	console.log(messages)
-		// }
-
-		const app = Elm.Main.fullscreen()
-
-		this.context = new AudioContext
+	constructor (midiAccess) {
+		this.setupMidiAccess(midiAccess)
 
 		this.masterVolume = this.context.createGain()
 
 		this.masterVolume.gain.value = 0.2
 
 		this.masterVolume.connect(this.context.destination)
-
-		app.ports.noteOn.subscribe(midiNote =>
-			this.noteOn(midiNote.note, midiNote.velocity)
-		)
-
 	}
 
-	onMIDIFailure (e) {
-		console.log(`No access to MIDI devices or your browser doesn\'t \
-			support WebMIDI API. Please use WebMIDIAPIShim ${e}`)
-	}
-
-		// midi functions
-	onMIDISuccess (midiAccess) {
+	// midi functions
+	setupMidiAccess (midiAccess) {
 		// when we get a succesful response, run this code
 		let inputs = midiAccess.inputs.values()
 
@@ -103,9 +73,8 @@ export default class AudioEngine {
 		osc1.start(this.context.currentTime)
 	}
 
-	noteOff(midiNote, velocity) {
+	noteOff (midiNote, velocity) {
 		console.log(midiNote, velocity)
 	}
-
 
 }
