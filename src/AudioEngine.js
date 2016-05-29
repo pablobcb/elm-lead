@@ -12,22 +12,9 @@ export default class AudioEngine {
 	}
 
 	initializeMidiAccess (midiAccess) {
-		// when we get a succesful response, run this code
-		let inputs = midiAccess.inputs.values()
-
-		// iterate through the devices
-		let input = inputs.next()
-		for (; input && !input.done; input = inputs.next()) {
-			console.log(input.value)
-		}
-
-		// this is our raw MIDI data, inputs, outputs, and sysex status
-		const midi = midiAccess
-
-		inputs = midi.inputs.values()
 		// loop over all available inputs and listen for any MIDI input
-		input = inputs.next()
-		for (; input && !input.done; input = inputs.next()) {
+		for (const input of midiAccess.inputs.values()) {
+			console.log(input.value)
 			// each time there is a midi message call the onMIDIMessage
 			// function
 			input.value.onmidimessage = this.onMIDIMessage

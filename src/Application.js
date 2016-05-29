@@ -15,6 +15,7 @@ export default class Application {
 		}
 	}
 
+	// this is our raw MIDI data, inputs, outputs, and sysex status
 	onMIDISuccess (midiAccess) {
 		this.audioEngine = new AudioEngine(midiAccess)
 

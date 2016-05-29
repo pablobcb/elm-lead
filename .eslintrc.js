@@ -14,6 +14,7 @@ module.exports = {
 		"linebreak-style": [ "warn", "unix" ],
 		"max-len": [ "warn", 80 ],
 		"no-console": [ "off" ],
+		"no-debugger": [ "warn" ],
 		"no-redeclare": [ "warn" ],
 		"no-undef": [ "warn" ],
 		"no-unused-vars": [ "warn" ],
