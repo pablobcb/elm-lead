@@ -56,12 +56,6 @@
         type = data[0] & 0xf0, // channel agnostic message type. Thanks, Phil Burk.
         note = data[1],
         velocity = data[2];
-        // with pressure and tilt off
-        // note off: 128, cmd: 8 
-        // note on: 144, cmd: 9
-        // pressure / tilt on
-        // pressure: 176, cmd 11: 
-        // bend: 224, cmd: 14
 
         switch (type) {
             case 144: // noteOn message 
@@ -72,27 +66,21 @@
                 break;
         }
 
-        //console.log('data', data, 'cmd', cmd, 'channel', channel);
-        logger("breno", 'key data', data);
+       // logger("breno", 'key data', data);
     }
 
-    function onStateChange(event) {
-        var port = event.port,
-            state = port.state,
-            name = port.name,
-            type = port.type;
-        if (type == "input") console.log("name", name, "port", port, "state", state);
-    }
-
-    function listInputs(inputs) {
-        var input = inputs.value;
-        log("Input port : [ type:'" + input.type + "' id: '" + input.id +
-            "' manufacturer: '" + input.manufacturer + "' name: '" + input.name +
-            "' version: '" + input.version + "']");
-    }
+    var oscillators = []
 
     function noteOn(midiNote, velocity) {
-        player(midiNote, velocity);
+      var osc1 = context.createOscillator()
+      oscillators[midiNote] = [osc1]
+
+
+      osc1.frequency.value = frequencyFromNoteNumber(midiNote)
+      osc1.type = 'sawtooth'
+      osc1.connect( masterVolume )
+      osc1.start( context.currentTime )
+      
     }
 
     function noteOff(midiNote, velocity) {
@@ -110,13 +98,7 @@
 
 
     // utility functions
-    function randomRange(min, max) {
-        return Math.random() * (max + min) + min;
-    }
 
-    function rangeMap(x, a1, a2, b1, b2) {
-        return ((x - a1) / (a2 - a1)) * (b2 - b1) + b1;
-    }
 
     function frequencyFromNoteNumber(note) {
         return 440 * Math.pow(2, (note - 69) / 12);
@@ -132,9 +114,6 @@
 
     var context = new AudioContext
 
-    var frequency = 440
-
-    var midiNote = 'C1'
 
     var masterVolume = context.createGain()
 
@@ -142,15 +121,7 @@
 
     masterVolume.connect( context.destination )
 
-    //var osc1 = context.createOscillator()
-    //var oscillators = {}
-    //oscillators[midiNote] = [osc1]
-//
-//
-//    //osc1.frequency.value = frequency
-//    //osc1.type = 'sawtooth'
-//    //osc1.connect( masterVolume )
-    //osc1.start( context.currentTime )
+
 
     app.ports.noteOn.subscribe(function(note) {
       console.log(note)
