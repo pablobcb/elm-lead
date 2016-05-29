@@ -12,10 +12,7 @@ export default class AudioEngine {
 	initializeMidiAccess (midiAccess : MIDIAccess) {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
-			console.log(input.value)
-			// each time there is a midi message call the onMIDIMessage
-			// function
-			input.value.onmidimessage = this.onMIDIMessage
+			input.onmidimessage = this.onMIDIMessage
 		}
 	}
 
