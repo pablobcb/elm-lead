@@ -16,6 +16,8 @@ module.exports = {
 		"no-redeclare": [ "warn" ],
 		"no-undef": [ "warn" ],
 		"no-unused-vars": [ "warn" ],
+		"no-var": [ "warn" ],
+		"prefer-const": [ "warn" ],
 		"prefer-template": [ "warn" ],
 		"quotes": [ "warn", "single" ],
 		"semi": [ "warn", "never" ],

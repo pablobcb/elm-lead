@@ -16,16 +16,16 @@ export default class AudioEngine {
 		// midi functions
 		function onMIDISuccess(midiAccess) {
 			// when we get a succesful response, run this code
-			var inputs = midiAccess.inputs.values()
+			let inputs = midiAccess.inputs.values()
 
 			// iterate through the devices
-			var input = inputs.next()
+			let input = inputs.next()
 			for (; input && !input.done; input = inputs.next()) {
 				console.log(input.value)
 			}
 
 			// this is our raw MIDI data, inputs, outputs, and sysex status
-			var midi = midiAccess
+			const midi = midiAccess
 
 			inputs = midi.inputs.values()
 			// loop over all available inputs and listen for any MIDI input
@@ -38,15 +38,15 @@ export default class AudioEngine {
 		}
 
 		function onMIDIMessage(event) {
-			var data = event.data
+			const data = event.data
 			// var cmd = data[0] >> 4
 			// var channel = data[0] & 0xf
 
 			// channel agnostic message type. Thanks, Phil Burk.
-			var type = data[0] & 0xf0
+			const type = data[0] & 0xf0
 
-			var note = data[1]
-			var velocity = data[2]
+			const note = data[1]
+			const velocity = data[2]
 
 			switch (type) {
 				case 144: // noteOn message
@@ -60,10 +60,10 @@ export default class AudioEngine {
 			// logger("breno", 'key data', data);
 		}
 
-		var oscillators = []
+		const oscillators = []
 
 		function noteOn(midiNote) {
-			var osc1 = context.createOscillator()
+			const osc1 = context.createOscillator()
 			oscillators[midiNote] = [osc1]
 
 			osc1.frequency.value = frequencyFromNoteNumber(midiNote)
@@ -96,11 +96,11 @@ export default class AudioEngine {
 		// 	console.log(messages)
 		// }
 
-		var app = Elm.Main.fullscreen()
+		const app = Elm.Main.fullscreen()
 
-		var context = new AudioContext
+		const context = new AudioContext
 
-		var masterVolume = context.createGain()
+		const masterVolume = context.createGain()
 
 		masterVolume.gain.value = 0.2
 
