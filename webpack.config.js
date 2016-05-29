@@ -1,3 +1,5 @@
+const autoprefixer = require('autoprefixer')
+
 module.exports = {
 	entry: './src/main.js',
 	output: {
@@ -19,7 +21,7 @@ module.exports = {
 		loaders: [
 			{
 				test: /\.styl$/,
-				loader: 'style!css!stylus'
+				loader: 'style!css!postcss!stylus'
 			},
 			{
 				test: /\.elm$/,
@@ -41,5 +43,6 @@ module.exports = {
 	},
 	stylint: {
 		config: __dirname + '/.stylintrc'
-	}
+	},
+	postcss: () => [autoprefixer]
 }
