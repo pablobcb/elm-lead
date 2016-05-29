@@ -66,30 +66,32 @@ update msg model =
       (velocityUp model,  Cmd.none)
 
     KeyOn symbol ->
-      (model, makeMidiMessage 44 model.velocity |> noteOn)
+      let
+        velocity = .velocity model
+        octave   = .octave model
 
-    --  let
-    --    vel = .velocity model
-    --    octave = .octave model
-    --  in
-    --    noteOn <|
-    --    case symbol of
-    --      'a' -> { octave, vel, C  }
-    --      'w' -> { octave, vel, Db }
-    --      's' -> { octave, vel, D  }
-    --      'e' -> { octave, vel, Eb }
-    --      'd' -> { octave, vel, E  }
-    --      'f' -> { octave, vel, F  }
-    --      't' -> { octave, vel, Gb }
-    --      'g' -> { octave, vel, G  }
-    --      'y' -> { octave, vel, Ab }
-    --      'h' -> { octave, vel, A  }
-    --      'u' -> { octave, vel, Bb }
-    --      'j' -> { octave, vel, B  }
-    --      'k' -> { octave + 1, vel, C  }
-    --      'o' -> { octave + 2, vel, Db }
-    --      'l' -> { octave + 1, vel, D  }
-    --      _ -> Debug.crash "breno"
+        midiNoteNumber =
+          noteToMIDINumber <|
+            case symbol of
+              'a' -> ( C  , octave )
+              'w' -> ( Db , octave )
+              's' -> ( D  , octave )
+              'e' -> ( Eb , octave )
+              'd' -> ( E  , octave )
+              'f' -> ( F  , octave )
+              't' -> ( Gb , octave )
+              'g' -> ( G  , octave )
+              'y' -> ( Ab , octave )
+              'h' -> ( A  , octave )
+              'u' -> ( Bb , octave )
+              'j' -> ( B  , octave )
+              'k' -> ( C  , octave + 1 )
+              'o' -> ( Db , octave + 1 )
+              'l' -> ( D  , octave + 1 )
+              _ -> Debug.crash "shouldnt happen"
+      in
+        (model, makeMidiMessage midiNoteNumber model.velocity |> noteOn)
+
 
     NoteOff note->
       (model, Cmd.none)
