@@ -4,11 +4,12 @@ import AudioEngine from './AudioEngine'
 
 export default class Application {
 
-	constructor() {
+	constructor () {
 		this.app = Elm.Main.fullscreen()
 
 		if (navigator.requestMIDIAccess) {
-			navigator.requestMIDIAccess()
+			navigator
+				.requestMIDIAccess()
 				.then(::this.onMIDISuccess, this.onMIDIFailure)
 		} else {
 			alert('No MIDI support in your browser.')
@@ -22,7 +23,6 @@ export default class Application {
 		this.app.ports.noteOn.subscribe(midiNote =>
 			this.audioEngine.noteOn(midiNote.note, midiNote.velocity)
 		)
-
 	}
 
 	onMIDIFailure (e) {

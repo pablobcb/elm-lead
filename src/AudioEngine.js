@@ -46,8 +46,6 @@ export default class AudioEngine {
 				this.noteOff(note, velocity)
 				break
 		}
-
-		// logger("breno", 'key data', data);
 	}
 
 	noteOn (midiNote) {
