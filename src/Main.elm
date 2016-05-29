@@ -65,7 +65,7 @@ update msg model =
       (velocityUp model,  Cmd.none)
 
     KeyOn symbol->
-      (model, noteOn { octave = 3, velocity = 100, note = 88})
+      (model, noteOn (88, (.velocity model)) )
       
     --  let 
     --    vel = .velocity model

@@ -18,8 +18,3 @@ type Note
   | Bb
   | B
 
-type alias NoteRepresentation =
-  { octave   : Octave
-  , velocity : Velocity
-  , note     : Int
-  }

@@ -7879,10 +7879,6 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _user$project$Note$NoteRepresentation = F3(
-	function (a, b, c) {
-		return {octave: a, velocity: b, note: c};
-	});
 var _user$project$Note$B = {ctor: 'B'};
 var _user$project$Note$Bb = {ctor: 'Bb'};
 var _user$project$Note$A = {ctor: 'A'};
@@ -7899,7 +7895,7 @@ var _user$project$Note$C = {ctor: 'C'};
 var _user$project$MyPort$noteOn = _elm_lang$core$Native_Platform.outgoingPort(
 	'noteOn',
 	function (v) {
-		return {octave: v.octave, velocity: v.velocity, note: v.note};
+		return [v._0, v._1];
 	});
 
 var _user$project$Main$virtualKeyboard = function (model) {
@@ -8045,7 +8041,13 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _user$project$MyPort$noteOn(
-						{octave: 3, velocity: 100, note: 88})
+						{
+							ctor: '_Tuple2',
+							_0: 88,
+							_1: function (_) {
+								return _.velocity;
+							}(model)
+						})
 				};
 			default:
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};

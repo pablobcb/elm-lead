@@ -1,5 +1,6 @@
 port module MyPort exposing (..)
 
 import Note exposing (..)
+import MIDI exposing (..)
 
-port noteOn : NoteRepresentation -> Cmd msg
+port noteOn : (Int, Velocity) -> Cmd msg

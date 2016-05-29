@@ -1,7 +1,3 @@
-var _user$project$Note$NoteRepresentation = F3(
-	function (a, b, c) {
-		return {octave: a, velocity: b, note: c};
-	});
 var _user$project$Note$B = {ctor: 'B'};
 var _user$project$Note$Bb = {ctor: 'Bb'};
 var _user$project$Note$A = {ctor: 'A'};

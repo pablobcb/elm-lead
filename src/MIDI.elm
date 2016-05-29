@@ -2,25 +2,12 @@ module MIDI exposing (..)
 
 import Note exposing (..)
 
-type alias MidiMsg =
-  { channel  : Int
-  , cmd      : Int
-  , type     : Int
-  , note     : Int
-  , velocity : Int
-  }
+type alias MidiNote = Int
 
-makeMidiMsg ch cmd tp nt vel =
-  { channel  = ch
-  , cmd      = cmd
-  , type     = tp
-  , note     = nt
-  , velocity = vel
-  }
 
-noteToMIDINumber : NoteRepresentation -> Int
-noteToMIDINumber { octave, _, note } = 
-  case (note, octave) of 
+noteToMIDINumber : (Note, Octave) -> MidiNote
+noteToMIDINumber note = 
+  case note of 
     (C , -2) -> 0
     (Db, -2) -> 1
     (D , -2) -> 2
@@ -159,12 +146,4 @@ noteToMIDINumber { octave, _, note } =
     (F , 8) -> 125
     (Gb, 8) -> 126
     (G , 8) -> 127
-
---noteToMIDI : NoteRepresentation -> MidiMsg
---noteToMIDI { octave, velocity, note } = 
---  let 
---    midiNote =
---  in
---    makeMidiMsg
---      1
 

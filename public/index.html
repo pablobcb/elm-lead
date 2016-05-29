@@ -80,7 +80,7 @@
       osc1.type = 'sawtooth'
       osc1.connect( masterVolume )
       osc1.start( context.currentTime )
-      
+
     }
 
     function noteOff(midiNote, velocity) {
@@ -125,6 +125,7 @@
 
     app.ports.noteOn.subscribe(function(note) {
       console.log(note)
+      noteOn(note.note, note.velocity)
 
     });
 

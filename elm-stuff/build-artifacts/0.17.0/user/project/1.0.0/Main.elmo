@@ -141,7 +141,13 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _user$project$MyPort$noteOn(
-						{octave: 3, velocity: 100, note: 88})
+						{
+							ctor: '_Tuple2',
+							_0: 88,
+							_1: function (_) {
+								return _.velocity;
+							}(model)
+						})
 				};
 			default:
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
