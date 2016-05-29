@@ -1,4 +1,3 @@
-// prefer interpolation
 module.exports = {
 	env: {
 		browser: true,
