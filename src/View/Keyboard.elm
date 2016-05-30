@@ -8,18 +8,21 @@ import Update exposing (Msg)
 
 keyboard : Html Msg
 keyboard =
-  ul
-    [ class "keyboard" ]
-    [ li [ class "key white c"  ] []
-    , li [ class "key black cs" ] []
-    , li [ class "key white d"  ] []
-    , li [ class "key black ds" ] []
-    , li [ class "key white e"  ] []
-    , li [ class "key white f"  ] []
-    , li [ class "key black fs" ] []
-    , li [ class "key white g"  ] []
-    , li [ class "key black gs" ] []
-    , li [ class "key white a"  ] []
-    , li [ class "key black as" ] []
-    , li [ class "key white b"  ] []
-    ]
+  let
+    keys = List.concat <| List.repeat 7
+      [ li [ class "key lower c"   ] []
+      , li [ class "key higher cs" ] []
+      , li [ class "key lower d"   ] []
+      , li [ class "key higher ds" ] []
+      , li [ class "key lower e"   ] []
+      , li [ class "key lower f"   ] []
+      , li [ class "key higher fs" ] []
+      , li [ class "key lower g"   ] []
+      , li [ class "key higher gs" ] []
+      , li [ class "key lower a"   ] []
+      , li [ class "key higher as" ] []
+      , li [ class "key lower b"   ] []
+      ]
+  in
+    ul [ class "keyboard" ] keys
+
