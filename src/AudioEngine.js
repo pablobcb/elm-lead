@@ -1,10 +1,13 @@
+// @flow
+
 export default class AudioEngine {
 
-	context = new AudioContext
+	context : AudioContext;
 
-	oscillators = []
+	oscillators : Array<Object>;
 
 	constructor (midiAccess : MIDIAccess) {
+		this.context = new AudioContext
 		this.initializeMidiAccess(midiAccess)
 		this.initializeMasterVolume()
 	}
@@ -43,11 +46,11 @@ export default class AudioEngine {
 		}
 	}
 
-	frequencyFromNoteNumber = (note : number) : number => (
-		440 * Math.pow(2, (note - 69) / 12)
-	)
+	frequencyFromNoteNumber (note : number) : number {
+		return 440 * Math.pow(2, (note - 69) / 12)
+	}
 
-	noteOn = (message : Object) => {
+	noteOn (message : Object) {
 		const { note } = message
 
 		const osc1 = this.context.createOscillator()
@@ -59,7 +62,7 @@ export default class AudioEngine {
 		osc1.start(this.context.currentTime)
 	}
 
-	noteOff = (midiNote : number, velocity : number) => {
+	noteOff (midiNote : number, velocity : number) {
 		console.log(midiNote, velocity)
 	}
 

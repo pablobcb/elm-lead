@@ -10,7 +10,7 @@ export default class Application {
 		if (navigator.requestMIDIAccess) {
 			navigator
 				.requestMIDIAccess()
-				.then(::this.onMIDISuccess, this.onMIDIFailure)
+				.then(this.onMIDISuccess.bind(this), this.onMIDIFailure)
 		} else {
 			alert('No MIDI support in your browser.')
 		}

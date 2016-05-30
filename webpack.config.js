@@ -39,11 +39,11 @@ module.exports = {
 				query: {
 					presets: ['es2015'],
 					plugins: [
+						'transform-function-bind',
+						'transform-class-properties',
 						'typecheck',
 						'syntax-flow',
-						'transform-flow-strip-types',
-						'transform-class-properties',
-						'transform-function-bind'
+						'transform-flow-strip-types'
 					]
 				}
 			}
