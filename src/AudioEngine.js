@@ -62,7 +62,9 @@ export default class AudioEngine {
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		console.log(midiNote, velocity)
+		this.oscillators[midiNote].forEach(oscillator => (
+			oscillator.stop(this.context.currentTime)
+		))
 	}
 
 }

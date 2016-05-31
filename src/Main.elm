@@ -80,6 +80,6 @@ subscriptions : VirtualKeyboardModel -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Keyboard.downs handleKeyDown
-    , Keyboard.ups (\ keyCode -> Debug.log "BRENO" NoOp)
+    , Keyboard.ups handleKeyUp
     ]
     
