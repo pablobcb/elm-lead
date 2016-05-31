@@ -19,7 +19,10 @@ export default class Application {
 	// this is our raw MIDI data, inputs, outputs, and sysex status
 	onMIDISuccess (midiAccess : MIDIAccess) {
 		this.audioEngine = new AudioEngine(midiAccess)
-		this.app.ports.noteOn.subscribe(this.audioEngine.noteOn)
+
+		this.app.ports.noteOn.subscribe((midiMsg : Object) =>
+			this.audioEngine.noteOn(midiMsg)
+		) 
 	}
 
 	onMIDIFailure (e : Error) {

@@ -8,6 +8,7 @@ export default class AudioEngine {
 
 	constructor (midiAccess : MIDIAccess) {
 		this.context = new AudioContext
+		this.oscillators = []
 		this.initializeMidiAccess(midiAccess)
 		this.initializeMasterVolume()
 	}
@@ -30,7 +31,7 @@ export default class AudioEngine {
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
 
-		// channel agnostic message type. Thanks, Phil Burk.
+		// channel agnostic message type
 		const type = data[0] & 0xf0
 
 		const note = data[1]
@@ -50,10 +51,11 @@ export default class AudioEngine {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
-	noteOn (message : Object) {
-		const { note } = message
+	noteOn (midiMessage : Object) {
+		const { note } = midiMessage
 
 		const osc1 = this.context.createOscillator()
+		//debugger
 		this.oscillators[note] = [osc1]
 
 		osc1.frequency.value = this.frequencyFromNoteNumber(note)
