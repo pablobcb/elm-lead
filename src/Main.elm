@@ -61,3 +61,8 @@ handleKey keyCode =
 subscriptions : VirtualKeyboardModel -> Sub Msg
 subscriptions model =
   Keyboard.downs handleKey
+  --Sub.batch
+  --  [ .map KeyboardExtraMsg Keyboard.Extra.subscriptions
+  --  , Keyboard.downs handleKey
+  --  ]
+    
