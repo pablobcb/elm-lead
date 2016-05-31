@@ -4,6 +4,7 @@ import Note exposing (..)
 import Model.VirtualKeyboard exposing (VirtualKeyboardModel)
 import Midi exposing (..)
 import MidiPort exposing (..)
+import Debug exposing (..)
 
 -- Update
 type Msg
@@ -36,7 +37,15 @@ update msg model =
       (velocityUp model,  Cmd.none)
 
     KeyOn symbol ->
-      let
+      if not <| List.member symbol
+        ['a','w','s','e','d'
+        ,'f','t','g','y','h'
+        ,'u','j','k','o','l','p'
+        ] 
+      then
+          (model, Cmd.none)
+      else
+        let
         velocity = .velocity model
         octave   = .octave model
 
@@ -58,6 +67,7 @@ update msg model =
               'k' -> ( C  , octave + 1 )
               'o' -> ( Db , octave + 1 )
               'l' -> ( D  , octave + 1 )
+              'p' -> ( Eb , octave + 1 )
               _ -> Debug.crash "shouldnt happen"
       in
         (model, makeMidiMessage midiNoteNumber model.velocity |> noteOn)

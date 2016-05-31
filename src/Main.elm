@@ -60,4 +60,4 @@ handleKey keyCode =
 
 subscriptions : VirtualKeyboardModel -> Sub Msg
 subscriptions model =
-  Keyboard.presses handleKey
+  Keyboard.downs handleKey
