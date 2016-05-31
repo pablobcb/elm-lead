@@ -4,16 +4,24 @@ import Dict
 import Note exposing (..)
 
 type alias MidiNote = Int
-type alias MidiMessage =
-  { note     : MidiNote
-  , velocity : Velocity
-  }
+type alias MidiMessage = List Int
 
-makeMidiMessage : MidiNote -> Velocity -> MidiMessage
-makeMidiMessage note velocity =
-  { note     = note
-  , velocity = velocity
-  }
+noteOn = 144
+noteOff = 128
+
+makeMidiMessage : MidiNote -> Velocity -> Int -> MidiMessage
+makeMidiMessage note velocity type_ =
+  [type_, note, velocity]
+
+
+noteOnMessage : MidiNote -> Velocity -> MidiMessage
+noteOnMessage note velocity =
+  makeMidiMessage note velocity noteOn
+
+
+noteOffMessage : MidiNote -> Velocity -> MidiMessage
+noteOffMessage note velocity =
+  makeMidiMessage note velocity noteOff
 
 
 noteToMidiNumber : (Note, Octave) -> MidiNote

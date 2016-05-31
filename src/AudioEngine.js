@@ -16,7 +16,7 @@ export default class AudioEngine {
 	initializeMidiAccess (midiAccess : MIDIAccess) {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
-			input.onmidimessage = this.onMIDIMessage
+			input.onmidimessage = this.onMIDIMessage.bind(this)
 		}
 	}
 
@@ -51,11 +51,8 @@ export default class AudioEngine {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
-	noteOn (midiMessage : Object) {
-		const { note } = midiMessage
-
+	noteOn (note : number, velocity : number) {
 		const osc1 = this.context.createOscillator()
-		//debugger
 		this.oscillators[note] = [osc1]
 
 		osc1.frequency.value = this.frequencyFromNoteNumber(note)

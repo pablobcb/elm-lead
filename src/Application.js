@@ -20,9 +20,11 @@ export default class Application {
 	onMIDISuccess (midiAccess : MIDIAccess) {
 		this.audioEngine = new AudioEngine(midiAccess)
 
-		this.app.ports.noteOn.subscribe((midiMsg : Object) =>
-			this.audioEngine.noteOn(midiMsg)
-		) 
+		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
+			let midiEvent = new Event("midimessage")
+			midiEvent.data = midiData
+			this.audioEngine.onMIDIMessage(midiEvent)
+		})
 	}
 
 	onMIDIFailure (e : Error) {

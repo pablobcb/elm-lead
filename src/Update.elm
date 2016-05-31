@@ -14,7 +14,7 @@ type Msg
   | VelocityUp
   | VelocityDown
   | KeyOn Char
-  | KeyOff Note
+  | KeyOff Char
 
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
@@ -41,14 +41,11 @@ update msg model =
 
 
     KeyOn symbol ->
-      if not <| List.member symbol VirtualKbd.allowedInputKeys then
-          (model, Cmd.none)
-      else
-        let
-          midiNoteNumber =
-            VirtualKbd.keyToMidiNoteNumber symbol (.octave model)
-       in
-        (model, makeMidiMessage midiNoteNumber (.velocity model) |> noteOn)
+      let
+        midiNoteNumber =
+          VirtualKbd.keyToMidiNoteNumber symbol (.octave model)
+      in
+        (model, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
 
 
     KeyOff symbol->

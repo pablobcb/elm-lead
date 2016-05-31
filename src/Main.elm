@@ -8,7 +8,7 @@ import Char exposing (..)
 import MidiPort exposing (..)
 import Note exposing (..)
 import Midi exposing (..)
-import Model.VirtualKeyboard exposing (VirtualKeyboardModel)
+import Model.VirtualKeyboard as VirtualKbd exposing (..)
 
 import Update exposing (..)
 import View.Dashboard exposing (..)
@@ -36,33 +36,50 @@ view : VirtualKeyboardModel -> Html Msg
 view model =
   dashboard model
 
+
 -- Subscriptions
-handleKey : Keyboard.KeyCode -> Msg
-handleKey keyCode =
-  case keyCode |> Char.fromCode |> toLower of
-  -- Keyboard Controls
-    'z' ->
-      OctaveDown
+handleKeyDown : Keyboard.KeyCode -> Msg
+handleKeyDown keyCode =
+  let
+    symbol = keyCode |> Char.fromCode |> toLower
+    allowedInput = List.member symbol VirtualKbd.allowedInputKeys
+  in 
+    if not allowedInput then
+      NoOp
+    else
+      case symbol of
+        'z' ->
+          OctaveDown
 
-    'x' ->
-      OctaveUp
+        'x' ->
+          OctaveUp
 
-    'c' ->
-      VelocityDown
+        'c' ->
+          VelocityDown
 
-    'v' ->
-      VelocityUp
+        'v' ->
+          VelocityUp
 
-  -- Notes
-    symbol ->
-      KeyOn symbol
+        symbol ->
+          KeyOn symbol
+
+
+handleKeyUp : Keyboard.KeyCode -> Msg
+handleKeyUp keyCode =
+  let
+    symbol = keyCode |> Char.fromCode |> toLower
+    pianoKeys = List.member symbol VirtualKbd.pianoKeys
+  in 
+    if not pianoKeys then
+      NoOp
+    else
+      KeyOff symbol
 
 
 subscriptions : VirtualKeyboardModel -> Sub Msg
 subscriptions model =
-  Keyboard.downs handleKey
-  --Sub.batch
-  --  [ .map KeyboardExtraMsg Keyboard.Extra.subscriptions
-  --  , Keyboard.downs handleKey
-  --  ]
+  Sub.batch
+    [ Keyboard.downs handleKeyDown
+    , Keyboard.ups (\ keyCode -> Debug.log "BRENO" NoOp)
+    ]
     

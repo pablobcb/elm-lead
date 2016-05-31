@@ -8,12 +8,16 @@ type alias VirtualKeyboardModel =
   , velocity : Velocity
   }
 
+pianoKeys: List Char
+pianoKeys = 
+  ['a', 'w', 's', 'e', 'd'
+  ,'f', 't', 'g', 'y', 'h'
+  ,'u', 'j', 'k', 'o', 'l', 'p'
+  ]
+
 allowedInputKeys: List Char
 allowedInputKeys = 
-  ['a','w','s','e','d'
-  ,'f','t','g','y','h'
-  ,'u','j','k','o','l','p'
-  ]
+  ['z', 'c', 'x', 'v'] ++ pianoKeys
 
 keyToMidiNoteNumber : Char -> Octave -> Int
 keyToMidiNoteNumber symbol octave =
