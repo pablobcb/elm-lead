@@ -35,7 +35,7 @@ update msg model =
     KeyOn symbol ->
       let
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber symbol (.octave model)            
+          VirtualKbd.keyToMidiNoteNumber (symbol, (.octave model))
       in
         (addPressedNote model symbol, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
 
@@ -43,7 +43,7 @@ update msg model =
     KeyOff symbol ->
       let                
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber symbol (getPressedNoteOctave model symbol)
+          VirtualKbd.keyToMidiNoteNumber (getPressedKeyNote model symbol)
       in
         (removePressedNote model symbol, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
 

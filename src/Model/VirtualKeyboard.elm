@@ -31,8 +31,8 @@ unusedKeysOnLastOctave: List Char
 unusedKeysOnLastOctave =
   ['h','u', 'j', 'k', 'o', 'l', 'p']
 
-keyToMidiNoteNumber : Char -> Octave -> Int
-keyToMidiNoteNumber symbol octave =
+keyToMidiNoteNumber : PressedNote -> Int
+keyToMidiNoteNumber (symbol, octave) =
   Midi.noteToMidiNumber <|
     case symbol of
       'a' -> ( C  , octave )
@@ -163,14 +163,14 @@ findFirstPressedNote model symbol =
   List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
 
 
-getPressedNoteOctave : VirtualKeyboardModel -> Char -> Octave
-getPressedNoteOctave model symbol =
+getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedNote
+getPressedKeyNote model symbol =
   let
     firstPressedNote =
       findFirstPressedNote model symbol
   in
     case firstPressedNote of
       Just pressedNote ->
-        snd pressedNote
+        pressedNote
       Nothing ->
         Debug.crash "Key up without key down first"
