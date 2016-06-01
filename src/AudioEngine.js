@@ -28,6 +28,7 @@ export default class AudioEngine {
 
 	onMIDIMessage (event : Event) {
 		const data = event.data
+		console.log(event)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
 
@@ -52,19 +53,23 @@ export default class AudioEngine {
 	}
 
 	noteOn (note : number, velocity : number) {
+		if(this.oscillators[note])
+			return
+
 		const osc1 = this.context.createOscillator()
 		this.oscillators[note] = [osc1]
 
 		osc1.frequency.value = this.frequencyFromNoteNumber(note)
-		osc1.type = 'sine'
+		osc1.type = 'square'
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		this.oscillators[midiNote].forEach(oscillator => (
+		this.oscillators[midiNote].forEach(oscillator => {
 			oscillator.stop(this.context.currentTime)
-		))
+			this.oscillators[midiNote] = null
+		})
 	}
 
 }
