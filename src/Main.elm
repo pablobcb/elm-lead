@@ -3,8 +3,8 @@ import Html.Attributes exposing (class)
 import Html.App as Html
 import Html.Events exposing (onClick)
 import Keyboard exposing (..)
-import Debug exposing (..)
 import Char exposing (..)
+import Debug exposing (..)
 import Ports exposing (..)
 import Note exposing (..)
 import Midi exposing (..)
@@ -38,13 +38,15 @@ view model =
 
 
 -- Subscriptions
-handleKeyDown : Keyboard.KeyCode -> Msg
-handleKeyDown keyCode =
+handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
+handleKeyDown model keyCode =
   let
     symbol = keyCode |> Char.fromCode |> toLower
     allowedInput = List.member symbol VirtualKbd.allowedInputKeys
+    isLastOctave = (.octave model) == 8
+    unusedKeys = List.member symbol VirtualKbd.unusedKeysOnLastOctave
   in 
-    if not allowedInput then
+    if (not allowedInput) || (isLastOctave && unusedKeys) then
       NoOp
     else
       case symbol of
@@ -64,13 +66,15 @@ handleKeyDown keyCode =
           KeyOn symbol
 
 
-handleKeyUp : Keyboard.KeyCode -> Msg
-handleKeyUp keyCode =
+handleKeyUp : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
+handleKeyUp model keyCode =
   let
     symbol = keyCode |> Char.fromCode |> toLower
     pianoKeys = List.member symbol VirtualKbd.pianoKeys
+    isLastOctave = (.octave model) == 8
+    unusedKeys = List.member symbol VirtualKbd.unusedKeysOnLastOctave
   in 
-    if not pianoKeys then
+    if (not pianoKeys) || (isLastOctave && unusedKeys) then
       NoOp
     else
       KeyOff symbol
@@ -79,7 +83,7 @@ handleKeyUp keyCode =
 subscriptions : VirtualKeyboardModel -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ Keyboard.downs handleKeyDown
-    , Keyboard.ups handleKeyUp
+    [ Keyboard.downs (handleKeyDown model)
+    , Keyboard.ups (handleKeyUp model)
     ]
     

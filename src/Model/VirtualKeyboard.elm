@@ -19,6 +19,10 @@ allowedInputKeys: List Char
 allowedInputKeys = 
   ['z', 'c', 'x', 'v'] ++ pianoKeys
 
+unusedKeysOnLastOctave: List Char
+unusedKeysOnLastOctave =
+  ['h','u', 'j', 'k', 'o', 'l', 'p']
+
 keyToMidiNoteNumber : Char -> Octave -> Int
 keyToMidiNoteNumber symbol octave =
   Midi.noteToMidiNumber <|
