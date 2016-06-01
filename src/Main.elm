@@ -28,7 +28,7 @@ init =
   (,)
   { octave   = 3
   , velocity = 100
-  , pressedKeys = []
+  , pressedNotes = []
   }
   Cmd.none
 

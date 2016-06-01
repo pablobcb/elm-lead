@@ -37,25 +37,15 @@ update msg model =
         midiNoteNumber =
           VirtualKbd.keyToMidiNoteNumber symbol (.octave model)            
       in
-        (addPressedKey model symbol, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
+        (addPressedNote model symbol, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
 
 
     KeyOff symbol ->
-      let        
-        pressedKey = 
-          List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedKeys
-
-        octave = 
-          case pressedKey of
-            Just pressedKey' ->
-              snd pressedKey'
-            Nothing ->
-              Debug.crash "Key up without key down first"
-
+      let                
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber symbol octave
+          VirtualKbd.keyToMidiNoteNumber symbol (getPressedNoteOctave model symbol)
       in
-        (removePressedKey model symbol, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
+        (removePressedNote model symbol, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
 
 
     MasterVolumeChange value ->

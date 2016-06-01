@@ -7,10 +7,13 @@ import Char exposing (..)
 import Keyboard exposing (..)
 import List exposing (..)
 
+type alias PressedNote =
+  (Char, Octave)
+
 type alias VirtualKeyboardModel =
-  { octave      : Octave
-  , velocity    : Velocity
-  , pressedKeys : List (Char, Octave)
+  { octave       : Octave
+  , velocity     : Velocity
+  , pressedNotes : List PressedNote
   }
 
 pianoKeys: List Char
@@ -136,20 +139,38 @@ handleKeyUp model keyCode =
     invalidKey = 
       not <| List.member symbol pianoKeys
 
-    hasPressedKeys =
-      List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedKeys model)
+    hasPressedNotes =
+      List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedNotes model)
   in 
-    if invalidKey || hasPressedKeys then
+    if invalidKey || hasPressedNotes then
       NoOp
     else
       KeyOff symbol
 
 
-addPressedKey : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
-addPressedKey model symbol =
-  { model | pressedKeys = (.pressedKeys model) ++ [(symbol, (.octave model))] }
+addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
+addPressedNote model symbol =
+  { model | pressedNotes = (.pressedNotes model) ++ [(symbol, (.octave model))] }
 
 
-removePressedKey : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
-removePressedKey model symbol =
-  { model | pressedKeys = List.filter (\(symbol', octave') -> symbol /= symbol') model.pressedKeys }
+removePressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
+removePressedNote model symbol =
+  { model | pressedNotes = List.filter (\(symbol', octave') -> symbol /= symbol') model.pressedNotes }
+
+
+findFirstPressedNote : VirtualKeyboardModel -> Char -> Maybe PressedNote
+findFirstPressedNote model symbol =
+  List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
+
+
+getPressedNoteOctave : VirtualKeyboardModel -> Char -> Octave
+getPressedNoteOctave model symbol =
+  let
+    firstPressedNote =
+      findFirstPressedNote model symbol
+  in
+    case firstPressedNote of
+      Just pressedNote ->
+        snd pressedNote
+      Nothing ->
+        Debug.crash "Key up without key down first"
