@@ -1,23 +1,13 @@
 module Update exposing (..) -- where
 
+import Msg exposing (..)
 import Note exposing (..)
 import Model.VirtualKeyboard as VirtualKbd exposing (..)
 import Midi exposing (..)
 import Ports exposing (..)
 import Debug exposing (..)
 import String exposing (..)
-
--- Update
-type Msg
-  = NoOp
-  | OctaveUp
-  | OctaveDown
-  | VelocityUp
-  | VelocityDown
-  | KeyOn Char
-  | KeyOff Char
-  | MasterVolumeChange String
-
+import Char exposing (..)
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
@@ -45,17 +35,28 @@ update msg model =
     KeyOn symbol ->
       let
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber symbol (.octave model)
+          VirtualKbd.keyToMidiNoteNumber symbol (.octave model)            
       in
-        (model, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
+        (addPressedKey model symbol, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
 
 
     KeyOff symbol ->
-      let
+      let        
+        pressedKey = 
+          List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedKeys
+
+        octave = 
+          case pressedKey of
+            Just pressedKey' ->
+              snd pressedKey'
+            Nothing ->
+              Debug.crash "Key up without key down first"
+
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber symbol (.octave model)
+          VirtualKbd.keyToMidiNoteNumber symbol octave
       in
-        (model, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
+        (removePressedKey model symbol, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
+
 
     MasterVolumeChange value ->
       case String.toFloat value of

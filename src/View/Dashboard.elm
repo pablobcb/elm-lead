@@ -4,13 +4,14 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 
 import Model.VirtualKeyboard exposing (VirtualKeyboardModel)
-import Update
+import Update exposing (..)
+import Msg exposing (..)
 import View.Keyboard exposing (keyboard)
 import View.SynthPanel exposing (..)
 import View.InformationBar exposing (informationBar)
 
 
-dashboard : VirtualKeyboardModel -> Html Update.Msg
+dashboard : VirtualKeyboardModel -> Html Msg
 dashboard model =
   div
     [ class "dashboard" ]

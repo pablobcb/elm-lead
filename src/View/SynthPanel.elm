@@ -7,6 +7,7 @@ import Html.Attributes exposing (..)
 import Json.Decode as Json
 
 import Update exposing (..)
+import Msg exposing (..)
 
 synthPanel : Html Msg
 synthPanel = 

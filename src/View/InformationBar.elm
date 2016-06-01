@@ -3,10 +3,11 @@ module View.InformationBar exposing (informationBar) -- where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
-import Update
+import Update exposing (..)
+import Msg exposing (..)
 import Model.VirtualKeyboard exposing (VirtualKeyboardModel)
 
-informationBar : VirtualKeyboardModel -> Html Update.Msg
+informationBar : VirtualKeyboardModel -> Html Msg
 informationBar model =
   let
     startOctave =

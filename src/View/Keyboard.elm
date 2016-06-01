@@ -4,7 +4,8 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 
-import Update exposing (Msg)
+import Update exposing (..)
+import Msg exposing (..)
 
 keyboard : Html Msg
 keyboard =
