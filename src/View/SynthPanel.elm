@@ -25,7 +25,7 @@ masterVolume =
             , Html.Attributes.max "100"
             , Html.Attributes.value "70"
             , Html.Attributes.step "1"
-            , Html.Events.on "input" (Json.succeed NoOp) 
+            , Html.Events.onInput MasterVolumeChange
             ]
            []
 

@@ -25,6 +25,10 @@ export default class Application {
 			midiEvent.data = midiData
 			this.audioEngine.onMIDIMessage(midiEvent)
 		})
+
+		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
+			this.audioEngine.setMasterVolumeGain(masterVolume)
+		})
 	}
 
 	onMIDIFailure (e : Error) {

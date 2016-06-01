@@ -3,8 +3,9 @@ module Update exposing (..) -- where
 import Note exposing (..)
 import Model.VirtualKeyboard as VirtualKbd exposing (..)
 import Midi exposing (..)
-import MidiPort exposing (..)
+import Ports exposing (..)
 import Debug exposing (..)
+import String exposing (..)
 
 -- Update
 type Msg
@@ -15,14 +16,14 @@ type Msg
   | VelocityDown
   | KeyOn Char
   | KeyOff Char
-  --| MasterVolumeChange Float
+  | MasterVolumeChange String
 
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
   case msg of
     NoOp ->
-      Debug.log "breno" (model, Cmd.none)
+      (model, Cmd.none)
 
 
     OctaveDown ->
@@ -49,9 +50,17 @@ update msg model =
         (model, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
 
 
-    KeyOff symbol->
+    KeyOff symbol ->
       let
         midiNoteNumber =
           VirtualKbd.keyToMidiNoteNumber symbol (.octave model)
       in
         (model, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
+
+    MasterVolumeChange value ->
+      case String.toFloat value of
+        Ok float -> 
+          (model, float |> masterVolumePort)
+
+        Err msg -> 
+          Debug.crash msg

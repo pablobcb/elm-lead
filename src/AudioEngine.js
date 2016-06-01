@@ -22,7 +22,7 @@ export default class AudioEngine {
 
 	initializeMasterVolume () {
 		this.masterVolume = this.context.createGain()
-		this.masterVolume.gain.value = 0.2
+		this.masterVolume.gain.value = 0.7
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -71,6 +71,10 @@ export default class AudioEngine {
 			oscillator.stop(this.context.currentTime)
 			this.oscillators[midiNote] = null
 		})
+	}
+
+	setMasterVolumeGain (value : number) {
+		this.masterVolume.gain.value = value / 100
 	}
 
 }
