@@ -11,7 +11,11 @@ import Msg exposing (..)
 
 synthPanel : Html Msg
 synthPanel = 
-    masterVolume
+    div
+        []
+        [ masterVolume
+        , oscillatorDetune
+        ]
 
 masterVolume : Html Msg
 masterVolume = 
@@ -32,5 +36,23 @@ masterVolume =
 
         ]
 
+oscillatorDetune : Html Msg
+oscillatorDetune =
+    div
+        []
+        [ span 
+            [] 
+            [ "Oscillator Detune" |> text ]
+        , input 
+            [ Html.Attributes.type' "range" 
+            , Html.Attributes.min "0"
+            , Html.Attributes.max "100"
+            , Html.Attributes.value "0"
+            , Html.Attributes.step "1"
+            , Html.Events.onInput MasterVolumeChange
+            ]
+           []
+
+        ]
 
         

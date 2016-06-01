@@ -9,3 +9,5 @@ type Msg
   | KeyOn Char
   | KeyOff Char
   | MasterVolumeChange String
+  | OscillatorVolumeChange String
+  | OscillatorDetuneChange String

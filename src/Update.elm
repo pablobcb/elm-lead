@@ -55,3 +55,14 @@ update msg model =
 
         Err msg -> 
           Debug.crash msg
+
+
+    OscillatorVolumeChange value ->
+      (model, Cmd.none)
+
+
+    OscillatorDetuneChange value ->
+      (model, Cmd.none)
+
+
+

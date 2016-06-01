@@ -1,5 +1,7 @@
 module Model.SynthPanel exposing (..) -- where
 
 type alias SynthPanelModel =
-  { masterVolume   : Float  
+  { masterVolume     : Float
+  , oscillatorVolume : Float
+  , oscillatorDetune : Float
   }
