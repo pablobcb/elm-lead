@@ -141,8 +141,11 @@ handleKeyUp model keyCode =
 
     unusedKeys =
       List.member symbol unusedKeysOnLastOctave
+
+    hasPressedKeys =
+      List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedKeys model)
   in 
-    if invalidKey || (isLastOctave && unusedKeys) then
+    if invalidKey || (isLastOctave && unusedKeys) || hasPressedKeys then
       NoOp
     else
       KeyOff symbol
