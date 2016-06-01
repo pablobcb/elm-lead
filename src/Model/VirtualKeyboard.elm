@@ -136,16 +136,10 @@ handleKeyUp model keyCode =
     invalidKey = 
       not <| List.member symbol pianoKeys
 
-    isLastOctave = 
-      (.octave model) == 8
-
-    unusedKeys =
-      List.member symbol unusedKeysOnLastOctave
-
     hasPressedKeys =
       List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedKeys model)
   in 
-    if invalidKey || (isLastOctave && unusedKeys) || hasPressedKeys then
+    if invalidKey || hasPressedKeys then
       NoOp
     else
       KeyOff symbol
