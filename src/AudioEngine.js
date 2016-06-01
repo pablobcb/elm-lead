@@ -51,11 +51,15 @@ export default class AudioEngine {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
-	noteOn (note : number, velocity : number) {
-		const osc1 = this.context.createOscillator()
-		this.oscillators[note] = [osc1]
+	noteOn (midiNote : number, velocity : number) {
+		/*debugger
+		if(this.oscillators[midiNote])
+			return*/
 
-		osc1.frequency.value = this.frequencyFromNoteNumber(note)
+		const osc1 = this.context.createOscillator()
+		this.oscillators[midiNote] = [osc1]
+
+		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc1.type = 'sine'
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)

@@ -15,13 +15,14 @@ type Msg
   | VelocityDown
   | KeyOn Char
   | KeyOff Char
+  --| MasterVolumeChange Float
 
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
   case msg of
     NoOp ->
-      (model, Cmd.none)
+      Debug.log "breno" (model, Cmd.none)
 
 
     OctaveDown ->
