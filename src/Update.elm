@@ -49,39 +49,19 @@ update msg model =
 
 
     MasterVolumeChange value ->
-      case String.toFloat value of
-        Ok float -> 
-          (model, float |> masterVolumePort)
-
-        Err msg -> 
-          Debug.crash msg
+      (model, value |> masterVolumePort)
 
 
     OscillatorsBalanceChange value ->
-      case String.toFloat value of
-        Ok float -> 
-          (model, float |> oscillatorsBalancePort)
-
-        Err msg -> 
-          Debug.crash msg
+      (model, value |> oscillatorsBalancePort)
 
 
     Oscillator1DetuneChange value ->
-      case String.toFloat value of
-        Ok float -> 
-          (model, float |> oscillator1DetunePort)
-
-        Err msg -> 
-          Debug.crash msg
+      (model, value |> oscillator1DetunePort)
 
 
     Oscillator2DetuneChange value ->
-      case String.toFloat value of
-        Ok float -> 
-          (model, float |> oscillator2DetunePort)
-
-        Err msg -> 
-          Debug.crash msg
+      (model, value |> oscillator2DetunePort)
 
 
 

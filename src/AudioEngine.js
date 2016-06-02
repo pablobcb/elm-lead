@@ -68,7 +68,7 @@ export default class AudioEngine {
 	balanceToGains (balance : number) : Array<number> {
 		let osc1Gain = 1
 		let osc2Gain = 1
-		let gainPercentage = Math.abs(balance - 50) / 50
+		const gainPercentage = Math.abs(balance - 50) / 50
 
 		if(balance < 50)
 			osc1Gain -= gainPercentage

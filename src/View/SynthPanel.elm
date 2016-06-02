@@ -1,5 +1,6 @@
 module View.SynthPanel exposing (..) -- where
 
+import String exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
@@ -8,6 +9,16 @@ import Json.Decode as Json
 
 import Update exposing (..)
 import Msg exposing (..)
+
+
+unsafeToFloat : String -> Float
+unsafeToFloat value =
+  case String.toFloat value of
+    Ok value' ->
+      value'
+
+    Err err ->
+      Debug.crash err
 
 synthPanel : Html Msg
 synthPanel = 
@@ -72,13 +83,13 @@ masterVolume =
     [ span 
         [] 
         [ "master level" |> text ]
-    , input 
+    , input
         [ Html.Attributes.type' "range" 
         , Html.Attributes.min "0"
         , Html.Attributes.max "100"
         , Html.Attributes.value "70"
         , Html.Attributes.step "1"
-        , Html.Events.onInput MasterVolumeChange
+        , Html.Events.onInput <| unsafeToFloat >> MasterVolumeChange
         ]
         []
     ]
@@ -96,7 +107,7 @@ oscillator1Detune =
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
-          , Html.Events.onInput Oscillator1DetuneChange
+          , Html.Events.onInput <| unsafeToFloat >> Oscillator1DetuneChange
           ]
          []
       ]
@@ -114,7 +125,7 @@ oscillator2Detune =
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
-          , Html.Events.onInput Oscillator2DetuneChange
+          , Html.Events.onInput <| unsafeToFloat >> Oscillator2DetuneChange
           ]
          []
        ]
@@ -132,7 +143,7 @@ oscillatorsBalance =
           , Html.Attributes.max "100"
           , Html.Attributes.value "50"
           , Html.Attributes.step "1"
-          , Html.Events.onInput OscillatorsBalanceChange
+          , Html.Events.onInput <| unsafeToFloat >> OscillatorsBalanceChange
           ]
          []
       ]

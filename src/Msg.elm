@@ -8,7 +8,7 @@ type Msg
   | VelocityDown
   | KeyOn Char
   | KeyOff Char
-  | MasterVolumeChange String
-  | OscillatorsBalanceChange String
-  | Oscillator1DetuneChange String
-  | Oscillator2DetuneChange String
+  | MasterVolumeChange Float
+  | OscillatorsBalanceChange Float
+  | Oscillator1DetuneChange Float
+  | Oscillator2DetuneChange Float
