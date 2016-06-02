@@ -73,8 +73,14 @@ export default class AudioEngine {
 		})
 	}
 
-	setMasterVolumeGain (value : number) {
-		this.masterVolume.gain.value = value / 100
+	setMasterVolumeGain (masterVolumeGain : number) {
+		this.masterVolume.gain.value = masterVolumeGain / 100
+	}
+
+	setOscillatorDetune (oscillatorDetune : number) {
+		this.oscillators.forEach(oscillator => {
+			oscillator[0].detune.value = oscillatorDetune
+		})
 	}
 
 }

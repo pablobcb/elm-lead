@@ -29,6 +29,10 @@ export default class Application {
 		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
 			this.audioEngine.setMasterVolumeGain(masterVolume)
 		})
+
+		this.app.ports.oscillatorDetunePort.subscribe((oscillatorDetune : number) => {
+			this.audioEngine.setOscillatorDetune(oscillatorDetune)
+		})
 	}
 
 	onMIDIFailure (e : Error) {

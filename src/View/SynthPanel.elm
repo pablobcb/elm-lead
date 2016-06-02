@@ -49,7 +49,7 @@ oscillatorDetune =
             , Html.Attributes.max "100"
             , Html.Attributes.value "0"
             , Html.Attributes.step "1"
-            , Html.Events.onInput MasterVolumeChange
+            , Html.Events.onInput OscillatorDetuneChange
             ]
            []
 
