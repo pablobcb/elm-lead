@@ -57,18 +57,31 @@ update msg model =
           Debug.crash msg
 
 
-    OscillatorVolumeChange value ->
-      (model, Cmd.none)
-
-
-    OscillatorDetuneChange value ->
+    OscillatorsBalanceChange value ->
       case String.toFloat value of
         Ok float -> 
-          (model, float |> oscillatorDetunePort)
+          (model, float |> oscillatorsBalancePort)
 
         Err msg -> 
           Debug.crash msg
 
+
+    Oscillator1DetuneChange value ->
+      case String.toFloat value of
+        Ok float -> 
+          (model, float |> oscillator1DetunePort)
+
+        Err msg -> 
+          Debug.crash msg
+
+
+    Oscillator2DetuneChange value ->
+      case String.toFloat value of
+        Ok float -> 
+          (model, float |> oscillator2DetunePort)
+
+        Err msg -> 
+          Debug.crash msg
 
 
 
