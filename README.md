@@ -1,8 +1,12 @@
-# Osiris
+# Web Lead
 
-Browser-based synthetizer 
+browser-based synthetizer inspired on Clavia's Nord Lead series
 
 ## Install Instructions
+
+install npm
+
+install Elm 0.17
 
 `npm install`
 
