@@ -1,6 +1,7 @@
 # Web Lead
 
 browser-based synthetizer with MIDI support 
+
 inspired on Clavia's Nord Lead series
 
 ![alt tag](https://github.com/pablobcb/elm-lead/blob/master/nord-lead-2x.jpg)
