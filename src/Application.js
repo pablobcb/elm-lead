@@ -31,11 +31,11 @@ export default class Application {
 		})
 
 		this.app.ports.oscillator1DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillatorDetune(0, oscillatorDetune)
+			this.audioEngine.setOscillator1Detune(oscillatorDetune)
 		})
 
 		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillatorDetune(1, oscillatorDetune)
+			this.audioEngine.setOscillator2Detune(oscillatorDetune)
 		})
 	}
 

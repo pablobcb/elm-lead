@@ -15,6 +15,7 @@ synthPanel =
         []
         [ masterVolume
         , oscillator1Detune
+        , oscillator2Detune
         ]
 
 masterVolume : Html Msg

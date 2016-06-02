@@ -55,12 +55,12 @@ export default class AudioEngine {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
-	noteOn (midiNote : number, velocity : number) {		
+	noteOn (midiNote : number, velocity : number) {
 		if(this.oscillators[midiNote])
 			return
 
-		const osc1 = this.context.createOscillator()		
-		const osc2 = this.context.createOscillator()		
+		const osc1 = this.context.createOscillator()
+		const osc2 = this.context.createOscillator()
 		
 		osc1.type = 'square'
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
@@ -96,7 +96,7 @@ export default class AudioEngine {
 
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[0].detune.value = this.oscillatorDetune
+				oscillator[0].detune.value = this.oscillator1Detune
 		})
 	}
 
@@ -105,7 +105,7 @@ export default class AudioEngine {
 
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[1].detune.value = this.oscillatorDetune
+				oscillator[1].detune.value = this.oscillator2Detune
 		})
 	}
 
