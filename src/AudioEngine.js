@@ -32,11 +32,11 @@ export default class AudioEngine {
 	initializeOscillatorsGain () {
 		this.oscillator1Gain = this.context.createGain()
 		this.oscillator1Gain.gain.value = 1
-		this.oscillator1Gain.connect(this.context.destination)
+		this.oscillator1Gain.connect(this.masterVolume)
 
 		this.oscillator2Gain = this.context.createGain()
 		this.oscillator2Gain.gain.value = 1
-		this.oscillator2Gain.connect(this.context.destination)
+		this.oscillator2Gain.connect(this.masterVolume)
 	}
 
 	onMIDIMessage (event : Event) {
