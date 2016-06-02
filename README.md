@@ -10,6 +10,8 @@ inspired on Clavia's Nord Lead series
 
 install npm
 
+install webpack
+
 install Elm 0.17
 
 `npm install`
