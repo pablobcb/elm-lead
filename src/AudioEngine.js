@@ -68,9 +68,10 @@ export default class AudioEngine {
 
 	noteOff (midiNote : number, velocity : number) {
 		this.oscillators[midiNote].forEach(oscillator => {
-			oscillator.stop(this.context.currentTime)
-			this.oscillators[midiNote] = null
+			oscillator.stop(this.context.currentTime)			
 		})
+
+		this.oscillators[midiNote] = null
 	}
 
 	setMasterVolumeGain (masterVolumeGain : number) {
@@ -79,7 +80,8 @@ export default class AudioEngine {
 
 	setOscillatorDetune (oscillatorDetune : number) {
 		this.oscillators.forEach(oscillator => {
-			oscillator[0].detune.value = oscillatorDetune
+			if(oscillator)
+				oscillator[0].detune.value = oscillatorDetune
 		})
 	}
 
