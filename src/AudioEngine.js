@@ -10,8 +10,8 @@ export default class AudioEngine {
 		this.context = new AudioContext
 		this.oscillators = []
 		this.initializeMidiAccess(midiAccess)
-		this.initializeMasterVolume()
-		this.oscillatorsBalance = 0
+		this.initializeMasterVolume()	
+		this.initializeOscillatorsGain ()
 		this.oscillator1Detune = 0
 		this.oscillator2Detune = 0
 	}
@@ -27,6 +27,16 @@ export default class AudioEngine {
 		this.masterVolume = this.context.createGain()
 		this.masterVolume.gain.value = 0.7
 		this.masterVolume.connect(this.context.destination)
+	}
+
+	initializeOscillatorsGain () {
+		this.oscillator1Gain = this.context.createGain()
+		this.oscillator1Gain.gain.value = 1
+		this.oscillator1Gain.connect(this.context.destination)
+
+		this.oscillator2Gain = this.context.createGain()
+		this.oscillator2Gain.gain.value = 1
+		this.oscillator2Gain.connect(this.context.destination)
 	}
 
 	onMIDIMessage (event : Event) {
@@ -55,6 +65,19 @@ export default class AudioEngine {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
+	balanceToGains (balance : number) : Array<number> {
+		let osc1Gain = 1
+		let osc2Gain = 1
+		let gainPercentage = Math.abs(balance - 50) / 50
+
+		if(balance < 50)
+			osc1Gain -= gainPercentage
+		else if(balance > 50)
+			osc2Gain -= gainPercentage
+
+		return [osc1Gain, osc2Gain]
+	}
+
 	noteOn (midiNote : number, velocity : number) {
 		if(this.oscillators[midiNote])
 			return
@@ -66,14 +89,15 @@ export default class AudioEngine {
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc1.detune.value = this.oscillator1Detune
 
-		osc2.type = 'sine'
+		osc1.connect(this.oscillator1Gain)
+
+		osc2.type = 'triangle'
 		osc2.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc2.detune.value = this.oscillator2Detune
 
-		osc1.connect(this.masterVolume)
-		osc1.start(this.context.currentTime)
+		osc2.connect(this.oscillator2Gain)
 
-		osc2.connect(this.masterVolume)
+		osc1.start(this.context.currentTime)
 		osc2.start(this.context.currentTime)
 
 		this.oscillators[midiNote] = [osc1, osc2]
@@ -89,6 +113,14 @@ export default class AudioEngine {
 
 	setMasterVolumeGain (masterVolumeGain : number) {
 		this.masterVolume.gain.value = masterVolumeGain / 100
+	}
+
+	setOscillatorsBalance (oscillatorsBalance : number) {
+		const gains = this.balanceToGains(oscillatorsBalance)
+
+		console.log(gains)
+		this.oscillator1Gain.gain.value = gains[0]
+		this.oscillator2Gain.gain.value = gains[1]
 	}
 
 	setOscillator1Detune (oscillatorDetune : number) {

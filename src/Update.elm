@@ -58,7 +58,12 @@ update msg model =
 
 
     OscillatorsBalanceChange value ->
-      (model, Cmd.none)
+      case String.toFloat value of
+        Ok float -> 
+          (model, float |> oscillatorsBalancePort)
+
+        Err msg -> 
+          Debug.crash msg
 
 
     Oscillator1DetuneChange value ->

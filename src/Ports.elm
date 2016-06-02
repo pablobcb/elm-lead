@@ -10,3 +10,5 @@ port masterVolumePort : Float -> Cmd msg
 port oscillator1DetunePort : Float -> Cmd msg
 
 port oscillator2DetunePort : Float -> Cmd msg
+
+port oscillatorsBalancePort : Float -> Cmd msg
