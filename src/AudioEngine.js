@@ -11,6 +11,7 @@ export default class AudioEngine {
 		this.oscillators = []
 		this.initializeMidiAccess(midiAccess)
 		this.initializeMasterVolume()
+		this.oscillatorDetune = 0
 	}
 
 	initializeMidiAccess (midiAccess : MIDIAccess) {
@@ -58,9 +59,10 @@ export default class AudioEngine {
 
 		const osc1 = this.context.createOscillator()
 		this.oscillators[midiNote] = [osc1]
-
-		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
+		
 		osc1.type = 'square'
+		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
+		osc1.detune.value = this.oscillatorDetune
 
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)
@@ -79,9 +81,11 @@ export default class AudioEngine {
 	}
 
 	setOscillatorDetune (oscillatorDetune : number) {
+		this.oscillatorDetune = oscillatorDetune
+		
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[0].detune.value = oscillatorDetune
+				oscillator[0].detune.value = this.oscillatorDetune
 		})
 	}
 
