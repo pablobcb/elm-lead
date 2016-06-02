@@ -12,7 +12,7 @@ import Msg exposing (..)
 synthPanel : Html Msg
 synthPanel = 
     div
-        []
+        [ class "synth-panel"]
         [ masterVolume
         , oscillatorDetune
         ]
