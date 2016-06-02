@@ -2,6 +2,8 @@
 
 browser-based synthetizer inspired on Clavia's Nord Lead series
 
+![alt tag](https://raw.githubusercontent.com/pablobcb/elm-lead/master/nord-lead-rack-2x.jpg)
+
 ## Install Instructions
 
 install npm
