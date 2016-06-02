@@ -11,7 +11,9 @@ export default class AudioEngine {
 		this.oscillators = []
 		this.initializeMidiAccess(midiAccess)
 		this.initializeMasterVolume()
-		this.oscillatorDetune = 0
+		this.oscillatorsBalance = 0
+		this.oscillator1Detune = 0
+		this.oscillator2Detune = 0
 	}
 
 	initializeMidiAccess (midiAccess : MIDIAccess) {
@@ -57,15 +59,24 @@ export default class AudioEngine {
 		if(this.oscillators[midiNote])
 			return
 
-		const osc1 = this.context.createOscillator()
-		this.oscillators[midiNote] = [osc1]
+		const osc1 = this.context.createOscillator()		
+		const osc2 = this.context.createOscillator()		
 		
 		osc1.type = 'square'
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
-		osc1.detune.value = this.oscillatorDetune
+		osc1.detune.value = this.oscillator1Detune
+
+		osc2.type = 'sine'
+		osc2.frequency.value = this.frequencyFromNoteNumber(midiNote)
+		osc2.detune.value = this.oscillator2Detune
 
 		osc1.connect(this.masterVolume)
 		osc1.start(this.context.currentTime)
+
+		osc2.connect(this.masterVolume)
+		osc2.start(this.context.currentTime)
+
+		this.oscillators[midiNote] = [osc1, osc2]
 	}
 
 	noteOff (midiNote : number, velocity : number) {
@@ -80,12 +91,21 @@ export default class AudioEngine {
 		this.masterVolume.gain.value = masterVolumeGain / 100
 	}
 
-	setOscillatorDetune (oscillatorDetune : number) {
-		this.oscillatorDetune = oscillatorDetune
-		
+	setOscillator1Detune (oscillatorDetune : number) {
+		this.oscillator1Detune = oscillatorDetune
+
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
 				oscillator[0].detune.value = this.oscillatorDetune
+		})
+	}
+
+	setOscillator2Detune (oscillatorDetune : number) {
+		this.oscillator2Detune = oscillatorDetune
+
+		this.oscillators.forEach(oscillator => {
+			if(oscillator)
+				oscillator[1].detune.value = this.oscillatorDetune
 		})
 	}
 

@@ -30,8 +30,12 @@ export default class Application {
 			this.audioEngine.setMasterVolumeGain(masterVolume)
 		})
 
-		this.app.ports.oscillatorDetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillatorDetune(oscillatorDetune)
+		this.app.ports.oscillator1DetunePort.subscribe((oscillatorDetune : number) => {
+			this.audioEngine.setOscillatorDetune(0, oscillatorDetune)
+		})
+
+		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
+			this.audioEngine.setOscillatorDetune(1, oscillatorDetune)
 		})
 	}
 

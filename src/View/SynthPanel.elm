@@ -14,7 +14,7 @@ synthPanel =
     div
         []
         [ masterVolume
-        , oscillatorDetune
+        , oscillator1Detune
         ]
 
 masterVolume : Html Msg
@@ -36,20 +36,39 @@ masterVolume =
 
         ]
 
-oscillatorDetune : Html Msg
-oscillatorDetune =
+oscillator1Detune : Html Msg
+oscillator1Detune =
     div
         []
         [ span 
             [] 
-            [ "Oscillator Detune" |> text ]
+            [ "Oscillator 1 Detune" |> text ]
         , input 
             [ Html.Attributes.type' "range" 
             , Html.Attributes.min "0"
             , Html.Attributes.max "100"
             , Html.Attributes.value "0"
             , Html.Attributes.step "1"
-            , Html.Events.onInput OscillatorDetuneChange
+            , Html.Events.onInput Oscillator1DetuneChange
+            ]
+           []
+
+        ]
+
+oscillator2Detune : Html Msg
+oscillator2Detune =
+    div
+        []
+        [ span 
+            [] 
+            [ "Oscillator 2 Detune" |> text ]
+        , input 
+            [ Html.Attributes.type' "range" 
+            , Html.Attributes.min "0"
+            , Html.Attributes.max "100"
+            , Html.Attributes.value "0"
+            , Html.Attributes.step "1"
+            , Html.Events.onInput Oscillator2DetuneChange
             ]
            []
 
