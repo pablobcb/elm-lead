@@ -46,6 +46,7 @@ subscriptions model =
   Sub.batch
     [ Keyboard.downs (VirtualKbd.handleKeyDown model)
     , Keyboard.ups (VirtualKbd.handleKeyUp model)
-    --, Mouse.downs : (Position -> msg) -> Sub msg
+    , Mouse.downs <| always MouseClickDown
+    , Mouse.ups <| always MouseClickUp
     ]
     

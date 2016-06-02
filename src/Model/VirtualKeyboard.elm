@@ -155,12 +155,6 @@ handleKeyUp model keyCode =
     else
       KeyOff symbol
 
---handleMouseDown -> VirtualKeyboardModel -> Position -> Msg
---handleMouseDown model _ ->
-
---handleMouseUp
---handleMouseUp
-
 addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 addPressedNote model symbol =
   { model | pressedNotes = (.pressedNotes model) ++ [(symbol, (.octave model))] }

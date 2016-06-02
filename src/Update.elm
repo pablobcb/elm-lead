@@ -15,6 +15,13 @@ update msg model =
     NoOp ->
       (model, Cmd.none)
 
+    MouseClickDown ->
+      Debug.log "down" (mouseDown model, Cmd.none)
+
+
+    MouseClickUp ->
+      Debug.log "up" (mouseUp model, Cmd.none)
+
 
     OctaveDown ->
       (octaveDown model, Cmd.none)

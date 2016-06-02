@@ -8,6 +8,8 @@ type Msg
   | VelocityDown
   | KeyOn Char
   | KeyOff Char
+  | MouseClickUp
+  | MouseClickDown
   | MasterVolumeChange Float
   | OscillatorsBalanceChange Float
   | Oscillator1DetuneChange Float
