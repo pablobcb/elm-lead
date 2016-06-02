@@ -23,7 +23,7 @@ masterVolume =
         []
         [ span 
             [] 
-            [ "Volume" |> text ]
+            [ "master level" |> text ]
         , input 
             [ Html.Attributes.type' "range" 
             , Html.Attributes.min "0"
