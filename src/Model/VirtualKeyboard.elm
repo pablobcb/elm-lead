@@ -14,6 +14,7 @@ type alias VirtualKeyboardModel =
   { octave       : Octave
   , velocity     : Velocity
   , pressedNotes : List PressedNote
+  , mousePressed : Bool
   }
 
 pianoKeys: List Char
@@ -84,6 +85,13 @@ velocityUp model =
         vel + 20
     }
 
+mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseDown model =
+  { model | mousePressed = True }
+
+mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseUp model =
+  { model | mousePressed = False }
 
 octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveDown model =
@@ -147,6 +155,11 @@ handleKeyUp model keyCode =
     else
       KeyOff symbol
 
+--handleMouseDown -> VirtualKeyboardModel -> Position -> Msg
+--handleMouseDown model _ ->
+
+--handleMouseUp
+--handleMouseUp
 
 addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 addPressedNote model symbol =
