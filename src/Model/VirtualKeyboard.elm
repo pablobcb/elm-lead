@@ -95,7 +95,7 @@ octaveDown model =
 octaveUp : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveUp model =
   { model | octave = min 8 (model |> .octave |> (+) 1) }
-  
+
 mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
 mouseDown model =
   { model | mousePressed = True, mousePressedKey = model.mouseHoverKey }
@@ -184,19 +184,19 @@ removePressedNote model symbol =
   { model | pressedNotes = List.filter (\(symbol', _) -> symbol /= symbol') model.pressedNotes }
 
 
-findPressedNotes : VirtualKeyboardModel -> Char -> List PressedKey
+findPressedNotes : VirtualKeyboardModel -> Char -> Maybe PressedKey
 findPressedNotes model symbol =
-  List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
+  List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
 
-
-getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey
-getPressedKeyNote model midiNote =
-  let
-    firstPressedNote =
-      List.head <| findPressedNotes model midiNote
-  in
-    case firstPressedNote of
-      Just pressedNote ->
-        pressedNote
-      Nothing ->
-        Debug.crash "Key up without key down first"
+--
+--getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey
+--getPressedKeyNote model midiNote =
+--  let
+--    firstPressedNote =
+--      List.head <| findPressedNotes model midiNote
+--  in
+--    case firstPressedNote of
+--      Just pressedNote ->
+--        pressedNote
+--      Nothing ->
+--        Debug.crash "Key up without key down first"

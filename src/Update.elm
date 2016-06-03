@@ -97,11 +97,15 @@ update msg model =
 
     KeyOff symbol ->
       let
-        midiNoteNumber =
-          snd <| getPressedKeyNote model symbol
+        maybeMidiNoteNumber =
+          findPressedNotes model symbol
       in
-        (removePressedNote model symbol, noteOffCommand (.velocity model) midiNoteNumber)
-
+        case maybeMidiNoteNumber of
+          Just (_, midiNoteNumber') ->
+            (removePressedNote model symbol, noteOffCommand (.velocity model) midiNoteNumber')
+          Nothing ->
+            (model, Cmd.none)
+            
 
     MasterVolumeChange value ->
       (model, value |> masterVolumePort)
