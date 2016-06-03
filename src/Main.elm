@@ -32,6 +32,7 @@ init =
   , pressedNotes = []
   , mousePressed = False
   , mouseHoverKey = Nothing
+  , mousePressedKey = Nothing
   }
   Cmd.none
 

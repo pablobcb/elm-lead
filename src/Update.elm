@@ -19,17 +19,20 @@ noteOffCommand velocity midiNoteNumber=
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
+
+  let 
+    breno = Debug.log ("msg: " ++ (toString msg) ++ " model:" ++ (toString model))
+  in
   case msg of
     NoOp ->
       (model, Cmd.none)
 
-
     MouseClickDown ->
       let
         model' = 
-          mouseDown model
+          breno <| mouseDown model
       in
-        case .mouseHoverKey model of
+        case .mousePressedKey model' of
           Just midiNoteNumber' ->
             (model', noteOnCommand (.velocity model') midiNoteNumber')
           Nothing ->
@@ -38,9 +41,9 @@ update msg model =
     MouseClickUp ->
       let
         model' = 
-          mouseUp model
+          breno <| mouseUp model
       in
-        case .mouseHoverKey model of
+        case .mousePressedKey model of
           Just midiNoteNumber' ->
             (model', noteOffCommand (.velocity model') midiNoteNumber')
           Nothing ->
@@ -49,22 +52,24 @@ update msg model =
     MouseEnter midiNoteNumber ->
       let
         model' = 
-          mouseEnter model midiNoteNumber
+          breno <| mouseEnter model midiNoteNumber
       in
-        if .mousePressed model then
-          (model', noteOnCommand (.velocity model') midiNoteNumber)
-        else
-          (model', Cmd.none)
+        case .mousePressedKey model' of
+          Just midiNoteNumber' ->
+            (model', noteOnCommand (.velocity model') midiNoteNumber')
+          Nothing ->
+            (model', Cmd.none)
 
     MouseLeave midiNoteNumber->
       let
         model' = 
-          mouseLeave model midiNoteNumber
+          breno <| mouseLeave model midiNoteNumber
       in
-        if .mousePressed model then
-          (model', noteOffCommand (.velocity model') midiNoteNumber)
-        else
-          (model', Cmd.none)
+        case .mousePressedKey model of
+          Just midiNoteNumber' ->
+            (model', noteOffCommand (.velocity model') midiNoteNumber')
+          Nothing ->
+            (model', Cmd.none)
 
     OctaveDown ->
       (octaveDown model, Cmd.none)
@@ -85,17 +90,23 @@ update msg model =
     KeyOn symbol ->
       let
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber (symbol, (.octave model))
+          VirtualKbd.keyToMidiNoteNumber (symbol, .octave model)
       in
         (addPressedNote model symbol, noteOnCommand (.velocity model) midiNoteNumber)
 
 
     KeyOff symbol ->
-      let                
+      let
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber (getPressedKeyNote model symbol)
+          Debug.log "midiNoteNumber:" <| snd <| getPressedKeyNote model symbol
+
+        model' = 
+          removePressedNote model <| Debug.log "Symbol:" symbol
       in
-        (removePressedNote model symbol, noteOffCommand (.velocity model) midiNoteNumber)
+        if List.length (.pressedNotes model') > 1 then 
+          (model', Cmd.none)
+        else
+          (model', noteOffCommand (.velocity model) midiNoteNumber)
 
 
     MasterVolumeChange value ->

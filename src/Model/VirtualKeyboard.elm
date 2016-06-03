@@ -6,16 +6,18 @@ import Msg exposing (..)
 import Char exposing (..)
 import Keyboard exposing (..)
 import List exposing (..)
+import Maybe.Extra exposing (..)
 
-type alias PressedNote =
-  (Char, Octave)
+type alias PressedKey =
+  (Char, MidiNote)
 
 type alias VirtualKeyboardModel =
-  { octave        : Octave
-  , velocity      : Velocity
-  , pressedNotes  : List PressedNote
-  , mousePressed  : Bool
-  , mouseHoverKey : Maybe Int
+  { octave            : Octave
+  , velocity          : Velocity
+  , pressedNotes      : List PressedKey
+  , mousePressed      : Bool
+  , mouseHoverKey     : Maybe MidiNote
+  , mousePressedKey   : Maybe MidiNote
   }
 
 pianoKeys: List Char
@@ -33,7 +35,7 @@ unusedKeysOnLastOctave: List Char
 unusedKeysOnLastOctave =
   ['h','u', 'j', 'k', 'o', 'l', 'p']
 
-keyToMidiNoteNumber : PressedNote -> Int
+keyToMidiNoteNumber : (Char, Octave) -> MidiNote
 keyToMidiNoteNumber (symbol, octave) =
   Midi.noteToMidiNumber <|
     case symbol of
@@ -88,11 +90,11 @@ velocityUp model =
 
 mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
 mouseDown model =
-  { model | mousePressed = True }
+  { model | mousePressed = True, mousePressedKey = model.mouseHoverKey }
 
 mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
 mouseUp model =
-  { model | mousePressed = False }
+  { model | mousePressed = False, mousePressedKey = Nothing }
 
 octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveDown model =
@@ -104,11 +106,11 @@ octaveUp model =
 
 mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
 mouseEnter model key =
-  Debug.log "Magro" { model | mouseHoverKey = Just key }
+  { model | mouseHoverKey = Just key, mousePressedKey = if model.mousePressed then Just key else Nothing }
 
 mouseLeave : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
 mouseLeave model key =
-  Debug.log "Breno" { model | mouseHoverKey = Nothing }
+  { model | mouseHoverKey = Nothing, mousePressedKey = Nothing }
 
 handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
 handleKeyDown model keyCode =
@@ -154,34 +156,44 @@ handleKeyUp model keyCode =
     invalidKey = 
       not <| List.member symbol pianoKeys
 
-    hasPressedNotes =
-      List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedNotes model)
+    pressedNotes =
+      findPressedNotes model symbol
   in 
-    if invalidKey || hasPressedNotes then
+    if invalidKey then
       NoOp
     else
       KeyOff symbol
 
+addClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+addClickedNote model midiNote =
+  { model | mousePressedKey = Just midiNote }
+
+
+removeClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+removeClickedNote model midiNote =
+  { model | mousePressedKey = Just midiNote }
+
+
 addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 addPressedNote model symbol =
-  { model | pressedNotes = (.pressedNotes model) ++ [(symbol, (.octave model))] }
+  { model | pressedNotes = (.pressedNotes model) ++ [ (symbol, keyToMidiNoteNumber (symbol, .octave model)) ] }
 
 
 removePressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 removePressedNote model symbol =
-  { model | pressedNotes = List.filter (\(symbol', octave') -> symbol /= symbol') model.pressedNotes }
+  { model | pressedNotes = List.filter (\(symbol', _) -> symbol /= symbol') model.pressedNotes }
 
 
-findFirstPressedNote : VirtualKeyboardModel -> Char -> Maybe PressedNote
-findFirstPressedNote model symbol =
-  List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
+findPressedNotes : VirtualKeyboardModel -> Char -> List PressedKey
+findPressedNotes model symbol =
+  List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
 
 
-getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedNote
-getPressedKeyNote model symbol =
+getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey
+getPressedKeyNote model midiNote =
   let
     firstPressedNote =
-      findFirstPressedNote model symbol
+      List.head <| findPressedNotes model midiNote
   in
     case firstPressedNote of
       Just pressedNote ->
