@@ -98,15 +98,9 @@ update msg model =
     KeyOff symbol ->
       let
         midiNoteNumber =
-          Debug.log "midiNoteNumber:" <| snd <| getPressedKeyNote model symbol
-
-        model' = 
-          removePressedNote model <| Debug.log "Symbol:" symbol
+          snd <| getPressedKeyNote model symbol
       in
-        if List.length (.pressedNotes model') > 1 then 
-          (model', Cmd.none)
-        else
-          (model', noteOffCommand (.velocity model) midiNoteNumber)
+        (removePressedNote model symbol, noteOffCommand (.velocity model) midiNoteNumber)
 
 
     MasterVolumeChange value ->

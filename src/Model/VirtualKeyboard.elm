@@ -88,14 +88,6 @@ velocityUp model =
         vel + 20
     }
 
-mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
-mouseDown model =
-  { model | mousePressed = True, mousePressedKey = model.mouseHoverKey }
-
-mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
-mouseUp model =
-  { model | mousePressed = False, mousePressedKey = Nothing }
-
 octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveDown model =
   { model | octave = max (-2) ((.octave model) - 1) }
@@ -103,6 +95,14 @@ octaveDown model =
 octaveUp : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveUp model =
   { model | octave = min 8 (model |> .octave |> (+) 1) }
+  
+mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseDown model =
+  { model | mousePressed = True, mousePressedKey = model.mouseHoverKey }
+
+mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseUp model =
+  { model | mousePressed = False, mousePressedKey = Nothing }
 
 mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
 mouseEnter model key =
