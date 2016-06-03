@@ -125,9 +125,12 @@ handleKeyDown model keyCode =
       (.octave model) == 8
 
     unusedKeys = 
-      List.member symbol unusedKeysOnLastOctave   
+      List.member symbol unusedKeysOnLastOctave
+
+    symbolAlreadyPressed =
+      isJust <| findPressedKey model symbol
   in 
-    if (not allowedInput) || (isLastOctave && unusedKeys) then
+    if (not allowedInput) || (isLastOctave && unusedKeys) || symbolAlreadyPressed then
       NoOp
     else
       case symbol of
@@ -156,8 +159,16 @@ handleKeyUp model keyCode =
     invalidKey = 
       not <| List.member symbol pianoKeys
 
-    pressedNotes =
-      findPressedNotes model symbol
+   --isMousePressingSameKey =
+   --  case findPressedKey model symbol of
+   --    Just (symbol', midiNote') ->
+   --      case model.mousePressedKey of
+   --        Just midiNote ->
+   --          (==) midiNote' midiNote
+   --        Nothing ->
+   --          False
+   --    Nothing->
+   --      False
   in 
     if invalidKey then
       NoOp
@@ -184,9 +195,14 @@ removePressedNote model symbol =
   { model | pressedNotes = List.filter (\(symbol', _) -> symbol /= symbol') model.pressedNotes }
 
 
-findPressedNotes : VirtualKeyboardModel -> Char -> Maybe PressedKey
-findPressedNotes model symbol =
+findPressedKey : VirtualKeyboardModel -> Char -> Maybe PressedKey
+findPressedKey model symbol =
   List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
+
+
+findPressedNote : VirtualKeyboardModel -> MidiNote -> Maybe PressedKey
+findPressedNote model midiNote =
+  List.head <| List.filter (\(_, midiNote') -> midiNote == midiNote') model.pressedNotes
 
 --
 --getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey

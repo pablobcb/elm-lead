@@ -79,9 +79,6 @@ export default class AudioEngine {
 	}
 
 	noteOn (midiNote : number, velocity : number) {
-		if(this.oscillators[midiNote])
-			return
-
 		const osc1 = this.context.createOscillator()
 		const osc2 = this.context.createOscillator()
 		
