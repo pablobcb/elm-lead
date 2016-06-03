@@ -11,10 +11,11 @@ type alias PressedNote =
   (Char, Octave)
 
 type alias VirtualKeyboardModel =
-  { octave       : Octave
-  , velocity     : Velocity
-  , pressedNotes : List PressedNote
-  , mousePressed : Bool
+  { octave        : Octave
+  , velocity      : Velocity
+  , pressedNotes  : List PressedNote
+  , mousePressed  : Bool
+  , mouseHoverKey : Maybe Int
   }
 
 pianoKeys: List Char
@@ -97,11 +98,17 @@ octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveDown model =
   { model | octave = max (-2) ((.octave model) - 1) }
 
-
 octaveUp : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveUp model =
   { model | octave = min 8 (model |> .octave |> (+) 1) }
 
+mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseEnter model key =
+  Debug.log "Magro" { model | mouseHoverKey = Just key }
+
+mouseLeave : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseLeave model key =
+  Debug.log "Breno" { model | mouseHoverKey = Nothing }
 
 handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
 handleKeyDown model keyCode =

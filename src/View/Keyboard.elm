@@ -11,142 +11,49 @@ import Msg exposing (..)
 
 import Model.VirtualKeyboard exposing (..)
 
+octaveKeys : List String
+octaveKeys =
+  [ "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b" ]
+
+midiNotes : List Int
+midiNotes =
+  [ 0 .. 127 ]
+
+onScreenKeyboardKeys : List String  
+onScreenKeyboardKeys =
+  (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
+
+onMouseEnter' : Int -> Html.Attribute Msg
+onMouseEnter' midiNote = 
+  midiNote |> MouseEnter |> Html.Events.onMouseEnter
+
+onMouseLeave' : Int -> Html.Attribute Msg
+onMouseLeave' midiNote = 
+  midiNote |> MouseLeave |> Html.Events.onMouseEnter
+
+key : String -> Int -> Html Msg
+key noteName midiNote = 
+  li [ getKeyClass noteName midiNote |> class, onMouseEnter' midiNote ] []
+
+keys : List (Html Msg)
+keys =
+  List.map2 key onScreenKeyboardKeys midiNotes
+
+getKeyClass : String -> Int -> String
+getKeyClass noteName midiNote =
+  let keyPosition =
+    if String.contains "s" noteName then
+      "higher"
+    else
+      ((++) "lower") <|
+        if midiNote == 60 then
+          " c3"
+        else
+          ""
+  in
+    "key " ++ keyPosition ++ " " ++ noteName
+
 keyboard : Html Msg
 keyboard =
-  let
-    onMouseEnter' midiNote = 
-      midiNote |> MouseEnter |> Html.Events.onMouseEnter
-    
-    keys = 
-      [ li [ class "key lower c"  , onMouseEnter' "0"  ] []
-      , li [ class "key higher cs", onMouseEnter' "1"  ] []
-      , li [ class "key lower d"  , onMouseEnter' "2"  ] []
-      , li [ class "key higher ds", onMouseEnter' "3"  ] []
-      , li [ class "key lower e"  , onMouseEnter' "4"  ] []
-      , li [ class "key lower f"  , onMouseEnter' "5"  ] []
-      , li [ class "key higher fs", onMouseEnter' "6"  ] []
-      , li [ class "key lower g"  , onMouseEnter' "7"  ] []
-      , li [ class "key higher gs", onMouseEnter' "8"  ] []
-      , li [ class "key lower a"  , onMouseEnter' "9"  ] []
-      , li [ class "key higher as", onMouseEnter' "10" ] []
-      , li [ class "key lower b"  , onMouseEnter' "11" ] []
-      , li [ class "key lower c"  , onMouseEnter' "12" ] []
-      , li [ class "key higher cs", onMouseEnter' "13" ] []
-      , li [ class "key lower d"  , onMouseEnter' "14" ] []
-      , li [ class "key higher ds", onMouseEnter' "15" ] []
-      , li [ class "key lower e"  , onMouseEnter' "16" ] []
-      , li [ class "key lower f"  , onMouseEnter' "17" ] []
-      , li [ class "key higher fs", onMouseEnter' "18" ] []
-      , li [ class "key lower g"  , onMouseEnter' "19" ] []
-      , li [ class "key higher gs", onMouseEnter' "20" ] []
-      , li [ class "key lower a"  , onMouseEnter' "21" ] []
-      , li [ class "key higher as", onMouseEnter' "22" ] []
-      , li [ class "key lower b"  , onMouseEnter' "23" ] []
-      , li [ class "key lower c"  , onMouseEnter' "24" ] []
-      , li [ class "key higher cs", onMouseEnter' "25" ] []
-      , li [ class "key lower d"  , onMouseEnter' "26" ] []
-      , li [ class "key higher ds", onMouseEnter' "27" ] []
-      , li [ class "key lower e"  , onMouseEnter' "28" ] []
-      , li [ class "key lower f"  , onMouseEnter' "29" ] []
-      , li [ class "key higher fs", onMouseEnter' "30" ] []
-      , li [ class "key lower g"  , onMouseEnter' "31" ] []
-      , li [ class "key higher gs", onMouseEnter' "32" ] []
-      , li [ class "key lower a"  , onMouseEnter' "33" ] []
-      , li [ class "key higher as", onMouseEnter' "34" ] []
-      , li [ class "key lower b"  , onMouseEnter' "35" ] []
-      , li [ class "key lower c"  , onMouseEnter' "36" ] []
-      , li [ class "key higher cs", onMouseEnter' "37" ] []
-      , li [ class "key lower d"  , onMouseEnter' "38" ] []
-      , li [ class "key higher ds", onMouseEnter' "39" ] []
-      , li [ class "key lower e"  , onMouseEnter' "40" ] []
-      , li [ class "key lower f"  , onMouseEnter' "41" ] []
-      , li [ class "key higher fs", onMouseEnter' "42" ] []
-      , li [ class "key lower g"  , onMouseEnter' "43" ] []
-      , li [ class "key higher gs", onMouseEnter' "44" ] []
-      , li [ class "key lower a"  , onMouseEnter' "45" ] []
-      , li [ class "key higher as", onMouseEnter' "46" ] []
-      , li [ class "key lower b"  , onMouseEnter' "47" ] []
-      , li [ class "key lower c"  , onMouseEnter' "48" ] []
-      , li [ class "key higher cs", onMouseEnter' "49" ] []
-      , li [ class "key lower d"  , onMouseEnter' "50" ] []
-      , li [ class "key higher ds", onMouseEnter' "51" ] []
-      , li [ class "key lower e"  , onMouseEnter' "52" ] []
-      , li [ class "key lower f"  , onMouseEnter' "53" ] []
-      , li [ class "key higher fs", onMouseEnter' "54" ] []
-      , li [ class "key lower g"  , onMouseEnter' "55" ] []
-      , li [ class "key higher gs", onMouseEnter' "56" ] []
-      , li [ class "key lower a"  , onMouseEnter' "57" ] []
-      , li [ class "key higher as", onMouseEnter' "58" ] []
-      , li [ class "key lower b"  , onMouseEnter' "59" ] []
-      , li [class "key lower c c3", onMouseEnter' "60" ] []
-      , li [ class "key higher cs", onMouseEnter' "61" ] []
-      , li [ class "key lower d"  , onMouseEnter' "62" ] []
-      , li [ class "key higher ds", onMouseEnter' "63" ] []
-      , li [ class "key lower e"  , onMouseEnter' "64" ] []
-      , li [ class "key lower f"  , onMouseEnter' "65" ] []
-      , li [ class "key higher fs", onMouseEnter' "66" ] []
-      , li [ class "key lower g"  , onMouseEnter' "67" ] []
-      , li [ class "key higher gs", onMouseEnter' "68" ] []
-      , li [ class "key lower a"  , onMouseEnter' "69" ] []
-      , li [ class "key higher as", onMouseEnter' "70" ] []
-      , li [ class "key lower b"  , onMouseEnter' "71" ] []
-      , li [ class "key lower c"  , onMouseEnter' "72" ] []
-      , li [ class "key higher cs", onMouseEnter' "73" ] []
-      , li [ class "key lower d"  , onMouseEnter' "74" ] []
-      , li [ class "key higher ds", onMouseEnter' "75" ] []
-      , li [ class "key lower e"  , onMouseEnter' "76" ] []
-      , li [ class "key lower f"  , onMouseEnter' "77" ] []
-      , li [ class "key higher fs", onMouseEnter' "78" ] []
-      , li [ class "key lower g"  , onMouseEnter' "79" ] []
-      , li [ class "key higher gs", onMouseEnter' "80" ] []
-      , li [ class "key lower a"  , onMouseEnter' "81" ] []
-      , li [ class "key higher as", onMouseEnter' "82" ] []
-      , li [ class "key lower b"  , onMouseEnter' "83" ] []
-      , li [ class "key lower c"  , onMouseEnter' "84" ] []
-      , li [ class "key higher cs", onMouseEnter' "85" ] []
-      , li [ class "key lower d"  , onMouseEnter' "86" ] []
-      , li [ class "key higher ds", onMouseEnter' "87" ] []
-      , li [ class "key lower e"  , onMouseEnter' "88" ] []
-      , li [ class "key lower f"  , onMouseEnter' "89" ] []
-      , li [ class "key higher fs", onMouseEnter' "90" ] []
-      , li [ class "key lower g"  , onMouseEnter' "91" ] []
-      , li [ class "key higher gs", onMouseEnter' "92" ] []
-      , li [ class "key lower a"  , onMouseEnter' "93" ] []
-      , li [ class "key higher as", onMouseEnter' "94" ] []
-      , li [ class "key lower b"  , onMouseEnter' "95" ] []
-      , li [ class "key lower c"  , onMouseEnter' "96" ] []
-      , li [ class "key higher cs", onMouseEnter' "97" ] []
-      , li [ class "key lower d"  , onMouseEnter' "98" ] []
-      , li [ class "key higher ds", onMouseEnter' "99" ] []
-      , li [ class "key lower e"  , onMouseEnter' "100"] []
-      , li [ class "key lower f"  , onMouseEnter' "101"] []
-      , li [ class "key higher fs", onMouseEnter' "102"] []
-      , li [ class "key lower g"  , onMouseEnter' "103"] []
-      , li [ class "key higher gs", onMouseEnter' "104"] []
-      , li [ class "key lower a"  , onMouseEnter' "105"] []
-      , li [ class "key higher as", onMouseEnter' "106"] []
-      , li [ class "key lower b"  , onMouseEnter' "107"] []
-      , li [ class "key lower c"  , onMouseEnter' "108"] []
-      , li [ class "key higher cs", onMouseEnter' "109"] []
-      , li [ class "key lower d"  , onMouseEnter' "110"] []
-      , li [ class "key higher ds", onMouseEnter' "111"] []
-      , li [ class "key lower e"  , onMouseEnter' "112"] []
-      , li [ class "key lower f"  , onMouseEnter' "113"] []
-      , li [ class "key higher fs", onMouseEnter' "114"] []
-      , li [ class "key lower g"  , onMouseEnter' "115"] []
-      , li [ class "key higher gs", onMouseEnter' "116"] []
-      , li [ class "key lower a"  , onMouseEnter' "117"] []
-      , li [ class "key higher as", onMouseEnter' "118"] []
-      , li [ class "key lower b"  , onMouseEnter' "119"] []
-      , li [ class "key lower c"  , onMouseEnter' "120"] []
-      , li [ class "key higher cs", onMouseEnter' "121"] []
-      , li [ class "key lower d"  , onMouseEnter' "122"] []
-      , li [ class "key higher ds", onMouseEnter' "123"] []
-      , li [ class "key lower e"  , onMouseEnter' "124"] []
-      , li [ class "key lower f"  , onMouseEnter' "125"] []
-      , li [ class "key higher fs", onMouseEnter' "126"] []
-      , li [ class "key lower g"  , onMouseEnter' "127"] []
-      ]
-  in
-    ul [ class "keyboard" ] keys
+  ul [ class "keyboard" ] keys
 

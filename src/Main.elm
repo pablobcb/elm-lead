@@ -31,6 +31,7 @@ init =
   , velocity = 100
   , pressedNotes = []
   , mousePressed = False
+  , mouseHoverKey = Nothing
   }
   Cmd.none
 

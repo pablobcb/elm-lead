@@ -8,6 +8,15 @@ import Ports exposing (..)
 import Debug exposing (..)
 import String exposing (..)
 import Char exposing (..)
+import Maybe.Extra exposing (..)
+
+noteOnCommand : Velocity -> Int -> Cmd msg
+noteOnCommand velocity midiNoteNumber= 
+  noteOnMessage midiNoteNumber velocity |> midiPort
+
+noteOffCommand : Velocity -> Int -> Cmd msg
+noteOffCommand velocity midiNoteNumber= 
+  noteOffMessage midiNoteNumber velocity |> midiPort
 
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
@@ -24,10 +33,24 @@ update msg model =
       (mouseUp model, Cmd.none)
 
     MouseEnter midiNoteNumber ->
-      (model, Cmd.none)
+      let
+        model' = 
+          mouseEnter model midiNoteNumber
+      in
+        if .mousePressed model then
+          (model', noteOnCommand (.velocity model') midiNoteNumber)
+        else
+          (model', Cmd.none)
 
     MouseLeave midiNoteNumber->
-      (model, Cmd.none)
+      let
+        model' = 
+          mouseLeave model midiNoteNumber
+      in
+        if .mousePressed model then
+          (model', noteOffCommand (.velocity model') midiNoteNumber)
+        else
+          (model', Cmd.none)
 
     OctaveDown ->
       (octaveDown model, Cmd.none)
@@ -50,7 +73,7 @@ update msg model =
         midiNoteNumber =
           VirtualKbd.keyToMidiNoteNumber (symbol, (.octave model))
       in
-        (addPressedNote model symbol, noteOnMessage midiNoteNumber (.velocity model) |> midiPort)
+        (addPressedNote model symbol, noteOnCommand (.velocity model) midiNoteNumber)
 
 
     KeyOff symbol ->
@@ -58,7 +81,7 @@ update msg model =
         midiNoteNumber =
           VirtualKbd.keyToMidiNoteNumber (getPressedKeyNote model symbol)
       in
-        (removePressedNote model symbol, noteOffMessage midiNoteNumber (.velocity model) |> midiPort)
+        (removePressedNote model symbol, noteOffCommand (.velocity model) midiNoteNumber)
 
 
     MasterVolumeChange value ->
