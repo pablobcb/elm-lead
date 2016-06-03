@@ -29,11 +29,16 @@ onMouseEnter' midiNote =
 
 onMouseLeave' : Int -> Html.Attribute Msg
 onMouseLeave' midiNote = 
-  midiNote |> MouseLeave |> Html.Events.onMouseEnter
+  midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
 key : String -> Int -> Html Msg
 key noteName midiNote = 
-  li [ getKeyClass noteName midiNote |> class, onMouseEnter' midiNote ] []
+  li 
+  [ getKeyClass noteName midiNote |> class
+  , onMouseEnter' midiNote
+  , onMouseLeave' midiNote 
+  ] 
+  []
 
 keys : List (Html Msg)
 keys =

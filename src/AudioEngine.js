@@ -25,7 +25,7 @@ export default class AudioEngine {
 
 	initializeMasterVolume () {
 		this.masterVolume = this.context.createGain()
-		this.masterVolume.gain.value = 0.7
+		this.masterVolume.gain.value = 0.1
 		this.masterVolume.connect(this.context.destination)
 	}
 

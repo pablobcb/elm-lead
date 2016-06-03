@@ -87,7 +87,7 @@ masterVolume =
         [ Html.Attributes.type' "range" 
         , Html.Attributes.min "0"
         , Html.Attributes.max "100"
-        , Html.Attributes.value "70"
+        , Html.Attributes.value "10"
         , Html.Attributes.step "1"
         , Html.Events.onInput <| unsafeToFloat >> MasterVolumeChange
         ]

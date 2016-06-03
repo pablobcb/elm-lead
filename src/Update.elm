@@ -8,7 +8,6 @@ import Ports exposing (..)
 import Debug exposing (..)
 import String exposing (..)
 import Char exposing (..)
-import Maybe.Extra exposing (..)
 
 noteOnCommand : Velocity -> Int -> Cmd msg
 noteOnCommand velocity midiNoteNumber= 
@@ -26,11 +25,26 @@ update msg model =
 
 
     MouseClickDown ->
-      (mouseDown model, Cmd.none)
-
+      let
+        model' = 
+          mouseDown model
+      in
+        case .mouseHoverKey model of
+          Just midiNoteNumber' ->
+            (model', noteOnCommand (.velocity model') midiNoteNumber')
+          Nothing ->
+            (model', Cmd.none)
 
     MouseClickUp ->
-      (mouseUp model, Cmd.none)
+      let
+        model' = 
+          mouseUp model
+      in
+        case .mouseHoverKey model of
+          Just midiNoteNumber' ->
+            (model', noteOffCommand (.velocity model') midiNoteNumber')
+          Nothing ->
+            (model', Cmd.none)
 
     MouseEnter midiNoteNumber ->
       let
