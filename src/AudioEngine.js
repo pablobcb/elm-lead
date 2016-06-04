@@ -83,6 +83,9 @@ export default class AudioEngine {
 	}
 
 	noteOn (midiNote : number, velocity : number) {
+		if(this.oscillators[midiNote])
+			return
+		
 		const osc1 = this.context.createOscillator()
 		const osc2 = this.context.createOscillator()
 		
@@ -105,13 +108,14 @@ export default class AudioEngine {
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		if(this.oscillators[midiNote]){
-			this.oscillators[midiNote].forEach(oscillator => {
-				oscillator.stop(this.context.currentTime)
-			})
-			
-			this.oscillators[midiNote] = null
-		}
+		if(! this.oscillators[midiNote])
+			return
+
+		this.oscillators[midiNote].forEach(oscillator => {
+			oscillator.stop(this.context.currentTime)
+		})
+		
+		this.oscillators[midiNote] = null
 
 	}
 
