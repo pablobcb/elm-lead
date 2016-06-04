@@ -120,7 +120,6 @@ export default class AudioEngine {
 	}
 
 	panic () {
-		console.log("panic")
 		
 		this.oscillators.forEach(oscillator => {
 			if(oscillator){
