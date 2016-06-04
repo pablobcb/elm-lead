@@ -9,9 +9,13 @@ export default class AudioEngine {
 	constructor (midiAccess : MIDIAccess) {
 		this.context = new AudioContext
 		this.oscillators = []
+		
 		this.initializeMidiAccess(midiAccess)
-		this.initializeMasterVolume()	
+		
+		this.initializeMasterVolume()
+		
 		this.initializeOscillatorsGain ()
+		
 		this.oscillator1Detune = 0
 		this.oscillator2Detune = 0
 	}
@@ -101,12 +105,33 @@ export default class AudioEngine {
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		this.oscillators[midiNote].forEach(oscillator => {
-			oscillator.stop(this.context.currentTime)			
+		if(this.oscillators[midiNote]){
+			this.oscillators[midiNote].forEach(oscillator => {
+				oscillator.stop(this.context.currentTime)
+			})
+			
+			this.oscillators[midiNote] = null
+		}
+
+	}
+
+	panic () {
+		console.log("panic")
+		
+		this.oscillators.forEach(oscillator => {
+			if(oscillator){
+				oscillator.forEach(osc => {
+					osc.stop(this.context.currentTime)
+					osc = null
+				})
+
+				oscillator = null
+			}
 		})
 
-		this.oscillators[midiNote] = null
+		this.oscillators = []
 	}
+
 
 	setMasterVolumeGain (masterVolumeGain : number) {
 		this.masterVolume.gain.value = masterVolumeGain / 100
