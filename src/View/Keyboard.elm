@@ -31,34 +31,48 @@ onMouseLeave' : Int -> Html.Attribute Msg
 onMouseLeave' midiNote = 
   midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
-key : String -> Int -> Html Msg
-key noteName midiNote = 
+key : VirtualKeyboardModel -> String -> Int -> Html Msg
+key model noteName midiNote = 
   li 
-  [ getKeyClass noteName midiNote |> class
+  [ getKeyClass model noteName midiNote |> class
   , onMouseEnter' midiNote
   , onMouseLeave' midiNote 
   ] 
   []
 
-keys : List (Html Msg)
-keys =
-  List.map2 key onScreenKeyboardKeys midiNotes
+keys : VirtualKeyboardModel -> List (Html Msg)
+keys model =
+  List.map2 (key model) onScreenKeyboardKeys midiNotes
 
-getKeyClass : String -> Int -> String
-getKeyClass noteName midiNote =
-  let keyPosition =
-    if String.contains "s" noteName then
-      "higher"
-    else
-      ((++) "lower") <|
-        if midiNote == 60 then
-          " c3"
-        else
-          ""
+getKeyClass : VirtualKeyboardModel -> String -> Int -> String
+getKeyClass model noteName midiNote =
+  let 
+    isSharpKey = String.contains "s" noteName
+
+    middleC = 
+      if midiNote == 60 then
+        "c3"
+      else
+        ""
+
+    keyPressed = 
+      if List.member midiNote <| List.map snd model.pressedNotes then
+        "pressed"
+      else
+        ""
+
+    position = 
+      if isSharpKey then
+        "higher"
+      else
+        "lower"
+
   in
-    "key " ++ keyPosition ++ " " ++ noteName
+    ["key", position, keyPressed, middleC] 
+    |> List.filter ((/=) "") 
+    |> String.join " "
 
-keyboard : Html Msg
-keyboard =
-  ul [ class "keyboard" ] keys
+keyboard : VirtualKeyboardModel -> Html Msg
+keyboard model =
+  ul [ class "keyboard" ] <| keys model
 
