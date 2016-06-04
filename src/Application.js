@@ -41,6 +41,10 @@ export default class Application {
 		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
 			this.audioEngine.setOscillator2Detune(oscillatorDetune)
 		})
+
+		window.onblur = () => {
+			//this.audioEngine.panic()
+		}
 	}
 
 	onMIDIFailure (e : Error) {
