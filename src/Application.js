@@ -21,7 +21,7 @@ export default class Application {
 		this.audioEngine = new AudioEngine(midiAccess)
 
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
-			let midiEvent = new Event('idimessage')
+			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
 			this.audioEngine.onMIDIMessage(midiEvent)
 		})

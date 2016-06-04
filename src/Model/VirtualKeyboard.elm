@@ -6,14 +6,18 @@ import Msg exposing (..)
 import Char exposing (..)
 import Keyboard exposing (..)
 import List exposing (..)
+import Maybe.Extra exposing (..)
 
-type alias PressedNote =
-  (Char, Octave)
+type alias PressedKey =
+  (Char, MidiNote)
 
 type alias VirtualKeyboardModel =
-  { octave       : Octave
-  , velocity     : Velocity
-  , pressedNotes : List PressedNote
+  { octave              : Octave
+  , velocity            : Velocity
+  , pressedNotes        : List PressedKey
+  , clickedAndHovering  : Bool
+  , mouseHoverNote      : Maybe MidiNote
+  , mousePressedNote    : Maybe MidiNote
   }
 
 pianoKeys: List Char
@@ -31,7 +35,7 @@ unusedKeysOnLastOctave: List Char
 unusedKeysOnLastOctave =
   ['h','u', 'j', 'k', 'o', 'l', 'p']
 
-keyToMidiNoteNumber : PressedNote -> Int
+keyToMidiNoteNumber : (Char, Octave) -> MidiNote
 keyToMidiNoteNumber (symbol, octave) =
   Midi.noteToMidiNumber <|
     case symbol of
@@ -84,16 +88,29 @@ velocityUp model =
         vel + 20
     }
 
-
 octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveDown model =
   { model | octave = max (-2) ((.octave model) - 1) }
-
 
 octaveUp : VirtualKeyboardModel -> VirtualKeyboardModel
 octaveUp model =
   { model | octave = min 8 (model |> .octave |> (+) 1) }
 
+mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseDown model =
+  { model | clickedAndHovering = True, mousePressedNote = model.mouseHoverNote }
+
+mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseUp model =
+  { model | clickedAndHovering = False, mousePressedNote = Nothing }
+
+mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseEnter model key =
+  { model | mouseHoverNote = Just key, mousePressedNote = if model.clickedAndHovering then Just key else Nothing }
+
+mouseLeave : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseLeave model key =
+  { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
 handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
 handleKeyDown model keyCode =
@@ -108,9 +125,12 @@ handleKeyDown model keyCode =
       (.octave model) == 8
 
     unusedKeys = 
-      List.member symbol unusedKeysOnLastOctave   
+      List.member symbol unusedKeysOnLastOctave
+
+    symbolAlreadyPressed =
+      isJust <| findPressedKey model symbol
   in 
-    if (not allowedInput) || (isLastOctave && unusedKeys) then
+    if (not allowedInput) || (isLastOctave && unusedKeys) || symbolAlreadyPressed then
       NoOp
     else
       case symbol of
@@ -139,38 +159,60 @@ handleKeyUp model keyCode =
     invalidKey = 
       not <| List.member symbol pianoKeys
 
-    hasPressedNotes =
-      List.isEmpty <| List.filter (\(symbol', _) -> symbol == symbol') (.pressedNotes model)
+   --isMousePressingSameKey =
+   --  case findPressedKey model symbol of
+   --    Just (symbol', midiNote') ->
+   --      case model.mousePressedKey of
+   --        Just midiNote ->
+   --          (==) midiNote' midiNote
+   --        Nothing ->
+   --          False
+   --    Nothing->
+   --      False
   in 
-    if invalidKey || hasPressedNotes then
+    if invalidKey then
       NoOp
     else
       KeyOff symbol
 
+addClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+addClickedNote model midiNote =
+  { model | mousePressedNote = Just midiNote }
+
+
+removeClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+removeClickedNote model midiNote =
+  { model | mousePressedNote = Just midiNote }
+
 
 addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 addPressedNote model symbol =
-  { model | pressedNotes = (.pressedNotes model) ++ [(symbol, (.octave model))] }
+  { model | pressedNotes = (.pressedNotes model) ++ [ (symbol, keyToMidiNoteNumber (symbol, .octave model)) ] }
 
 
 removePressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
 removePressedNote model symbol =
-  { model | pressedNotes = List.filter (\(symbol', octave') -> symbol /= symbol') model.pressedNotes }
+  { model | pressedNotes = List.filter (\(symbol', _) -> symbol /= symbol') model.pressedNotes }
 
 
-findFirstPressedNote : VirtualKeyboardModel -> Char -> Maybe PressedNote
-findFirstPressedNote model symbol =
+findPressedKey : VirtualKeyboardModel -> Char -> Maybe PressedKey
+findPressedKey model symbol =
   List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
 
 
-getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedNote
-getPressedKeyNote model symbol =
-  let
-    firstPressedNote =
-      findFirstPressedNote model symbol
-  in
-    case firstPressedNote of
-      Just pressedNote ->
-        pressedNote
-      Nothing ->
-        Debug.crash "Key up without key down first"
+findPressedNote : VirtualKeyboardModel -> MidiNote -> Maybe PressedKey
+findPressedNote model midiNote =
+  List.head <| List.filter (\(_, midiNote') -> midiNote == midiNote') model.pressedNotes
+
+--
+--getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey
+--getPressedKeyNote model midiNote =
+--  let
+--    firstPressedNote =
+--      List.head <| findPressedNotes model midiNote
+--  in
+--    case firstPressedNote of
+--      Just pressedNote ->
+--        pressedNote
+--      Nothing ->
+--        Debug.crash "Key up without key down first"

@@ -29,7 +29,7 @@ export default class AudioEngine {
 
 	initializeMasterVolume () {
 		this.masterVolume = this.context.createGain()
-		this.masterVolume.gain.value = 0.7
+		this.masterVolume.gain.value = 0.1
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -85,7 +85,7 @@ export default class AudioEngine {
 	noteOn (midiNote : number, velocity : number) {
 		if(this.oscillators[midiNote])
 			return
-
+		
 		const osc1 = this.context.createOscillator()
 		const osc2 = this.context.createOscillator()
 		
@@ -108,7 +108,7 @@ export default class AudioEngine {
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		if(! this.oscillators[midiNote]){
+		if(! this.oscillators[midiNote])
 			return
 
 		this.oscillators[midiNote].forEach(oscillator => {
@@ -116,11 +116,9 @@ export default class AudioEngine {
 		})
 			
 		this.oscillators[midiNote] = null
-
 	}
 
 	panic () {
-		console.log("panic")
 		
 		this.oscillators.forEach(oscillator => {
 			if(oscillator){

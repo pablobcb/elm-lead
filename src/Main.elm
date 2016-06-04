@@ -9,6 +9,7 @@ import Midi exposing (..)
 import Model.VirtualKeyboard as VirtualKbd exposing (..)
 import Msg exposing (..)
 import Keyboard exposing (..)
+import Mouse exposing (..)
 
 import Update exposing (..)
 import View.Dashboard exposing (..)
@@ -26,9 +27,12 @@ main =
 init : (VirtualKeyboardModel, Cmd msg)
 init =
   (,)
-  { octave   = 3
-  , velocity = 100
-  , pressedNotes = []
+  { octave             = 3
+  , velocity           = 100
+  , pressedNotes       = []
+  , clickedAndHovering = False
+  , mouseHoverNote     = Nothing
+  , mousePressedNote   = Nothing
   }
   Cmd.none
 
@@ -44,5 +48,7 @@ subscriptions model =
   Sub.batch
     [ Keyboard.downs (VirtualKbd.handleKeyDown model)
     , Keyboard.ups (VirtualKbd.handleKeyUp model)
+    , Mouse.downs <| always MouseClickDown
+    , Mouse.ups <| always MouseClickUp
     ]
     

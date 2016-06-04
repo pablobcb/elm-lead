@@ -1,5 +1,7 @@
 module View.Keyboard exposing (keyboard) -- where
 
+import String exposing (..)
+
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
@@ -7,149 +9,56 @@ import Html.Attributes exposing (class)
 import Update exposing (..)
 import Msg exposing (..)
 
+import Model.VirtualKeyboard exposing (..)
+
+octaveKeys : List String
+octaveKeys =
+  [ "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b" ]
+
+midiNotes : List Int
+midiNotes =
+  [ 0 .. 127 ]
+
+onScreenKeyboardKeys : List String  
+onScreenKeyboardKeys =
+  (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
+
+onMouseEnter' : Int -> Html.Attribute Msg
+onMouseEnter' midiNote = 
+  midiNote |> MouseEnter |> Html.Events.onMouseEnter
+
+onMouseLeave' : Int -> Html.Attribute Msg
+onMouseLeave' midiNote = 
+  midiNote |> MouseLeave |> Html.Events.onMouseLeave
+
+key : String -> Int -> Html Msg
+key noteName midiNote = 
+  li 
+  [ getKeyClass noteName midiNote |> class
+  , onMouseEnter' midiNote
+  , onMouseLeave' midiNote 
+  ] 
+  []
+
+keys : List (Html Msg)
+keys =
+  List.map2 key onScreenKeyboardKeys midiNotes
+
+getKeyClass : String -> Int -> String
+getKeyClass noteName midiNote =
+  let keyPosition =
+    if String.contains "s" noteName then
+      "higher"
+    else
+      ((++) "lower") <|
+        if midiNote == 60 then
+          " c3"
+        else
+          ""
+  in
+    "key " ++ keyPosition ++ " " ++ noteName
+
 keyboard : Html Msg
 keyboard =
-  let
-    keys = 
-      [ li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c c3"] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-      
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      , li [ class "key higher gs" ] []
-      , li [ class "key lower a"   ] []
-      , li [ class "key higher as" ] []
-      , li [ class "key lower b"   ] []
-
-      , li [ class "key lower c"   ] []
-      , li [ class "key higher cs" ] []
-      , li [ class "key lower d"   ] []
-      , li [ class "key higher ds" ] []
-      , li [ class "key lower e"   ] []
-      , li [ class "key lower f"   ] []
-      , li [ class "key higher fs" ] []
-      , li [ class "key lower g"   ] []
-      ]
-  in
-    ul [ class "keyboard" ] keys
+  ul [ class "keyboard" ] keys
 
