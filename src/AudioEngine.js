@@ -110,18 +110,23 @@ export default class AudioEngine {
 	noteOff (midiNote : number, velocity : number) {
 		this.oscillators[midiNote].forEach(oscillator => {
 			oscillator.stop(this.context.currentTime)
-			oscillator = null
 		})
 
-		
+		this.oscillators[midiNote] = null
 	}
 
 	panic () {
 		console.log("panic")
-		//this.oscillators.forEach(oscillator => {
-		//	oscillator.stop(this.context.currentTime)
-		//	oscillator = null
-		//})
+		this.oscillators.forEach(oscillator => {
+			
+			if(oscillator){
+					oscillator.forEach(osc => {
+						osc.stop(this.context.currentTime)
+					}
+				)
+			}
+
+		})
 	}
 
 	setMasterVolumeGain (masterVolumeGain : number) {

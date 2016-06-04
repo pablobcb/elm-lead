@@ -43,7 +43,8 @@ export default class Application {
 		})
 
 		window.onblur = () => {
-			//this.audioEngine.panic()
+			console.log("BLURRRRRRR")
+			this.audioEngine.panic()
 		}
 	}
 
