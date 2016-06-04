@@ -12,12 +12,12 @@ type alias PressedKey =
   (Char, MidiNote)
 
 type alias VirtualKeyboardModel =
-  { octave            : Octave
-  , velocity          : Velocity
-  , pressedNotes      : List PressedKey
-  , mousePressed      : Bool
-  , mouseHoverKey     : Maybe MidiNote
-  , mousePressedKey   : Maybe MidiNote
+  { octave              : Octave
+  , velocity            : Velocity
+  , pressedNotes        : List PressedKey
+  , clickedAndHovering  : Bool
+  , mouseHoverNote      : Maybe MidiNote
+  , mousePressedNote    : Maybe MidiNote
   }
 
 pianoKeys: List Char
@@ -98,19 +98,19 @@ octaveUp model =
 
 mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
 mouseDown model =
-  { model | mousePressed = True, mousePressedKey = model.mouseHoverKey }
+  { model | clickedAndHovering = True, mousePressedNote = model.mouseHoverNote }
 
 mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
 mouseUp model =
-  { model | mousePressed = False, mousePressedKey = Nothing }
+  { model | clickedAndHovering = False, mousePressedNote = Nothing }
 
 mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
 mouseEnter model key =
-  { model | mouseHoverKey = Just key, mousePressedKey = if model.mousePressed then Just key else Nothing }
+  { model | mouseHoverNote = Just key, mousePressedNote = if model.clickedAndHovering then Just key else Nothing }
 
 mouseLeave : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
 mouseLeave model key =
-  { model | mouseHoverKey = Nothing, mousePressedKey = Nothing }
+  { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
 handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
 handleKeyDown model keyCode =
@@ -177,12 +177,12 @@ handleKeyUp model keyCode =
 
 addClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
 addClickedNote model midiNote =
-  { model | mousePressedKey = Just midiNote }
+  { model | mousePressedNote = Just midiNote }
 
 
 removeClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
 removeClickedNote model midiNote =
-  { model | mousePressedKey = Just midiNote }
+  { model | mousePressedNote = Just midiNote }
 
 
 addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel

@@ -27,12 +27,12 @@ main =
 init : (VirtualKeyboardModel, Cmd msg)
 init =
   (,)
-  { octave   = 3
-  , velocity = 100
-  , pressedNotes = []
-  , mousePressed = False
-  , mouseHoverKey = Nothing
-  , mousePressedKey = Nothing
+  { octave             = 3
+  , velocity           = 100
+  , pressedNotes       = []
+  , clickedAndHovering = False
+  , mouseHoverNote     = Nothing
+  , mousePressedNote   = Nothing
   }
   Cmd.none
 

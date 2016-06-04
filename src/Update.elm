@@ -18,6 +18,25 @@ noteOffCommand : Velocity -> Int -> Cmd msg
 noteOffCommand velocity midiNoteNumber= 
   noteOffMessage midiNoteNumber velocity |> midiPort
 
+--f model midiNoteNumber = 
+--  let
+--    isKeyPressed midiNoteNumber = 
+--      isJust <| findPressedNote model midiNoteNumber
+--  
+--    hoveringAndClickingKey = 
+--      model.mousePressedNote
+--    
+--    model' = 
+--      mouseUp model
+--  in
+--    case hoveringAndClickingKey of
+--      Just midiNoteNumber ->
+--        if isKeyPressed midiNoteNumber then
+--          (model', Cmd.none)
+--        else
+--          (model', noteOffCommand (.velocity model') midiNoteNumber)
+--      Nothing ->
+--        (model', Cmd.none)
 update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
 update msg model =
   case msg of
@@ -33,7 +52,7 @@ update msg model =
           isJust <| findPressedNote model' midiNoteNumber
 
         hoveringAndClickingKey = 
-          model'.mousePressedKey
+          model'.mousePressedNote
       in
         case hoveringAndClickingKey of
           Just midiNoteNumber-> 
@@ -50,7 +69,7 @@ update msg model =
           isJust <| findPressedNote model midiNoteNumber
 
         hoveringAndClickingKey = 
-          model.mousePressedKey
+          model.mousePressedNote
         
         model' = 
           mouseUp model
@@ -73,7 +92,7 @@ update msg model =
           isJust <| findPressedNote model' midiNoteNumber
 
         hoveringAndClickingKey = 
-          model'.mousePressedKey
+          model'.mousePressedNote
       in
         case hoveringAndClickingKey of
           Just midiNoteNumber-> 
@@ -90,7 +109,7 @@ update msg model =
           isJust <| findPressedNote model midiNoteNumber
 
         hoveringAndClickingKey =  
-          model.mousePressedKey
+          model.mousePressedNote
         
         model' = 
           mouseLeave model midiNoteNumber
@@ -129,7 +148,7 @@ update msg model =
           VirtualKbd.keyToMidiNoteNumber (symbol, model.octave)
 
         hoveringAndClickingKey = 
-          model.mousePressedKey
+          model.mousePressedNote
       in
         case hoveringAndClickingKey of
           Just midiNoteNumber' ->
@@ -147,7 +166,7 @@ update msg model =
           findPressedKey model symbol
 
         hoveringAndClickingKey = 
-          model.mousePressedKey
+          model.mousePressedNote
 
         model' =
           removePressedNote model symbol
