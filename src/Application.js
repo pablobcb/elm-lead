@@ -23,6 +23,7 @@ export default class Application {
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
 			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
+
 			this.audioEngine.onMIDIMessage(midiEvent)
 		})
 
@@ -43,7 +44,6 @@ export default class Application {
 		})
 
 		window.onblur = () => {
-			console.log("BLURRRRRRR")
 			this.audioEngine.panic()
 		}
 	}

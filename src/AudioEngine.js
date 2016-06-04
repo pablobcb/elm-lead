@@ -20,6 +20,7 @@ export default class AudioEngine {
 		this.oscillator2Detune = 0
 	}
 
+	//create MIDI engine
 	initializeMidiAccess (midiAccess : MIDIAccess) {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
