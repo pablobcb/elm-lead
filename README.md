@@ -19,4 +19,3 @@ install Elm 0.17
 ## Build Instructions
 
 `npm run build`
-
