@@ -1,16 +1,43 @@
-// @flow
+/**
+ * AudioEngine.js
+ * @flow
+ */
+
+type DOMHighResTimeStamp = any;
+
+interface MIDIMessageEvent extends Event {
+	receivedTime: DOMHighResTimeStamp;
+	data: Uint8Array;
+}
+
+interface MIDIInputMap {
+	values(): any
+}
+
+interface MIDIOutputMap {
+}
+
+interface MIDIAccess {
+    inputs: MIDIInputMap;
+    outputs: MIDIOutputMap;
+    onstatechange: EventHandler;
+    sysexEnabled: bool;
+}
+
 
 export default class AudioEngine {
 
 	context : AudioContext;
 
-	oscillators : Array<Object>;
+	masterVolume : GainNode;
+
+	oscillators : Array<Array<OscillatorNode>>;
 
 	constructor (midiAccess : MIDIAccess) {
 		this.context = new AudioContext
 		this.oscillators = []
 		this.initializeMidiAccess(midiAccess)
-		this.initializeMasterVolume()	
+		this.initializeMasterVolume()
 		this.initializeOscillatorsGain ()
 		this.oscillator1Detune = 0
 		this.oscillator2Detune = 0
@@ -39,7 +66,7 @@ export default class AudioEngine {
 		this.oscillator2Gain.connect(this.masterVolume)
 	}
 
-	onMIDIMessage (event : Event) {
+	onMIDIMessage (event : MIDIMessageEvent) {
 		const data = event.data
 		console.log(event)
 		// var cmd = data[0] >> 4
@@ -84,7 +111,7 @@ export default class AudioEngine {
 
 		const osc1 = this.context.createOscillator()
 		const osc2 = this.context.createOscillator()
-		
+
 		osc1.type = 'square'
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc1.detune.value = this.oscillator1Detune
@@ -105,7 +132,7 @@ export default class AudioEngine {
 
 	noteOff (midiNote : number, velocity : number) {
 		this.oscillators[midiNote].forEach(oscillator => {
-			oscillator.stop(this.context.currentTime)			
+			oscillator.stop(this.context.currentTime)
 		})
 
 		this.oscillators[midiNote] = null

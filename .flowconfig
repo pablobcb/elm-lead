@@ -1,2 +1,6 @@
 [options]
 esproposal.class_instance_fields=enable
+
+[libs]
+interfaces/
+declarations/
