@@ -53,7 +53,9 @@ panelRightSection =
       div
         []
         [ span [] [ text "Breno" ]
-        , knob 20
+        , knob 0 127 1
+        , knob 0 127 126
+        , knob 0 127 64
         ]
     ]
 
