@@ -1,8 +1,30 @@
-.knob
-	text-align: center;
-	width 100%
+$knob-size = 48px
+$knob-inner-size = ($knob-size - ($knob-size / 6))
+$knob-inner-distance = ($knob-size / 12)
 
-.knob__label
-	font-size 70%
-	background-color $knob-label-background-color
-	border-radius ($unit / 2)
+$knob-darker = #6E6E82
+$knob-lighter = #485A7B
+$knob-indicator = white
+
+
+.knob
+	position relative
+	height $knob-size
+	width $knob-size
+	border-radius: ($knob-size / 2)
+	background-color $knob-darker
+
+.knob__inner
+	position: absolute;
+	top $knob-inner-distance
+	left $knob-inner-distance
+	height $knob-inner-size
+	width $knob-inner-size
+	border-radius ($knob-inner-size / 2)
+	background-color $knob-lighter
+
+.knob__indicator
+	width 2px
+	height ($knob-inner-size / 2)
+	background-color $knob-indicator
+	margin-left ($knob-inner-size / 2)
