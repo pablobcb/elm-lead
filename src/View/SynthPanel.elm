@@ -23,7 +23,7 @@ unsafeToFloat value =
       Debug.crash err
 
 synthPanel : Html Msg
-synthPanel = 
+synthPanel =
   div
     [ class "synth-panel" ]
     [ panelLeftSection
@@ -71,7 +71,7 @@ oscillators =
 
 
 masterVolume : Html Msg
-masterVolume = 
+masterVolume =
   div
     [ class "master-volume"]
     [ span 
@@ -92,11 +92,11 @@ oscillator1Detune : Html Msg
 oscillator1Detune =
   div
       []
-      [ span 
-          [] 
+      [ span
+          []
           [ "Oscillator 1 Detune" |> text ]
-      , input 
-          [ Html.Attributes.type' "range" 
+      , input
+          [ Html.Attributes.type' "range"
           , Html.Attributes.min "0"
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
@@ -110,11 +110,11 @@ oscillator2Detune : Html Msg
 oscillator2Detune =
   div
       []
-      [ span 
-          [] 
+      [ span
+          []
           [ "Oscillator 2 Detune" |> text ]
-      , input 
-          [ Html.Attributes.type' "range" 
+      , input
+          [ Html.Attributes.type' "range"
           , Html.Attributes.min "0"
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
@@ -128,11 +128,11 @@ oscillatorsBalance : Html Msg
 oscillatorsBalance =
   div
       []
-      [ span 
-          [] 
+      [ span
+          []
           [ "Oscillators Balance" |> text ]
-      , input 
-          [ Html.Attributes.type' "range" 
+      , input
+          [ Html.Attributes.type' "range"
           , Html.Attributes.min "0"
           , Html.Attributes.max "100"
           , Html.Attributes.value "50"
