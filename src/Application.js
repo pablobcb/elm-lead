@@ -30,20 +30,23 @@ export default class Application {
 			this.audioEngine.setMasterVolumeGain(masterVolume)
 		})
 
-		this.app.ports.oscillatorsBalancePort.subscribe((oscillatorsBalance : number) => {
-			this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
-		})
+		this.app.ports.oscillatorsBalancePort
+			.subscribe((oscillatorsBalance : number) => {
+				this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
+			})
 
-		this.app.ports.oscillator1DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillator1Detune(oscillatorDetune)
-		})
+		this.app.ports.oscillator1DetunePort
+			.subscribe((oscillatorDetune : number) => {
+				this.audioEngine.setOscillator1Detune(oscillatorDetune)
+			})
 
-		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillator2Detune(oscillatorDetune)
-		})
+		this.app.ports.oscillator2DetunePort
+			.subscribe((oscillatorDetune : number) => {
+				this.audioEngine.setOscillator2Detune(oscillatorDetune)
+			})
 
 		window.onblur = () => {
-			console.log("BLURRRRRRR")
+			console.log('BLURRRRRRR')
 			this.audioEngine.panic()
 		}
 	}
