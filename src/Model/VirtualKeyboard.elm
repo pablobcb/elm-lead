@@ -130,7 +130,7 @@ handleKeyDown model keyCode =
     symbolAlreadyPressed =
       isJust <| findPressedKey model symbol
   in 
-    if (not allowedInput) || (isLastOctave && unusedKeys) || symbolAlreadyPressed then
+    if (not allowedInput) || isLastOctave  || symbolAlreadyPressed then
       NoOp
     else
       case symbol of
