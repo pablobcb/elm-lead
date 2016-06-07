@@ -18,12 +18,14 @@ export default class Application {
 
 	// this is our raw MIDI data, inputs, outputs, and sysex status
 	onMIDISuccess (midiAccess : MIDIAccess) {
-		this.audioEngine = new AudioEngine(midiAccess)
+		this.audioEngine = new AudioEngine()
+		this.midiEngine = new midiEngine()
 
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
 			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
-			this.audioEngine.onMIDIMessage(midiEvent)
+
+			this.midiEngine.onMIDIMessage(midiEvent).bind(this.)
 		})
 
 		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
@@ -46,7 +48,6 @@ export default class Application {
 			})
 
 		window.onblur = () => {
-			console.log('BLURRRRRRR')
 			this.audioEngine.panic()
 		}
 	}

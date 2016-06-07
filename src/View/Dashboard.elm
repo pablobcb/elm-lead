@@ -16,6 +16,6 @@ dashboard model =
   div
     [ class "dashboard" ]
     [ synthPanel
-    , keyboard
+    , keyboard model
     , informationBar model
     ]

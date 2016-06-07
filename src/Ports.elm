@@ -5,6 +5,8 @@ import Midi exposing (..)
 
 port midiPort : MidiMessage -> Cmd msg
 
+port noteInPort : (MidiNote -> msg) -> Sub msg
+
 port masterVolumePort : Float -> Cmd msg
 
 port oscillator1DetunePort : Float -> Cmd msg
