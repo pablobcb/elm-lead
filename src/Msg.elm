@@ -16,6 +16,7 @@ type Msg
   | MasterVolumeChange Float
   | OscillatorsBalanceChange Float
   | Oscillator1WaveformChange OscillatorWaveform
+  | Oscillator2WaveformChange OscillatorWaveform
   | Oscillator2SemitoneChange Float
   | Oscillator2DetuneChange Float
   | FMAmountChange Float

@@ -12,6 +12,8 @@ port masterVolumePort : Float -> Cmd msg
 
 port oscillator1WaveformPort : String -> Cmd msg
 
+port oscillator2WaveformPort : String -> Cmd msg
+
 port oscillator2SemitonePort : Float -> Cmd msg
 
 port oscillator2DetunePort : Float -> Cmd msg

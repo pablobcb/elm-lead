@@ -24,6 +24,7 @@ type alias Model =
   , mouseHoverNote      : Maybe MidiNote
   , mousePressedNote    : Maybe MidiNote
   , oscillator1Waveform : OscillatorWaveform
+  , oscillator2Waveform : OscillatorWaveform
   }
 
 pianoKeys: List Char
@@ -150,3 +151,7 @@ findPressedNote model midiNote =
 setOscillator1Waveform : Model -> OscillatorWaveform -> Model
 setOscillator1Waveform model waveform =
   { model | oscillator1Waveform = waveform }
+
+setOscillator2Waveform : Model -> OscillatorWaveform -> Model
+setOscillator2Waveform model waveform =
+  { model | oscillator2Waveform = waveform }

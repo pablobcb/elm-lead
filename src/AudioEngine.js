@@ -219,4 +219,16 @@ export default class AudioEngine {
 		})
 	}
 
+	setOscillator2Waveform (waveform) {
+		const validWaveforms = ['triangle', 'sawtooth', 'square']
+
+		if(validWaveforms.indexOf(waveform.toLowerCase()) == -1)
+			throw new Error('Invalid Waveform Type')
+
+		this.oscillator2Waveform = waveform.toLowerCase()
+		this.oscillators.forEach(oscillator => {
+			if(oscillator)
+				oscillator[1].type = this.oscillator2Waveform
+		})
+	}
 }

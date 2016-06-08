@@ -36,6 +36,7 @@ init =
   , mouseHoverNote      = Nothing
   , mousePressedNote    = Nothing
   , oscillator1Waveform = Sawtooth
+  , oscillator2Waveform = Sawtooth
   }
   Cmd.none
 
@@ -63,7 +64,7 @@ handleKeyDown model keyCode =
     symbolAlreadyPressed =
       isJust <| findPressedKey model symbol
   in 
-    if (not allowedInput) || isLastOctave  || symbolAlreadyPressed then
+    if (not allowedInput) || (isLastOctave && unusedKeys)  || symbolAlreadyPressed then
       NoOp
     else
       case symbol of

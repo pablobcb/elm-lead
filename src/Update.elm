@@ -206,7 +206,11 @@ update msg model =
 
 
     Oscillator1WaveformChange waveform ->
-      Debug.log (toString waveform) (setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort)
+      (setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort)
+
+
+    Oscillator2WaveformChange waveform ->
+      (setOscillator2Waveform model waveform, toString waveform |> oscillator2WaveformPort)
 
 
 

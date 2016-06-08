@@ -27,6 +27,21 @@ oscillator1WaveformRadio waveform name model =
       , text name
       ]
 
+oscillator2WaveformRadio : OscillatorWaveform -> String -> Model -> Html Msg
+oscillator2WaveformRadio waveform name model =
+  let
+    isSelected =
+      model.oscillator2Waveform == waveform
+  in
+    label []
+      [ input 
+        [ type' "radio"
+        , checked isSelected
+        , onCheck (\_ -> Oscillator2WaveformChange waveform) ] 
+        []
+      , text name
+      ]
+
 unsafeToFloat : String -> Float
 unsafeToFloat value =
   case String.toFloat value of
@@ -88,6 +103,7 @@ oscillators model =
    [ class "oscillators" ]
    [ oscillatorsBalance
    , oscillator1Waveform model
+   , oscillator2Waveform model
    , oscillator2Semitone
    , oscillator2Detune
    , fmAmount
@@ -194,5 +210,16 @@ oscillator1Waveform model =
     , oscillator1WaveformRadio Triangle "triangle" model
     , oscillator1WaveformRadio Sine "sine" model
     , oscillator1WaveformRadio Square "square" model
+    ]
+
+oscillator2Waveform : Model -> Html Msg
+oscillator2Waveform model =
+  div []
+    [ span 
+      [] 
+      [text "OSC2 Wave"]
+    , oscillator2WaveformRadio Sawtooth "sawtooth" model
+    , oscillator2WaveformRadio Triangle "triangle" model
+    , oscillator2WaveformRadio Square "square" model
     ]
 
