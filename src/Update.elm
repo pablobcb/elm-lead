@@ -201,4 +201,8 @@ update msg model =
       (model, value |> oscillator2DetunePort)
 
 
+    FMAmountChange value ->
+      (model, value |> fmAmountPort)
+
+
 

@@ -71,8 +71,9 @@ oscillators =
   div
    [ class "oscillators" ]
    [ oscillatorsBalance
-   , oscillator1Detune
+   , oscillator2Semitone
    , oscillator2Detune
+   , fmAmount
    ]
 
 
@@ -94,13 +95,13 @@ masterVolume =
         []
     ]
 
-oscillator1Detune : Html Msg
-oscillator1Detune =
+oscillator2Semitone : Html Msg
+oscillator2Semitone =
   div
       []
       [ span 
           [] 
-          [ "Oscillator 2 Semitones" |> text ]
+          [ "Oscillator 2 Semitone" |> text ]
       , input 
           [ Html.Attributes.type' "range" 
           , Html.Attributes.min "-60"
@@ -144,6 +145,24 @@ oscillatorsBalance =
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
           , Html.Events.onInput <| unsafeToFloat >> OscillatorsBalanceChange
+          ]
+         []
+      ]
+
+fmAmount : Html Msg
+fmAmount =
+  div
+      []
+      [ span 
+          [] 
+          [ "FM" |> text ]
+      , input 
+          [ Html.Attributes.type' "range"
+          , Html.Attributes.min "0"
+          , Html.Attributes.max "100"
+          , Html.Attributes.value "0"
+          , Html.Attributes.step "1"
+          , Html.Events.onInput <| unsafeToFloat >> FMAmountChange
           ]
          []
       ]

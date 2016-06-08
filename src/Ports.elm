@@ -14,3 +14,5 @@ port oscillator2SemitonePort : Float -> Cmd msg
 port oscillator2DetunePort : Float -> Cmd msg
 
 port oscillatorsBalancePort : Float -> Cmd msg
+
+port fmAmountPort : Float -> Cmd msg

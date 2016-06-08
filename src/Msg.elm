@@ -16,3 +16,4 @@ type Msg
   | OscillatorsBalanceChange Float
   | Oscillator2SemitoneChange Float
   | Oscillator2DetuneChange Float
+  | FMAmountChange Float

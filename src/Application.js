@@ -43,8 +43,11 @@ export default class Application {
 			this.audioEngine.setOscillator2Detune(oscillatorDetune)
 		})
 
+		this.app.ports.fmAmountPort.subscribe((fmAmount : number) => {
+			this.audioEngine.setSetFmAmount(fmAmount)
+		})
+
 		window.onblur = () => {
-			console.log("BLURRRRRRR")
 			this.audioEngine.panic()
 		}
 	}
