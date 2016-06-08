@@ -13,6 +13,7 @@ type Msg
   | KeyOff Char
   | MouseClickUp
   | MouseClickDown
+  
   | MasterVolumeChange Float
   | OscillatorsBalanceChange Float
   | Oscillator1WaveformChange OscillatorWaveform
@@ -20,3 +21,4 @@ type Msg
   | Oscillator2SemitoneChange Float
   | Oscillator2DetuneChange Float
   | FMAmountChange Float
+  | PulseWidthChange Float

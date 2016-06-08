@@ -44,7 +44,11 @@ export default class Application {
 		})
 
 		this.app.ports.fmAmountPort.subscribe((fmAmount : number) => {
-			this.audioEngine.setSetFmAmount(fmAmount)
+			this.audioEngine.setFmAmount(fmAmount)
+		})
+
+		this.app.ports.pulseWidthPort.subscribe((pulseWidth : number) => {
+			this.audioEngine.setPulseWidth(pulseWidth)
 		})
 
 		this.app.ports.oscillator1WaveformPort.subscribe((waveform) => {
