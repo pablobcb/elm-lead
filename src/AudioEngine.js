@@ -36,11 +36,11 @@ export default class AudioEngine {
 
 	initializeOscillatorsGain () {
 		this.oscillator1Gain = this.context.createGain()
-		this.oscillator1Gain.gain.value = 1
+		this.oscillator1Gain.gain.value = .5
 		this.oscillator1Gain.connect(this.masterVolume)
 
 		this.oscillator2Gain = this.context.createGain()
-		this.oscillator2Gain.gain.value = 1
+		this.oscillator2Gain.gain.value = .5
 		this.oscillator2Gain.connect(this.masterVolume)
 	}
 
@@ -68,19 +68,6 @@ export default class AudioEngine {
 
 	frequencyFromNoteNumber (note : number) : number {
 		return 440 * Math.pow(2, (note - 69) / 12)
-	}
-
-	balanceToGains (balance : number) : Array<number> {
-		let osc1Gain = 1
-		let osc2Gain = 1
-		const gainPercentage = Math.abs(balance) / 100
-
-		if(balance < 0)
-			osc1Gain -= gainPercentage
-		else if(balance > 0)
-			osc2Gain -= gainPercentage
-
-		return [osc1Gain, osc2Gain]
 	}
 
 	noteOn (midiNote : number, velocity : number) {
@@ -148,13 +135,17 @@ export default class AudioEngine {
 	setOscillatorsBalance (oscillatorsBalance : number) {
 		const gainPercentage = Math.abs(oscillatorsBalance) / 100
 
-		this.oscillator1Gain.gain.value = 1
-		this.oscillator2Gain.gain.value = 1
+		this.oscillator1Gain.gain.value = .5
+		this.oscillator2Gain.gain.value = .5
 
-		if(oscillatorsBalance > 0)
+		if(oscillatorsBalance > 0) {
 			this.oscillator1Gain.gain.value -= gainPercentage
-		else if(oscillatorsBalance < 0)
+			this.oscillator2Gain.gain.value += gainPercentage
+		}
+		else if(oscillatorsBalance < 0) {
+			this.oscillator1Gain.gain.value += gainPercentage
 			this.oscillator2Gain.gain.value -= gainPercentage
+		}
 	}
 
 	setOscillator2Semitone (oscillatorSemitone : number) {
