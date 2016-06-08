@@ -9,7 +9,7 @@ import Html.Attributes exposing (class)
 import Update exposing (..)
 import Msg exposing (..)
 
-import Model.VirtualKeyboard exposing (..)
+import Model.Model exposing (..)
 
 octaveKeys : List String
 octaveKeys =
@@ -31,7 +31,7 @@ onMouseLeave' : Int -> Html.Attribute Msg
 onMouseLeave' midiNote = 
   midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
-key : VirtualKeyboardModel -> String -> Int -> Html Msg
+key : Model -> String -> Int -> Html Msg
 key model noteName midiNote = 
   li 
   [ getKeyClass model noteName midiNote |> class
@@ -40,11 +40,11 @@ key model noteName midiNote =
   ] 
   []
 
-keys : VirtualKeyboardModel -> List (Html Msg)
+keys : Model -> List (Html Msg)
 keys model =
   List.map2 (key model) onScreenKeyboardKeys midiNotes
 
-getKeyClass : VirtualKeyboardModel -> String -> Int -> String
+getKeyClass : Model -> String -> Int -> String
 getKeyClass model noteName midiNote =
   let 
     isSharpKey = String.contains "s" noteName
@@ -72,7 +72,7 @@ getKeyClass model noteName midiNote =
     |> List.filter ((/=) "") 
     |> String.join " "
 
-keyboard : VirtualKeyboardModel -> Html Msg
+keyboard : Model -> Html Msg
 keyboard model =
   ul [ class "keyboard" ] <| keys model
 

@@ -47,6 +47,10 @@ export default class Application {
 			this.audioEngine.setSetFmAmount(fmAmount)
 		})
 
+		this.app.ports.oscillator1WaveformPort.subscribe((waveform) => {
+			this.audioEngine.setOscillator1Waveform(waveform)
+		})
+
 		window.onblur = () => {
 			this.audioEngine.panic()
 		}

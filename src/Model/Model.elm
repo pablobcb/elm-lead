@@ -1,8 +1,7 @@
-module Model.VirtualKeyboard exposing (..) -- where
+module Model.Model exposing (..) -- where
 
 import Note exposing (..)
 import Midi exposing (..)
-import Msg exposing (..)
 import Char exposing (..)
 import Keyboard exposing (..)
 import List exposing (..)
@@ -11,13 +10,20 @@ import Maybe.Extra exposing (..)
 type alias PressedKey =
   (Char, MidiNote)
 
-type alias VirtualKeyboardModel =
+type OscillatorWaveform 
+  = Sawtooth
+  | Triangle
+  | Sine
+  | Square
+
+type alias Model =
   { octave              : Octave
   , velocity            : Velocity
   , pressedNotes        : List PressedKey
   , clickedAndHovering  : Bool
   , mouseHoverNote      : Maybe MidiNote
   , mousePressedNote    : Maybe MidiNote
+  , oscillator1Waveform : OscillatorWaveform
   }
 
 pianoKeys: List Char
@@ -57,7 +63,7 @@ keyToMidiNoteNumber (symbol, octave) =
       'p' -> ( Eb , octave + 1 )
       _ -> Debug.crash ("Note and octave outside MIDI bounds: " ++ toString symbol ++ " " ++ toString octave)
 
-velocityDown : VirtualKeyboardModel -> VirtualKeyboardModel
+velocityDown : Model -> Model
 velocityDown model =
   let
     vel = .velocity model
@@ -73,7 +79,7 @@ velocityDown model =
     }
 
 
-velocityUp : VirtualKeyboardModel -> VirtualKeyboardModel
+velocityUp : Model -> Model
 velocityUp model =
   let
     vel = .velocity model
@@ -88,131 +94,59 @@ velocityUp model =
         vel + 20
     }
 
-octaveDown : VirtualKeyboardModel -> VirtualKeyboardModel
+octaveDown : Model -> Model
 octaveDown model =
   { model | octave = max (-2) ((.octave model) - 1) }
 
-octaveUp : VirtualKeyboardModel -> VirtualKeyboardModel
+octaveUp : Model -> Model
 octaveUp model =
   { model | octave = min 8 (model |> .octave |> (+) 1) }
 
-mouseDown : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseDown : Model -> Model
 mouseDown model =
   { model | clickedAndHovering = True, mousePressedNote = model.mouseHoverNote }
 
-mouseUp : VirtualKeyboardModel -> VirtualKeyboardModel
+mouseUp : Model -> Model
 mouseUp model =
   { model | clickedAndHovering = False, mousePressedNote = Nothing }
 
-mouseEnter : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseEnter : Model -> Int -> Model
 mouseEnter model key =
   { model | mouseHoverNote = Just key, mousePressedNote = if model.clickedAndHovering then Just key else Nothing }
 
-mouseLeave : VirtualKeyboardModel -> Int -> VirtualKeyboardModel
+mouseLeave : Model -> Int -> Model
 mouseLeave model key =
   { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
-handleKeyDown : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
-handleKeyDown model keyCode =
-  let
-    symbol = 
-      keyCode |> Char.fromCode |> toLower 
-
-    allowedInput = 
-      List.member symbol allowedInputKeys
-
-    isLastOctave = 
-      (.octave model) == 8
-
-    unusedKeys = 
-      List.member symbol unusedKeysOnLastOctave
-
-    symbolAlreadyPressed =
-      isJust <| findPressedKey model symbol
-  in 
-    if (not allowedInput) || isLastOctave  || symbolAlreadyPressed then
-      NoOp
-    else
-      case symbol of
-        'z' ->
-          OctaveDown
-
-        'x' ->
-          OctaveUp
-
-        'c' ->
-          VelocityDown
-
-        'v' ->
-          VelocityUp
-
-        symbol ->
-          KeyOn symbol
-
-
-handleKeyUp : VirtualKeyboardModel -> Keyboard.KeyCode -> Msg
-handleKeyUp model keyCode =
-  let    
-    symbol = 
-      keyCode |> Char.fromCode |> toLower
-
-    invalidKey = 
-      not <| List.member symbol pianoKeys
-
-   --isMousePressingSameKey =
-   --  case findPressedKey model symbol of
-   --    Just (symbol', midiNote') ->
-   --      case model.mousePressedKey of
-   --        Just midiNote ->
-   --          (==) midiNote' midiNote
-   --        Nothing ->
-   --          False
-   --    Nothing->
-   --      False
-  in 
-    if invalidKey then
-      NoOp
-    else
-      KeyOff symbol
-
-addClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+addClickedNote : Model -> MidiNote -> Model
 addClickedNote model midiNote =
   { model | mousePressedNote = Just midiNote }
 
 
-removeClickedNote : VirtualKeyboardModel -> MidiNote -> VirtualKeyboardModel
+removeClickedNote : Model -> MidiNote -> Model
 removeClickedNote model midiNote =
   { model | mousePressedNote = Just midiNote }
 
 
-addPressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
+addPressedNote : Model -> Char -> Model
 addPressedNote model symbol =
   { model | pressedNotes = (.pressedNotes model) ++ [ (symbol, keyToMidiNoteNumber (symbol, .octave model)) ] }
 
 
-removePressedNote : VirtualKeyboardModel -> Char -> VirtualKeyboardModel
+removePressedNote : Model -> Char -> Model
 removePressedNote model symbol =
   { model | pressedNotes = List.filter (\(symbol', _) -> symbol /= symbol') model.pressedNotes }
 
 
-findPressedKey : VirtualKeyboardModel -> Char -> Maybe PressedKey
+findPressedKey : Model -> Char -> Maybe PressedKey
 findPressedKey model symbol =
   List.head <| List.filter (\(symbol', _) -> symbol == symbol') model.pressedNotes
 
 
-findPressedNote : VirtualKeyboardModel -> MidiNote -> Maybe PressedKey
+findPressedNote : Model -> MidiNote -> Maybe PressedKey
 findPressedNote model midiNote =
   List.head <| List.filter (\(_, midiNote') -> midiNote == midiNote') model.pressedNotes
 
---
---getPressedKeyNote: VirtualKeyboardModel -> Char -> PressedKey
---getPressedKeyNote model midiNote =
---  let
---    firstPressedNote =
---      List.head <| findPressedNotes model midiNote
---  in
---    case firstPressedNote of
---      Just pressedNote ->
---        pressedNote
---      Nothing ->
---        Debug.crash "Key up without key down first"
+setOscillator1Waveform : Model -> OscillatorWaveform -> Model
+setOscillator1Waveform model waveform =
+  { model | oscillator1Waveform = waveform }

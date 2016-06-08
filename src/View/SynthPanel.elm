@@ -10,6 +10,22 @@ import Json.Decode as Json
 import Update exposing (..)
 import Msg exposing (..)
 
+import Model.Model exposing (..)
+
+oscillator1WaveformRadio : OscillatorWaveform -> String -> Model -> Html Msg
+oscillator1WaveformRadio waveform name model =
+  let
+    isSelected =
+      model.oscillator1Waveform == waveform
+  in
+    label []
+      [ input 
+        [ type' "radio"
+        , checked isSelected
+        , onCheck (\_ -> Oscillator1WaveformChange waveform) ] 
+        []
+      , text name
+      ]
 
 unsafeToFloat : String -> Float
 unsafeToFloat value =
@@ -20,31 +36,31 @@ unsafeToFloat value =
     Err err ->
       Debug.crash err
 
-synthPanel : Html Msg
-synthPanel = 
+synthPanel : Model -> Html Msg
+synthPanel model = 
   div
     [ class "synth-panel" ]
-    [ panelLeftSection
-    , panelMiddleSection
-    , panelRightSection
+    [ panelLeftSection model
+    , panelMiddleSection model
+    , panelRightSection model
     ]
 
-panelLeftSection : Html Msg
-panelLeftSection =
+panelLeftSection : Model -> Html Msg
+panelLeftSection model =
   div
     [ class "synth-panel panel-left-section" ]
     [ masterVolume ]
 
 
-panelMiddleSection : Html Msg
-panelMiddleSection =
+panelMiddleSection : Model -> Html Msg
+panelMiddleSection model =
   div
     [ class "synth-panel panel-middle-section" ]
-    [ oscillators ]
+    [ oscillators model ]
 
 
-panelRightSection : Html Msg
-panelRightSection =
+panelRightSection : Model -> Html Msg
+panelRightSection model =
   div
     [ class "synth-panel panel-right-section" ]
     [
@@ -66,11 +82,12 @@ panelRightSection =
     ]
 
 
-oscillators : Html Msg
-oscillators =
+oscillators : Model -> Html Msg
+oscillators model =
   div
    [ class "oscillators" ]
    [ oscillatorsBalance
+   , oscillator1Waveform model
    , oscillator2Semitone
    , oscillator2Detune
    , fmAmount
@@ -166,3 +183,16 @@ fmAmount =
           ]
          []
       ]
+
+oscillator1Waveform : Model -> Html Msg
+oscillator1Waveform model =
+  div []
+    [ span 
+      [] 
+      [text "OSC1 Wave"]
+    , oscillator1WaveformRadio Sawtooth "sawtooth" model
+    , oscillator1WaveformRadio Triangle "triangle" model
+    , oscillator1WaveformRadio Sine "sine" model
+    , oscillator1WaveformRadio Square "square" model
+    ]
+

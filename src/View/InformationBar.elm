@@ -5,9 +5,9 @@ import Html.Attributes exposing (..)
 
 import Update exposing (..)
 import Msg exposing (..)
-import Model.VirtualKeyboard exposing (VirtualKeyboardModel)
+import Model.Model exposing (Model)
 
-informationBar : VirtualKeyboardModel -> Html Msg
+informationBar : Model -> Html Msg
 informationBar model =
   let
     startOctave =

@@ -2,7 +2,7 @@ module Update exposing (..) -- where
 
 import Msg exposing (..)
 import Note exposing (..)
-import Model.VirtualKeyboard as VirtualKbd exposing (..)
+import Model.Model as Model exposing (..)
 import Midi exposing (..)
 import Ports exposing (..)
 import Debug exposing (..)
@@ -37,7 +37,7 @@ noteOffCommand velocity midiNoteNumber=
 --          (model', noteOffCommand (.velocity model') midiNoteNumber)
 --      Nothing ->
 --        (model', Cmd.none)
-update : Msg -> VirtualKeyboardModel -> (VirtualKeyboardModel, Cmd msg)
+update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
   case msg of
     NoOp ->
@@ -145,7 +145,7 @@ update msg model =
           addPressedNote model symbol
 
         midiNoteNumber =
-          VirtualKbd.keyToMidiNoteNumber (symbol, model.octave)
+          Model.keyToMidiNoteNumber (symbol, model.octave)
 
         hoveringAndClickingKey = 
           model.mousePressedNote
@@ -203,6 +203,10 @@ update msg model =
 
     FMAmountChange value ->
       (model, value |> fmAmountPort)
+
+
+    Oscillator1WaveformChange waveform ->
+      Debug.log (toString waveform) (setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort)
 
 
 
