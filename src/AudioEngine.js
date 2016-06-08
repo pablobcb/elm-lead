@@ -4,6 +4,47 @@ export default class AudioEngine {
 
 	context : AudioContext;
 
+	const pulseCurve = new Float32Array(256);
+	for(let i=0; i<128; i++) {
+		pulseCurve[i] = -1;
+		pulseCurve[i + 128] = 1;
+	}
+
+	const constantOneCurve = new Float32Array(2);
+	constantOneCurve[0] = 1;
+	constantOneCurve[1] = 1;
+
+	ac.createPulseOscillator = function() {
+		const node = this.createOscillator();
+		node.type = "sawtooth";
+
+		const pulseShaper = ac.createWaveShaper();
+		pulseShaper.curve = pulseCurve;
+		node.connect(pulseShaper);
+
+		const widthGain = ac.createGain();
+		widthGain.gain.value = 0;
+		node.width = widthGain.gain; 
+		widthGain.connect(pulseShaper);
+
+		const constantOneShaper = this.createWaveShaper();
+		constantOneShaper.curve = constantOneCurve;
+		node.connect(constantOneShaper);
+		constantOneShaper.connect(widthGain);
+
+		node.connect=function() {
+			pulseShaper.connect.apply(pulseShaper, arguments);
+			return node;
+		}
+
+		node.disconnect=function() {
+			pulseShaper.disconnect.apply(pulseShaper, arguments);
+			return node;
+		}
+
+		return node;
+	};
+
 	oscillators : Array<Object>;
 
 	constructor (midiAccess : MIDIAccess) {
@@ -80,7 +121,6 @@ export default class AudioEngine {
 		osc1.type = 'sawtooth'
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
 
-
 		osc2.type = 'sawtooth'
 		osc2.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc2.detune.value = this.oscillator2Detune + this.oscillator2Semitone
@@ -109,9 +149,7 @@ export default class AudioEngine {
 		this.oscillators[midiNote].forEach(oscillator => {
 			oscillator.stop(this.context.currentTime)
 			oscillator = null
-		})
-
-		
+		})		
 	}
 
 	panic () {
@@ -124,7 +162,6 @@ export default class AudioEngine {
 				oscillator = null
 			}
 		})
-
 		this.oscillators = []
 	}
 
