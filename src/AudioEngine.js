@@ -206,7 +206,7 @@ export default class AudioEngine {
 		this.oscillator2Semitone = oscillatorSemitone * 100
 		for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].oscillator[1].detune.value = 
+				this.oscillators[midiNote][1].detune.value = 
 					this.oscillator2Detune + this.oscillator2Semitone
 			}
 		}
@@ -216,7 +216,7 @@ export default class AudioEngine {
 		this.oscillator2Detune = oscillatorDetune
 		for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].oscillator[1].detune.value = 
+				this.oscillators[midiNote][1].detune.value = 
 					this.oscillator2Detune + this.oscillator2Semitone
 			}
 		}
