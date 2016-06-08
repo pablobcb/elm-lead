@@ -223,7 +223,7 @@ export default class AudioEngine {
 	}
 
 	setFmAmount (fmAmount : number) {
-		this.fmGain.gain.value = fmAmount / 100 // * 10
+		this.fmGain.gain.value = fmAmount * 10
 	}
 
 	setPulseWidth (pulseWith : number) {
@@ -297,9 +297,10 @@ export default class AudioEngine {
 			throw new Error('Invalid Waveform Type')
 
 		this.oscillator2Waveform = waveform.toLowerCase()
-		/*this.oscillators.forEach(oscillator => {
-			if(oscillator)
-				oscillator[1].type = this.oscillator2Waveform
-		})*/
+		for(let midiNote in this.oscillators) {
+			if(this.oscillators.hasOwnProperty(midiNote)) {
+				this.oscillators[midiNote][1].type = this.oscillator2Waveform
+			}
+		}
 	}
 }
