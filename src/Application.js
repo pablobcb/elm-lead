@@ -21,7 +21,7 @@ export default class Application {
 		this.audioEngine = new AudioEngine(midiAccess)
 
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
-			
+
 			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
 			this.audioEngine.onMIDIMessage(midiEvent)
@@ -35,8 +35,8 @@ export default class Application {
 			this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
 		})
 
-		this.app.ports.oscillator1DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillator1Detune(oscillatorDetune)
+		this.app.ports.oscillator2SemitonePort.subscribe((oscillatorSemitone : number) => {
+			this.audioEngine.setOscillator2Semitone(oscillatorSemitone)
 		})
 
 		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {

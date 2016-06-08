@@ -9,7 +9,7 @@ port noteInPort : (MidiNote -> msg) -> Sub msg
 
 port masterVolumePort : Float -> Cmd msg
 
-port oscillator1DetunePort : Float -> Cmd msg
+port oscillator2SemitonePort : Float -> Cmd msg
 
 port oscillator2DetunePort : Float -> Cmd msg
 

@@ -16,7 +16,7 @@ export default class AudioEngine {
 		
 		this.initializeOscillatorsGain ()
 		
-		this.oscillator1Detune = 0
+		this.oscillator2Semitone = 0
 		this.oscillator2Detune = 0
 	}
 
@@ -29,7 +29,7 @@ export default class AudioEngine {
 
 	initializeMasterVolume () {
 		this.masterVolume = this.context.createGain()
-		this.masterVolume.gain.value = 0.7
+		this.masterVolume.gain.value = 0.1
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -91,7 +91,6 @@ export default class AudioEngine {
 		
 		osc1.type = 'square'
 		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
-		osc1.detune.value = this.oscillator1Detune
 
 		osc1.connect(this.oscillator1Gain)
 
@@ -143,20 +142,22 @@ export default class AudioEngine {
 		this.oscillator1Gain.gain.value = 1
 		this.oscillator2Gain.gain.value = 1
 
-		if(oscillatorsBalance < 0)
+		if(oscillatorsBalance > 0)
 			this.oscillator1Gain.gain.value -= gainPercentage
-		else if(oscillatorsBalance > 0)
+		else if(oscillatorsBalance < 0)
 			this.oscillator2Gain.gain.value -= gainPercentage
 	}
 
-	setOscillator1Detune (oscillatorDetune : number) {
+	setOscillator2Semitone (oscillatorSemitone : number) {
+		this.oscillator2Semitone = oscillatorSemitone
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[0].detune.value = oscillatorDetune
+				oscillator[1].detune.value = oscillatorSemitone * 100
 		})
 	}
 
 	setOscillator2Detune (oscillatorDetune : number) {
+		this.oscillator2Detune = oscillatorDetune
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
 				oscillator[1].detune.value = oscillatorDetune

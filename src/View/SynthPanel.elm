@@ -100,14 +100,14 @@ oscillator1Detune =
       []
       [ span 
           [] 
-          [ "Oscillator 1 Detune" |> text ]
+          [ "Oscillator 2 Semitones" |> text ]
       , input 
           [ Html.Attributes.type' "range" 
-          , Html.Attributes.min "-100"
-          , Html.Attributes.max "100"
+          , Html.Attributes.min "-60"
+          , Html.Attributes.max "60"
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
-          , Html.Events.onInput <| unsafeToFloat >> Oscillator1DetuneChange
+          , Html.Events.onInput <| unsafeToFloat >> Oscillator2SemitoneChange
           ]
          []
       ]

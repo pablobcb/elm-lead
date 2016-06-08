@@ -14,5 +14,5 @@ type Msg
   | MouseClickDown
   | MasterVolumeChange Float
   | OscillatorsBalanceChange Float
-  | Oscillator1DetuneChange Float
+  | Oscillator2SemitoneChange Float
   | Oscillator2DetuneChange Float

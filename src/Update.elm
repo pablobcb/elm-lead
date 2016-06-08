@@ -193,8 +193,8 @@ update msg model =
       (model, value |> oscillatorsBalancePort)
 
 
-    Oscillator1DetuneChange value ->
-      (model, value |> oscillator1DetunePort)
+    Oscillator2SemitoneChange value ->
+      (model, value |> oscillator2SemitonePort)
 
 
     Oscillator2DetuneChange value ->
