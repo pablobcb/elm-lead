@@ -17,37 +17,34 @@ export default class Application {
 	}
 
 	// this is our raw MIDI data, inputs, outputs, and sysex status
-	onMIDISuccess (midiAccess : MIDIAccess) {
-		this.audioEngine = new AudioEngine()
-		this.midiEngine = new midiEngine()
+	onMIDISuccess = (midiAccess : MIDIAccess) => {
+		this.audioEngine = new AudioEngine(midiAccess)
 
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
+			
 			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
-
-			this.midiEngine.onMIDIMessage(midiEvent).bind(this.)
+			this.audioEngine.onMIDIMessage(midiEvent)
 		})
 
 		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
 			this.audioEngine.setMasterVolumeGain(masterVolume)
 		})
 
-		this.app.ports.oscillatorsBalancePort
-			.subscribe((oscillatorsBalance : number) => {
-				this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
-			})
+		this.app.ports.oscillatorsBalancePort.subscribe((oscillatorsBalance : number) => {
+			this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
+		})
 
-		this.app.ports.oscillator1DetunePort
-			.subscribe((oscillatorDetune : number) => {
-				this.audioEngine.setOscillator1Detune(oscillatorDetune)
-			})
+		this.app.ports.oscillator1DetunePort.subscribe((oscillatorDetune : number) => {
+			this.audioEngine.setOscillator1Detune(oscillatorDetune)
+		})
 
-		this.app.ports.oscillator2DetunePort
-			.subscribe((oscillatorDetune : number) => {
-				this.audioEngine.setOscillator2Detune(oscillatorDetune)
-			})
+		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
+			this.audioEngine.setOscillator2Detune(oscillatorDetune)
+		})
 
 		window.onblur = () => {
+			console.log("BLURRRRRRR")
 			this.audioEngine.panic()
 		}
 	}
