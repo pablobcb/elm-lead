@@ -103,7 +103,7 @@ oscillator1Detune =
           [ "Oscillator 1 Detune" |> text ]
       , input 
           [ Html.Attributes.type' "range" 
-          , Html.Attributes.min "0"
+          , Html.Attributes.min "-100"
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
@@ -121,7 +121,7 @@ oscillator2Detune =
           [ "Oscillator 2 Detune" |> text ]
       , input 
           [ Html.Attributes.type' "range" 
-          , Html.Attributes.min "0"
+          , Html.Attributes.min "-100"
           , Html.Attributes.max "100"
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
@@ -138,10 +138,10 @@ oscillatorsBalance =
           [] 
           [ "Oscillators Balance" |> text ]
       , input 
-          [ Html.Attributes.type' "range" 
-          , Html.Attributes.min "0"
+          [ Html.Attributes.type' "range"
+          , Html.Attributes.min "-100"
           , Html.Attributes.max "100"
-          , Html.Attributes.value "50"
+          , Html.Attributes.value "0"
           , Html.Attributes.step "1"
           , Html.Events.onInput <| unsafeToFloat >> OscillatorsBalanceChange
           ]

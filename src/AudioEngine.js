@@ -72,11 +72,11 @@ export default class AudioEngine {
 	balanceToGains (balance : number) : Array<number> {
 		let osc1Gain = 1
 		let osc2Gain = 1
-		const gainPercentage = Math.abs(balance - 50) / 50
+		const gainPercentage = Math.abs(balance) / 100
 
-		if(balance < 50)
+		if(balance < 0)
 			osc1Gain -= gainPercentage
-		else if(balance > 50)
+		else if(balance > 0)
 			osc2Gain -= gainPercentage
 
 		return [osc1Gain, osc2Gain]
@@ -95,7 +95,7 @@ export default class AudioEngine {
 
 		osc1.connect(this.oscillator1Gain)
 
-		osc2.type = 'triangle'
+		osc2.type = 'sine'
 		osc2.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc2.detune.value = this.oscillator2Detune
 
@@ -110,7 +110,7 @@ export default class AudioEngine {
 	noteOff (midiNote : number, velocity : number) {
 		if(!this.oscillators[midiNote])
 			return
-		
+
 		this.oscillators[midiNote].forEach(oscillator => {
 			oscillator.stop(this.context.currentTime)
 			oscillator = null
@@ -138,28 +138,28 @@ export default class AudioEngine {
 	}
 
 	setOscillatorsBalance (oscillatorsBalance : number) {
-		const gains = this.balanceToGains(oscillatorsBalance)
+		const gainPercentage = Math.abs(oscillatorsBalance) / 100
 
-		console.log(gains)
-		this.oscillator1Gain.gain.value = gains[0]
-		this.oscillator2Gain.gain.value = gains[1]
+		this.oscillator1Gain.gain.value = 1
+		this.oscillator2Gain.gain.value = 1
+
+		if(oscillatorsBalance < 0)
+			this.oscillator1Gain.gain.value -= gainPercentage
+		else if(oscillatorsBalance > 0)
+			this.oscillator2Gain.gain.value -= gainPercentage
 	}
 
 	setOscillator1Detune (oscillatorDetune : number) {
-		this.oscillator1Detune = oscillatorDetune
-
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[0].detune.value = this.oscillator1Detune
+				oscillator[0].detune.value = oscillatorDetune
 		})
 	}
 
 	setOscillator2Detune (oscillatorDetune : number) {
-		this.oscillator2Detune = oscillatorDetune
-
 		this.oscillators.forEach(oscillator => {
 			if(oscillator)
-				oscillator[1].detune.value = this.oscillator2Detune
+				oscillator[1].detune.value = oscillatorDetune
 		})
 	}
 
