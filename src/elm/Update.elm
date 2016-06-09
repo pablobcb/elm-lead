@@ -1,14 +1,16 @@
 module Update exposing (..) -- where
 
-import Msg exposing (..)
-import Note exposing (..)
-import Model.Model as Model exposing (..)
-import Midi exposing (..)
 import Ports exposing (..)
-import Debug exposing (..)
 import String exposing (..)
 import Char exposing (..)
 import Maybe.Extra exposing (..)
+
+import Msg exposing (..)
+import Model.Note exposing (..)
+import Model.Model as Model exposing (..)
+import Model.Midi exposing (..)
+
+import Debug exposing (..)
 
 noteOnCommand : Velocity -> Int -> Cmd msg
 noteOnCommand velocity midiNoteNumber= 
@@ -18,25 +20,6 @@ noteOffCommand : Velocity -> Int -> Cmd msg
 noteOffCommand velocity midiNoteNumber= 
   noteOffMessage midiNoteNumber velocity |> midiPort
 
---f model midiNoteNumber = 
---  let
---    isKeyPressed midiNoteNumber = 
---      isJust <| findPressedNote model midiNoteNumber
---  
---    hoveringAndClickingKey = 
---      model.mousePressedNote
---    
---    model' = 
---      mouseUp model
---  in
---    case hoveringAndClickingKey of
---      Just midiNoteNumber ->
---        if isKeyPressed midiNoteNumber then
---          (model', Cmd.none)
---        else
---          (model', noteOffCommand (.velocity model') midiNoteNumber)
---      Nothing ->
---        (model', Cmd.none)
 update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
   case msg of

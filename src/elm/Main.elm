@@ -2,19 +2,20 @@ import Html exposing (Html, button, div, text, li, ul)
 import Html.Attributes exposing (class)
 import Html.App as Html
 import Html.Events exposing (onClick)
-import Debug exposing (..)
 import Ports exposing (..)
-import Note exposing (..)
-import Midi exposing (..)
-import Model.Model as Model exposing (..)
-import Msg exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Char exposing (..)
 import Maybe.Extra exposing (..)
 
+import Msg exposing (..)
 import Update exposing (..)
 import View.Dashboard exposing (..)
+import Model.Note exposing (..)
+import Model.Midi exposing (..)
+import Model.Model as Model exposing (..)
+
+import Debug exposing (..)
 
 main : Program Never
 main =
@@ -28,18 +29,7 @@ main =
 
 init : (Model, Cmd msg)
 init =
-  (,)
-  { octave              = 3
-  , velocity            = 100
-  , pressedNotes        = []
-  , clickedAndHovering  = False
-  , mouseHoverNote      = Nothing
-  , mousePressedNote    = Nothing
-  , oscillator1Waveform = Sawtooth
-  , oscillator2Waveform = Sawtooth
-  }
-  Cmd.none
-
+  (initModel, Cmd.none)
 
 view : Model -> Html Msg
 view model =

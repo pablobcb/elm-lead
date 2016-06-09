@@ -1,11 +1,13 @@
 module Model.Model exposing (..) -- where
 
-import Note exposing (..)
-import Midi exposing (..)
 import Char exposing (..)
 import Keyboard exposing (..)
 import List exposing (..)
 import Maybe.Extra exposing (..)
+
+import Model.Note as Note exposing (..)
+import Model.Midi as Midi exposing (..)
+
 
 type alias PressedKey =
   (Char, MidiNote)
@@ -17,14 +19,28 @@ type OscillatorWaveform
   | Square
 
 type alias Model =
-  { octave              : Octave
-  , velocity            : Velocity
-  , pressedNotes        : List PressedKey
-  , clickedAndHovering  : Bool
-  , mouseHoverNote      : Maybe MidiNote
-  , mousePressedNote    : Maybe MidiNote
-  , oscillator1Waveform : OscillatorWaveform
-  , oscillator2Waveform : OscillatorWaveform
+  { octave                     : Octave
+  , velocity                   : Velocity
+  , pressedNotes               : List PressedKey
+  , clickedAndHovering         : Bool
+  , mouseHoverNote             : Maybe MidiNote
+  , mousePressedNote           : Maybe MidiNote
+  , oscillator1Waveform        : OscillatorWaveform
+  , oscillator2Waveform        : OscillatorWaveform
+  , midiControllerPressedNotes : List MidiNote
+  }
+
+initModel : Model
+initModel =
+  { octave                     = 3
+  , velocity                   = 100
+  , pressedNotes               = []
+  , clickedAndHovering         = False
+  , mouseHoverNote             = Nothing
+  , mousePressedNote           = Nothing
+  , oscillator1Waveform        = Sawtooth
+  , oscillator2Waveform        = Sawtooth
+  , midiControllerPressedNotes = []
   }
 
 pianoKeys: List Char

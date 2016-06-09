@@ -1,8 +1,8 @@
 port module Ports exposing (..)
 
-import Note exposing (..)
-import Midi exposing (..)
+import Model.Midi  exposing (..)
 import Model.Model exposing (..)
+import Model.Note  exposing (..)
 
 port midiPort : MidiMessage -> Cmd msg
 

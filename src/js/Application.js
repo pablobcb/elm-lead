@@ -1,4 +1,4 @@
-import Elm from './Main.elm'
+import Elm from '../elm/Main.elm'
 
 import AudioEngine from './AudioEngine'
 
@@ -16,7 +16,15 @@ export default class Application {
 			this.onMIDIFailure({})
 		}
 	}
+	
+	onMIDISuccess = (midiAccess : MIDIAccess) => {
+		this.midiAccess = midiAccess
+	}
 
+	onMIDIFailur = () => {
+		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
+	}
+	
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine(this.midiAccess)
@@ -62,14 +70,6 @@ export default class Application {
 		window.onblur = () => {
 			this.audioEngine.panic()
 		}
-	}
-
-	onMIDISuccess = (midiAccess : MIDIAccess) => {
-		this.midiAccess = midiAccess
-	}
-
-	onMIDIFailure() {
-		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
 	}
 
 }

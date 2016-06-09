@@ -1,4 +1,4 @@
-module Note exposing (..) -- where
+module Model.Note exposing (..) -- where
 
 type alias Octave = Int
 

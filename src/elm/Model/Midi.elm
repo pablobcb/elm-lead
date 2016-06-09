@@ -1,6 +1,7 @@
-module Midi exposing (..) -- where
+module Model.Midi exposing (..) -- where
 
-import Note exposing (..)
+import Model.Note as Note exposing (..)
+
 import Dict exposing (..)
 
 

@@ -215,10 +215,10 @@ export default class AudioEngine {
 		const velocity = data[2]
 
 		switch (type) {
-			case 144: // noteOn message
+			case 144:
 				this.noteOn(note, velocity)
 				break
-			case 128: // noteOff message
+			case 128:
 				this.noteOff(note, velocity)
 				break
 		}
