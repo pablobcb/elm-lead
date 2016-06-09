@@ -6,17 +6,21 @@ import Char exposing (..)
 import Maybe.Extra exposing (..)
 
 import Msg exposing (..)
+
 import Model.Note exposing (..)
 import Model.Model as Model exposing (..)
 import Model.Midi exposing (..)
+import Model.OnScreenKeyboard
+  as Keyboard exposing (..)
+
 
 import Debug exposing (..)
 
-noteOnCommand : Velocity -> Int -> Cmd msg
+noteOnCommand : Velocity -> MidiNote -> Cmd msg
 noteOnCommand velocity midiNoteNumber= 
   noteOnMessage midiNoteNumber velocity |> midiOutPort
 
-noteOffCommand : Velocity -> Int -> Cmd msg
+noteOffCommand : Velocity -> MidiNote -> Cmd msg
 noteOffCommand velocity midiNoteNumber= 
   noteOffMessage midiNoteNumber velocity |> midiOutPort
 
@@ -132,7 +136,7 @@ update msg model =
           addPressedNote model symbol
 
         midiNoteNumber =
-          Model.keyToMidiNoteNumber (symbol, model.octave)
+          Keyboard.keyToMidiNoteNumber (symbol, model.octave)
 
         hoveringAndClickingKey = 
           model.mousePressedNote
