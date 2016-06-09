@@ -36,7 +36,7 @@ export default class AudioEngine {
 
 		const widthGain = this.context.createGain()
 		widthGain.gain.value = 0
-		node.width = widthGain.gain 
+		node.width = widthGain.gain.value
 		widthGain.connect(pulseShaper)
 
 		const constantOneShaper = this.context.createWaveShaper()
@@ -57,7 +57,7 @@ export default class AudioEngine {
 		return node
 	}
 
-	createOscillatorNode () {		
+	createOscillatorNode () {
 		const that = this
 		const node = that.context.createGain()
 		node.gain.value = 1
@@ -150,7 +150,7 @@ export default class AudioEngine {
 				for(const midiNote in node.oscillators) {
 					if(node.oscillators.hasOwnProperty(midiNote)) {
 						node.oscillators[midiNote].width = node.pulseWidth
-						console.log(node.oscillators)
+						console.log(node.oscillators[midiNote])
 					}
 				}
 			}
@@ -266,8 +266,8 @@ export default class AudioEngine {
 	}
 
 	setPulseWidth (pulseWith : number) {
-		this.oscillator1.pulseWith = pulseWith / 100
-		this.oscillator2.pulseWith = pulseWith / 100
+		this.oscillator1.setPulseWidth(pulseWith / 100)
+		this.oscillator2.setPulseWidth(pulseWith / 100)
 	}
 
 	setOscillator1Waveform (waveform) {
