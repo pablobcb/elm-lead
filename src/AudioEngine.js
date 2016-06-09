@@ -9,16 +9,22 @@ export default class AudioEngine {
 		
 		this.initializeMasterVolume()
 		
+		this.initializeOscillators ()
+
 		this.initializeOscillatorsGain ()
 		
-		this.oscillator1Waveform = 'sawtooth'
+		/*this.oscillator1Waveform = 'sawtooth'
 		this.oscillator2Waveform = 'sawtooth'
 		this.oscillator2Semitone = 0
-		this.oscillator2Detune = 0
+		this.oscillator2Detune = 0*/
+
+
 		
 		this.initializeFMGain ()
 		this.pulseWith = 0.5
 	}
+
+	
 
 	createPulseOscillator = () => {
 		const pulseCurve = new Float32Array(256)
@@ -61,6 +67,71 @@ export default class AudioEngine {
 		return node
 	}
 
+	createOscillatorNode () {
+		const node = this.context.createGain()		
+		node.gain.value = 1
+		node.oscillators = {}
+		node.type = 'sawtooth'
+		node.detune = 0
+		node.semitone = 0
+
+		node.frequencyFromNoteNumber = function(note : number) : number {
+			return 440 * Math.pow(2, (note - 69) / 12)
+		}
+
+		node.noteOff = function(midiNote : number) {
+			const midiNoteKey = midiNote.toString()
+
+			node.oscillators[midiNoteKey].disconnect(node)
+			node.oscillators[midiNoteKey].stop(this.context.currentTime)
+			delete node.oscillators[midiNoteKey]
+		}
+
+		node.noteOn = function(midiNote : number) {
+			const midiNoteKey = midiNote.toString()
+
+			const osc = this.context.createOscillator()
+			osc.type = node.type
+			osc.frequency.value = node.frequencyFromNoteNumber(midiNote)
+
+			osc.connect(node)
+			osc.start(this.context.currentTime)
+			node.oscillators[midiNoteKey] = osc
+		}
+
+		node.setDetune = function(detune : number) {
+			node.detune = detune * 100
+			for(let midiNote in node.oscillators) {
+				if(node.oscillators.hasOwnProperty(midiNote)) {
+					node.oscillators[midiNote].detune.value = 
+						node.detune + node.semitone
+				}
+			}
+		}
+
+		node.setSemitone = function(semitone : number) {
+			node.semitone = semitone * 100
+			for(let midiNote in node.oscillators) {
+				if(node.oscillators.hasOwnProperty(midiNote)) {
+					node.oscillators[midiNote].detune.value = 
+						node.detune + node.semitone
+				}
+			}
+		}
+
+		node.setWaveform = function(waveform) {
+			node.type = waveform
+			for(let midiNote in node.oscillators) {
+				if(node.oscillators.hasOwnProperty(midiNote)) {
+					node.oscillators[midiNote].type =
+						node.type
+				}
+			}
+		}
+
+		return node
+	}
+
 	initializeMidiAccess (midiAccess : MIDIAccess) {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
@@ -74,19 +145,28 @@ export default class AudioEngine {
 		this.masterVolume.connect(this.context.destination)
 	}
 
+	initializeOscillators () {
+		this.oscillator1 = this.createOscillatorNode()
+		this.oscillator2 = this.createOscillatorNode()
+	}
+
 	initializeOscillatorsGain () {
 		this.oscillator1Gain = this.context.createGain()
 		this.oscillator1Gain.gain.value = .5
 		this.oscillator1Gain.connect(this.masterVolume)
+		this.oscillator1.connect(this.oscillator1Gain)
 
 		this.oscillator2Gain = this.context.createGain()
 		this.oscillator2Gain.gain.value = .5
 		this.oscillator2Gain.connect(this.masterVolume)
+		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
 	initializeFMGain () {
-		this.fmGain = this.context.createGain();
+		/*this.fmGain = this.context.createGain();
 		this.fmGain.gain.value = 0
+		this.oscillator2.connect(this.fmGain)
+		this.fmGain.connect(this.oscillator1.frequency)*/
 	}
 
 	onMIDIMessage (event : Event) {
@@ -111,75 +191,29 @@ export default class AudioEngine {
 		}
 	}
 
-	frequencyFromNoteNumber (note : number) : number {
-		return 440 * Math.pow(2, (note - 69) / 12)
-	}
-
 	noteOn (midiNote : number, velocity : number) {
 		//if(this.oscillators[midiNote])
 			//return
-		const osc1 = this.oscillator1Waveform == 'square' ? 
-			this.createPulseOscillator() : this.context.createOscillator() 
-		const osc2 = this.context.createOscillator()
 
-		if(this.oscillator1Waveform == 'square')
-			osc1.width.value = this.pulseWith
+		this.oscillator1.noteOn(midiNote)
+		this.oscillator2.noteOn(midiNote)
 
-		// OSC1
-		osc1.type = this.oscillator1Waveform
-		osc1.frequency.value = this.frequencyFromNoteNumber(midiNote)
-
-		osc1.connect(this.oscillator1Gain)
-
-		// OSC2
-		osc2.type = this.oscillator2Waveform
-		osc2.frequency.value = this.frequencyFromNoteNumber(midiNote)
-		osc2.detune.value = this.oscillator2Detune + this.oscillator2Semitone
-
-		osc2.connect(this.oscillator2Gain)
-
-		// FM
-		osc2.connect(this.fmGain)
-		this.fmGain.connect(osc1.frequency)
-
-		osc1.start(this.context.currentTime)
-		osc2.start(this.context.currentTime)
-
-		this.oscillators[midiNote.toString()] = [osc1, osc2]
+		//this.oscillators[midiNote.toString()] = [osc1, osc2]
 	}
 
 	noteOff (midiNote : number, velocity : number) {
-		if(!this.oscillators[midiNote])
-			return
-
-		let oscillator = this.oscillators[midiNote]
-
-		oscillator[0].stop(this.context.currentTime)
-		oscillator[1].stop(this.context.currentTime)
-
-		this.fmGain.disconnect(oscillator[0].frequency)
-		oscillator[0].disconnect(this.oscillator1Gain)
-		//oscillator[0] = null
-
-		oscillator[1].disconnect(this.fmGain)
-		oscillator[1].disconnect(this.oscillator2Gain)
-		//oscillator[1] = null
-
-		delete this.oscillators[midiNote]
-
-		//this.oscillators[midiNote].forEach(oscillator => {
-//
-		//})		
+		this.oscillator1.noteOff(midiNote)
+		this.oscillator2.noteOff(midiNote)
 	}
 
 	panic () {
-		for(let midiNote in this.oscillators) {
+		/*for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote][0].stop(this.context.currentTime)
 				this.oscillators[midiNote][1].stop(this.context.currentTime)
 			}
 			delete this.oscillators[midiNote]
-		}
+		}*/
 	}
 
 	setMasterVolumeGain (masterVolumeGain : number) {
@@ -203,23 +237,25 @@ export default class AudioEngine {
 	}
 
 	setOscillator2Semitone (oscillatorSemitone : number) {
-		this.oscillator2Semitone = oscillatorSemitone * 100
+		/*this.oscillator2Semitone = oscillatorSemitone * 100
 		for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote][1].detune.value = 
 					this.oscillator2Detune + this.oscillator2Semitone
 			}
-		}
+		}*/
+		this.oscillator2.setSemitone(oscillatorSemitone)
 	}
 
 	setOscillator2Detune (oscillatorDetune : number) {
-		this.oscillator2Detune = oscillatorDetune
+		/*this.oscillator2Detune = oscillatorDetune
 		for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote][1].detune.value = 
 					this.oscillator2Detune + this.oscillator2Semitone
 			}
-		}
+		}*/
+		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
 	setFmAmount (fmAmount : number) {
@@ -236,15 +272,16 @@ export default class AudioEngine {
 		})*/
 	}
 
-	setOscillator1Waveform (waveform_) {
+	setOscillator1Waveform (waveform) {
 		const validWaveforms = ['sine', 'triangle', 'sawtooth', 'square']
-		const waveform = waveform_.toLowerCase()
-		const lastWaveform = this.oscillator1Waveform
+		const waveform_ = waveform.toLowerCase()
+		//const lastWaveform = this.oscillator1Waveform
 
-		if(validWaveforms.indexOf(waveform) == -1)
+		if(validWaveforms.indexOf(waveform_) == -1)
 			throw new Error('Invalid Waveform Type')
 
-		this.oscillator1Waveform = waveform
+		this.oscillator1.setWaveform(waveform_)
+		/*this.oscillator1Waveform = waveform
 		//this.oscillator1Waveform = waveform.toLowerCase()
 		for(let midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
@@ -267,7 +304,7 @@ export default class AudioEngine {
 				}*/
 
 				//console.log("VIROU " + this.oscillator1Waveform)
-				this.oscillators[midiNote][0].type = this.oscillator1Waveform
+				/*this.oscillators[midiNote][0].type = this.oscillator1Waveform
 
 				/*if(waveform == 'square') {
 					console.log("VIROU SQUARE")
@@ -286,8 +323,8 @@ export default class AudioEngine {
 
 					oscillator[0] = pulseOsc
 				}*/
-			}
-		}
+			/*}
+		}*/
 	}
 
 	setOscillator2Waveform (waveform) {
@@ -296,11 +333,6 @@ export default class AudioEngine {
 		if(validWaveforms.indexOf(waveform.toLowerCase()) == -1)
 			throw new Error('Invalid Waveform Type')
 
-		this.oscillator2Waveform = waveform.toLowerCase()
-		for(let midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote][1].type = this.oscillator2Waveform
-			}
-		}
+		this.oscillator2.setWaveform(waveform.toLowerCase())
 	}
 }
