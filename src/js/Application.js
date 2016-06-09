@@ -30,7 +30,7 @@ export default class Application {
 		for (const input of this.midiAccess.inputs.values()) {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
-				this.audioEngine.onMIDIMessage(midiData)
+				this.audioEngine.onMIDIMessage(data)
 				this.app.ports.midiInPort.send([data[0],data[1],data[2]])
 			}
 		}
