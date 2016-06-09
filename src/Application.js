@@ -64,9 +64,8 @@ export default class Application {
 		this.midiAccess = midiAccess
 	}
 
-	onMIDIFailure (e) {
-		console.log(`No access to MIDI devices or your browser doesn\'t \
-			support WebMIDI API. Please use WebMIDIAPIShim ${e}`)
+	onMIDIFailure() {
+		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
 	}
 
 }
