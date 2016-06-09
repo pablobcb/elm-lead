@@ -206,7 +206,7 @@ update msg model =
 
 
     PulseWidthChange value ->
-      (model, value |> fmAmountPort)
+      (model, value |> pulseWidthPort)
 
 
     Oscillator1WaveformChange waveform ->
