@@ -86,7 +86,9 @@ export default class AudioEngine {
 		node.noteOff = function (midiNote : number) {
 			const midiNoteKey = midiNote.toString()
 
-			node.oscillators[midiNoteKey].stop(that.context.currentTime)
+			if(node.oscillators[midiNoteKey])
+				node.oscillators[midiNoteKey].stop(that.context.currentTime)
+			
 			node.frequency.disconnect(node.oscillators[midiNoteKey].frequency)
 			node.oscillators[midiNoteKey].disconnect(node)
 			delete node.oscillators[midiNoteKey]
