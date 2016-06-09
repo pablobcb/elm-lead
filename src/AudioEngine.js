@@ -102,7 +102,7 @@ export default class AudioEngine {
 		}
 
 		node.setDetune = function(detune : number) {
-			node.detune = detune * 100
+			node.detune = detune
 			for(let midiNote in node.oscillators) {
 				if(node.oscillators.hasOwnProperty(midiNote)) {
 					node.oscillators[midiNote].detune.value = 
