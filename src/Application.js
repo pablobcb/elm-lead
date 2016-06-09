@@ -6,22 +6,22 @@ export default class Application {
 
 	constructor () {
 		this.app = Elm.Main.fullscreen()
-
+		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
 			navigator
 				.requestMIDIAccess()
-				.then(this.onMIDISuccess.bind(this), this.onMIDIFailure)
+				.then((this.onMIDISuccess.bind(this)), this.onMIDIFailure)
+				.then(this.initializeAudioEngine.bind(this))
 		} else {
-			alert('No MIDI support in your browser.')
+			this.onMIDIFailure({})
 		}
 	}
 
-	// this is our raw MIDI data, inputs, outputs, and sysex status
-	onMIDISuccess = (midiAccess : MIDIAccess) => {
-		this.audioEngine = new AudioEngine(midiAccess)
+	initializeAudioEngine = () => {
+
+		this.audioEngine = new AudioEngine(this.midiAccess)
 
 		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
-
 			const midiEvent = new Event('idimessage')
 			midiEvent.data = midiData
 			this.audioEngine.onMIDIMessage(midiEvent)
@@ -64,9 +64,12 @@ export default class Application {
 		}
 	}
 
-	onMIDIFailure (e : Error) {
-		console.log(`No access to MIDI devices or your browser doesn\'t \
-			support WebMIDI API. Please use WebMIDIAPIShim ${e}`)
+	onMIDISuccess = (midiAccess : MIDIAccess) => {
+		this.midiAccess = midiAccess
+	}
+
+	onMIDIFailure() {
+		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
 	}
 
 }
