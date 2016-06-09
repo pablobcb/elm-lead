@@ -107,6 +107,7 @@ oscillators model =
    , oscillator2Semitone
    , oscillator2Detune
    , fmAmount
+   , pulseWidth
    ]
 
 
@@ -196,6 +197,24 @@ fmAmount =
           , Html.Attributes.value "0"
           , Html.Attributes.step "1"
           , Html.Events.onInput <| unsafeToFloat >> FMAmountChange
+          ]
+         []
+      ]
+
+pulseWidth : Html Msg
+pulseWidth =
+  div
+      []
+      [ span 
+          [] 
+          [ "PW" |> text ]
+      , input 
+          [ Html.Attributes.type' "range"
+          , Html.Attributes.min "50"
+          , Html.Attributes.max "99"
+          , Html.Attributes.value "50"
+          , Html.Attributes.step "1"
+          , Html.Events.onInput <| unsafeToFloat >> PulseWidthChange
           ]
          []
       ]

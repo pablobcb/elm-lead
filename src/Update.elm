@@ -205,6 +205,10 @@ update msg model =
       (model, value |> fmAmountPort)
 
 
+    PulseWidthChange value ->
+      (model, value |> pulseWidthPort)
+
+
     Oscillator1WaveformChange waveform ->
       (setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort)
 

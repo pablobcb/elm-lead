@@ -22,3 +22,5 @@ port oscillatorsBalancePort : Float -> Cmd msg
 
 port fmAmountPort : Float -> Cmd msg
 
+port pulseWidthPort : Float -> Cmd msg
+
