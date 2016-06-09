@@ -1,22 +1,30 @@
-module Model.Note exposing (..) -- where
+module Model.Note exposing (..)
 
-type alias Octave = Int
+-- where
 
-type alias Velocity = Int
+
+type alias Octave =
+    Int
+
+
+type alias Velocity =
+    Int
+
 
 type Note
-  = C
-  | Db
-  | D
-  | Eb
-  | E
-  | F
-  | Gb
-  | G
-  | Ab
-  | A
-  | Bb
-  | B
+    = C
+    | Db
+    | D
+    | Eb
+    | E
+    | F
+    | Gb
+    | G
+    | Ab
+    | A
+    | Bb
+    | B
+
 
 octaveNotes =
-  [ C, Db, D, Eb, E, F , Gb, G , Ab , A , Bb, B ]
+    [ C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B ]
