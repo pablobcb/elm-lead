@@ -1,11 +1,10 @@
 // @flow
 
 export default class AudioEngine {
-	constructor (midiAccess) {
+	constructor (midiAccess : MIDIAccess) {
 		this.context = new AudioContext
 		
-		if(midiAccess)
-			this.initializeMidiAccess(midiAccess)
+		this.initializeMidiAccess(midiAccess)
 		
 		this.initializeMasterVolume()
 		
@@ -87,9 +86,10 @@ export default class AudioEngine {
 		node.noteOff = function (midiNote : number) {
 			const midiNoteKey = midiNote.toString()
 
-			if(node.oscillators[midiNoteKey])
-				node.oscillators[midiNoteKey].stop(that.context.currentTime)
-			
+			if(! node.oscillators[midiNoteKey])
+				return
+			node.oscillators[midiNoteKey].stop(that.context.currentTime)
+
 			node.frequency.disconnect(node.oscillators[midiNoteKey].frequency)
 			node.oscillators[midiNoteKey].disconnect(node)
 			delete node.oscillators[midiNoteKey]
@@ -204,7 +204,7 @@ export default class AudioEngine {
 
 	onMIDIMessage (event : Event) {
 		const data = event.data
-		//console.log(event)
+		console.log(event)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
 
