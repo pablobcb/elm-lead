@@ -12,21 +12,11 @@ export default class AudioEngine {
 		this.initializeOscillators ()
 
 		this.initializeOscillatorsGain ()
-		
-		/*this.oscillator1Waveform = 'sawtooth'
-		this.oscillator2Waveform = 'sawtooth'
-		this.oscillator2Semitone = 0
-		this.oscillator2Detune = 0*/
 
-
-		
 		this.initializeFMGain ()
-		//this.pulseWith = 0.5
 	}
 
-	
-
-	createPulseOscillator = () => {
+	createPulseOscillator () {
 		const pulseCurve = new Float32Array(256)
 		for(let i=0; i<128; i++) {
 			pulseCurve[i] = -1
@@ -78,6 +68,14 @@ export default class AudioEngine {
 
 		node.frequencyFromNoteNumber = function(note : number) : number {
 			return 440 * Math.pow(2, (note - 69) / 12)
+		}
+
+		node.panic = function() {
+			for(let midiNote in node.oscillators) {
+				if(node.oscillators.hasOwnProperty(midiNote)) {
+					node.noteOff(Number(midiNote))
+				}
+			}
 		}
 
 		node.noteOff = function(midiNote : number) {
@@ -196,13 +194,8 @@ export default class AudioEngine {
 	}
 
 	noteOn (midiNote : number, velocity : number) {
-		//if(this.oscillators[midiNote])
-			//return
-
 		this.oscillator1.noteOn(midiNote)
 		this.oscillator2.noteOn(midiNote)
-
-		//this.oscillators[midiNote.toString()] = [osc1, osc2]
 	}
 
 	noteOff (midiNote : number, velocity : number) {
@@ -211,13 +204,8 @@ export default class AudioEngine {
 	}
 
 	panic () {
-		/*for(let midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote][0].stop(this.context.currentTime)
-				this.oscillators[midiNote][1].stop(this.context.currentTime)
-			}
-			delete this.oscillators[midiNote]
-		}*/
+		this.oscillator1.panic()
+		this.oscillator2.panic()
 	}
 
 	setMasterVolumeGain (masterVolumeGain : number) {
@@ -241,24 +229,10 @@ export default class AudioEngine {
 	}
 
 	setOscillator2Semitone (oscillatorSemitone : number) {
-		/*this.oscillator2Semitone = oscillatorSemitone * 100
-		for(let midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote][1].detune.value = 
-					this.oscillator2Detune + this.oscillator2Semitone
-			}
-		}*/
 		this.oscillator2.setSemitone(oscillatorSemitone)
 	}
 
 	setOscillator2Detune (oscillatorDetune : number) {
-		/*this.oscillator2Detune = oscillatorDetune
-		for(let midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote][1].detune.value = 
-					this.oscillator2Detune + this.oscillator2Semitone
-			}
-		}*/
 		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
@@ -268,75 +242,25 @@ export default class AudioEngine {
 
 	setPulseWidth (pulseWith : number) {
 		this.pulseWith = pulseWith / 100
-		/*this.oscillators.forEach(oscillator => {
-			if(oscillator) {
-				if(oscillator[0].type == 'square')
-					oscillator[0].width = this.pulseWith
-			}
-		})*/
 	}
 
 	setOscillator1Waveform (waveform) {
 		const validWaveforms = ['sine', 'triangle', 'sawtooth', 'square']
 		const waveform_ = waveform.toLowerCase()
-		//const lastWaveform = this.oscillator1Waveform
 
 		if(validWaveforms.indexOf(waveform_) == -1)
 			throw new Error('Invalid Waveform Type')
 
 		this.oscillator1.setWaveform(waveform_)
-		/*this.oscillator1Waveform = waveform
-		//this.oscillator1Waveform = waveform.toLowerCase()
-		for(let midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				/*if(lastWaveform == 'square') {
-					console.log("ERA SQUARE")
-					
-					const osc1 = this.context.createOscillator()
-					osc1.type = this.oscillator1Waveform
-					osc1.frequency.value = oscillator[0].frequency.value
-					
-					this.modGain.disconnect(oscillator[0].frequency)
-					this.modGain.connect(osc1.frequency)
-
-					oscillator[0].disconnect(this.oscillator1Gain)
-					osc1.connect(this.oscillator1Gain)
-
-					osc1.start(this.context.currentTime)
-
-					oscillator[0] = osc1
-				}*/
-
-				//console.log("VIROU " + this.oscillator1Waveform)
-				/*this.oscillators[midiNote][0].type = this.oscillator1Waveform
-
-				/*if(waveform == 'square') {
-					console.log("VIROU SQUARE")
-					const pulseOsc = this.createPulseOscillator()
-					pulseOsc.frequency.value = oscillator[0].frequency.value
-					pulseOsc.type = waveform
-					pulseOsc.width = this.pulseWith
-
-					this.modGain.disconnect(oscillator[0].frequency)
-					this.modGain.connect(pulseOsc.frequency)
-
-					oscillator[0].disconnect(this.oscillator1Gain)
-					pulseOsc.connect(this.oscillator1Gain)
-
-					pulseOsc.start(this.context.currentTime)
-
-					oscillator[0] = pulseOsc
-				}*/
-			/*}
-		}*/
 	}
 
 	setOscillator2Waveform (waveform) {
 		const validWaveforms = ['triangle', 'sawtooth', 'square']
+		const waveform_ = waveform.toLowerCase()
 
-		if(validWaveforms.indexOf(waveform.toLowerCase()) == -1)
+		if(validWaveforms.indexOf(waveform_.toLowerCase()) == -1)
 			throw new Error('Invalid Waveform Type')
 
-		this.oscillator2.setWaveform(waveform.toLowerCase())
+		this.oscillator2.setWaveform(waveform_.toLowerCase())
 	}
 }
