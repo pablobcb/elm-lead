@@ -14,15 +14,19 @@ import Debug exposing (..)
 
 noteOnCommand : Velocity -> Int -> Cmd msg
 noteOnCommand velocity midiNoteNumber= 
-  noteOnMessage midiNoteNumber velocity |> midiPort
+  noteOnMessage midiNoteNumber velocity |> midiOutPort
 
 noteOffCommand : Velocity -> Int -> Cmd msg
 noteOffCommand velocity midiNoteNumber= 
-  noteOffMessage midiNoteNumber velocity |> midiPort
+  noteOffMessage midiNoteNumber velocity |> midiOutPort
 
 update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
   case msg of
+
+    MidiMessageIn midiMsg ->
+      Debug.log "MIDI MSG" (model, Cmd.none)
+
     NoOp ->
       (model, Cmd.none)
 

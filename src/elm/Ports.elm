@@ -4,9 +4,9 @@ import Model.Midi  exposing (..)
 import Model.Model exposing (..)
 import Model.Note  exposing (..)
 
-port midiPort : MidiMessage -> Cmd msg
+port midiOutPort : MidiMessage -> Cmd msg
 
-port noteInPort : (MidiNote -> msg) -> Sub msg
+port midiInPort : (MidiMessage -> msg) -> Sub msg
 
 port masterVolumePort : Float -> Cmd msg
 

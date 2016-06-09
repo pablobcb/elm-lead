@@ -14,8 +14,7 @@ type Msg
   | KeyOff Char
   | MouseClickUp
   | MouseClickDown
-  --| MidiNoteOn MidiNote --used for changing the key style to pressed
-  --| MidiNoteOff MidiNote --used for changing the key style to unpressed
+  | MidiMessageIn MidiMessage --used for changing the key style to pressed/unpress
   
   | MasterVolumeChange Float
   | OscillatorsBalanceChange Float

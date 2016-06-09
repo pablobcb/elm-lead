@@ -107,5 +107,6 @@ subscriptions model =
     , Keyboard.ups (handleKeyUp model)
     , Mouse.downs <| always MouseClickDown
     , Mouse.ups <| always MouseClickUp
+    , midiInPort MidiMessageIn
     ]
     

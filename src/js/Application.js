@@ -10,10 +10,10 @@ export default class Application {
 		if (navigator.requestMIDIAccess) {
 			navigator
 				.requestMIDIAccess()
-				.then((this.onMIDISuccess.bind(this)), this.onMIDIFailure)
+				.then(this.onMIDISuccess.bind(this), this.onMIDIFailure)
 				.then(this.initializeAudioEngine.bind(this))
 		} else {
-			this.onMIDIFailure({})
+			this.onMIDIFailure()
 		}
 	}
 	
@@ -21,18 +21,30 @@ export default class Application {
 		this.midiAccess = midiAccess
 	}
 
-	onMIDIFailur = () => {
+	onMIDIFailure = () => {
 		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
+	}
+	
+	initializeMidiAccess = () => {
+		// loop over all available inputs and listen for any MIDI input
+		for (const input of this.midiAccess.inputs.values()) {
+			input.onmidimessage = (midiMessage) => {
+				const data = midiMessage.data
+				this.audioEngine.onMIDIMessage(midiData)
+				this.app.ports.midiInPort.send([data[0],data[1],data[2]])
+			}
+		}
 	}
 	
 	initializeAudioEngine = () => {
 
-		this.audioEngine = new AudioEngine(this.midiAccess)
+		this.audioEngine = new AudioEngine()
 
-		this.app.ports.midiPort.subscribe((midiData : Array<number>) => {
-			const midiEvent = new Event('idimessage')
-			midiEvent.data = midiData
-			this.audioEngine.onMIDIMessage(midiEvent)
+		if(this.midiAccess)
+			this.initializeMidiAccess()
+
+		this.app.ports.midiOutPort.subscribe((midiData : Array<number>) => {
+			this.audioEngine.onMIDIMessage(midiData)
 		})
 
 		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
