@@ -3,7 +3,7 @@
 export default class AudioEngine {
 	constructor (midiAccess : MIDIAccess) {
 		this.context = new AudioContext
-		this.oscillators = {}
+		//this.oscillators = {}
 		
 		this.initializeMidiAccess(midiAccess)
 		
@@ -21,7 +21,7 @@ export default class AudioEngine {
 
 		
 		this.initializeFMGain ()
-		this.pulseWith = 0.5
+		//this.pulseWith = 0.5
 	}
 
 	
@@ -68,12 +68,13 @@ export default class AudioEngine {
 	}
 
 	createOscillatorNode () {
-		const node = this.context.createGain()		
+		const node = this.context.createGain()
 		node.gain.value = 1
 		node.oscillators = {}
 		node.type = 'sawtooth'
 		node.detune = 0
 		node.semitone = 0
+		node.frequency = this.context.createGain()
 
 		node.frequencyFromNoteNumber = function(note : number) : number {
 			return 440 * Math.pow(2, (note - 69) / 12)
@@ -82,6 +83,7 @@ export default class AudioEngine {
 		node.noteOff = function(midiNote : number) {
 			const midiNoteKey = midiNote.toString()
 
+			node.frequency.disconnect(node.oscillators[midiNoteKey].frequency)
 			node.oscillators[midiNoteKey].disconnect(node)
 			node.oscillators[midiNoteKey].stop(this.context.currentTime)
 			delete node.oscillators[midiNoteKey]
@@ -93,7 +95,9 @@ export default class AudioEngine {
 			const osc = this.context.createOscillator()
 			osc.type = node.type
 			osc.frequency.value = node.frequencyFromNoteNumber(midiNote)
+			osc.detune.value = node.detune + node.semitone
 
+			node.frequency.connect(osc.frequency)
 			osc.connect(node)
 			osc.start(this.context.currentTime)
 			node.oscillators[midiNoteKey] = osc
@@ -163,10 +167,10 @@ export default class AudioEngine {
 	}
 
 	initializeFMGain () {
-		/*this.fmGain = this.context.createGain();
+		this.fmGain = this.context.createGain();
 		this.fmGain.gain.value = 0
 		this.oscillator2.connect(this.fmGain)
-		this.fmGain.connect(this.oscillator1.frequency)*/
+		this.fmGain.connect(this.oscillator1.frequency)
 	}
 
 	onMIDIMessage (event : Event) {
