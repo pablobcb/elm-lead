@@ -1,11 +1,12 @@
 // @flow
 
 export default class AudioEngine {
-	constructor (midiAccess : MIDIAccess) {
+	constructor (midiAccess) {
 		this.context = new AudioContext
 		this.oscillators = []
 		
-		this.initializeMidiAccess(midiAccess)
+		if(midiAccess)
+			this.initializeMidiAccess(midiAccess)
 		
 		this.initializeMasterVolume()
 		
@@ -84,7 +85,7 @@ export default class AudioEngine {
 
 	onMIDIMessage (event : Event) {
 		const data = event.data
-		console.log(event)
+		//console.log(event)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
 
