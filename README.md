@@ -19,3 +19,6 @@ install Elm 0.17
 ## Build Instructions
 
 `npm run build`
+
+## Coding Style
+install and config[elm-format](https://github.com/avh4/elm-format)

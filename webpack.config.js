@@ -1,7 +1,7 @@
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
-	entry: './src/main.js',
+	entry: './src/js/main.js',
 	output: {
 		path: `${__dirname}/dist`,
 		filename: 'bundle.js'
