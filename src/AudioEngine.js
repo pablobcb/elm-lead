@@ -34,8 +34,8 @@ export default class AudioEngine {
 		node.connect(pulseShaper)
 
 		const widthGain = this.context.createGain()
-		widthGain.gain.value = .5
-		node.width = widthGain
+		widthGain.gain.value = 0
+		node.width = widthGain.gain
 		widthGain.connect(pulseShaper)
 
 		const constantOneShaper = this.context.createWaveShaper()
@@ -44,7 +44,7 @@ export default class AudioEngine {
 		constantOneShaper.connect(widthGain)
 
 		node.setWidth = function (width : number) {
-			node.width.gain.value = width
+			node.width.value = width
 		}
 
 		node.connect = function () {
@@ -69,7 +69,7 @@ export default class AudioEngine {
 		node.detune = 0
 		node.semitone = 0
 		node.frequency = that.context.createGain()
-		node.pulseWidth = .5
+		node.pulseWidth = 0
 
 		node.frequencyFromNoteNumber = function (note : number) : number {
 			return 440 * Math.pow(2, (note - 69) / 12)
@@ -86,9 +86,9 @@ export default class AudioEngine {
 		node.noteOff = function (midiNote : number) {
 			const midiNoteKey = midiNote.toString()
 
+			node.oscillators[midiNoteKey].stop(that.context.currentTime)
 			node.frequency.disconnect(node.oscillators[midiNoteKey].frequency)
 			node.oscillators[midiNoteKey].disconnect(node)
-			node.oscillators[midiNoteKey].stop(that.context.currentTime)
 			delete node.oscillators[midiNoteKey]
 		}
 

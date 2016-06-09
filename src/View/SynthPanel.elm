@@ -210,7 +210,7 @@ pulseWidth =
           [ "PW" |> text ]
       , input 
           [ Html.Attributes.type' "range"
-          , Html.Attributes.min "1"
+          , Html.Attributes.min "50"
           , Html.Attributes.max "99"
           , Html.Attributes.value "50"
           , Html.Attributes.step "1"
