@@ -2,16 +2,13 @@ module View.SynthPanel exposing (..)
 
 -- where
 
-import String exposing (toFloat)
-import Knob exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Json.Decode as Json
-import Update exposing (..)
 import Msg exposing (..)
-import Model.Model as Model exposing (..)
 import Ports exposing (..)
+import Knob exposing (..)
+import Model.Model as Model exposing (..)
 
 
 synthPanel : Model.Model -> Html Msg.Msg

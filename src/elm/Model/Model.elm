@@ -2,10 +2,6 @@ module Model.Model exposing (..)
 
 -- where
 
-import Char exposing (..)
-import Keyboard exposing (..)
-import List exposing (..)
-import Maybe.Extra exposing (..)
 import Model.Note as Note exposing (..)
 import Model.Midi as Midi exposing (..)
 import Knob

@@ -3,15 +3,13 @@ module Update exposing (..)
 -- where
 
 import Ports exposing (..)
-import String exposing (..)
-import Char exposing (..)
 import Maybe.Extra exposing (..)
 import Msg exposing (..)
 import Model.Note exposing (..)
 import Model.Model as Model exposing (..)
 import Model.Midi exposing (..)
-import Debug exposing (..)
 import Knob
+import Debug exposing (..)
 
 
 noteOnCommand : Velocity -> Int -> Cmd msg

@@ -4,7 +4,6 @@ module View.InformationBar exposing (informationBar)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Update exposing (..)
 import Msg exposing (..)
 import Model.Model exposing (Model)
 
