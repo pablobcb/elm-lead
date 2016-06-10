@@ -186,17 +186,17 @@ update msg model =
             OscillatorsMixChange subMsg ->
                 knobUpdateMap subMsg .oscillatorsMixKnob Model.setOscillatorsMix OscillatorsMixChange
 
-            Oscillator2SemitoneChange value ->
-                ( model, value |> oscillator2SemitonePort )
+            Oscillator2SemitoneChange subMsg ->
+                knobUpdateMap subMsg .oscillator2SemitoneKnob Model.setOscillator2Semitone Oscillator2SemitoneChange
 
-            Oscillator2DetuneChange value ->
-                ( model, value |> oscillator2DetunePort )
+            Oscillator2DetuneChange subMsg ->
+                knobUpdateMap subMsg .oscillator2DetuneKnob Model.setOscillator2Detune Oscillator2DetuneChange
 
-            FMAmountChange value ->
-                ( model, value |> fmAmountPort )
+            FMAmountChange subMsg ->
+                knobUpdateMap subMsg .fmAmountKnob Model.setFmAmount FMAmountChange
 
-            PulseWidthChange value ->
-                ( model, value |> pulseWidthPort )
+            PulseWidthChange subMsg ->
+                knobUpdateMap subMsg .pulseWidthKnob Model.setPulseWidth PulseWidthChange
 
             Oscillator1WaveformChange waveform ->
                 ( setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort )
