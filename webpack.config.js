@@ -40,10 +40,7 @@ module.exports = {
 					presets: ['es2015'],
 					plugins: [
 						'transform-function-bind',
-						'transform-class-properties',
-						'typecheck',
-						'syntax-flow',
-						'transform-flow-strip-types'
+						'transform-class-properties'
 					]
 				}
 			}
