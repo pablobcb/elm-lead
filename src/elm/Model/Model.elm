@@ -58,8 +58,8 @@ initModel =
     , oscillator1Waveform = Sawtooth
     , oscillator2Waveform = Sawtooth
     , midiControllerPressedNotes = []
-    , masterVolumeKnob = Knob.initialModel
-    , oscillatorsMixKnob = Knob.initialModel
+    , masterVolumeKnob = Knob.create 10 0 100
+    , oscillatorsMixKnob = Knob.create 0 -50 50
     }
 
 

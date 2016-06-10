@@ -21,11 +21,11 @@ type alias Model =
     }
 
 
-initialModel : Model
-initialModel =
-    { value = 50
-    , min = 0
-    , max = 100
+create : Int -> Int -> Int -> Model
+create value min max =
+    { value = value
+    , min = min
+    , max = max
     , step = 1
     , yPos = 0
     }
