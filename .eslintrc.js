@@ -10,7 +10,6 @@ module.exports = {
 		sourceType: "module"
 	},
 	plugins: [
-		"flowtype"
 	],
 	rules: {
 		"indent": [ "warn", "tab", { "SwitchCase": 1 } ],
@@ -29,9 +28,5 @@ module.exports = {
 		"space-before-function-paren": [ "warn" ],
 		"space-in-parens": ["warn", "never"],
 
-		"flowtype/require-parameter-type": ["warn", "always"],
-		"flowtype/require-return-type": ["warn", "always"],
-		"flowtype/space-after-type-colon": ["warn", "always"],
-		"flowtype/space-before-type-colon": ["warn", "always"]
 	}
 }

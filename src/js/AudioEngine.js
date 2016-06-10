@@ -3,9 +3,9 @@
 export default class AudioEngine {
 	constructor () {
 		this.context = new AudioContext
-		
+
 		this.initializeMasterVolume()
-		
+
 		this.initializeOscillators ()
 
 		this.initializeOscillatorsGain ()
@@ -41,7 +41,7 @@ export default class AudioEngine {
 		node.connect(constantOneShaper)
 		constantOneShaper.connect(widthGain)
 
-		node.setWidth = function (width : number) {
+		node.setWidth = function (width) {
 			node.width.value = width
 		}
 
@@ -70,7 +70,7 @@ export default class AudioEngine {
 		node.fmGain = 0
 		node.frequency = {} //that.context.createGain()
 
-		node.frequencyFromNoteNumber = function (note : number) : number {
+		node.frequencyFromNoteNumber = function (note) {
 			return 440 * Math.pow(2, (note - 69) / 12)
 		}
 
@@ -82,7 +82,7 @@ export default class AudioEngine {
 			}
 		}
 
-		node.noteOff = function (midiNote : number) {
+		node.noteOff = function (midiNote) {
 			const midiNoteKey = midiNote.toString()
 
 			if(!(midiNoteKey in node.oscillators))
@@ -91,7 +91,9 @@ export default class AudioEngine {
 			node.oscillators[midiNoteKey].stop(that.context.currentTime)
 
 			// FM
-			node.frequency[midiNoteKey].disconnect(node.oscillators[midiNoteKey].frequency)
+			node.frequency[midiNoteKey]
+				.disconnect(node.oscillators[midiNoteKey].frequency)
+
 			delete node.frequency[midiNoteKey]
 
 			// OSC
@@ -99,9 +101,9 @@ export default class AudioEngine {
 			delete node.oscillators[midiNoteKey]
 		}
 
-		node.noteOn = function (midiNote : number) {
+		node.noteOn = function (midiNote) {
 			const midiNoteKey = midiNote.toString()
-			
+
 			if(midiNoteKey in node.oscillators)
 				return
 
@@ -117,7 +119,7 @@ export default class AudioEngine {
 			osc.type = node.type
 			osc.frequency.value = node.frequencyFromNoteNumber(midiNote)
 			osc.detune.value = node.detune + node.semitone
-			
+
 			// FM
 			const fmGain = that.context.createGain()
 			fmGain.gain.value = node.fmGain
@@ -129,21 +131,21 @@ export default class AudioEngine {
 			node.oscillators[midiNoteKey] = osc
 		}
 
-		node.setDetune = function (detune : number) {
+		node.setDetune = function (detune) {
 			node.detune = detune
 			for(const midiNote in node.oscillators) {
 				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.oscillators[midiNote].detune.value = 
+					node.oscillators[midiNote].detune.value =
 						node.detune + node.semitone
 				}
 			}
 		}
 
-		node.setSemitone = function (semitone : number) {
+		node.setSemitone = function (semitone) {
 			node.semitone = semitone * 100
 			for(const midiNote in node.oscillators) {
 				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.oscillators[midiNote].detune.value = 
+					node.oscillators[midiNote].detune.value =
 						node.detune + node.semitone
 				}
 			}
@@ -157,13 +159,13 @@ export default class AudioEngine {
 						node.type = waveform
 						node.noteOn(Number(midiNote))
 					}
-					node.oscillators[midiNote].type =	waveform
+					node.oscillators[midiNote].type = waveform
 				}
 			}
 			node.type = waveform
 		}
-			
-		node.setPulseWidth = function (pulseWidth : number) {
+
+		node.setPulseWidth = function (pulseWidth) {
 			node.pulseWidth = pulseWidth
 			if(node.type == 'square') {
 				for(const midiNote in node.oscillators) {
@@ -174,7 +176,7 @@ export default class AudioEngine {
 			}
 		}
 
-		node.setFMGain = function (fmGain : number) {
+		node.setFMGain = function (fmGain) {
 			node.fmGain = fmGain
 			for(const midiNote in node.frequency) {
 				if(node.oscillators.hasOwnProperty(midiNote)) {
@@ -237,19 +239,21 @@ export default class AudioEngine {
 		}
 	}
 
-	noteOn (midiNote : number, velocity : number) {
+	noteOn (midiNote, velocity) {
 		this.oscillator1.noteOn(midiNote)
 		this.oscillator2.noteOn(midiNote)
 
 		console.log(this.oscillator2.oscillators)
 		console.log(this.oscillator1.frequency)
-		this.oscillator2.oscillators[midiNote.toString()].connect(this.oscillator1.frequency[midiNote.toString()])
+		this.oscillator2.oscillators[midiNote.toString()]
+			.connect(this.oscillator1.frequency[midiNote.toString()])
 	}
 
-	noteOff (midiNote : number, velocity : number) {
+	noteOff (midiNote, velocity) {
 		console.log(this.oscillator2.oscillators)
 		console.log(this.oscillator1.frequency)
-		this.oscillator2.oscillators[midiNote.toString()].disconnect(this.oscillator1.frequency[midiNote.toString()])
+		this.oscillator2.oscillators[midiNote.toString()]
+			.disconnect(this.oscillator1.frequency[midiNote.toString()])
 
 		this.oscillator1.noteOff(midiNote)
 		this.oscillator2.noteOff(midiNote)
@@ -260,11 +264,11 @@ export default class AudioEngine {
 		this.oscillator2.panic()
 	}
 
-	setMasterVolumeGain (masterVolumeGain : number) {
+	setMasterVolumeGain (masterVolumeGain) {
 		this.masterVolume.gain.value = masterVolumeGain / 100
 	}
 
-	setOscillatorsBalance (oscillatorsBalance : number) {
+	setOscillatorsBalance (oscillatorsBalance) {
 		const gainPercentage = Math.abs(oscillatorsBalance) / 100
 
 		this.oscillator1Gain.gain.value = .5
@@ -280,19 +284,19 @@ export default class AudioEngine {
 		}
 	}
 
-	setOscillator2Semitone (oscillatorSemitone : number) {
+	setOscillator2Semitone (oscillatorSemitone) {
 		this.oscillator2.setSemitone(oscillatorSemitone)
 	}
 
-	setOscillator2Detune (oscillatorDetune : number) {
+	setOscillator2Detune (oscillatorDetune) {
 		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
-	setFmAmount (fmAmount : number) {
+	setFmAmount (fmAmount) {
 		this.oscillator1.setFMGain(fmAmount * 10)
 	}
 
-	setPulseWidth (pulseWith : number) {
+	setPulseWidth (pulseWith) {
 		this.oscillator1.setPulseWidth(pulseWith / 100)
 		this.oscillator2.setPulseWidth(pulseWith / 100)
 	}
