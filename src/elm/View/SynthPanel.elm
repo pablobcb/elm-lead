@@ -11,41 +11,22 @@ import Knob exposing (..)
 import Model.Model as Model exposing (..)
 
 
-synthPanel : Model.Model -> Html Msg.Msg
-synthPanel model =
-    div [ class "synth-panel" ]
-        [ panelLeftSection model
-        , oscillators model
-        , panelRightSection model
-        ]
-
-
-panelLeftSection : Model.Model -> Html Msg.Msg
-panelLeftSection model =
-    div [ class "synth-panel panel-left-section" ]
-        [ span [] [ text "master level" ]
-        , knob MasterVolumeChange masterVolumePort model.masterVolumeKnob
-        ]
-
-
-panelRightSection : Model.Model -> Html Msg.Msg
-panelRightSection model =
-    div [ class "synth-panel panel-right-section" ]
-        [ div []
-            [ span []
-                [ "Breno" |> text ]
-            ]
-        ]
-
-
 withLabel : String -> Html a -> Html a
 withLabel txt elem =
     div [] [ span [] [ text txt ], elem ]
 
 
+synthPanel : Model.Model -> Html Msg.Msg
+synthPanel model =
+    div [ class "synth-panel" ]
+        [ knob MasterVolumeChange masterVolumePort model.masterVolumeKnob |> withLabel "master level"
+        , oscillators model
+        ]
+
+
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
-    div [ class "synth-panel panel-middle-section oscillators" ]
+    div [ class "synth-panel oscillators" ]
         [ knob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob |> withLabel "mix"
         , knob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob |> withLabel "semitone"
         , knob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob |> withLabel "detune"
