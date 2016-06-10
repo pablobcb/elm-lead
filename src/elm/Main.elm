@@ -1,9 +1,9 @@
 module Main exposing (..)
 
+-- where
+
 import Html exposing (Html, button, div, text, li, ul)
-import Html.Attributes exposing (class)
 import Html.App as Html
-import Html.Events exposing (onClick)
 import Ports exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
@@ -12,10 +12,7 @@ import Maybe.Extra exposing (..)
 import Msg exposing (..)
 import Update exposing (..)
 import View.Dashboard exposing (..)
-import Model.Note exposing (..)
-import Model.Midi exposing (..)
 import Model.Model as Model exposing (..)
-import Debug exposing (..)
 
 
 main : Program Never

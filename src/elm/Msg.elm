@@ -22,9 +22,9 @@ type Msg
     | MidiMessageIn MidiMessage
     | Oscillator1WaveformChange OscillatorWaveform
     | Oscillator2WaveformChange OscillatorWaveform
-    | Oscillator2SemitoneChange Float
-    | Oscillator2DetuneChange Float
-    | FMAmountChange Float
-    | PulseWidthChange Float
+    | Oscillator2SemitoneChange Knob.Msg
+    | Oscillator2DetuneChange Knob.Msg
+    | FMAmountChange Knob.Msg
+    | PulseWidthChange Knob.Msg
     | OscillatorsMixChange Knob.Msg
     | MasterVolumeChange Knob.Msg

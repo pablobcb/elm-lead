@@ -2,10 +2,6 @@ module Model.Model exposing (..)
 
 -- where
 
-import Char exposing (..)
-import Keyboard exposing (..)
-import List exposing (..)
-import Maybe.Extra exposing (..)
 import Model.Note as Note exposing (..)
 import Model.Midi as Midi exposing (..)
 import Knob
@@ -34,17 +30,11 @@ type alias Model =
     , midiControllerPressedNotes : List MidiNote
     , masterVolumeKnob : Knob.Model
     , oscillatorsMixKnob : Knob.Model
+    , oscillator2SemitoneKnob : Knob.Model
+    , oscillator2DetuneKnob : Knob.Model
+    , fmAmountKnob : Knob.Model
+    , pulseWidthKnob : Knob.Model
     }
-
-
-setMasterVolume : Knob.Model -> Model -> Model
-setMasterVolume knobModel model =
-    { model | masterVolumeKnob = knobModel }
-
-
-setOscillatorsMix : Knob.Model -> Model -> Model
-setOscillatorsMix knobModel model =
-    { model | oscillatorsMixKnob = knobModel }
 
 
 initModel : Model
@@ -60,7 +50,41 @@ initModel =
     , midiControllerPressedNotes = []
     , masterVolumeKnob = Knob.create 10 0 100
     , oscillatorsMixKnob = Knob.create 0 -50 50
+    , oscillator2SemitoneKnob = Knob.create 0 -60 60
+    , oscillator2DetuneKnob = Knob.create 0 -100 100
+    , fmAmountKnob = Knob.create 0 0 100
+    , pulseWidthKnob = Knob.create 0 0 100
     }
+
+
+setFmAmount : Knob.Model -> Model -> Model
+setFmAmount knobModel model =
+    { model | fmAmountKnob = knobModel }
+
+
+setPulseWidth : Knob.Model -> Model -> Model
+setPulseWidth knobModel model =
+    { model | oscillator2DetuneKnob = knobModel }
+
+
+setOscillator2Detune : Knob.Model -> Model -> Model
+setOscillator2Detune knobModel model =
+    { model | oscillator2DetuneKnob = knobModel }
+
+
+setOscillator2Semitone : Knob.Model -> Model -> Model
+setOscillator2Semitone knobModel model =
+    { model | oscillator2SemitoneKnob = knobModel }
+
+
+setMasterVolume : Knob.Model -> Model -> Model
+setMasterVolume knobModel model =
+    { model | masterVolumeKnob = knobModel }
+
+
+setOscillatorsMix : Knob.Model -> Model -> Model
+setOscillatorsMix knobModel model =
+    { model | oscillatorsMixKnob = knobModel }
 
 
 pianoKeys : List Char
