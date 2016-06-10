@@ -33,8 +33,18 @@ type alias Model =
     , oscillator2Waveform : OscillatorWaveform
     , midiControllerPressedNotes : List MidiNote
     , masterVolumeKnob : Knob.Model
-    , oscillatorsMix : Knob.Model
+    , oscillatorsMixKnob : Knob.Model
     }
+
+
+setMasterVolume : Knob.Model -> Model -> Model
+setMasterVolume knobModel model =
+    { model | masterVolumeKnob = knobModel }
+
+
+setOscillatorsMix : Knob.Model -> Model -> Model
+setOscillatorsMix knobModel model =
+    { model | oscillatorsMixKnob = knobModel }
 
 
 initModel : Model
@@ -49,7 +59,7 @@ initModel =
     , oscillator2Waveform = Sawtooth
     , midiControllerPressedNotes = []
     , masterVolumeKnob = Knob.initialModel
-    , oscillatorsMix = Knob.initialModel
+    , oscillatorsMixKnob = Knob.initialModel
     }
 
 

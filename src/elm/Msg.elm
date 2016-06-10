@@ -20,12 +20,11 @@ type Msg
     | MouseClickUp
     | MouseClickDown
     | MidiMessageIn MidiMessage
-      --| MasterVolumeChange Float
-    | OscillatorsMixChange Knob.Msg
     | Oscillator1WaveformChange OscillatorWaveform
     | Oscillator2WaveformChange OscillatorWaveform
     | Oscillator2SemitoneChange Float
     | Oscillator2DetuneChange Float
     | FMAmountChange Float
     | PulseWidthChange Float
+    | OscillatorsMixChange Knob.Msg
     | MasterVolumeChange Knob.Msg

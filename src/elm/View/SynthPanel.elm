@@ -79,9 +79,8 @@ panelLeftSection model =
 oscillatorsBalance : Model.Model -> Html Msg.Msg
 oscillatorsBalance model =
     div []
-        [ span []
-            [ "Oscillators Balance" |> text ]
-        , knob OscillatorsMixChange (Basics.toFloat >> oscillatorsBalancePort) model.oscillatorsMix
+        [ span [] [ text "Oscillators Balance" ]
+        , knob OscillatorsMixChange (Basics.toFloat >> oscillatorsBalancePort) model.oscillatorsMixKnob
         ]
 
 
