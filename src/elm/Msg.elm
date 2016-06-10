@@ -4,6 +4,7 @@ module Msg exposing (..)
 
 import Model.Model exposing (..)
 import Model.Midi exposing (..)
+import Knob exposing (..)
 
 
 type Msg
@@ -19,12 +20,12 @@ type Msg
     | MouseClickUp
     | MouseClickDown
     | MidiMessageIn MidiMessage
-      --used for changing the key style to pressed/unpress
-    | MasterVolumeChange Float
-    | OscillatorsBalanceChange Float
+      --| MasterVolumeChange Float
+    | OscillatorsMixChange Knob.Msg
     | Oscillator1WaveformChange OscillatorWaveform
     | Oscillator2WaveformChange OscillatorWaveform
     | Oscillator2SemitoneChange Float
     | Oscillator2DetuneChange Float
     | FMAmountChange Float
     | PulseWidthChange Float
+    | MasterVolumeChange Knob.Msg

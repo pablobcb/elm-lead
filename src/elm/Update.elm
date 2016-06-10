@@ -11,6 +11,7 @@ import Model.Note exposing (..)
 import Model.Model as Model exposing (..)
 import Model.Midi exposing (..)
 import Debug exposing (..)
+import Knob
 
 
 noteOnCommand : Velocity -> Int -> Cmd msg
@@ -23,7 +24,7 @@ noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> midiOutPort
 
 
-update : Msg -> Model -> ( Model, Cmd msg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MidiMessageIn midiMsg ->
@@ -175,11 +176,31 @@ update msg model =
                     Nothing ->
                         ( model', Cmd.none )
 
-        MasterVolumeChange value ->
-            ( model, value |> masterVolumePort )
+        MasterVolumeChange subMsg ->
+            let
+                ( updatedKnobModel, knobCmd ) =
+                    Knob.update subMsg model.masterVolumeKnob
+            in
+                ( { model | masterVolumeKnob = updatedKnobModel }
+                , Cmd.map MasterVolumeChange knobCmd
+                )
 
-        OscillatorsBalanceChange value ->
-            ( model, value |> oscillatorsBalancePort )
+        --f subMsg getField =
+        --  let
+        --        ( updatedKnobModel, knobCmd ) =
+        --            Knob.update subMsg (f' model)
+        --    in
+        --        ( { model | oscillatorsMix = updatedKnobModel }
+        --        , Cmd.map OscillatorsMixChange knobCmd
+        --        )
+        OscillatorsMixChange subMsg ->
+            let
+                ( updatedKnobModel, knobCmd ) =
+                    Knob.update subMsg model.oscillatorsMix
+            in
+                ( { model | oscillatorsMix = updatedKnobModel }
+                , Cmd.map OscillatorsMixChange knobCmd
+                )
 
         Oscillator2SemitoneChange value ->
             ( model, value |> oscillator2SemitonePort )
