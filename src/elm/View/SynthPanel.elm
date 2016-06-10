@@ -2,17 +2,20 @@ module View.SynthPanel exposing (..)
 
 -- where
 
-import String exposing (..)
+import String exposing (toFloat)
+import Knob exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
+import Html.App exposing (..)
 import Html.Attributes exposing (..)
 import Json.Decode as Json
 import Update exposing (..)
 import Msg exposing (..)
-import Model.Model exposing (..)
+import Model.Model as Model exposing (..)
+import Ports exposing (..)
 
 
-oscillator1WaveformRadio : OscillatorWaveform -> String -> Model -> Html Msg
+oscillator1WaveformRadio : OscillatorWaveform -> String -> Model.Model -> Html Msg.Msg
 oscillator1WaveformRadio waveform name model =
     let
         isSelected =
@@ -29,7 +32,7 @@ oscillator1WaveformRadio waveform name model =
             ]
 
 
-oscillator2WaveformRadio : OscillatorWaveform -> String -> Model -> Html Msg
+oscillator2WaveformRadio : OscillatorWaveform -> String -> Model.Model -> Html Msg.Msg
 oscillator2WaveformRadio waveform name model =
     let
         isSelected =
@@ -56,7 +59,7 @@ unsafeToFloat value =
             Debug.crash err
 
 
-synthPanel : Model -> Html Msg
+synthPanel : Model.Model -> Html Msg.Msg
 synthPanel model =
     div [ class "synth-panel" ]
         [ panelLeftSection model
@@ -65,19 +68,29 @@ synthPanel model =
         ]
 
 
-panelLeftSection : Model -> Html Msg
+panelLeftSection : Model.Model -> Html Msg.Msg
 panelLeftSection model =
     div [ class "synth-panel panel-left-section" ]
-        [ masterVolume ]
+        [ span [] [ text "master level" ]
+        , knob MasterVolumeChange (Basics.toFloat >> masterVolumePort) model.masterVolumeKnob
+        ]
 
 
-panelMiddleSection : Model -> Html Msg
+oscillatorsBalance : Model.Model -> Html Msg.Msg
+oscillatorsBalance model =
+    div []
+        [ span [] [ text "Oscillators Balance" ]
+        , knob OscillatorsMixChange (Basics.toFloat >> oscillatorsBalancePort) model.oscillatorsMixKnob
+        ]
+
+
+panelMiddleSection : Model.Model -> Html Msg.Msg
 panelMiddleSection model =
     div [ class "synth-panel panel-middle-section" ]
         [ oscillators model ]
 
 
-panelRightSection : Model -> Html Msg
+panelRightSection : Model.Model -> Html Msg.Msg
 panelRightSection model =
     div [ class "synth-panel panel-right-section" ]
         [ div []
@@ -96,10 +109,10 @@ panelRightSection model =
         ]
 
 
-oscillators : Model -> Html Msg
+oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
     div [ class "oscillators" ]
-        [ oscillatorsBalance
+        [ oscillatorsBalance model
         , oscillator1Waveform model
         , oscillator2Waveform model
         , oscillator2Semitone
@@ -109,24 +122,25 @@ oscillators model =
         ]
 
 
-masterVolume : Html Msg
-masterVolume =
-    div [ class "master-volume" ]
-        [ span []
-            [ "master level" |> text ]
-        , input
-            [ Html.Attributes.type' "range"
-            , Html.Attributes.min "0"
-            , Html.Attributes.max "100"
-            , Html.Attributes.value "10"
-            , Html.Attributes.step "1"
-            , Html.Events.onInput <| unsafeToFloat >> MasterVolumeChange
-            ]
-            []
-        ]
+
+--masterVolume : Html msg
+--masterVolume =
+--    div [ class "master-volume" ]
+--        [ span []
+--            [ "master level" |> text ]
+--        , input
+--            [ Html.Attributes.type' "range"
+--            , Html.Attributes.min "0"
+--            , Html.Attributes.max "100"
+--            , Html.Attributes.value "10"
+--            , Html.Attributes.step "1"
+--            , Html.Events.onInput <| unsafeToFloat >> MasterVolumeChange
+--            ]
+--            []
+--        ]
 
 
-oscillator2Semitone : Html Msg
+oscillator2Semitone : Html Msg.Msg
 oscillator2Semitone =
     div []
         [ span []
@@ -143,7 +157,7 @@ oscillator2Semitone =
         ]
 
 
-oscillator2Detune : Html Msg
+oscillator2Detune : Html Msg.Msg
 oscillator2Detune =
     div []
         [ span []
@@ -160,24 +174,7 @@ oscillator2Detune =
         ]
 
 
-oscillatorsBalance : Html Msg
-oscillatorsBalance =
-    div []
-        [ span []
-            [ "Oscillators Balance" |> text ]
-        , input
-            [ Html.Attributes.type' "range"
-            , Html.Attributes.min "-50"
-            , Html.Attributes.max "50"
-            , Html.Attributes.value "0"
-            , Html.Attributes.step "1"
-            , Html.Events.onInput <| unsafeToFloat >> OscillatorsBalanceChange
-            ]
-            []
-        ]
-
-
-fmAmount : Html Msg
+fmAmount : Html Msg.Msg
 fmAmount =
     div []
         [ span []
@@ -194,7 +191,7 @@ fmAmount =
         ]
 
 
-pulseWidth : Html Msg
+pulseWidth : Html Msg.Msg
 pulseWidth =
     div []
         [ span []
@@ -211,7 +208,7 @@ pulseWidth =
         ]
 
 
-oscillator1Waveform : Model -> Html Msg
+oscillator1Waveform : Model.Model -> Html Msg.Msg
 oscillator1Waveform model =
     div []
         [ span []
@@ -223,7 +220,7 @@ oscillator1Waveform model =
         ]
 
 
-oscillator2Waveform : Model -> Html Msg
+oscillator2Waveform : Model.Model -> Html Msg.Msg
 oscillator2Waveform model =
     div []
         [ span []

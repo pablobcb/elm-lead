@@ -8,6 +8,7 @@ import List exposing (..)
 import Maybe.Extra exposing (..)
 import Model.Note as Note exposing (..)
 import Model.Midi as Midi exposing (..)
+import Knob
 
 
 type alias PressedKey =
@@ -31,7 +32,19 @@ type alias Model =
     , oscillator1Waveform : OscillatorWaveform
     , oscillator2Waveform : OscillatorWaveform
     , midiControllerPressedNotes : List MidiNote
+    , masterVolumeKnob : Knob.Model
+    , oscillatorsMixKnob : Knob.Model
     }
+
+
+setMasterVolume : Knob.Model -> Model -> Model
+setMasterVolume knobModel model =
+    { model | masterVolumeKnob = knobModel }
+
+
+setOscillatorsMix : Knob.Model -> Model -> Model
+setOscillatorsMix knobModel model =
+    { model | oscillatorsMixKnob = knobModel }
 
 
 initModel : Model
@@ -45,6 +58,8 @@ initModel =
     , oscillator1Waveform = Sawtooth
     , oscillator2Waveform = Sawtooth
     , midiControllerPressedNotes = []
+    , masterVolumeKnob = Knob.create 10 0 100
+    , oscillatorsMixKnob = Knob.create 0 -50 50
     }
 
 
