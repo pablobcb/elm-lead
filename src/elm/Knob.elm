@@ -76,23 +76,6 @@ knob knobMsg cmdEmmiter model =
             model
 
 
-updateMap :
-    parentModel
-    -> Msg
-    -> (parentModel -> Model)
-    -> (Model -> parentModel -> parentModel)
-    -> (Msg -> c)
-    -> ( parentModel, Cmd c )
-updateMap parentModel msg getField reduxor parentMsg =
-    let
-        ( updatedKnobModel, knobCmd ) =
-            update msg (getField parentModel)
-    in
-        ( reduxor updatedKnobModel parentModel
-        , Cmd.map parentMsg knobCmd
-        )
-
-
 
 -- UPDATE
 

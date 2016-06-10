@@ -12,6 +12,24 @@ import Knob
 import Debug exposing (..)
 
 
+updateMap :
+    Model
+    -> (b -> childrenModel -> ( d, Cmd e ))
+    -> b
+    -> (Model -> childrenModel)
+    -> (d -> Model -> Model)
+    -> (e -> g)
+    -> ( Model, Cmd g )
+updateMap model childUpdate childMsg getChild reduxor msg =
+    let
+        ( updatedChildModel, childCmd ) =
+            childUpdate childMsg (getChild model)
+    in
+        ( reduxor updatedChildModel model
+        , Cmd.map msg childCmd
+        )
+
+
 noteOnCommand : Velocity -> Int -> Cmd msg
 noteOnCommand velocity midiNoteNumber =
     noteOnMessage midiNoteNumber velocity |> midiOutPort
@@ -25,8 +43,8 @@ noteOffCommand velocity midiNoteNumber =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        knobUpdateMap =
-            Knob.updateMap model
+        updateMap' =
+            updateMap model
     in
         case msg of
             MidiMessageIn midiMsg ->
@@ -179,22 +197,22 @@ update msg model =
                             ( model', Cmd.none )
 
             MasterVolumeChange subMsg ->
-                knobUpdateMap subMsg .masterVolumeKnob Model.setMasterVolume MasterVolumeChange
+                updateMap' Knob.update subMsg .masterVolumeKnob Model.setMasterVolume MasterVolumeChange
 
             OscillatorsMixChange subMsg ->
-                knobUpdateMap subMsg .oscillatorsMixKnob Model.setOscillatorsMix OscillatorsMixChange
+                updateMap' Knob.update subMsg .oscillatorsMixKnob Model.setOscillatorsMix OscillatorsMixChange
 
             Oscillator2SemitoneChange subMsg ->
-                knobUpdateMap subMsg .oscillator2SemitoneKnob Model.setOscillator2Semitone Oscillator2SemitoneChange
+                updateMap' Knob.update subMsg .oscillator2SemitoneKnob Model.setOscillator2Semitone Oscillator2SemitoneChange
 
             Oscillator2DetuneChange subMsg ->
-                knobUpdateMap subMsg .oscillator2DetuneKnob Model.setOscillator2Detune Oscillator2DetuneChange
+                updateMap' Knob.update subMsg .oscillator2DetuneKnob Model.setOscillator2Detune Oscillator2DetuneChange
 
             FMAmountChange subMsg ->
-                knobUpdateMap subMsg .fmAmountKnob Model.setFmAmount FMAmountChange
+                updateMap' Knob.update subMsg .fmAmountKnob Model.setFmAmount FMAmountChange
 
             PulseWidthChange subMsg ->
-                knobUpdateMap subMsg .pulseWidthKnob Model.setPulseWidth PulseWidthChange
+                updateMap' Knob.update subMsg .pulseWidthKnob Model.setPulseWidth PulseWidthChange
 
             Oscillator1WaveformChange waveform ->
                 ( setOscillator1Waveform model waveform, toString waveform |> oscillator1WaveformPort )
