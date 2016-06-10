@@ -21,12 +21,12 @@ type alias Model =
     }
 
 
-create : Int -> Int -> Int -> Model
-create value min max =
+create : Int -> Int -> Int -> Int -> Model
+create value min max step =
     { value = value
     , min = min
     , max = max
-    , step = 1
+    , step = step
     , yPos = 0
     }
 
@@ -41,7 +41,6 @@ type alias Value =
 
 type Msg
     = ValueChange (Value -> Cmd Msg) YPos
-    | MouseDrag YPos
     | MouseDragStart YPos
 
 
@@ -101,18 +100,15 @@ updateMap parentModel msg getField reduxor parentMsg =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
-        MouseDrag yPos ->
-            ( model, Cmd.none )
-
         MouseDragStart yPos ->
             ( { model | yPos = yPos }, Cmd.none )
 
-        ValueChange cmdEmmiter currentYPos ->
+        ValueChange cmdEmmiter yPos ->
             let
                 newValue =
-                    if currentYPos < model.yPos then
+                    if yPos < model.yPos then
                         model.value + model.step
-                    else if currentYPos > model.yPos then
+                    else if yPos > model.yPos then
                         model.value - model.step
                     else
                         model.value
