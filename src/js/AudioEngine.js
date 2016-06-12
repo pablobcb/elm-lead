@@ -237,7 +237,7 @@ export default class AudioEngine {
 		}
 	}
 
-	noteOn = (midiNote, velocity) => {
+	noteOn = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote)
 		this.oscillator2.noteOn(midiNote)
 
@@ -247,7 +247,7 @@ export default class AudioEngine {
 			.connect(this.oscillator1.frequency[midiNote.toString()])
 	}
 
-	noteOff = (midiNote, velocity) => {
+	noteOff = (midiNote /*, velocity*/) => {
 		console.log(this.oscillator2.oscillators)
 		console.log(this.oscillator1.frequency)
 		this.oscillator2.oscillators[midiNote.toString()]
