@@ -20,7 +20,7 @@ panel : Model.Model -> Html Msg.Msg
 panel model =
     div [ class "panel" ]
         [ section "master volume" <| knob MasterVolumeChange masterVolumePort model.masterVolumeKnob
-        , oscillators model
+        , section "oscillators" <| oscillators model
         ]
 
 
@@ -36,7 +36,7 @@ section title content =
 
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
-    div [ class "panel oscillators" ]
+    div [ class "oscillators" ]
         [ knob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob |> withLabel "mix"
         , knob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob |> withLabel "semitone"
         , knob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob |> withLabel "detune"
