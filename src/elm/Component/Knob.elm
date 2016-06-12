@@ -58,6 +58,18 @@ knobStyle =
 view : (Int -> Cmd Msg) -> Model -> Html Msg
 view cmdEmmiter model =
     let
+        -- These are defined in terms of degrees, with 0 pointing straight up
+        visualMinimum = -140
+        visualMaximum = 140
+        visualRange = 280
+
+        valueRange = (model.max - model.min)
+        value = (toFloat model.value) / (toFloat valueRange)
+
+        direction = visualMinimum + (value * visualRange)
+        direction' = (toString direction) ++ "deg"
+        knobStyle = [("transform", "rotate(" ++ direction' ++ ")")]
+
         positionMap msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
@@ -65,13 +77,15 @@ view cmdEmmiter model =
             [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
             , Html.Events.on "dragstart" <| positionMap MouseDragStart
             , style knobStyle
-            , class "knob-dialer"
+            , class "knob__dial"
             ]
-            [ Html.text (toString model.value) ]
+            [ div [ class "knob__indicator"]
+                [ Html.text (toString model.value) ]
+            ]
 
 
-knob : (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
-knob knobMsg cmdEmmiter model =
+knob : String -> (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
+knob label knobMsg cmdEmmiter model =
     Html.App.map knobMsg
         <| view (\value -> value |> cmdEmmiter)
             model

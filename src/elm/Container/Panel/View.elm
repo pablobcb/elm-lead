@@ -20,9 +20,7 @@ nordKnob :
     -> Html a
 nordKnob op cmd model label =
     div [ class "knob" ]
-        [ Knob.knob op cmd model
-        , div [ class "knob__label" ] [ text label ]
-        ]
+        [ Knob.knob op cmd model ]
 
 
 section : String -> List (Html a) -> Html a
