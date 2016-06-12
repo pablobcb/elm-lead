@@ -1,7 +1,7 @@
 .section
 	background-color $section-background-color
 	color $text-color
-	border-radius $unit
+	border-radius ($unit / 2)
 
 .section__title,
 .section__content
@@ -9,8 +9,9 @@
 	padding-right $unit
 
 .section__title
-	height $unit + ($unit/3)
+	height $unit
 	background-color $section-title-background-color
 	border-top-left-radius inherit
 	border-top-right-radius inherit
 	padding-bottom $unit
+	font-family monospace

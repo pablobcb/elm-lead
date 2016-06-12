@@ -69,13 +69,13 @@ filter model =
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
     div [ class "oscillators" ]
-        [ nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
+        [ oscillator1Waveform model Oscillator1WaveformChange
+        , oscillator2Waveform model Oscillator2WaveformChange
+        , nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
         , nordKnob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob "semitone"
         , nordKnob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob "detune"
         , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
         , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
-        , oscillator1Waveform model Oscillator1WaveformChange
-        , oscillator2Waveform model Oscillator2WaveformChange
         ]
 
 

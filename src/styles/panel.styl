@@ -2,10 +2,10 @@
 	display flex
 	color $text-color
 	background-color #291c2d
-	border-radius $unit
+	border-radius ($unit / 2)
 	margin $unit
 	padding $unit
-
+	f
 
 	&.panel-left-section
 		background-color #b1b3cc
@@ -24,4 +24,24 @@
 		width 100%
 
 	.section
+		margin-bottom $unit
+
+	.modulators
+		display:inline-block
+		width:30%
 		margin-right $unit
+
+
+
+	.oscillators
+		display:inline
+		width:25%
+
+	.amplifier
+		///margin-bottom $unit
+
+	.ampAndFilter
+		display:inline-block
+		width:45%
+		margin-left $unit
+
