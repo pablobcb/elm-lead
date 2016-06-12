@@ -32,8 +32,16 @@ type alias Model =
     , oscillatorsMixKnob : Knob.Model
     , oscillator2SemitoneKnob : Knob.Model
     , oscillator2DetuneKnob : Knob.Model
-    , fmAmountKnob : Knob.Model
     , pulseWidthKnob : Knob.Model
+    , fmAmountKnob : Knob.Model
+    , ampAttackKnob : Knob.Model
+    , ampDecayKnob : Knob.Model
+    , ampSustainKnob : Knob.Model
+    , ampReleaseKnob : Knob.Model
+    , filterAttackKnob : Knob.Model
+    , filterDecayKnob : Knob.Model
+    , filterSustainKnob : Knob.Model
+    , filterReleaseKnob : Knob.Model
     }
 
 
@@ -54,6 +62,14 @@ initModel =
     , oscillator2DetuneKnob = Knob.create 0 -100 100 1
     , fmAmountKnob = Knob.create 0 0 100 1
     , pulseWidthKnob = Knob.create 0 0 100 1
+    , ampAttackKnob = Knob.create 0 0 100 1
+    , ampDecayKnob = Knob.create 0 0 100 1
+    , ampSustainKnob = Knob.create 0 0 100 1
+    , ampReleaseKnob = Knob.create 0 0 100 1
+    , filterAttackKnob = Knob.create 0 0 100 1
+    , filterDecayKnob = Knob.create 0 0 100 1
+    , filterSustainKnob = Knob.create 0 0 100 1
+    , filterReleaseKnob = Knob.create 0 0 100 1
     }
 
 

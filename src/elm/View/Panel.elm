@@ -11,16 +11,11 @@ import Knob exposing (..)
 import Model.Model as Model exposing (..)
 
 
-withLabel : String -> Html a -> Html a
-withLabel txt elem =
-    div [] [ span [] [ text txt ], elem ]
-
-
-panel : Model.Model -> Html Msg.Msg
-panel model =
-    div [ class "panel" ]
-        [ section "master volume" <| knob MasterVolumeChange masterVolumePort model.masterVolumeKnob
-        , section "oscillators" <| oscillators model
+nordKnob : (Knob.Msg -> a) -> (Int -> Cmd Knob.Msg) -> Knob.Model -> String -> Html a
+nordKnob op cmd model label =
+    div [ class "knob" ]
+        [ knob op cmd model
+        , div [ class "knob__label" ] [ text label ]
         ]
 
 
@@ -34,16 +29,53 @@ section title content =
         ]
 
 
+panel : Model.Model -> Html Msg.Msg
+panel model =
+    div [ class "panel" ]
+        [ div [ class "modulators" ]
+            [ section "lfo1" <| text "breno"
+            , section "lfo2" <| text "magro"
+            , section "mod env" <| text "forest psy"
+            ]
+        , section "oscillators" <| oscillators model
+        , div [ class "ampAndFilter" ]
+            [ section "amplifier" <| amplifier model
+            , section "filter" <| filter model
+            ]
+        ]
+
+
+amplifier : Model.Model -> Html Msg.Msg
+amplifier model =
+    div [ class "amplifier" ]
+        [ nordKnob (always NoOp) (always Cmd.none) model.ampAttackKnob "attack"
+        , nordKnob (always NoOp) (always Cmd.none) model.ampDecayKnob "decay"
+        , nordKnob (always NoOp) (always Cmd.none) model.ampSustainKnob "sustain"
+        , nordKnob (always NoOp) (always Cmd.none) model.ampReleaseKnob "release"
+        , nordKnob MasterVolumeChange masterVolumePort model.masterVolumeKnob "gain"
+        ]
+
+
+filter : Model.Model -> Html Msg.Msg
+filter model =
+    div [ class "filter" ]
+        [ nordKnob (always NoOp) (always Cmd.none) model.filterAttackKnob "attack"
+        , nordKnob (always NoOp) (always Cmd.none) model.filterDecayKnob "decay"
+        , nordKnob (always NoOp) (always Cmd.none) model.filterSustainKnob "sustain"
+        , nordKnob (always NoOp) (always Cmd.none) model.filterReleaseKnob "release"
+        ]
+
+
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
     div [ class "oscillators" ]
-        [ knob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob |> withLabel "mix"
-        , knob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob |> withLabel "semitone"
-        , knob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob |> withLabel "detune"
-        , knob FMAmountChange fmAmountPort model.fmAmountKnob |> withLabel "FM"
-        , knob PulseWidthChange pulseWidthPort model.pulseWidthKnob |> withLabel "PW"
-        , oscillator1Waveform model Oscillator1WaveformChange |> withLabel "OSC1 Wave"
-        , oscillator2Waveform model Oscillator2WaveformChange |> withLabel "OSC2 Wave"
+        [ nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
+        , nordKnob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob "semitone"
+        , nordKnob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob "detune"
+        , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
+        , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
+        , oscillator1Waveform model Oscillator1WaveformChange
+        , oscillator2Waveform model Oscillator2WaveformChange
         ]
 
 
