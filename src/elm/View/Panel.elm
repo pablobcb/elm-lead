@@ -23,16 +23,16 @@ panel model =
         , oscillators model
         ]
 
+
 section : String -> Html a -> Html a
 section title content =
     div [ class "section" ]
-        [ div
-            [ class "section__title" ]
+        [ div [ class "section__title" ]
             [ text title ]
-        , div
-            [class "section__content" ]
+        , div [ class "section__content" ]
             [ content ]
         ]
+
 
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =

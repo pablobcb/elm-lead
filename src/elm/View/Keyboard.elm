@@ -75,10 +75,10 @@ getKeyClass model noteName midiNote =
                 "lower"
 
         note =
-          if (String.length noteName) > 1 then
-            ""
-          else
-            noteName
+            if (String.length noteName) > 1 then
+                ""
+            else
+                noteName
     in
         [ "key", position, keyPressed, middleC, note ]
             |> List.filter ((/=) "")
