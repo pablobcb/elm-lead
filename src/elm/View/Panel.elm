@@ -1,4 +1,4 @@
-module View.SynthPanel exposing (..)
+module View.Panel exposing (..)
 
 -- where
 
@@ -16,17 +16,27 @@ withLabel txt elem =
     div [] [ span [] [ text txt ], elem ]
 
 
-synthPanel : Model.Model -> Html Msg.Msg
-synthPanel model =
-    div [ class "synth-panel" ]
-        [ knob MasterVolumeChange masterVolumePort model.masterVolumeKnob |> withLabel "master level"
+panel : Model.Model -> Html Msg.Msg
+panel model =
+    div [ class "panel" ]
+        [ section "master volume" <| knob MasterVolumeChange masterVolumePort model.masterVolumeKnob
         , oscillators model
         ]
 
+section : String -> Html a -> Html a
+section title content =
+    div [ class "section" ]
+        [ div
+            [ class "section__title" ]
+            [ text title ]
+        , div
+            [class "section__content" ]
+            [ content ]
+        ]
 
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
-    div [ class "synth-panel oscillators" ]
+    div [ class "panel oscillators" ]
         [ knob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob |> withLabel "mix"
         , knob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob |> withLabel "semitone"
         , knob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob |> withLabel "detune"
