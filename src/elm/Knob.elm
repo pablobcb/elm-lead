@@ -5,7 +5,7 @@ module Knob exposing (..)
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
-import Html.Attributes exposing (draggable, style)
+import Html.Attributes exposing (draggable, style, class)
 import Json.Decode as Json exposing (..)
 
 
@@ -65,6 +65,7 @@ view cmdEmmiter model =
             [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
             , Html.Events.on "dragstart" <| positionMap MouseDragStart
             , style knobStyle
+            , class "knob-dialer"
             ]
             [ Html.text (toString model.value) ]
 
