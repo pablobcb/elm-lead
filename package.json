@@ -5,6 +5,7 @@
   "main": "dist/index.html",
   "scripts": {
     "build": "webpack",
+    "dev": "webpack-dev-server --inline --content-base dist/",
     "elm": "elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,5 +39,8 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.0",
     "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^1.14.1"
   }
 }
