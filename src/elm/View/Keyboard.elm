@@ -6,8 +6,7 @@ import String exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
-import Msg exposing (..)
-import Model.Model exposing (..)
+import Components.OnScreenKeyboard exposing (..)
 
 
 octaveKeys : List String

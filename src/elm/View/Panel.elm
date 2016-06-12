@@ -7,14 +7,14 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Msg exposing (..)
 import Ports exposing (..)
-import Knob exposing (..)
-import Model.Model as Model exposing (..)
+import Components.Knob as Knob
+import Model.Model as Model exposing (OscillatorWaveform)
 
 
 nordKnob : (Knob.Msg -> a) -> (Int -> Cmd Knob.Msg) -> Knob.Model -> String -> Html a
 nordKnob op cmd model label =
     div [ class "knob" ]
-        [ knob op cmd model
+        [ Knob.knob op cmd model
         , div [ class "knob__label" ] [ text label ]
         ]
 
@@ -45,24 +45,30 @@ panel model =
         ]
 
 
-amplifier : Model.Model -> Html Msg.Msg
+
+--amplifier : Model.Model -> Html Msg.Msg
+
+
 amplifier model =
     div [ class "amplifier" ]
-        [ nordKnob (always NoOp) (always Cmd.none) model.ampAttackKnob "attack"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampDecayKnob "decay"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampSustainKnob "sustain"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampReleaseKnob "release"
-        , nordKnob MasterVolumeChange masterVolumePort model.masterVolumeKnob "gain"
+        [ nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampAttackKnob "attack"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampDecayKnob "decay"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampSustainKnob "sustain"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampReleaseKnob "release"
+        , nordKnob (always MasterVolumeChange) masterVolumePort model.masterVolumeKnob "gain"
         ]
 
 
-filter : Model.Model -> Html Msg.Msg
+
+--filter : Model.Model -> Html Msg.Msg
+
+
 filter model =
     div [ class "filter" ]
-        [ nordKnob (always NoOp) (always Cmd.none) model.filterAttackKnob "attack"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterDecayKnob "decay"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterSustainKnob "sustain"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterReleaseKnob "release"
+        [ nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterAttackKnob "attack"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterDecayKnob "decay"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterSustainKnob "sustain"
+        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterReleaseKnob "release"
         ]
 
 
@@ -108,9 +114,9 @@ waveformSelector waveforms getter model msg =
 
 oscillator1Waveform : Model.Model -> (OscillatorWaveform -> Msg.Msg) -> Html Msg.Msg
 oscillator1Waveform =
-    waveformSelector [ Sawtooth, Sine, Triangle, Square ] .oscillator1Waveform
+    waveformSelector [ Model.Sawtooth, Model.Sine, Model.Triangle, Model.Square ] .oscillator1Waveform
 
 
 oscillator2Waveform : Model.Model -> (OscillatorWaveform -> Msg.Msg) -> Html Msg.Msg
 oscillator2Waveform =
-    waveformSelector [ Sawtooth, Triangle, Square ] .oscillator2Waveform
+    waveformSelector [ Model.Sawtooth, Model.Triangle, Model.Square ] .oscillator2Waveform

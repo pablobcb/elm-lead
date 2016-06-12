@@ -1,4 +1,4 @@
-module Knob exposing (..)
+module Components.Knob exposing (..)
 
 -- where
 

@@ -5,7 +5,7 @@ module View.InformationBar exposing (informationBar)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Msg exposing (..)
-import Model.Model exposing (Model)
+import Components.OnScreenKeyboard exposing (Model)
 
 
 informationBar : Model -> Html Msg

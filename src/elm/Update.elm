@@ -3,157 +3,12 @@ module Update exposing (..)
 -- where
 
 import Ports exposing (..)
-import Maybe.Extra exposing (..)
 import Msg exposing (..)
-
-import Model.Note exposing (..)
 import Model.Model as Model exposing (..)
-import Model.Midi exposing (..)
-<<<<<<< HEAD
-import Model.OnScreenKeyboard
-  as Keyboard exposing (..)
-
-
+import Components.OnScreenKeyboard as OnScreenKeyboard
+import Components.Knob as Knob
 import Debug exposing (..)
 
-noteOnCommand : Velocity -> MidiNote -> Cmd msg
-noteOnCommand velocity midiNoteNumber= 
-  noteOnMessage midiNoteNumber velocity |> midiOutPort
-
-noteOffCommand : Velocity -> MidiNote -> Cmd msg
-noteOffCommand velocity midiNoteNumber= 
-  noteOffMessage midiNoteNumber velocity |> midiOutPort
-
-update : Msg -> Model -> (Model, Cmd msg)
-update msg model =
-  case msg of
-
-    MidiMessageIn midiMsg ->
-      Debug.log "MIDI MSG" (model, Cmd.none)
-
-    NoOp ->
-      (model, Cmd.none)
-
-    MouseClickDown ->
-      let
-        model' = 
-          mouseDown model
-
-        isKeyPressed midiNoteNumber = 
-          isJust <| findPressedNote model' midiNoteNumber
-
-        hoveringAndClickingKey = 
-          model'.mousePressedNote
-      in
-        case hoveringAndClickingKey of
-          Just midiNoteNumber-> 
-            if isKeyPressed midiNoteNumber then
-                (model', Cmd.none)
-            else
-              (model', noteOnCommand (.velocity model') midiNoteNumber)
-          Nothing ->
-            (model', Cmd.none)
-
-    MouseClickUp ->
-      let
-        isKeyPressed midiNoteNumber = 
-          isJust <| findPressedNote model midiNoteNumber
-
-        hoveringAndClickingKey = 
-          model.mousePressedNote
-        
-        model' = 
-          mouseUp model
-      in
-        case hoveringAndClickingKey of
-          Just midiNoteNumber ->
-            if isKeyPressed midiNoteNumber then
-              (model', Cmd.none)
-            else
-              (model', noteOffCommand (.velocity model') midiNoteNumber)
-          Nothing ->
-            (model', Cmd.none)
-
-    MouseEnter midiNoteNumber ->
-      let
-        model' = 
-          mouseEnter model midiNoteNumber
-
-        isKeyPressed midiNoteNumber = 
-          isJust <| findPressedNote model' midiNoteNumber
-
-        hoveringAndClickingKey = 
-          model'.mousePressedNote
-      in
-        case hoveringAndClickingKey of
-          Just midiNoteNumber-> 
-            if isKeyPressed midiNoteNumber then
-              (model', Cmd.none)
-            else
-              (model', noteOnCommand (.velocity model') midiNoteNumber)
-          Nothing ->
-            (model', Cmd.none)
-
-    MouseLeave midiNoteNumber->
-      let
-        isKeyPressed midiNoteNumber = 
-          isJust <| findPressedNote model midiNoteNumber
-
-        hoveringAndClickingKey =  
-          model.mousePressedNote
-        
-        model' = 
-          mouseLeave model midiNoteNumber
-      in
-        case hoveringAndClickingKey of
-          Just midiNoteNumber ->
-            if isKeyPressed midiNoteNumber then
-              (model', Cmd.none)
-            else
-              (model', noteOffCommand (.velocity model') midiNoteNumber)
-          Nothing ->
-            (model', Cmd.none)
-
-    OctaveDown ->
-      (octaveDown model, Cmd.none)
-
-
-    OctaveUp ->
-      (octaveUp model, Cmd.none)
-
-
-    VelocityDown ->
-      (velocityDown model, Cmd.none)
-
-
-    VelocityUp ->
-      (velocityUp model,  Cmd.none)
-
-
-    KeyOn symbol ->
-      let
-        model' =
-          addPressedNote model symbol
-
-        midiNoteNumber =
-          Keyboard.keyToMidiNoteNumber (symbol, model.octave)
-
-        hoveringAndClickingKey = 
-          model.mousePressedNote
-      in
-        case hoveringAndClickingKey of
-          Just midiNoteNumber' ->
-            if midiNoteNumber == midiNoteNumber' then
-              (model', Cmd.none)
-            else
-              (model', noteOnCommand (.velocity model) midiNoteNumber)
-          Nothing ->
-            (model', noteOnCommand (.velocity model) midiNoteNumber)
-=======
-import Knob
-import Debug exposing (..)
-
->>>>>>> master
 
 updateMap :
     Model
@@ -173,171 +28,48 @@ updateMap model childUpdate childMsg getChild reduxor msg =
         )
 
 
-noteOnCommand : Velocity -> Int -> Cmd msg
-noteOnCommand velocity midiNoteNumber =
-    noteOnMessage midiNoteNumber velocity |> midiOutPort
-
-
-noteOffCommand : Velocity -> Int -> Cmd msg
-noteOffCommand velocity midiNoteNumber =
-    noteOffMessage midiNoteNumber velocity |> midiOutPort
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg.Msg -> Model.Model -> ( Model.Model, Cmd Msg.Msg )
 update msg model =
     let
         updateMap' =
             updateMap model
     in
         case msg of
-            MidiMessageIn midiMsg ->
+            NoOp subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard NoOp
+
+            MidiMessageIn subMsg ->
                 Debug.log "MIDI MSG" ( model, Cmd.none )
 
-            NoOp ->
-                ( model, Cmd.none )
+            MouseClickDown subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseClickDown
 
-            MouseClickDown ->
-                let
-                    model' =
-                        mouseDown model
+            MouseClickUp subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseClickUp
 
-                    isKeyPressed midiNoteNumber =
-                        isJust <| findPressedNote model' midiNoteNumber
+            MouseEnter subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseEnter
 
-                    hoveringAndClickingKey =
-                        model'.mousePressedNote
-                in
-                    case hoveringAndClickingKey of
-                        Just midiNoteNumber ->
-                            if isKeyPressed midiNoteNumber then
-                                ( model', Cmd.none )
-                            else
-                                ( model', noteOnCommand (.velocity model') midiNoteNumber )
+            MouseLeave subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseLeave
 
-                        Nothing ->
-                            ( model', Cmd.none )
+            OctaveDown subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard OctaveDown
 
-            MouseClickUp ->
-                let
-                    isKeyPressed midiNoteNumber =
-                        isJust <| findPressedNote model midiNoteNumber
+            OctaveUp subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard OctaveUp
 
-                    hoveringAndClickingKey =
-                        model.mousePressedNote
+            VelocityDown subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard VelocityDown
 
-                    model' =
-                        mouseUp model
-                in
-                    case hoveringAndClickingKey of
-                        Just midiNoteNumber ->
-                            if isKeyPressed midiNoteNumber then
-                                ( model', Cmd.none )
-                            else
-                                ( model', noteOffCommand (.velocity model') midiNoteNumber )
+            VelocityUp subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard VelocityUp
 
-                        Nothing ->
-                            ( model', Cmd.none )
+            KeyOn subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard KeyOn
 
-            MouseEnter midiNoteNumber ->
-                let
-                    model' =
-                        mouseEnter model midiNoteNumber
-
-                    isKeyPressed midiNoteNumber =
-                        isJust <| findPressedNote model' midiNoteNumber
-
-                    hoveringAndClickingKey =
-                        model'.mousePressedNote
-                in
-                    case hoveringAndClickingKey of
-                        Just midiNoteNumber ->
-                            if isKeyPressed midiNoteNumber then
-                                ( model', Cmd.none )
-                            else
-                                ( model', noteOnCommand (.velocity model') midiNoteNumber )
-
-                        Nothing ->
-                            ( model', Cmd.none )
-
-            MouseLeave midiNoteNumber ->
-                let
-                    isKeyPressed midiNoteNumber =
-                        isJust <| findPressedNote model midiNoteNumber
-
-                    hoveringAndClickingKey =
-                        model.mousePressedNote
-
-                    model' =
-                        mouseLeave model midiNoteNumber
-                in
-                    case hoveringAndClickingKey of
-                        Just midiNoteNumber ->
-                            if isKeyPressed midiNoteNumber then
-                                ( model', Cmd.none )
-                            else
-                                ( model', noteOffCommand (.velocity model') midiNoteNumber )
-
-                        Nothing ->
-                            ( model', Cmd.none )
-
-            OctaveDown ->
-                ( octaveDown model, Cmd.none )
-
-            OctaveUp ->
-                ( octaveUp model, Cmd.none )
-
-            VelocityDown ->
-                ( velocityDown model, Cmd.none )
-
-            VelocityUp ->
-                ( velocityUp model, Cmd.none )
-
-            KeyOn symbol ->
-                let
-                    model' =
-                        addPressedNote model symbol
-
-                    midiNoteNumber =
-                        Model.keyToMidiNoteNumber ( symbol, model.octave )
-
-                    hoveringAndClickingKey =
-                        model.mousePressedNote
-                in
-                    case hoveringAndClickingKey of
-                        Just midiNoteNumber' ->
-                            if midiNoteNumber == midiNoteNumber' then
-                                ( model', Cmd.none )
-                            else
-                                ( model', noteOnCommand (.velocity model) midiNoteNumber )
-
-                        Nothing ->
-                            ( model', noteOnCommand (.velocity model) midiNoteNumber )
-
-            KeyOff symbol ->
-                let
-                    releasedKey =
-                        findPressedKey model symbol
-
-                    hoveringAndClickingKey =
-                        model.mousePressedNote
-
-                    model' =
-                        removePressedNote model symbol
-                in
-                    case releasedKey of
-                        Just ( symbol', midiNoteNumber ) ->
-                            case hoveringAndClickingKey of
-                                Just midiNoteNumber' ->
-                                    if midiNoteNumber == midiNoteNumber' then
-                                        ( model', Cmd.none )
-                                    else
-                                        ( model', noteOffCommand model.velocity midiNoteNumber )
-
-                                Nothing ->
-                                    ( model', noteOffCommand model.velocity midiNoteNumber )
-
-                        Nothing ->
-                            ( model', Cmd.none )
+            KeyOff subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard KeyOff
 
             MasterVolumeChange subMsg ->
                 updateMap' Knob.update subMsg .masterVolumeKnob Model.setMasterVolume MasterVolumeChange

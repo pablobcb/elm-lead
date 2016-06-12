@@ -11,10 +11,10 @@ import View.Panel exposing (..)
 import View.InformationBar exposing (informationBar)
 
 
-dashboard : Model -> Html Msg
+dashboard : Model -> Html a
 dashboard model =
     div [ class "dashboard" ]
         [ panel model
-        , keyboard model
+        , keyboard model.onScreenKeyboard
         , informationBar model
         ]
