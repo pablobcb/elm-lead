@@ -11,7 +11,12 @@ import Knob exposing (..)
 import Model.Model as Model exposing (..)
 
 
-nordKnob : (Knob.Msg -> a) -> (Int -> Cmd Knob.Msg) -> Knob.Model -> String -> Html a
+nordKnob :
+    (Knob.Msg -> a)
+    -> (Int -> Cmd Knob.Msg)
+    -> Knob.Model
+    -> String
+    -> Html a
 nordKnob op cmd model label =
     div [ class "knob" ]
         [ knob op cmd model
@@ -51,23 +56,30 @@ panel model =
 
 amplifier : Model.Model -> Html Msg.Msg
 amplifier model =
-    section "amplifier"
-        [ nordKnob (always NoOp) (always Cmd.none) model.ampAttackKnob "attack"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampDecayKnob "decay"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampSustainKnob "sustain"
-        , nordKnob (always NoOp) (always Cmd.none) model.ampReleaseKnob "release"
-        , nordKnob MasterVolumeChange masterVolumePort model.masterVolumeKnob "gain"
-        ]
+    let
+        knob = nordKnob (always NoOp) (always Cmd.none)
+    in
+        section "amplifier"
+            [ knob model.ampAttackKnob "attack"
+            , knob model.ampDecayKnob "decay"
+            , knob model.ampSustainKnob "sustain"
+            , knob model.ampReleaseKnob "release"
+            , nordKnob MasterVolumeChange
+                masterVolumePort model.masterVolumeKnob "gain"
+            ]
 
 
 filter : Model.Model -> Html Msg.Msg
 filter model =
-    section "filter"
-        [ nordKnob (always NoOp) (always Cmd.none) model.filterAttackKnob "attack"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterDecayKnob "decay"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterSustainKnob "sustain"
-        , nordKnob (always NoOp) (always Cmd.none) model.filterReleaseKnob "release"
-        ]
+    let
+        knob = nordKnob (always NoOp) (always Cmd.none)
+    in
+        section "filter"
+            [ knob model.filterAttackKnob "attack"
+            , knob model.filterDecayKnob "decay"
+            , knob model.filterSustainKnob "sustain"
+            , knob model.filterReleaseKnob "release"
+            ]
 
 
 oscillators : Model.Model -> Html Msg.Msg
@@ -75,9 +87,12 @@ oscillators model =
     section "oscillators"
         [ oscillator1Waveform model Oscillator1WaveformChange
         , oscillator2Waveform model Oscillator2WaveformChange
-        , nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
-        , nordKnob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob "semitone"
-        , nordKnob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob "detune"
+        , nordKnob OscillatorsMixChange
+            oscillatorsBalancePort model.oscillatorsMixKnob "mix"
+        , nordKnob Oscillator2SemitoneChange
+            oscillator2SemitonePort model.oscillator2SemitoneKnob "semitone"
+        , nordKnob Oscillator2DetuneChange
+            oscillator2DetunePort model.oscillator2DetuneKnob "detune"
         , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
         , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
         ]
@@ -110,7 +125,11 @@ waveformSelector waveforms getter model msg =
             waveforms
 
 
-oscillator1Waveform : Model.Model -> (OscillatorWaveform -> Msg.Msg) -> Html Msg.Msg
+oscillator1Waveform :
+    Model.Model
+    -> (OscillatorWaveform
+    -> Msg.Msg)
+    -> Html Msg.Msg
 oscillator1Waveform =
     waveformSelector [ Sawtooth, Sine, Triangle, Square ] .oscillator1Waveform
 
