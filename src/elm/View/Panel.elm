@@ -19,35 +19,39 @@ nordKnob op cmd model label =
         ]
 
 
-section : String -> Html a -> Html a
+section : String -> List (Html a) -> Html a
 section title content =
     div [ class "section" ]
         [ div [ class "section__title" ]
             [ text title ]
-        , div [ class "section__content" ]
-            [ content ]
+        , div [ class "section__content" ] content
         ]
+
+column : List (Html a) -> Html a
+column content =
+    div [ class "panel__column" ] content
 
 
 panel : Model.Model -> Html Msg.Msg
 panel model =
     div [ class "panel" ]
-        [ div [ class "modulators" ]
-            [ section "lfo1" <| text "breno"
-            , section "lfo2" <| text "magro"
-            , section "mod env" <| text "forest psy"
+        [ column
+            [ section "lfo1" [ text "breno" ]
+            , section "lfo2" [ text "magro" ]
+            , section "mod env" [ text "forest psy" ]
             ]
-        , section "oscillators" <| oscillators model
-        , div [ class "ampAndFilter" ]
-            [ section "amplifier" <| amplifier model
-            , section "filter" <| filter model
+        , column
+            [ oscillators model ]
+        , column
+            [ amplifier model
+            , filter model
             ]
         ]
 
 
 amplifier : Model.Model -> Html Msg.Msg
 amplifier model =
-    div [ class "amplifier" ]
+    section "amplifier"
         [ nordKnob (always NoOp) (always Cmd.none) model.ampAttackKnob "attack"
         , nordKnob (always NoOp) (always Cmd.none) model.ampDecayKnob "decay"
         , nordKnob (always NoOp) (always Cmd.none) model.ampSustainKnob "sustain"
@@ -58,7 +62,7 @@ amplifier model =
 
 filter : Model.Model -> Html Msg.Msg
 filter model =
-    div [ class "filter" ]
+    section "filter"
         [ nordKnob (always NoOp) (always Cmd.none) model.filterAttackKnob "attack"
         , nordKnob (always NoOp) (always Cmd.none) model.filterDecayKnob "decay"
         , nordKnob (always NoOp) (always Cmd.none) model.filterSustainKnob "sustain"
@@ -68,7 +72,7 @@ filter model =
 
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
-    div [ class "oscillators" ]
+    section "oscillators"
         [ oscillator1Waveform model Oscillator1WaveformChange
         , oscillator2Waveform model Oscillator2WaveformChange
         , nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
