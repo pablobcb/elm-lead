@@ -16,15 +16,15 @@ export default class Application {
 			this.onMIDIFailure()
 		}
 	}
-	
-	onMIDISuccess = (midiAccess : MIDIAccess) => {
+
+	onMIDISuccess = (midiAccess) => {
 		this.midiAccess = midiAccess
 	}
 
 	onMIDIFailure = () => {
 		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
 	}
-	
+
 	initializeMidiAccess = () => {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of this.midiAccess.inputs.values()) {
@@ -35,7 +35,7 @@ export default class Application {
 			}
 		}
 	}
-	
+
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine()
@@ -43,41 +43,50 @@ export default class Application {
 		if(this.midiAccess)
 			this.initializeMidiAccess()
 
-		this.app.ports.midiOutPort.subscribe((midiData : Array<number>) => {
-			this.audioEngine.onMIDIMessage(midiData)
-		})
+		this.app.ports.midiOutPort
+			.subscribe((midiDataArray) => {
+				this.audioEngine.onMIDIMessage(midiDataArray)
+			})
 
-		this.app.ports.masterVolumePort.subscribe((masterVolume : number) => {
-			this.audioEngine.setMasterVolumeGain(masterVolume)
-		})
+		this.app.ports.masterVolumePort
+			.subscribe((masterVolumeValue) => {
+				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
+			})
 
-		this.app.ports.oscillatorsBalancePort.subscribe((oscillatorsBalance : number) => {
-			this.audioEngine.setOscillatorsBalance(oscillatorsBalance)
-		})
+		this.app.ports.oscillatorsBalancePort
+			.subscribe((oscillatorsBalanceValue) => {
+				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
+			})
 
-		this.app.ports.oscillator2SemitonePort.subscribe((oscillatorSemitone : number) => {
-			this.audioEngine.setOscillator2Semitone(oscillatorSemitone)
-		})
+		this.app.ports.oscillator2SemitonePort
+			.subscribe((oscillatorSemitoneValue) => {
+				this.audioEngine.setOscillator2Semitone(oscillatorSemitoneValue)
+			})
 
-		this.app.ports.oscillator2DetunePort.subscribe((oscillatorDetune : number) => {
-			this.audioEngine.setOscillator2Detune(oscillatorDetune)
-		})
+		this.app.ports.oscillator2DetunePort
+			.subscribe((oscillatorDetuneValue) => {
+				this.audioEngine.setOscillator2Detune(oscillatorDetuneValue)
+			})
 
-		this.app.ports.fmAmountPort.subscribe((fmAmount : number) => {
-			this.audioEngine.setFmAmount(fmAmount)
-		})
+		this.app.ports.fmAmountPort
+			.subscribe((fmAmountValue) => {
+				this.audioEngine.setFmAmount(fmAmountValue)
+			})
 
-		this.app.ports.pulseWidthPort.subscribe((pulseWidth : number) => {
-			this.audioEngine.setPulseWidth(pulseWidth)
-		})
+		this.app.ports.pulseWidthPort
+			.subscribe((pulseWidthValue) => {
+				this.audioEngine.setPulseWidth(pulseWidthValue)
+			})
 
-		this.app.ports.oscillator1WaveformPort.subscribe((waveform) => {
-			this.audioEngine.setOscillator1Waveform(waveform)
-		})
+		this.app.ports.oscillator1WaveformPort
+			.subscribe((waveform) => {
+				this.audioEngine.setOscillator1Waveform(waveform)
+			})
 
-		this.app.ports.oscillator2WaveformPort.subscribe((waveform) => {
-			this.audioEngine.setOscillator2Waveform(waveform)
-		})
+		this.app.ports.oscillator2WaveformPort
+			.subscribe((waveform) => {
+				this.audioEngine.setOscillator2Waveform(waveform)
+			})
 
 		window.onblur = () => {
 			this.audioEngine.panic()

@@ -4,6 +4,7 @@
 	flex-grow 2
 	display flex
 	align-items flex-end
+	justify-content center
 
 	.key
 		margin 0
@@ -30,8 +31,8 @@
 			&.pressed
 				background  linear-gradient(to bottom, #fff 0, #e9e9e9 100%)
 				box-shadow 2px 0 3px rgba(0,0,0, .1) inset, -5px 5px 20px rgba(0,0,0, .2) inset,0 0 3px rgba(0,0,0, .2)
-				
-				
+
+
 		&.higher
 			height $higher-key-height
 			width $higher-key-width
@@ -58,11 +59,11 @@
 		&.d,
 		&.c
 			margin 0
-			margin-left 0.5 * $negative-unit
+			margin-left -0.25 * $lower-key-width
 
 		&.e,
 		&.b
-			margin-right .5 * $unit
+			margin-right .25 * $lower-key-width
 
 		&.c3
 			background #6b77a1
