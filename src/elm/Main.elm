@@ -8,8 +8,6 @@ import Html.Attributes exposing (..)
 import Ports exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
-import Char exposing (..)
-import Maybe.Extra exposing (..)
 import Container.OnScreenKeyboard as OnScreenKeyboard exposing (..)
 import Container.Panel as Panel
 
@@ -58,21 +56,6 @@ updatePanel panel model =
 
 
 
--- Subscriptions
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.batch
-        [ Keyboard.downs (handleKeyDown model.onScreenKeyboard)
-        , Keyboard.ups handleKeyUp
-        , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
-        , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
-        , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
-        ]
-
-
-
 -- Update
 
 
@@ -81,34 +64,26 @@ type Msg
     | OnScreenKeyboardMsg OnScreenKeyboard.Msg
 
 
-updateMap model childUpdate childMsg getChild reduxor msg =
-    let
-        ( updatedChildModel, childCmd ) =
-            childUpdate childMsg (getChild model)
-    in
-        ( reduxor updatedChildModel model
-        , Cmd.map msg Cmd.none
-        )
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         PanelMsg subMsg ->
-            updateMap model
-                Panel.update
-                subMsg
-                .panel
-                updatePanel
-                PanelMsg
+            let
+                ( updatedPanel, _ ) =
+                    Panel.update subMsg model.panel
+            in
+                ( updatePanel updatedPanel model
+                , Cmd.map PanelMsg Cmd.none
+                )
 
         OnScreenKeyboardMsg subMsg ->
-            updateMap model
-                OnScreenKeyboard.update
-                subMsg
-                .onScreenKeyboard
-                updateOnScreenKeyboard
-                OnScreenKeyboardMsg
+            let
+                ( updatedKbd, _ ) =
+                    OnScreenKeyboard.update subMsg model.onScreenKeyboard
+            in
+                ( updateOnScreenKeyboard updatedKbd model
+                , Cmd.map OnScreenKeyboardMsg Cmd.none
+                )
 
 
 view : Model -> Html Msg
@@ -122,68 +97,15 @@ view model =
 
 
 
---TODO move to keyboard
+-- Subscriptions
 
 
---handleKeyDown : OnScreenKeyboard.Model -> Keyboard.KeyCode -> Msg
-handleKeyDown model keyCode =
-    let
-        symbol =
-            keyCode |> Char.fromCode |> toLower
-
-        allowedInput =
-            List.member symbol allowedInputKeys
-
-        isLastOctave =
-            (.octave model) == 8
-
-        unusedKeys =
-            List.member symbol unusedKeysOnLastOctave
-
-        symbolAlreadyPressed =
-            isJust <| findPressedKey model symbol
-    in
-        if (not allowedInput) || (isLastOctave && unusedKeys) || symbolAlreadyPressed then
-            OnScreenKeyboardMsg NoOp
-        else
-            case symbol of
-                'z' ->
-                    OnScreenKeyboardMsg OctaveDown
-
-                'x' ->
-                    OnScreenKeyboardMsg OctaveUp
-
-                'c' ->
-                    OnScreenKeyboardMsg VelocityDown
-
-                'v' ->
-                    OnScreenKeyboardMsg VelocityUp
-
-                symbol ->
-                    OnScreenKeyboardMsg <| KeyOn symbol
-
-
-==handleKeyUp : Keyboard.KeyCode -> Msg
-handleKeyUp keyCode =
-    let
-        symbol =
-            keyCode |> Char.fromCode |> toLower
-
-        invalidKey =
-            not <| List.member symbol pianoKeys
-
-        --isMousePressingSameKey =
-        --  case findPressedKey model symbol of
-        --    Just (symbol', midiNote') ->
-        --      case model.mousePressedKey of
-        --        Just midiNote ->
-        --          (==) midiNote' midiNote
-        --        Nothing ->
-        --          False
-        --    Nothing->
-        --      False
-    in
-        if invalidKey then
-            OnScreenKeyboardMsg NoOp
-        else
-            OnScreenKeyboardMsg <| KeyOff symbol
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ Keyboard.downs <| handleKeyDown OnScreenKeyboardMsg model.onScreenKeyboard
+        , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
+        , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
+        , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
+        , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
+        ]

@@ -12,6 +12,7 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 import Html.App exposing (map)
+import Char exposing (..)
 
 
 type alias PressedKey =
@@ -536,3 +537,71 @@ keyboard : (Msg -> a) -> Model -> Html a
 keyboard keyboardMsg model =
     Html.App.map keyboardMsg
         <| view model
+
+
+handleKeyDown : (Msg -> a) -> Model -> Char.KeyCode -> a
+handleKeyDown msg model keyCode =
+    let
+        symbol =
+            keyCode |> Char.fromCode |> Char.toLower
+
+        allowedInput =
+            List.member symbol allowedInputKeys
+
+        isLastOctave =
+            (.octave model) == 8
+
+        unusedKeys =
+            List.member symbol unusedKeysOnLastOctave
+
+        symbolAlreadyPressed =
+            isJust <| findPressedKey model symbol
+    in
+        if
+            (not allowedInput)
+                || (isLastOctave && unusedKeys)
+                || symbolAlreadyPressed
+        then
+            msg NoOp
+        else
+            case symbol of
+                'z' ->
+                    msg OctaveDown
+
+                'x' ->
+                    msg OctaveUp
+
+                'c' ->
+                    msg VelocityDown
+
+                'v' ->
+                    msg VelocityUp
+
+                symbol ->
+                    msg <| KeyOn symbol
+
+
+handleKeyUp : (Msg -> a) -> Char.KeyCode -> a
+handleKeyUp msg keyCode =
+    let
+        symbol =
+            keyCode |> Char.fromCode |> Char.toLower
+
+        invalidKey =
+            not <| List.member symbol pianoKeys
+
+        --isMousePressingSameKey =
+        --  case findPressedKey model symbol of
+        --    Just (symbol', midiNote') ->
+        --      case model.mousePressedKey of
+        --        Just midiNote ->
+        --          (==) midiNote' midiNote
+        --        Nothing ->
+        --          False
+        --    Nothing->
+        --      False
+    in
+        if invalidKey then
+            msg NoOp
+        else
+            msg <| KeyOff symbol
