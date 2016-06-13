@@ -1,47 +1,21 @@
 .panel
 	display flex
+	justify-content space-around
 	color $text-color
 	background-color #291c2d
 	border-radius ($unit / 2)
 	margin $unit
 	padding $unit
-	f
 
-	&.panel-left-section
-		background-color #b1b3cc
-		width 100%
+.panel__column
+	flex-grow 1
+	margin-right $unit
 
-
-	&.panel-middle-section
-		margin-left 0px
-		margin-right 0px
-		background-color #b1b3cc
-		width 100%
-
-
-	&.panel-right-section
-		background-color #b1b3cc
-		width 100%
+	&:last-of-type
+		margin-right 0
 
 	.section
 		margin-bottom $unit
 
-	.modulators
-		display:inline-block
-		width:30%
-		margin-right $unit
-
-
-
-	.oscillators
-		display:inline
-		width:25%
-
-	.amplifier
-		///margin-bottom $unit
-
-	.ampAndFilter
-		display:inline-block
-		width:45%
-		margin-left $unit
-
+		&:last-of-type
+			margin-bottom 0

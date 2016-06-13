@@ -35,41 +35,8 @@ update msg model =
             updateMap model
     in
         case msg of
-            NoOp subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard NoOp
-
-            MidiMessageIn subMsg ->
-                Debug.log "MIDI MSG" ( model, Cmd.none )
-
-            MouseClickDown subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseClickDown
-
-            MouseClickUp subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseClickUp
-
-            MouseEnter subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseEnter
-
-            MouseLeave subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard MouseLeave
-
-            OctaveDown subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard OctaveDown
-
-            OctaveUp subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard OctaveUp
-
-            VelocityDown subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard VelocityDown
-
-            VelocityUp subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard VelocityUp
-
-            KeyOn subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard KeyOn
-
-            KeyOff subMsg ->
-                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard KeyOff
+            OnScreenKeyboardMsg subMsg ->
+                updateMap' OnScreenKeyboard.update subMsg .onScreenKeyboard Model.setOnScreenKeyboard OnScreenKeyboardMsg
 
             MasterVolumeChange subMsg ->
                 updateMap' Knob.update subMsg .masterVolumeKnob Model.setMasterVolume MasterVolumeChange

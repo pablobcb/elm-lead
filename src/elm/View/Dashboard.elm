@@ -4,17 +4,17 @@ module View.Dashboard exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Model.Model exposing (Model)
+import Model.Model as Model exposing (..)
 import Msg exposing (..)
-import View.Keyboard exposing (keyboard)
+import Components.OnScreenKeyboard exposing (..)
 import View.Panel exposing (..)
 import View.InformationBar exposing (informationBar)
 
 
-dashboard : Model -> Html a
+dashboard : Model.Model -> Html Msg.Msg
 dashboard model =
     div [ class "dashboard" ]
         [ panel model
-        , keyboard model.onScreenKeyboard
-        , informationBar model
+        , keyboard OnScreenKeyboardMsg model.onScreenKeyboard
+        , informationBar model.onScreenKeyboard
         ]

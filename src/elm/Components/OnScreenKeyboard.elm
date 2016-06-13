@@ -9,6 +9,11 @@ import Maybe.Extra exposing (..)
 import Model.Note as Note exposing (..)
 import Model.Midi as Midi exposing (..)
 import Ports exposing (..)
+import String exposing (..)
+import Html exposing (..)
+import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
+import Html.App exposing (map)
 
 
 type alias PressedKey =
@@ -402,3 +407,111 @@ noteOnCommand velocity midiNoteNumber =
 noteOffCommand : Velocity -> Int -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> midiOutPort
+
+
+
+--VIEW
+
+
+octaveKeys : List String
+octaveKeys =
+    [ "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b" ]
+
+
+midiNotes : List Int
+midiNotes =
+    [0..127]
+
+
+onScreenKeyboardKeys : List String
+onScreenKeyboardKeys =
+    (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
+
+
+
+--onMouseEnter : Int -> Html.Attribute Msg
+
+
+onMouseEnter midiNote =
+    midiNote |> MouseEnter |> Html.Events.onMouseEnter
+
+
+
+--onMouseLeave : Int -> Html.Attribute Msg
+
+
+onMouseLeave midiNote =
+    midiNote |> MouseLeave |> Html.Events.onMouseLeave
+
+
+
+--key : Model -> String -> Int -> Html Msg
+
+
+key model noteName midiNote =
+    li
+        [ getKeyClass model noteName midiNote |> class
+        , onMouseEnter midiNote
+        , onMouseLeave midiNote
+        ]
+        []
+
+
+
+--keys : Model -> List (Html Msg)
+
+
+getKeyClass : Model -> String -> Int -> String
+getKeyClass model noteName midiNote =
+    let
+        isSharpKey =
+            String.contains "s" noteName
+
+        middleC =
+            if midiNote == 60 then
+                "c3"
+            else
+                ""
+
+        keyPressed =
+            if List.member midiNote <| List.map snd model.pressedNotes then
+                "pressed"
+            else
+                ""
+
+        position =
+            if isSharpKey then
+                "higher"
+            else
+                "lower"
+
+        note =
+            if (String.length noteName) > 1 then
+                ""
+            else
+                noteName
+    in
+        [ "key", position, keyPressed, middleC, note ]
+            |> List.filter ((/=) "")
+            |> String.join " "
+
+
+
+--view : (Int -> Cmd Msg) -> Model -> Html Msg
+
+
+view model =
+    let
+        keys =
+            List.map2 (key model) onScreenKeyboardKeys midiNotes
+    in
+        ul [ class "keyboard" ] <| keys
+
+
+
+--keyboard : (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
+
+
+keyboard keyboardMsg model =
+    Html.App.map keyboardMsg
+        <| view model

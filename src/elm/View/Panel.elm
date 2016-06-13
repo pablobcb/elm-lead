@@ -11,7 +11,12 @@ import Components.Knob as Knob
 import Model.Model as Model exposing (OscillatorWaveform)
 
 
-nordKnob : (Knob.Msg -> a) -> (Int -> Cmd Knob.Msg) -> Knob.Model -> String -> Html a
+nordKnob :
+    (Knob.Msg -> a)
+    -> (Int -> Cmd Knob.Msg)
+    -> Knob.Model
+    -> String
+    -> Html a
 nordKnob op cmd model label =
     div [ class "knob" ]
         [ Knob.knob op cmd model
@@ -19,28 +24,32 @@ nordKnob op cmd model label =
         ]
 
 
-section : String -> Html a -> Html a
+section : String -> List (Html a) -> Html a
 section title content =
     div [ class "section" ]
         [ div [ class "section__title" ]
             [ text title ]
-        , div [ class "section__content" ]
-            [ content ]
+        , div [ class "section__content" ] content
         ]
+
+
+column : List (Html a) -> Html a
+column content =
+    div [ class "panel__column" ] content
 
 
 panel : Model.Model -> Html Msg.Msg
 panel model =
     div [ class "panel" ]
-        [ div [ class "modulators" ]
-            [ section "lfo1" <| text "breno"
-            , section "lfo2" <| text "magro"
-            , section "mod env" <| text "forest psy"
+        [ column
+            [ section "lfo1" [ text "breno" ]
+            , section "lfo2" [ text "magro" ]
+            , section "mod env" [ text "forest psy" ]
             ]
-        , section "oscillators" <| oscillators model
-        , div [ class "ampAndFilter" ]
-            [ section "amplifier" <| amplifier model
-            , section "filter" <| filter model
+        , column [ oscillators model ]
+        , column
+            [ amplifier model
+            , filter model
             ]
         ]
 
@@ -50,13 +59,21 @@ panel model =
 
 
 amplifier model =
-    div [ class "amplifier" ]
-        [ nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampAttackKnob "attack"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampDecayKnob "decay"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampSustainKnob "sustain"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.ampReleaseKnob "release"
-        , nordKnob (always MasterVolumeChange) masterVolumePort model.masterVolumeKnob "gain"
-        ]
+    let
+        knob =
+            nordKnob (always MasterVolumeChange) (always Cmd.none)
+    in
+        section "amplifier"
+            [ --knob model.ampAttackKnob "attack"
+              --, knob model.ampDecayKnob "decay"
+              --, knob model.ampSustainKnob "sustain"
+              --, knob model.ampReleaseKnob "release"
+              --,
+              nordKnob MasterVolumeChange
+                masterVolumePort
+                model.masterVolumeKnob
+                "gain"
+            ]
 
 
 
@@ -64,22 +81,38 @@ amplifier model =
 
 
 filter model =
-    div [ class "filter" ]
-        [ nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterAttackKnob "attack"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterDecayKnob "decay"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterSustainKnob "sustain"
-        , nordKnob (always MasterVolumeChange) (always Cmd.none) model.filterReleaseKnob "release"
-        ]
+    let
+        knob =
+            nordKnob (always MasterVolumeChange) (always Cmd.none)
+    in
+        section "filter" []
+
+
+
+--[ knob model.filterAttackKnob "attack"
+--, knob model.filterDecayKnob "decay"
+--, knob model.filterSustainKnob "sustain"
+--, knob model.filterReleaseKnob "release"
+--]
 
 
 oscillators : Model.Model -> Html Msg.Msg
 oscillators model =
-    div [ class "oscillators" ]
+    section "oscillators"
         [ oscillator1Waveform model Oscillator1WaveformChange
         , oscillator2Waveform model Oscillator2WaveformChange
-        , nordKnob OscillatorsMixChange oscillatorsBalancePort model.oscillatorsMixKnob "mix"
-        , nordKnob Oscillator2SemitoneChange oscillator2SemitonePort model.oscillator2SemitoneKnob "semitone"
-        , nordKnob Oscillator2DetuneChange oscillator2DetunePort model.oscillator2DetuneKnob "detune"
+        , nordKnob OscillatorsMixChange
+            oscillatorsBalancePort
+            model.oscillatorsMixKnob
+            "mix"
+        , nordKnob Oscillator2SemitoneChange
+            oscillator2SemitonePort
+            model.oscillator2SemitoneKnob
+            "semitone"
+        , nordKnob Oscillator2DetuneChange
+            oscillator2DetunePort
+            model.oscillator2DetuneKnob
+            "detune"
         , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
         , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
         ]
@@ -112,7 +145,12 @@ waveformSelector waveforms getter model msg =
             waveforms
 
 
-oscillator1Waveform : Model.Model -> (OscillatorWaveform -> Msg.Msg) -> Html Msg.Msg
+oscillator1Waveform :
+    Model.Model
+    -> (OscillatorWaveform
+        -> Msg.Msg
+       )
+    -> Html Msg.Msg
 oscillator1Waveform =
     waveformSelector [ Model.Sawtooth, Model.Sine, Model.Triangle, Model.Square ] .oscillator1Waveform
 

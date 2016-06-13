@@ -13,6 +13,7 @@ import Msg exposing (..)
 import Update exposing (..)
 import View.Dashboard exposing (..)
 import Model.Model as Model exposing (..)
+import Components.OnScreenKeyboard as OnScreenKeyboard exposing (..)
 
 
 main : Program Never
@@ -20,22 +21,22 @@ main =
     Html.program
         { init = init
         , view = view
-        , update = update
+        , update = Update.update
         , subscriptions = subscriptions
         }
 
 
-init : ( Model, Cmd msg )
+init : ( Model.Model, Cmd msg )
 init =
     ( initModel, Cmd.none )
 
 
-view : Model -> Html Msg
+view : Model.Model -> Html Msg.Msg
 view model =
     dashboard model
 
 
-handleKeyDown : Model -> Keyboard.KeyCode -> Msg
+handleKeyDown : OnScreenKeyboard.Model -> Keyboard.KeyCode -> Msg.Msg
 handleKeyDown model keyCode =
     let
         symbol =
@@ -54,27 +55,27 @@ handleKeyDown model keyCode =
             isJust <| findPressedKey model symbol
     in
         if (not allowedInput) || (isLastOctave && unusedKeys) || symbolAlreadyPressed then
-            NoOp
+            OnScreenKeyboardMsg NoOp
         else
             case symbol of
                 'z' ->
-                    OctaveDown
+                    OnScreenKeyboardMsg OctaveDown
 
                 'x' ->
-                    OctaveUp
+                    OnScreenKeyboardMsg OctaveUp
 
                 'c' ->
-                    VelocityDown
+                    OnScreenKeyboardMsg VelocityDown
 
                 'v' ->
-                    VelocityUp
+                    OnScreenKeyboardMsg VelocityUp
 
                 symbol ->
-                    KeyOn symbol
+                    OnScreenKeyboardMsg <| KeyOn symbol
 
 
-handleKeyUp : Model -> Keyboard.KeyCode -> Msg
-handleKeyUp model keyCode =
+handleKeyUp : Keyboard.KeyCode -> Msg.Msg
+handleKeyUp keyCode =
     let
         symbol =
             keyCode |> Char.fromCode |> toLower
@@ -94,21 +95,21 @@ handleKeyUp model keyCode =
         --      False
     in
         if invalidKey then
-            NoOp
+            OnScreenKeyboardMsg NoOp
         else
-            KeyOff symbol
+            OnScreenKeyboardMsg <| KeyOff symbol
 
 
 
 -- Subscriptions
 
 
-subscriptions : Model -> Sub Msg
+subscriptions : Model.Model -> Sub Msg.Msg
 subscriptions model =
     Sub.batch
-        [ Keyboard.downs (handleKeyDown model)
-        , Keyboard.ups (handleKeyUp model)
-        , Mouse.downs <| always MouseClickDown
-        , Mouse.ups <| always MouseClickUp
-        , midiInPort MidiMessageIn
+        [ Keyboard.downs (handleKeyDown model.onScreenKeyboard)
+        , Keyboard.ups handleKeyUp
+        , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
+        , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
+        , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
         ]

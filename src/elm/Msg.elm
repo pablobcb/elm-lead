@@ -17,15 +17,4 @@ type Msg
     | PulseWidthChange Knob.Msg
     | OscillatorsMixChange Knob.Msg
     | MasterVolumeChange Knob.Msg
-    | OctaveUp OnScreenKeyboard.Msg
-    | OctaveDown OnScreenKeyboard.Msg
-    | VelocityUp OnScreenKeyboard.Msg
-    | VelocityDown OnScreenKeyboard.Msg
-    | MouseEnter OnScreenKeyboard.Msg
-    | MouseLeave OnScreenKeyboard.Msg
-    | KeyOn OnScreenKeyboard.Msg
-    | KeyOff OnScreenKeyboard.Msg
-    | MouseClickUp OnScreenKeyboard.Msg
-    | MouseClickDown OnScreenKeyboard.Msg
-    | MidiMessageIn OnScreenKeyboard.Msg
-    | NoOp OnScreenKeyboard.Msg
+    | OnScreenKeyboardMsg OnScreenKeyboard.Msg

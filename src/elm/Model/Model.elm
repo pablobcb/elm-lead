@@ -4,19 +4,13 @@ module Model.Model exposing (..)
 
 import Model.Note as Note exposing (..)
 import Model.Midi as Midi exposing (..)
-<<<<<<< Updated upstream
 import Components.OnScreenKeyboard as OnScreenKeyboard exposing (..)
 import Components.Knob as Knob
-=======
-import Model.OnScreenKeyboard 
-  as OnScreenKeyboard exposing (..)
->>>>>>> Stashed changes
 
 
 type alias PressedKey =
     ( Char, MidiNote )
 
-<<<<<<< Updated upstream
 
 type OscillatorWaveform
     = Sawtooth
@@ -116,24 +110,3 @@ setOscillator2Waveform model waveform =
 setOnScreenKeyboard : OnScreenKeyboard.Model -> Model -> Model
 setOnScreenKeyboard keyboard model =
     { model | onScreenKeyboard = keyboard }
-=======
-type OscillatorWaveform 
-  = Sawtooth
-  | Triangle
-  | Sine
-  | Square
-
-type alias Model =
-  { onScreenKeyboard           : OnScreenKeyboard
-  , oscillator1Waveform        : OscillatorWaveform
-  , oscillator2Waveform        : OscillatorWaveform
-  }
-
-initModel : Model
-initModel =
-  { onScreenKeyboard           = initOnScreenKeyboard
-  , oscillator1Waveform        = Sawtooth
-  , oscillator2Waveform        = Sawtooth
-  }
-
->>>>>>> Stashed changes
