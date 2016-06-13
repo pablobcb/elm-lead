@@ -8,7 +8,9 @@ import Html.Attributes exposing (..)
 import Port exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
-import Container.OnScreenKeyboard as OnScreenKeyboard exposing (..)
+import Container.OnScreenKeyboard.Model as KbdModel exposing (..)
+import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
+import Container.OnScreenKeyboard.View as KbdView exposing (..)
 import Container.Panel.Model as PanelModel exposing (..)
 import Container.Panel.Update as PanelUpdate exposing (..)
 import Container.Panel.View as PanelView exposing (..)
@@ -25,7 +27,7 @@ main =
 
 
 type alias Model =
-    { onScreenKeyboard : OnScreenKeyboard.Model
+    { onScreenKeyboard : KbdModel.Model
     , panel : PanelModel.Model
     }
 
@@ -37,12 +39,12 @@ init =
 
 initModel : Model
 initModel =
-    { onScreenKeyboard = OnScreenKeyboard.init
+    { onScreenKeyboard = KbdModel.init
     , panel = PanelModel.init
     }
 
 
-updateOnScreenKeyboard : OnScreenKeyboard.Model -> Model -> Model
+updateOnScreenKeyboard : KbdModel.Model -> Model -> Model
 updateOnScreenKeyboard keyboard model =
     { model | onScreenKeyboard = keyboard }
 
@@ -54,7 +56,7 @@ updatePanel panel model =
 
 type Msg
     = PanelMsg PanelUpdate.Msg
-    | OnScreenKeyboardMsg OnScreenKeyboard.Msg
+    | OnScreenKeyboardMsg KbdUpdate.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -72,7 +74,7 @@ update msg model =
         OnScreenKeyboardMsg subMsg ->
             let
                 ( updatedKbd, _ ) =
-                    OnScreenKeyboard.update subMsg model.onScreenKeyboard
+                    KbdUpdate.update subMsg model.onScreenKeyboard
             in
                 ( updateOnScreenKeyboard updatedKbd model
                 , Cmd.map OnScreenKeyboardMsg Cmd.none
@@ -84,7 +86,7 @@ view model =
     div [ class "dashboard" ]
         [ PanelView.panel PanelMsg
             model.panel
-        , OnScreenKeyboard.keyboard OnScreenKeyboardMsg
+        , KbdView.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
         ]
 
