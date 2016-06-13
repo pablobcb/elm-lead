@@ -3,7 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Components.Knob as Knob
-import Ports exposing (..)
+import Port exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)

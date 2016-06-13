@@ -5,7 +5,7 @@ module Main exposing (..)
 import Html exposing (Html, button, div, text, li, ul)
 import Html.App
 import Html.Attributes exposing (..)
-import Ports exposing (..)
+import Port exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard as OnScreenKeyboard exposing (..)

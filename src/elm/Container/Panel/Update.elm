@@ -4,7 +4,7 @@ module Container.Panel.Update exposing (..)
 
 import Container.Panel.Model as Model exposing (..)
 import Components.Knob as Knob
-import Ports exposing (..)
+import Port exposing (..)
 
 
 type Msg

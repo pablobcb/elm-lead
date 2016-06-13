@@ -1,4 +1,4 @@
-module Model.Note exposing (..)
+module Note exposing (..)
 
 -- where
 

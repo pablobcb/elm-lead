@@ -1,6 +1,6 @@
-port module Ports exposing (..)
+port module Port exposing (..)
 
-import Model.Midi exposing (..)
+import Midi exposing (..)
 
 
 port midiOutPort : MidiMessage -> Cmd msg
