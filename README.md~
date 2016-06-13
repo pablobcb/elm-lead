@@ -20,4 +20,4 @@ inspired on Clavia's Nord Lead series
 `npm run build`
 
 ## Coding Style
-install and config [elm-format](https://github.com/avh4/elm-format)
+install and config[elm-format](https://github.com/avh4/elm-format)
