@@ -9,7 +9,7 @@ import Ports exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard as OnScreenKeyboard exposing (..)
-import Container.Panel as Panel
+import Container.Panel.Panel as Panel
 
 
 main : Program Never
@@ -22,20 +22,15 @@ main =
         }
 
 
-init : ( Model, Cmd msg )
-init =
-    ( initModel, Cmd.none )
-
-
-
--- Model
-
-
 type alias Model =
-    --OSC
     { onScreenKeyboard : OnScreenKeyboard.Model
     , panel : Panel.Model
     }
+
+
+init : ( Model, Cmd msg )
+init =
+    ( initModel, Cmd.none )
 
 
 initModel : Model
@@ -53,10 +48,6 @@ updateOnScreenKeyboard keyboard model =
 updatePanel : Panel.Model -> Model -> Model
 updatePanel panel model =
     { model | panel = panel }
-
-
-
--- Update
 
 
 type Msg
@@ -94,10 +85,6 @@ view model =
         , OnScreenKeyboard.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
         ]
-
-
-
--- Subscriptions
 
 
 subscriptions : Model -> Sub Msg

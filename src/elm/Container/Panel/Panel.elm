@@ -1,4 +1,4 @@
-module Container.Panel exposing (..)
+module Container.Panel.Panel exposing (..)
 
 -- where
 
@@ -76,59 +76,56 @@ type Msg
     | MasterVolumeChange Knob.Msg
 
 
-updateMap model childUpdate childMsg getChild reduxor msg =
-    let
-        ( updatedChildModel, childCmd ) =
-            childUpdate childMsg (getChild model)
-    in
-        ( reduxor updatedChildModel model
-        , Cmd.map msg childCmd
-        )
-
-
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        updateMap' =
-            updateMap model
+        updateMap childUpdate childMsg getChild reduxor msg' =
+            let
+                ( updatedChildModel, childCmd ) =
+                    childUpdate childMsg (getChild model)
+            in
+                ( reduxor updatedChildModel model
+                , Cmd.map msg' childCmd
+                )
     in
         case msg of
             MasterVolumeChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .masterVolumeKnob
                     setMasterVolume
                     MasterVolumeChange
 
             OscillatorsMixChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .oscillatorsMixKnob
                     setOscillatorsMix
                     OscillatorsMixChange
 
             Oscillator2SemitoneChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .oscillator2SemitoneKnob
                     setOscillator2Semitone
                     Oscillator2SemitoneChange
 
             Oscillator2DetuneChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .oscillator2DetuneKnob
                     setOscillator2Detune
                     Oscillator2DetuneChange
 
             FMAmountChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .fmAmountKnob
                     setFmAmount
                     FMAmountChange
 
             PulseWidthChange subMsg ->
-                updateMap' Knob.update
+                updateMap Knob.update
                     subMsg
                     .pulseWidthKnob
                     setPulseWidth
