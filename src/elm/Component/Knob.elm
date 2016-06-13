@@ -7,6 +7,7 @@ import Html.Events exposing (onClick)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class)
 import Json.Decode as Json exposing (..)
+import Port exposing (..)
 
 
 -- MODEL
@@ -101,5 +102,5 @@ update message model =
                     ( model, Cmd.none )
                 else
                     ( { model | value = newValue }
-                    , cmdEmmiter newValue
+                    , masterVolumePort newValue
                     )

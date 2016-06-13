@@ -64,20 +64,20 @@ update msg model =
     case msg of
         PanelMsg subMsg ->
             let
-                ( updatedPanel, _ ) =
+                ( updatedPanel, panelCmd ) =
                     PanelUpdate.update subMsg model.panel
             in
                 ( updatePanel updatedPanel model
-                , Cmd.map PanelMsg Cmd.none
+                , Cmd.map PanelMsg panelCmd
                 )
 
         OnScreenKeyboardMsg subMsg ->
             let
-                ( updatedKbd, _ ) =
+                ( updatedKbd, kbdCmd ) =
                     KbdUpdate.update subMsg model.onScreenKeyboard
             in
                 ( updateOnScreenKeyboard updatedKbd model
-                , Cmd.map OnScreenKeyboardMsg Cmd.none
+                , Cmd.map OnScreenKeyboardMsg kbdCmd
                 )
 
 

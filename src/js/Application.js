@@ -50,6 +50,7 @@ export default class Application {
 
 		this.app.ports.masterVolumePort
 			.subscribe((masterVolumeValue) => {
+				console.log(masterVolumeValue)
 				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
 
