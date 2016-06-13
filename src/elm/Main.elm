@@ -9,7 +9,9 @@ import Ports exposing (..)
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard as OnScreenKeyboard exposing (..)
-import Container.Panel.Panel as Panel
+import Container.Panel.Model as PanelModel exposing (..)
+import Container.Panel.Update as PanelUpdate exposing (..)
+import Container.Panel.View as PanelView exposing (..)
 
 
 main : Program Never
@@ -24,7 +26,7 @@ main =
 
 type alias Model =
     { onScreenKeyboard : OnScreenKeyboard.Model
-    , panel : Panel.Model
+    , panel : PanelModel.Model
     }
 
 
@@ -36,7 +38,7 @@ init =
 initModel : Model
 initModel =
     { onScreenKeyboard = OnScreenKeyboard.init
-    , panel = Panel.init
+    , panel = PanelModel.init
     }
 
 
@@ -45,13 +47,13 @@ updateOnScreenKeyboard keyboard model =
     { model | onScreenKeyboard = keyboard }
 
 
-updatePanel : Panel.Model -> Model -> Model
+updatePanel : PanelModel.Model -> Model -> Model
 updatePanel panel model =
     { model | panel = panel }
 
 
 type Msg
-    = PanelMsg Panel.Msg
+    = PanelMsg PanelUpdate.Msg
     | OnScreenKeyboardMsg OnScreenKeyboard.Msg
 
 
@@ -61,7 +63,7 @@ update msg model =
         PanelMsg subMsg ->
             let
                 ( updatedPanel, _ ) =
-                    Panel.update subMsg model.panel
+                    PanelUpdate.update subMsg model.panel
             in
                 ( updatePanel updatedPanel model
                 , Cmd.map PanelMsg Cmd.none
@@ -80,7 +82,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "dashboard" ]
-        [ Panel.panel PanelMsg
+        [ PanelView.panel PanelMsg
             model.panel
         , OnScreenKeyboard.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
