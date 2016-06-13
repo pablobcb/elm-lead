@@ -3,7 +3,7 @@ module Container.Panel.Update exposing (..)
 --where
 
 import Container.Panel.Model as Model exposing (..)
-import Components.Knob as Knob
+import Component.Knob as Knob
 import Port exposing (..)
 
 

@@ -2,7 +2,7 @@ module Container.Panel.Model exposing (..)
 
 -- where
 
-import Components.Knob as Knob exposing (..)
+import Component.Knob as Knob exposing (..)
 
 
 type OscillatorWaveform
