@@ -211,8 +211,12 @@ mouseEnter model key =
     }
 
 
-mouseLeave : Model -> Int -> Model
-mouseLeave model key =
+
+--TODO: RENAME ME
+
+
+mouseLeave : Model -> Model
+mouseLeave model =
     { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
 
@@ -327,7 +331,7 @@ update msg model =
                     model.mousePressedNote
 
                 model' =
-                    mouseLeave model midiNoteNumber
+                    mouseLeave model
             in
                 case hoveringAndClickingKey of
                     Just midiNoteNumber ->
@@ -399,12 +403,12 @@ update msg model =
                         ( model', Cmd.none )
 
 
-noteOnCommand : Velocity -> Int -> Cmd msg
+noteOnCommand : Velocity -> MidiNote -> Cmd msg
 noteOnCommand velocity midiNoteNumber =
     noteOnMessage midiNoteNumber velocity |> midiOutPort
 
 
-noteOffCommand : Velocity -> Int -> Cmd msg
+noteOffCommand : Velocity -> MidiNote -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> midiOutPort
 
@@ -428,26 +432,17 @@ onScreenKeyboardKeys =
     (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
 
 
-
---onMouseEnter : Int -> Html.Attribute Msg
-
-
+onMouseEnter : MidiNote -> Html.Attribute Msg
 onMouseEnter midiNote =
     midiNote |> MouseEnter |> Html.Events.onMouseEnter
 
 
-
---onMouseLeave : Int -> Html.Attribute Msg
-
-
+onMouseLeave : MidiNote -> Html.Attribute Msg
 onMouseLeave midiNote =
     midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
 
-
---key : Model -> String -> Int -> Html Msg
-
-
+key : Model -> String -> MidiNote -> Html Msg
 key model noteName midiNote =
     li
         [ getKeyClass model noteName midiNote |> class
@@ -455,10 +450,6 @@ key model noteName midiNote =
         , onMouseLeave midiNote
         ]
         []
-
-
-
---keys : Model -> List (Html Msg)
 
 
 getKeyClass : Model -> String -> Int -> String
@@ -496,10 +487,7 @@ getKeyClass model noteName midiNote =
             |> String.join " "
 
 
-
---view : (Int -> Cmd Msg) -> Model -> Html Msg
-
-
+view : Model -> Html Msg
 view model =
     let
         keys =
@@ -508,10 +496,7 @@ view model =
         ul [ class "keyboard" ] <| keys
 
 
-
---keyboard : (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
-
-
+keyboard : (Msg -> a) -> Model -> Html a
 keyboard keyboardMsg model =
     Html.App.map keyboardMsg
         <| view model

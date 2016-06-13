@@ -54,10 +54,7 @@ panel model =
         ]
 
 
-
---amplifier : Model.Model -> Html Msg.Msg
-
-
+amplifier : Model.Model -> Html Msg.Msg
 amplifier model =
     let
         knob =
@@ -76,10 +73,7 @@ amplifier model =
             ]
 
 
-
---filter : Model.Model -> Html Msg.Msg
-
-
+filter : Model.Model -> Html Msg.Msg
 filter model =
     let
         knob =
@@ -147,9 +141,7 @@ waveformSelector waveforms getter model msg =
 
 oscillator1Waveform :
     Model.Model
-    -> (OscillatorWaveform
-        -> Msg.Msg
-       )
+    -> (OscillatorWaveform -> Msg.Msg)
     -> Html Msg.Msg
 oscillator1Waveform =
     waveformSelector [ Model.Sawtooth, Model.Sine, Model.Triangle, Model.Square ] .oscillator1Waveform
