@@ -18,6 +18,7 @@ type alias Model =
     , min : Int
     , max : Int
     , step : Int
+    , initYPos : Int
     , yPos : Int
     }
 
@@ -27,7 +28,8 @@ create value min max step =
     { value = value
     , min = min
     , max = max
-    , step = step
+    , step = step * 20
+    , initYPos = 0
     , yPos = 0
     }
 
@@ -86,21 +88,22 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         MouseDragStart yPos ->
-            ( { model | yPos = yPos }, Cmd.none )
+            ( { model | initYPos = yPos, yPos = yPos }, Cmd.none )
 
         ValueChange cmdEmmiter yPos ->
             let
                 newValue =
-                    if yPos < model.yPos then
-                        model.value + model.step
-                    else if yPos > model.yPos then
-                        model.value - model.step
-                    else
-                        model.value
+                    model.value + (model.initYPos - yPos) // abs(model.initYPos - yPos) --model.value + model.step
+                    --else if yPos > model.initYPos then
+                    --    model.value + (model.initYPos - yPos) // model.step --model.value - model.step
+                    --else
+                    --    model.value
             in
-                if newValue > model.max || newValue < model.min then
-                    ( model, Cmd.none )
+                if newValue > model.max then
+                    ( { model | value = model.max, initYPos = yPos }, Cmd.none )
+                else if newValue < model.min then
+                    ( { model | value = model.min, initYPos = yPos }, Cmd.none )
                 else
-                    ( { model | value = newValue }
+                    ( { model | value = newValue, initYPos = yPos }
                     , cmdEmmiter newValue
                     )
