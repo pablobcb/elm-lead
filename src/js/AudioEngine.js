@@ -121,7 +121,9 @@ export default class AudioEngine {
 	}
 
 	setFmAmount = (fmAmount) => {
-		this.oscillator1.setFMGain(fmAmount * 10)
+		for(let i=0; i<128; i++) {
+			this.fmGains[i].gain.value = 10 * fmAmount
+		}
 	}
 
 	setPulseWidth = (pulseWith)  => {

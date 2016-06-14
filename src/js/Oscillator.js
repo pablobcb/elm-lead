@@ -179,11 +179,9 @@ export default class Oscillator {
 
 	setFMGain = (fmGain) => {
 		this.fmGain = fmGain
-		for(const midiNote in this.frequencyGains) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.frequencyGains[midiNote].gain.value = this.fmGain
-				console.log(this.fmGain)
-			}
+		for(let i=0; i<128; i++) {
+			this.frequencyGains[i].gain.value = this.fmGain
+			console.log(this.fmGain)
 		}
 	}
 
