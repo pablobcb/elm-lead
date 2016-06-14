@@ -78,7 +78,7 @@ export default class Oscillator {
 		this.oscillators[midiNoteKey].stop(this.context.currentTime)
 
 		// FM
-		this.frequency[midiNoteKey]
+		zzthis.frequency[midiNoteKey]
 			.disconnect(this.oscillators[midiNoteKey].frequency)
 
 		delete this.frequency[midiNoteKey]
