@@ -9,7 +9,13 @@ export default class Oscillator {
 		this.semitone = 0
 		this.pulseWidth = 0
 		this.fmGain = 0
-		this.frequency = {} //this.context.createGain()
+		this.frequencyGains = [] //this.context.createGain()
+		this.oscillatorGains = []
+
+		for(let i=0; i<128; i++) {
+			this.frequencyGains[i] = this.context.createGain()
+			this.oscillatorGains[i] = this.context.createGain()
+		}
 	}
 
 	/*createPulseOscillator = () => {
@@ -69,23 +75,22 @@ export default class Oscillator {
 		}
 	}
 
-	noteOff = (midiNote) => {
+	noteOff = (at, midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
 		if(!(midiNoteKey in this.oscillators))
 			return
 
-		this.oscillators[midiNoteKey].stop(this.context.currentTime)
+		this.oscillators[midiNoteKey].stop(at)
 
 		// FM
-		zzthis.frequency[midiNoteKey]
-			.disconnect(this.oscillators[midiNoteKey].frequency)
+		/*this.frequency[midiNoteKey]
+			.disconnect(this.oscillators[midiNoteKey].frequency)*/
 
-		delete this.frequency[midiNoteKey]
+		//delete this.frequency[midiNoteKey]
 
 		// OSC
-		this.oscillators[midiNoteKey].disconnect(this.node)
-		delete this.oscillators[midiNoteKey]
+		
 	}
 
 	noteOn = (midiNote) => {
@@ -108,12 +113,19 @@ export default class Oscillator {
 		osc.type = this.type
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc.detune.value = this.detune + this.semitone
+		osc.onended = () => {
+			osc.disconnect(this.oscillatorGains[midiNote])
+			this.frequencyGains[midiNote].disconnect(osc.frequency)
+			this.oscillators[midiNoteKey].disconnect(this.node)
+			delete this.oscillators[midiNoteKey]
+		}
 
 		// FM
-		const fmGain = this.context.createGain()
-		fmGain.gain.value = this.fmGain
-		fmGain.connect(osc.frequency)
-		this.frequency[midiNoteKey] = fmGain
+		//const fmGain = this.context.createGain()
+		//this.fmGain[midiNote].gain.value = this.fmGain
+		osc.connect(this.oscillatorGains[midiNote])
+		this.frequencyGains[midiNote].connect(osc.frequency)
+		//this.frequencyGains[midiNoteKey] = fmGain
 
 		osc.connect(this.node)
 		osc.start(this.context.currentTime)
@@ -167,9 +179,9 @@ export default class Oscillator {
 
 	setFMGain = (fmGain) => {
 		this.fmGain = fmGain
-		for(const midiNote in this.frequency) {
+		for(const midiNote in this.frequencyGains) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.frequency[midiNote].gain.value = this.fmGain
+				this.frequencyGains[midiNote].gain.value = this.fmGain
 				console.log(this.fmGain)
 			}
 		}

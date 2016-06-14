@@ -37,10 +37,14 @@ export default class AudioEngine {
 	}
 
 	initializeFMGain  = () => {
-		//this.fmGain = this.context.createGain()
-		//this.fmGain.gain.value = 0
-		/*this.oscillator2.connect(this.fmGain)
-		this.fmGain.connect(this.oscillator1.frequency)*/
+		this.fmGains = []
+		
+		for(let i=0; i<128; i++) {
+			this.fmGains[i] = this.context.createGain()
+			this.fmGains[i].gain.value = 0
+			this.oscillator2.oscillatorGains[i].connect(this.fmGains[i])
+			this.fmGains[i].connect(this.oscillator1.frequencyGains[i])
+		}
 	}
 
 	onMIDIMessage  = (data) => {
@@ -67,20 +71,20 @@ export default class AudioEngine {
 		this.oscillator1.noteOn(midiNote)
 		this.oscillator2.noteOn(midiNote)
 
-		console.log(this.oscillator2.oscillators)
+		/*console.log(this.oscillator2.oscillators)
 		console.log(this.oscillator1.frequency)
 		this.oscillator2.oscillators[midiNote.toString()]
-			.connect(this.oscillator1.frequency[midiNote.toString()])
+			.connect(this.oscillator1.frequency[midiNote.toString()])*/
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		console.log(this.oscillator2.oscillators)
+		/*console.log(this.oscillator2.oscillators)
 		console.log(this.oscillator1.frequency)
 		this.oscillator2.oscillators[midiNote.toString()]
-			.disconnect(this.oscillator1.frequency[midiNote.toString()])
+			.disconnect(this.oscillator1.frequency[midiNote.toString()])*/
 
-		this.oscillator1.noteOff(midiNote)
-		this.oscillator2.noteOff(midiNote)
+		this.oscillator1.noteOff(this.context.currentTime, midiNote)
+		this.oscillator2.noteOff(this.context.currentTime, midiNote)
 	}
 
 	panic = () => {
