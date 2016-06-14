@@ -102,5 +102,5 @@ update message model =
                     ( model, Cmd.none )
                 else
                     ( { model | value = newValue }
-                    , masterVolumePort newValue
+                    , cmdEmmiter newValue
                     )

@@ -64,7 +64,7 @@ setFmAmount knobModel model =
 
 setPulseWidth : Knob.Model -> Model -> Model
 setPulseWidth knobModel model =
-    { model | oscillator2DetuneKnob = knobModel }
+    { model | pulseWidthKnob = knobModel }
 
 
 setOscillator2Detune : Knob.Model -> Model -> Model

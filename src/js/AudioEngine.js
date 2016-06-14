@@ -1,5 +1,6 @@
-export default class AudioEngine {
+import Oscillator from './Oscillator'
 
+export default class AudioEngine {
 	constructor () {
 		this.context = new AudioContext
 
@@ -11,182 +12,7 @@ export default class AudioEngine {
 
 		this.initializeFMGain ()
 	}
-
-	createPulseOscillator = () => {
-		const pulseCurve = new Float32Array(256)
-		for(let i=0; i<128; i++) {
-			pulseCurve[i] = -1
-			pulseCurve[i + 128] = 1
-		}
-
-		const constantOneCurve = new Float32Array(2)
-		constantOneCurve[0] = 1
-		constantOneCurve[1] = 1
-
-		const node = this.context.createOscillator()
-		node.type = 'sawtooth'
-
-		const pulseShaper = this.context.createWaveShaper()
-		pulseShaper.curve = pulseCurve
-		node.connect(pulseShaper)
-
-		const widthGain = this.context.createGain()
-		widthGain.gain.value = 0
-		node.width = widthGain.gain
-		widthGain.connect(pulseShaper)
-
-		const constantOneShaper = this.context.createWaveShaper()
-		constantOneShaper.curve = constantOneCurve
-		node.connect(constantOneShaper)
-		constantOneShaper.connect(widthGain)
-
-		node.setWidth = function (width) {
-			node.width.value = width
-		}
-
-		node.connect = function () {
-			pulseShaper.connect.apply(pulseShaper, arguments)
-			return node
-		}
-
-		node.disconnect = function () {
-			pulseShaper.disconnect.apply(pulseShaper, arguments)
-			return node
-		}
-
-		return node
-	}
-
-	createOscillatorNode = () => {
-		const node = this.context.createGain()
-		node.gain.value = 1
-		node.oscillators = {}
-		node.type = 'sawtooth'
-		node.detune = 0
-		node.semitone = 0
-		node.pulseWidth = 0
-		node.fmGain = 0
-		node.frequency = {} //this.context.createGain()
-
-		node.frequencyFromNoteNumber = (note) => {
-			return 440 * Math.pow(2, (note - 69) / 12)
-		}
-
-		node.panic =  () => {
-			for(const midiNote in node.oscillators) {
-				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.noteOff(Number(midiNote))
-				}
-			}
-		}
-
-		node.noteOff = (midiNote) => {
-			const midiNoteKey = midiNote.toString()
-
-			if(!(midiNoteKey in node.oscillators))
-				return
-
-			node.oscillators[midiNoteKey].stop(this.context.currentTime)
-
-			// FM
-			node.frequency[midiNoteKey]
-				.disconnect(node.oscillators[midiNoteKey].frequency)
-
-			delete node.frequency[midiNoteKey]
-
-			// OSC
-			node.oscillators[midiNoteKey].disconnect(node)
-			delete node.oscillators[midiNoteKey]
-		}
-
-		node.noteOn = (midiNote) => {
-			const midiNoteKey = midiNote.toString()
-
-			if(midiNoteKey in node.oscillators)
-				return
-
-			// PW
-			const osc = node.type != 'square' ?
-				this.context.createOscillator() :
-				this.createPulseOscillator()
-
-			if(node.type == 'square')
-				osc.setWidth(node.pulseWidth)
-
-			// OSC
-			osc.type = node.type
-			osc.frequency.value = node.frequencyFromNoteNumber(midiNote)
-			osc.detune.value = node.detune + node.semitone
-
-			// FM
-			const fmGain = this.context.createGain()
-			fmGain.gain.value = node.fmGain
-			fmGain.connect(osc.frequency)
-			node.frequency[midiNoteKey] = fmGain
-
-			osc.connect(node)
-			osc.start(this.context.currentTime)
-			node.oscillators[midiNoteKey] = osc
-		}
-
-		node.setDetune = (detune) => {
-			node.detune = detune
-			for(const midiNote in node.oscillators) {
-				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.oscillators[midiNote].detune.value =
-						node.detune + node.semitone
-				}
-			}
-		}
-
-		node.setSemitone = (semitone) => {
-			node.semitone = semitone * 100
-			for(const midiNote in node.oscillators) {
-				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.oscillators[midiNote].detune.value =
-						node.detune + node.semitone
-				}
-			}
-		}
-
-		node.setWaveform = (waveform) => {
-			for(const midiNote in node.oscillators) {
-				if(node.oscillators.hasOwnProperty(midiNote)) {
-					if(waveform == 'square' || node.type == 'square') {
-						node.noteOff(Number(midiNote))
-						node.type = waveform
-						node.noteOn(Number(midiNote))
-					}
-					node.oscillators[midiNote].type = waveform
-				}
-			}
-			node.type = waveform
-		}
-
-		node.setPulseWidth = (pulseWidth) => {
-			node.pulseWidth = pulseWidth
-			if(node.type == 'square') {
-				for(const midiNote in node.oscillators) {
-					if(node.oscillators.hasOwnProperty(midiNote)) {
-						node.oscillators[midiNote].setWidth(node.pulseWidth)
-					}
-				}
-			}
-		}
-
-		node.setFMGain = (fmGain) => {
-			node.fmGain = fmGain
-			for(const midiNote in node.frequency) {
-				if(node.oscillators.hasOwnProperty(midiNote)) {
-					node.frequency[midiNote].gain.value = node.fmGain
-					console.log(node.fmGain)
-				}
-			}
-		}
-
-		return node
-	}
-
+	
 	initializeMasterVolume = () => {
 		this.masterVolume = this.context.createGain()
 		this.masterVolume.gain.value = 0.1
@@ -194,8 +20,8 @@ export default class AudioEngine {
 	}
 
 	initializeOscillators = () => {
-		this.oscillator1 = this.createOscillatorNode()
-		this.oscillator2 = this.createOscillatorNode()
+		this.oscillator1 = new Oscillator(this.context)
+		this.oscillator2 = new Oscillator(this.context)
 	}
 
 	initializeOscillatorsGain = () => {
