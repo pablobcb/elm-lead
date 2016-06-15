@@ -20,8 +20,8 @@ export default class AudioEngine {
 	}
 
 	initializeOscillators = () => {
-		this.oscillator1 = new Oscillator(this.context)
-		this.oscillator2 = new Oscillator(this.context)
+		this.oscillator1 = new Oscillator(this.context, 'sine')
+		this.oscillator2 = new Oscillator(this.context, 'triangle')
 	}
 
 	initializeOscillatorsGain = () => {
