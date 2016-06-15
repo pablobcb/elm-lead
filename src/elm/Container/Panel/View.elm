@@ -75,6 +75,7 @@ filter model =
 --]
 
 
+
 oscillators : Model -> Html Msg
 oscillators model =
     section "oscillators"
@@ -96,8 +97,14 @@ oscillators model =
             oscillator2DetunePort
             model.oscillator2DetuneKnob
             "detune"
-        , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
-        , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
+        , nordKnob FMAmountChange
+            fmAmountPort
+            model.fmAmountKnob
+            "FM"
+        , nordKnob PulseWidthChange
+            pulseWidthPort
+            model.pulseWidthKnob
+            "PW"
         ]
 
 

@@ -46,7 +46,7 @@ type Msg
 -- VIEW
 
 
-view : (String -> Cmd Msg) -> Model Msg -> Html Msg
+view : (String -> Cmd Msg) -> Model a -> Html Msg
 view cmdEmmiter model =
     div [ class "waveform-selector" ]
         [ ul [ class "waveform-list" ] <| options model
@@ -54,8 +54,7 @@ view cmdEmmiter model =
             []
         ]
 
-
-options : Model a -> List (Html a)
+options : Model a -> List (Html b)
 options model =
     List.map
         (\( label, elem ) ->
@@ -63,8 +62,7 @@ options model =
         )
         model.options
 
-
-option : Model a -> a -> String -> Html a
+option : Model a -> a -> String -> Html b
 option model elem label =
     let
         state =
@@ -75,12 +73,12 @@ option model elem label =
     in
         li [ class "waveform-option" ]
             [ div [ class ("led " ++ state) ] []
-            , div [ class "waveform-name"  ]
+            , div [ class "waveform-name" ]
                 [ text label ]
             ]
 
 
-nordButton : (Msg -> a) -> (String -> Cmd Msg) -> Model Msg -> Html a
+nordButton : (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
 nordButton knobMsg cmdEmmiter model =
     Html.App.map knobMsg
         <| view (\value -> value |> cmdEmmiter)

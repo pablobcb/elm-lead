@@ -2,11 +2,8 @@ module Container.OnScreenKeyboard.Update exposing (..)
 
 --where
 
-import Container.Panel.Model as Model exposing (..)
 import Container.OnScreenKeyboard.Model as KbdModel exposing (..)
-import Component.Knob as Knob
 import Midi exposing (..)
-import Port exposing (..)
 import Char exposing (..)
 import Maybe.Extra exposing (..)
 
