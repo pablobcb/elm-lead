@@ -111,15 +111,16 @@ oscillators model =
 view : Model -> Html Msg
 view model =
     div [ class "panel" ]
-        [ column
-            [ section "lfo1" [ text "breno" ]
-            , section "lfo2" [ text "magro" ]
-            , section "mod env" [ text "forest psy" ]
-            ]
-        , column [ oscillators model ]
+        [ --column
+          --  [ section "lfo1" [ text "breno" ]
+          --  , section "lfo2" [ text "magro" ]
+          --  , section "mod env" [ text "forest psy" ]
+          --  ]
+        --,
+         column [ oscillators model ]
         , column
             [ amplifier model
-            , filter model
+            --, filter model
             ]
         ]
 
