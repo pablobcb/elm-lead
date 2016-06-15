@@ -2,9 +2,9 @@
 	slist-style-type none
 	display flex
 	flex-direction column
-	padding-left 8px
-
-	
+	padding-left 6px
+	margin-top 0
+	margin-bottom 4px
 
 
 .waveform-option
@@ -19,6 +19,7 @@
 .waveform-selector
 	display flex
 	flex-direction column
-	width 45px
+	width $btn-width
+	height $waveform-selector-height
 	margin 0
 	justify-content flex-start

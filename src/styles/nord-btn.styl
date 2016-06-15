@@ -1,13 +1,12 @@
 .nord-btn
-	background-color #363636
+	background-color #4b4b4b
 	cursor pointer
-	border 0
 	outline 0
-	width 45px
-	height 20px
-	border-radius 2px
-	// &.active
-
-	// &.unactive
-
-
+	width $btn-width
+	height $btn-height
+	border-radius $btn-border-radius
+	border 6px solid $btn-background-color
+	
+	&:active
+		border-color black
+		background-color $btn-background-color
