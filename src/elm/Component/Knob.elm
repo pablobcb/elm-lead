@@ -46,15 +46,6 @@ type Msg
     = ValueChange (Value -> Cmd Msg) YPos
     | MouseDragStart YPos
 
-
-knobStyle : List ( String, String )
-knobStyle =
-    [ ( "-webkit-user-drag", "element" )
-    , ( "-webkit-user-select", "none" )
-    ]
-
-
-
 -- VIEW
 
 
@@ -67,8 +58,7 @@ view cmdEmmiter model =
         div
             [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
             , Html.Events.on "dragstart" <| positionMap MouseDragStart
-            , style knobStyle
-            , class "knob-dialer"
+            , class "knob-dial"
             ]
             [ Html.text (toString model.value) ]
 

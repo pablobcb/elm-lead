@@ -54,6 +54,7 @@ init =
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
+            , ( "noise", Square )
             ]
     , fmAmountKnob = Knob.init 0 0 100 1
     , pulseWidthKnob = Knob.init 0 0 100 1

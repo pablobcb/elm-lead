@@ -75,20 +75,27 @@ filter model =
 --]
 
 
-
-oscillators : Model -> Html Msg
-oscillators model =
-    section "oscillators"
+osc1 : Model -> Html Msg
+osc1 model =
+    div [ class "osc1" ]
         [ Button.nordButton Oscillator1WaveformChange
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
-        , Button.nordButton Oscillator2WaveformChange
+        , span [ class "osc-label" ] [ text "OSC 1" ]
+        , nordKnob FMAmountChange
+            fmAmountPort
+            model.fmAmountKnob
+            "FM"
+        ]
+
+
+osc2 : Model -> Html Msg
+osc2 model =
+    div [ class "osc2" ]
+        [ Button.nordButton Oscillator2WaveformChange
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
-        , nordKnob OscillatorsMixChange
-            oscillatorsBalancePort
-            model.oscillatorsMixKnob
-            "mix"
+        , span [ class "osc-label" ] [ text "OSC 2" ]
         , nordKnob Oscillator2SemitoneChange
             oscillator2SemitonePort
             model.oscillator2SemitoneKnob
@@ -97,14 +104,24 @@ oscillators model =
             oscillator2DetunePort
             model.oscillator2DetuneKnob
             "detune"
-        , nordKnob FMAmountChange
-            fmAmountPort
-            model.fmAmountKnob
-            "FM"
-        , nordKnob PulseWidthChange
-            pulseWidthPort
-            model.pulseWidthKnob
-            "PW"
+        ]
+
+
+oscillatorSection : Model -> Html Msg
+oscillatorSection model =
+    section "oscillators"
+        [ div [ class "oscillators" ]
+            [ osc1 model, osc2 model ]
+        , div [ class "oscillators-extra" ]
+            [ nordKnob PulseWidthChange
+                pulseWidthPort
+                model.pulseWidthKnob
+                "PW"
+            , nordKnob OscillatorsMixChange
+                oscillatorsBalancePort
+                model.oscillatorsMixKnob
+                "mix"
+            ]
         ]
 
 
@@ -116,7 +133,7 @@ view model =
             , section "lfo2" [ text "magro" ]
             , section "mod env" [ text "forest psy" ]
             ]
-        , column [ oscillators model ]
+        , column [ oscillatorSection model ]
         , column
             [ amplifier model
             , filter model
