@@ -76,8 +76,12 @@ export default class Oscillator {
 	}
 
 	noteOff = (at, midiNote) => {
-		const midiNoteKey = midiNote.toString()
-
+		let midiNoteKey
+		
+		if(midiNote)
+			midiNoteKey = midiNote.toString()
+		
+			
 		if(!(midiNoteKey in this.oscillators))
 			return
 

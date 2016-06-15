@@ -30,6 +30,8 @@ type alias Model =
     , ampSustainKnob : Knob.Model
     , ampReleaseKnob : Knob.Model
     , masterVolumeKnob : Knob.Model
+    , filterCutoffKnob : Knob.Model
+    , filterQKnob : Knob.Model
     , filterAttackKnob : Knob.Model
     , filterDecayKnob : Knob.Model
     , filterSustainKnob : Knob.Model
@@ -62,6 +64,8 @@ init =
     , ampSustainKnob = Knob.init 0 0 100 1
     , ampReleaseKnob = Knob.init 0 0 100 1
     , masterVolumeKnob = Knob.init 10 0 100 1
+    , filterCutoffKnob = Knob.init 4000 0 10000 1
+    , filterQKnob = Knob.init 1 0 45 1
     , filterAttackKnob = Knob.init 0 0 100 1
     , filterDecayKnob = Knob.init 0 0 100 1
     , filterSustainKnob = Knob.init 0 0 100 1
@@ -87,6 +91,16 @@ setOscillator2Detune knobModel model =
 setOscillator2Semitone : Knob.Model -> Model -> Model
 setOscillator2Semitone knobModel model =
     { model | oscillator2SemitoneKnob = knobModel }
+
+
+setFilterCutoff : Knob.Model -> Model -> Model
+setFilterCutoff knobModel model =
+    { model | filterCutoffKnob = knobModel }
+
+
+setFilterQ : Knob.Model -> Model -> Model
+setFilterQ knobModel model =
+    { model | filterQKnob = knobModel }
 
 
 setMasterVolume : Knob.Model -> Model -> Model

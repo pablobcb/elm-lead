@@ -15,6 +15,8 @@ type Msg
     | FMAmountChange Knob.Msg
     | PulseWidthChange Knob.Msg
     | OscillatorsMixChange Knob.Msg
+    | FilterCutoffChange Knob.Msg
+    | FilterQChange Knob.Msg
     | MasterVolumeChange Knob.Msg
 
 
@@ -86,3 +88,17 @@ update msg model =
                     .oscillator2WaveformBtn
                     setOscillator2WaveformBtn
                     Oscillator2WaveformChange
+
+            FilterCutoffChange subMsg ->
+                updateMap Knob.update
+                    subMsg
+                    .filterCutoffKnob
+                    setFilterCutoff
+                    FilterCutoffChange
+            
+            FilterQChange subMsg ->
+                updateMap Knob.update
+                    subMsg
+                    .filterQKnob
+                    setFilterQ
+                    FilterQChange

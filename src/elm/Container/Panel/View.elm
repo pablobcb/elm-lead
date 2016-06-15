@@ -60,11 +60,16 @@ amplifier model =
 
 filter : Model -> Html Msg
 filter model =
-    let
-        knob =
-            nordKnob (always MasterVolumeChange) (always Cmd.none)
-    in
-        section "filter" []
+    section "filter"
+        [ nordKnob FilterCutoffChange
+            filterCutoffPort
+            model.filterCutoffKnob
+            "Frequency"
+        , nordKnob FilterQChange
+            filterQPort
+            model.filterQKnob
+            "Resonance"
+        ]
 
 
 
@@ -73,7 +78,6 @@ filter model =
 --, knob model.filterSustainKnob "sustain"
 --, knob model.filterReleaseKnob "release"
 --]
-
 
 
 oscillators : Model -> Html Msg
@@ -116,11 +120,11 @@ view model =
           --  , section "lfo2" [ text "magro" ]
           --  , section "mod env" [ text "forest psy" ]
           --  ]
-        --,
-         column [ oscillators model ]
+          --,
+          column [ oscillators model ]
         , column
             [ amplifier model
-            --, filter model
+            , filter model
             ]
         ]
 

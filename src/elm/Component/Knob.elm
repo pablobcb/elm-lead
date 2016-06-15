@@ -93,11 +93,15 @@ update message model =
         ValueChange cmdEmmiter yPos ->
             let
                 newValue =
-                    model.value + (model.initYPos - yPos) // abs(model.initYPos - yPos) --model.value + model.step
-                    --else if yPos > model.initYPos then
-                    --    model.value + (model.initYPos - yPos) // model.step --model.value - model.step
-                    --else
-                    --    model.value
+                    model.value
+                        + (model.initYPos - yPos)
+                        // abs (model.initYPos - yPos)
+
+                --model.value + model.step
+                --else if yPos > model.initYPos then
+                --    model.value + (model.initYPos - yPos) // model.step --model.value - model.step
+                --else
+                --    model.value
             in
                 if newValue > model.max then
                     ( { model | value = model.max, initYPos = yPos }, Cmd.none )

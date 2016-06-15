@@ -31,3 +31,9 @@ port fmAmountPort : Int -> Cmd msg
 
 
 port pulseWidthPort : Int -> Cmd msg
+
+
+port filterCutoffPort : Int -> Cmd msg
+
+
+port filterQPort : Int -> Cmd msg

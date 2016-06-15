@@ -40,6 +40,7 @@ export default class Application {
 
 		this.audioEngine = new AudioEngine()
 
+		// MIDI
 		if(this.midiAccess)
 			this.initializeMidiAccess()
 
@@ -48,12 +49,14 @@ export default class Application {
 				this.audioEngine.onMIDIMessage(midiDataArray)
 			})
 
+		// VOLUME
 		this.app.ports.masterVolumePort
 			.subscribe((masterVolumeValue) => {
 				console.log(masterVolumeValue)
 				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
 
+		// OSCILLATORS
 		this.app.ports.oscillatorsBalancePort
 			.subscribe((oscillatorsBalanceValue) => {
 				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
@@ -89,6 +92,18 @@ export default class Application {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
+		// OSCILLATORS
+		this.app.ports.filterCutoffPort
+			.subscribe((freq) => {
+				this.audioEngine.setFilterCutoff(freq)
+			})
+
+		this.app.ports.filterQPort
+			.subscribe((amount) => {
+				this.audioEngine.setFilterQ(amount)
+			})
+
+		// MACRO
 		window.onblur = () => {
 			this.audioEngine.panic()
 		}
