@@ -92,7 +92,7 @@ export default class Application {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
-		// OSCILLATORS
+		// FILTER
 		this.app.ports.filterCutoffPort
 			.subscribe((freq) => {
 				this.audioEngine.setFilterCutoff(freq)
@@ -101,6 +101,11 @@ export default class Application {
 		this.app.ports.filterQPort
 			.subscribe((amount) => {
 				this.audioEngine.setFilterQ(amount)
+			})
+		
+		this.app.ports.filterTypePort
+			.subscribe((filterType) => {
+				this.audioEngine.setFilterType(filterType)
 			})
 
 		// MACRO

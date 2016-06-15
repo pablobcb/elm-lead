@@ -159,4 +159,14 @@ export default class AudioEngine {
 	setFilterQ = (q) => {
 		this.filter.Q.value = q
 	}
+
+	setFilterType = (filterType) => {
+		const validFilterTypes = ['lowpass', 'highpass', 'bandpass', 'notch']
+		const filterType_ = filterType.toLowerCase()
+
+		if(validFilterTypes.indexOf(filterType_) == -1)
+			throw new Error('Invalid Filter Type')
+		
+		this.filter.type = filterType_
+	}
 }
