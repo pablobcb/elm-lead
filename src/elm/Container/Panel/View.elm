@@ -21,7 +21,7 @@ nordKnob :
 nordKnob op cmd model label =
     div [ class "knob" ]
         [ Knob.knob op cmd model
-        , div [ class "knob__label" ] [ text label ]
+        , div [ class "pannel__label" ] [ text label ]
         ]
 
 
@@ -53,18 +53,29 @@ amplifier model =
               --,
               nordKnob MasterVolumeChange
                 masterVolumePort
-                model.masterVolumeKnob
+                model.ampVolumeKnob
                 "gain"
             ]
 
 
 filter : Model -> Html Msg
 filter model =
-    let
-        knob =
-            nordKnob (always MasterVolumeChange) (always Cmd.none)
-    in
-        section "filter" []
+    section "filter"
+        [ div [ class "filter" ]
+            [ nordKnob FilterCutoffChange
+                filterCutoffPort
+                model.filterCutoffKnob
+                "Frequency"
+            , nordKnob FilterQChange
+                filterQPort
+                model.filterQKnob
+                "Resonance"
+            , Button.nordButton "Filter Type"
+                FilterTypeChange
+                filterTypePort
+                model.filterTypeBtn
+            ]
+        ]
 
 
 
@@ -78,13 +89,14 @@ filter model =
 osc1 : Model -> Html Msg
 osc1 model =
     div [ class "osc1" ]
-        [ Button.nordButton Oscillator1WaveformChange
+        [ Button.nordButton "Waveform"
+            Oscillator1WaveformChange
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
-        , span [ class "osc-label" ] [ text "OSC 1" ]
+        , span [ class "oscillators__label" ] [ text "OSC 1" ]
         , nordKnob FMAmountChange
             fmAmountPort
-            model.fmAmountKnob
+            model.oscillator1FmAmountKnob
             "FM"
         ]
 
@@ -92,10 +104,11 @@ osc1 model =
 osc2 : Model -> Html Msg
 osc2 model =
     div [ class "osc2" ]
-        [ Button.nordButton Oscillator2WaveformChange
+        [ Button.nordButton "Waveform"
+            Oscillator2WaveformChange
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
-        , span [ class "osc-label" ] [ text "OSC 2" ]
+        , span [ class "oscillators__label" ] [ text "OSC 2" ]
         , nordKnob Oscillator2SemitoneChange
             oscillator2SemitonePort
             model.oscillator2SemitoneKnob
@@ -115,7 +128,7 @@ oscillatorSection model =
         , div [ class "oscillators-extra" ]
             [ nordKnob PulseWidthChange
                 pulseWidthPort
-                model.pulseWidthKnob
+                model.oscillatorsPulseWidthKnob
                 "PW"
             , nordKnob OscillatorsMixChange
                 oscillatorsBalancePort
@@ -128,12 +141,12 @@ oscillatorSection model =
 view : Model -> Html Msg
 view model =
     div [ class "panel" ]
-        [ column
-            [ section "lfo1" [ text "breno" ]
-            , section "lfo2" [ text "magro" ]
-            , section "mod env" [ text "forest psy" ]
-            ]
-        , column [ oscillatorSection model ]
+        [ --column
+          --  [ section "lfo1" [ text "breno" ]
+          --  , section "lfo2" [ text "magro" ]
+          --  , section "mod env" [ text "forest psy" ]
+          --  ],
+          column [ oscillatorSection model ]
         , column
             [ amplifier model
             , filter model

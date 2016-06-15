@@ -6,6 +6,8 @@ export default class AudioEngine {
 
 		this.initializeMasterVolume()
 
+		this.initializeFilter()
+
 		this.initializeOscillators ()
 
 		this.initializeOscillatorsGain ()
@@ -19,20 +21,27 @@ export default class AudioEngine {
 		this.masterVolume.connect(this.context.destination)
 	}
 
+	initializeFilter = () => {
+		this.filter = this.context.createBiquadFilter()
+		this.filter.type = 'lowpass'
+		this.filter.frequency.value = 10000
+		this.filter.connect(this.masterVolume)
+	}
+
 	initializeOscillators = () => {
-		this.oscillator1 = new Oscillator(this.context)
-		this.oscillator2 = new Oscillator(this.context)
+		this.oscillator1 = new Oscillator(this.context, 'sine')
+		this.oscillator2 = new Oscillator(this.context, 'triangle')
 	}
 
 	initializeOscillatorsGain = () => {
 		this.oscillator1Gain = this.context.createGain()
 		this.oscillator1Gain.gain.value = .5
-		this.oscillator1Gain.connect(this.masterVolume)
+		this.oscillator1Gain.connect(this.filter)
 		this.oscillator1.connect(this.oscillator1Gain)
 
 		this.oscillator2Gain = this.context.createGain()
 		this.oscillator2Gain.gain.value = .5
-		this.oscillator2Gain.connect(this.masterVolume)
+		this.oscillator2Gain.connect(this.filter)
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
@@ -139,5 +148,25 @@ export default class AudioEngine {
 			throw new Error('Invalid Waveform Type')
 
 		this.oscillator2.setWaveform(waveform_)
+	}
+
+
+	setFilterCutoff = (freq) => {
+		this.filter.frequency.value = freq
+	}
+
+
+	setFilterQ = (q) => {
+		this.filter.Q.value = q
+	}
+
+	setFilterType = (filterType) => {
+		const validFilterTypes = ['lowpass', 'highpass', 'bandpass', 'notch']
+		const filterType_ = filterType.toLowerCase()
+
+		if(validFilterTypes.indexOf(filterType_) == -1)
+			throw new Error('Invalid Filter Type')
+		
+		this.filter.type = filterType_
 	}
 }

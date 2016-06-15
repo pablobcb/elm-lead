@@ -7,7 +7,6 @@ import Html.Events exposing (onClick)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class)
 import Json.Decode as Json exposing (..)
-import Port exposing (..)
 
 
 -- MODEL
@@ -46,6 +45,8 @@ type Msg
     = ValueChange (Value -> Cmd Msg) YPos
     | MouseDragStart YPos
 
+
+
 -- VIEW
 
 
@@ -58,7 +59,7 @@ view cmdEmmiter model =
         div
             [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
             , Html.Events.on "dragstart" <| positionMap MouseDragStart
-            , class "knob-dial"
+            , class "knob__dial"
             ]
             [ Html.text (toString model.value) ]
 
@@ -83,11 +84,9 @@ update message model =
         ValueChange cmdEmmiter yPos ->
             let
                 newValue =
-                    model.value + (model.initYPos - yPos) // abs(model.initYPos - yPos) --model.value + model.step
-                    --else if yPos > model.initYPos then
-                    --    model.value + (model.initYPos - yPos) // model.step --model.value - model.step
-                    --else
-                    --    model.value
+                    model.value
+                        + (model.initYPos - yPos)
+                        // abs (model.initYPos - yPos)
             in
                 if newValue > model.max then
                     ( { model | value = model.max, initYPos = yPos }, Cmd.none )

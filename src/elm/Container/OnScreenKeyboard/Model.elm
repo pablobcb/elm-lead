@@ -3,16 +3,9 @@ module Container.OnScreenKeyboard.Model exposing (..)
 -- where
 
 import List exposing (..)
-import Maybe.Extra exposing (..)
 import Note exposing (..)
 import Midi exposing (..)
 import Port exposing (..)
-import String exposing (..)
-import Html exposing (..)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (class)
-import Html.App exposing (map)
-import Char exposing (..)
 
 
 type alias PressedKey =

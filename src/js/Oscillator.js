@@ -1,10 +1,10 @@
 export default class Oscillator {
-	constructor (context) {
+	constructor (context, initalWaveform) {
 		this.context = context
 		this.node = this.context.createGain()
 		this.node.gain.value = 1
 		this.oscillators = {}
-		this.type = 'sawtooth'
+		this.type = initalWaveform
 		this.detune = 0
 		this.semitone = 0
 		this.pulseWidth = 0
@@ -76,8 +76,12 @@ export default class Oscillator {
 	}
 
 	noteOff = (at, midiNote) => {
-		const midiNoteKey = midiNote.toString()
-
+		let midiNoteKey
+		
+		if(midiNote)
+			midiNoteKey = midiNote.toString()
+		
+			
 		if(!(midiNoteKey in this.oscillators))
 			return
 

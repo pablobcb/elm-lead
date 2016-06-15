@@ -13,23 +13,33 @@ type OscillatorWaveform
     | Square
 
 
+type FilterType
+    = Lowpass
+    | Highpass
+    | Bandpass
+    | Notch
+
+
 
 -- TODO : prefix all knobs with section name
 
 
 type alias Model =
     { oscillatorsMixKnob : Knob.Model
+    , oscillatorsPulseWidthKnob : Knob.Model
     , oscillator1WaveformBtn : Button.Model OscillatorWaveform
+    , oscillator1FmAmountKnob : Knob.Model
     , oscillator2WaveformBtn : Button.Model OscillatorWaveform
     , oscillator2SemitoneKnob : Knob.Model
     , oscillator2DetuneKnob : Knob.Model
-    , pulseWidthKnob : Knob.Model
-    , fmAmountKnob : Knob.Model
     , ampAttackKnob : Knob.Model
     , ampDecayKnob : Knob.Model
     , ampSustainKnob : Knob.Model
     , ampReleaseKnob : Knob.Model
-    , masterVolumeKnob : Knob.Model
+    , ampVolumeKnob : Knob.Model
+    , filterCutoffKnob : Knob.Model
+    , filterQKnob : Knob.Model
+    , filterTypeBtn : Button.Model FilterType
     , filterAttackKnob : Knob.Model
     , filterDecayKnob : Knob.Model
     , filterSustainKnob : Knob.Model
@@ -49,6 +59,7 @@ init =
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
             ]
+    , oscillator1FmAmountKnob = Knob.init 0 0 100 1
     , oscillator2WaveformBtn =
         Button.init
             [ ( "tri", Triangle )
@@ -56,13 +67,21 @@ init =
             , ( "sqr", Square )
             , ( "noise", Square )
             ]
-    , fmAmountKnob = Knob.init 0 0 100 1
-    , pulseWidthKnob = Knob.init 0 0 100 1
+    , oscillatorsPulseWidthKnob = Knob.init 0 0 100 1
     , ampAttackKnob = Knob.init 0 0 100 1
     , ampDecayKnob = Knob.init 0 0 100 1
     , ampSustainKnob = Knob.init 0 0 100 1
     , ampReleaseKnob = Knob.init 0 0 100 1
-    , masterVolumeKnob = Knob.init 10 0 100 1
+    , ampVolumeKnob = Knob.init 10 0 100 1
+    , filterCutoffKnob = Knob.init 4000 0 10000 1
+    , filterQKnob = Knob.init 1 0 45 1
+    , filterTypeBtn =
+        Button.init
+            [ ( "LP", Lowpass )
+            , ( "HP", Highpass )
+            , ( "BP", Bandpass )
+            , ( "notch", Notch )
+            ]
     , filterAttackKnob = Knob.init 0 0 100 1
     , filterDecayKnob = Knob.init 0 0 100 1
     , filterSustainKnob = Knob.init 0 0 100 1
@@ -70,33 +89,48 @@ init =
     }
 
 
-setFmAmount : Knob.Model -> Model -> Model
-setFmAmount knobModel model =
-    { model | fmAmountKnob = knobModel }
+setOscillator1FmAmountKnob : Knob.Model -> Model -> Model
+setOscillator1FmAmountKnob knobModel model =
+    { model | oscillator1FmAmountKnob = knobModel }
 
 
-setPulseWidth : Knob.Model -> Model -> Model
-setPulseWidth knobModel model =
-    { model | pulseWidthKnob = knobModel }
+setPulseWidthKnob : Knob.Model -> Model -> Model
+setPulseWidthKnob knobModel model =
+    { model | oscillatorsPulseWidthKnob = knobModel }
 
 
-setOscillator2Detune : Knob.Model -> Model -> Model
-setOscillator2Detune knobModel model =
+setOscillator2DetuneKnob : Knob.Model -> Model -> Model
+setOscillator2DetuneKnob knobModel model =
     { model | oscillator2DetuneKnob = knobModel }
 
 
-setOscillator2Semitone : Knob.Model -> Model -> Model
-setOscillator2Semitone knobModel model =
+setOscillator2SemitoneKnob : Knob.Model -> Model -> Model
+setOscillator2SemitoneKnob knobModel model =
     { model | oscillator2SemitoneKnob = knobModel }
 
 
-setMasterVolume : Knob.Model -> Model -> Model
-setMasterVolume knobModel model =
-    { model | masterVolumeKnob = knobModel }
+setFilterCutoffKnob : Knob.Model -> Model -> Model
+setFilterCutoffKnob knobModel model =
+    { model | filterCutoffKnob = knobModel }
 
 
-setOscillatorsMix : Knob.Model -> Model -> Model
-setOscillatorsMix knobModel model =
+setFilterQKnob : Knob.Model -> Model -> Model
+setFilterQKnob knobModel model =
+    { model | filterQKnob = knobModel }
+
+
+setFilterTypeBtn : Button.Model FilterType -> Model -> Model
+setFilterTypeBtn btn model =
+    { model | filterTypeBtn = btn }
+
+
+setAmpVolumeKnob : Knob.Model -> Model -> Model
+setAmpVolumeKnob knobModel model =
+    { model | ampVolumeKnob = knobModel }
+
+
+setOscillatorsMixKnob : Knob.Model -> Model -> Model
+setOscillatorsMixKnob knobModel model =
     { model | oscillatorsMixKnob = knobModel }
 
 

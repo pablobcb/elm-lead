@@ -46,13 +46,15 @@ type Msg
 -- VIEW
 
 
-view : (String -> Cmd Msg) -> Model a -> Html Msg
-view cmdEmmiter model =
-    div [ class "waveform-selector" ]
-        [ ul [ class "waveform-list" ] <| options model
+view : (String -> Cmd Msg) -> String -> Model a -> Html Msg
+view cmdEmmiter label model =
+    div [ class "option-selector" ]
+        [ span [ class "pannel__label" ] [ text label ]
+        , ul [ class "option-list" ] <| options model
         , button [ class "nord-btn", onClick <| Click cmdEmmiter ]
             []
         ]
+
 
 options : Model a -> List (Html b)
 options model =
@@ -61,6 +63,7 @@ options model =
             option model elem label
         )
         model.options
+
 
 option : Model a -> a -> String -> Html b
 option model elem label =
@@ -71,17 +74,18 @@ option model elem label =
             else
                 "unactive"
     in
-        li [ class "waveform-option" ]
+        li [ class "option" ]
             [ div [ class ("led " ++ state) ] []
-            , div [ class "waveform-name" ]
+            , div [ class "option-name" ]
                 [ text label ]
             ]
 
 
-nordButton : (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
-nordButton knobMsg cmdEmmiter model =
+nordButton : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
+nordButton label knobMsg cmdEmmiter model =
     Html.App.map knobMsg
         <| view (\value -> value |> cmdEmmiter)
+            label
             model
 
 
