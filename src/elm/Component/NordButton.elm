@@ -42,28 +42,20 @@ type Msg
     = Click (String -> Cmd Msg)
 
 
-btnStyle : List ( String, String )
-btnStyle =
-    [ ( "list-style-type", "none" ) ]
-
-
-redStyle =
-    [ ( "color", "red" ) ]
-
-
 
 -- VIEW
 
 
-view : (String -> Cmd Msg) -> Model a -> Html Msg
+view : (String -> Cmd Msg) -> Model Msg -> Html Msg
 view cmdEmmiter model =
-    div [ class "nord-btn" ]
+    div [ class "waveform-selector" ]
         [ ul [] <| options model
-        , button [ onClick <| Click cmdEmmiter ]
+        , button [ class "nord-btn", onClick <| Click cmdEmmiter ]
             [ text "a" ]
         ]
 
 
+options : Model a -> List (Html a)
 options model =
     List.map
         (\( label, elem ) ->
@@ -72,22 +64,22 @@ options model =
         model.options
 
 
+option : Model a -> a -> String -> Html a
 option model elem label =
     let
-        _ =
-            Debug.log "model" model
+        state =
+            if elem == model.currentElem then
+                "active"
+            else
+                "unactive"
     in
-        li
-            [ style
-                <| if elem == model.currentElem then
-                    redStyle
-                   else
-                    btnStyle
+        li []
+            [ div [ class ("led " ++ state) ] []
+            , div [ class "waveform-label" ] []
             ]
-            [ text label ]
 
 
-nordButton : (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
+nordButton : (Msg -> a) -> (String -> Cmd Msg) -> Model Msg -> Html a
 nordButton knobMsg cmdEmmiter model =
     Html.App.map knobMsg
         <| view (\value -> value |> cmdEmmiter)
