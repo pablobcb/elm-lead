@@ -24,6 +24,7 @@ export default class AudioEngine {
 	initializeFilter = () => {
 		this.filter = this.context.createBiquadFilter()
 		this.filter.type = 'lowpass'
+		this.filter.frequency.value = 10000
 		this.filter.connect(this.masterVolume)
 	}
 

@@ -2,7 +2,7 @@
 	slist-style-type none
 	display flex
 	flex-direction column
-	padding-left 6px
+	padding-left 4.5px
 	margin-top 0
 	margin-bottom 4px
 

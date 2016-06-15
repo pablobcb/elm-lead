@@ -37,3 +37,6 @@ port filterCutoffPort : Int -> Cmd msg
 
 
 port filterQPort : Int -> Cmd msg
+
+
+port filterTypePort : String -> Cmd msg

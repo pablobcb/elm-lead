@@ -7,12 +7,10 @@ import Html.Events exposing (onClick)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class)
 import Json.Decode as Json exposing (..)
-import Port exposing (..)
+
 
 
 -- MODEL
-
-
 type alias Model =
     { value : Int
     , min : Int
@@ -47,17 +45,7 @@ type Msg
     | MouseDragStart YPos
 
 
-knobStyle : List ( String, String )
-knobStyle =
-    [ ( "-webkit-user-drag", "element" )
-    , ( "-webkit-user-select", "none" )
-    ]
-
-
-
 -- VIEW
-
-
 view : (Int -> Cmd Msg) -> Model -> Html Msg
 view cmdEmmiter model =
     let
@@ -67,7 +55,6 @@ view cmdEmmiter model =
         div
             [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
             , Html.Events.on "dragstart" <| positionMap MouseDragStart
-            , style knobStyle
             , class "knob-dialer"
             ]
             [ Html.text (toString model.value) ]
@@ -82,8 +69,6 @@ knob knobMsg cmdEmmiter model =
 
 
 -- UPDATE
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
@@ -97,11 +82,6 @@ update message model =
                         + (model.initYPos - yPos)
                         // abs (model.initYPos - yPos)
 
-                --model.value + model.step
-                --else if yPos > model.initYPos then
-                --    model.value + (model.initYPos - yPos) // model.step --model.value - model.step
-                --else
-                --    model.value
             in
                 if newValue > model.max then
                     ( { model | value = model.max, initYPos = yPos }, Cmd.none )

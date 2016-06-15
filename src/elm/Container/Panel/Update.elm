@@ -17,6 +17,7 @@ type Msg
     | OscillatorsMixChange Knob.Msg
     | FilterCutoffChange Knob.Msg
     | FilterQChange Knob.Msg
+    | FilterTypeChange Button.Msg
     | MasterVolumeChange Knob.Msg
 
 
@@ -36,43 +37,43 @@ update msg model =
             MasterVolumeChange subMsg ->
                 updateMap Knob.update
                     subMsg
-                    .masterVolumeKnob
-                    setMasterVolume
+                    .ampVolumeKnob
+                    setAmpVolumeKnob 
                     MasterVolumeChange
 
             OscillatorsMixChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillatorsMixKnob
-                    setOscillatorsMix
+                    setOscillatorsMixKnob 
                     OscillatorsMixChange
 
             Oscillator2SemitoneChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillator2SemitoneKnob
-                    setOscillator2Semitone
+                    setOscillator2SemitoneKnob 
                     Oscillator2SemitoneChange
 
             Oscillator2DetuneChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillator2DetuneKnob
-                    setOscillator2Detune
+                    setOscillator2DetuneKnob 
                     Oscillator2DetuneChange
 
             FMAmountChange subMsg ->
                 updateMap Knob.update
                     subMsg
-                    .fmAmountKnob
-                    setFmAmount
+                    .oscillator1FmAmountKnob
+                    setOscillator1FmAmountKnob 
                     FMAmountChange
 
             PulseWidthChange subMsg ->
                 updateMap Knob.update
                     subMsg
-                    .pulseWidthKnob
-                    setPulseWidth
+                    .oscillatorsPulseWidthKnob
+                    setPulseWidthKnob 
                     PulseWidthChange
 
             Oscillator1WaveformChange subMsg ->
@@ -93,12 +94,19 @@ update msg model =
                 updateMap Knob.update
                     subMsg
                     .filterCutoffKnob
-                    setFilterCutoff
+                    setFilterCutoffKnob 
                     FilterCutoffChange
             
             FilterQChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .filterQKnob
-                    setFilterQ
+                    setFilterQKnob 
                     FilterQChange
+
+            FilterTypeChange subMsg ->
+                updateMap Button.update
+                    subMsg
+                    .filterTypeBtn
+                    setFilterTypeBtn
+                    FilterTypeChange

@@ -21,7 +21,7 @@ nordKnob :
 nordKnob op cmd model label =
     div [ class "knob" ]
         [ Knob.knob op cmd model
-        , div [ class "knob__label" ] [ text label ]
+        , div [ class "pannel__label" ] [ text label ]
         ]
 
 
@@ -53,7 +53,7 @@ amplifier model =
               --,
               nordKnob MasterVolumeChange
                 masterVolumePort
-                model.masterVolumeKnob
+                model.ampVolumeKnob
                 "gain"
             ]
 
@@ -69,6 +69,9 @@ filter model =
             filterQPort
             model.filterQKnob
             "Resonance"
+        , Button.nordButton FilterTypeChange
+            filterTypePort
+            model.filterTypeBtn
         ]
 
 
@@ -103,11 +106,11 @@ oscillators model =
             "detune"
         , nordKnob FMAmountChange
             fmAmountPort
-            model.fmAmountKnob
+            model.oscillator1FmAmountKnob
             "FM"
         , nordKnob PulseWidthChange
             pulseWidthPort
-            model.pulseWidthKnob
+            model.oscillatorsPulseWidthKnob
             "PW"
         ]
 
