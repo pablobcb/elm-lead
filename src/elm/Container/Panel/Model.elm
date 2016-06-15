@@ -11,6 +11,7 @@ type OscillatorWaveform
     | Triangle
     | Sine
     | Square
+    | WhiteNoise
 
 
 
@@ -54,6 +55,7 @@ init =
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
+            , ( "noise", WhiteNoise )
             ]
     , fmAmountKnob = Knob.init 0 0 100 1
     , pulseWidthKnob = Knob.init 0 0 100 1

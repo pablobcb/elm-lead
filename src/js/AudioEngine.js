@@ -132,7 +132,7 @@ export default class AudioEngine {
 	}
 
 	setOscillator2Waveform = (waveform)  => {
-		const validWaveforms = ['triangle', 'sawtooth', 'square']
+		const validWaveforms = ['triangle', 'sawtooth', 'square', 'whitenoise']
 		const waveform_ = waveform.toLowerCase()
 
 		if(validWaveforms.indexOf(waveform_) == -1)
