@@ -9,7 +9,7 @@ import Component.NordButton as Button
 
 type Msg
     = Oscillator1WaveformChange Button.Msg
-    --| Oscillator2WaveformChange OscillatorWaveform
+    | Oscillator2WaveformChange Button.Msg
     | Oscillator2SemitoneChange Knob.Msg
     | Oscillator2DetuneChange Knob.Msg
     | FMAmountChange Knob.Msg
@@ -79,8 +79,10 @@ update msg model =
                     .oscillator1WaveformBtn
                     setOscillator1WaveformBtn
                     Oscillator1WaveformChange
-
-            --Oscillator2WaveformChange waveform ->
-            --    ( setOscillator2Waveform model waveform
-            --    , toString waveform |> oscillator2WaveformPort
-            --    )
+            
+            Oscillator2WaveformChange subMsg ->
+                updateMap Button.update
+                    subMsg
+                    .oscillator2WaveformBtn
+                    setOscillator2WaveformBtn
+                    Oscillator2WaveformChange

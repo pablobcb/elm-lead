@@ -6,7 +6,6 @@ import Component.Knob as Knob
 import Component.NordButton as Button
 import Port exposing (..)
 import Html exposing (..)
-import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
 import Container.Panel.Model as Model exposing (..)
@@ -82,7 +81,9 @@ oscillators model =
         [ Button.nordButton Oscillator1WaveformChange
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
-          --, oscillator2Waveform model Oscillator2WaveformChange
+        , Button.nordButton Oscillator2WaveformChange
+            oscillator2WaveformPort
+            model.oscillator2WaveformBtn
         , nordKnob OscillatorsMixChange
             oscillatorsBalancePort
             model.oscillatorsMixKnob

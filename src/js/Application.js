@@ -22,7 +22,7 @@ export default class Application {
 	}
 
 	onMIDIFailure = () => {
-		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
+		alert('Your browser doesnt support WebMIDI API. Use another browser or install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
 	initializeMidiAccess = () => {

@@ -5,6 +5,7 @@ module Container.Panel.Model exposing (..)
 import Component.Knob as Knob exposing (..)
 import Component.NordButton as Button exposing (..)
 
+
 type OscillatorWaveform
     = Sawtooth
     | Triangle
@@ -17,11 +18,11 @@ type OscillatorWaveform
 
 
 type alias Model =
-    { oscillatorsMixKnob : Knob.Model 
+    { oscillatorsMixKnob : Knob.Model
     , oscillator1WaveformBtn : Button.Model OscillatorWaveform
+    , oscillator2WaveformBtn : Button.Model OscillatorWaveform
     , oscillator2SemitoneKnob : Knob.Model
     , oscillator2DetuneKnob : Knob.Model
-  --  , oscillator2Waveform : OscillatorWaveform
     , pulseWidthKnob : Knob.Model
     , fmAmountKnob : Knob.Model
     , ampAttackKnob : Knob.Model
@@ -41,13 +42,19 @@ init =
     { oscillatorsMixKnob = Knob.init 0 -50 50 1
     , oscillator2SemitoneKnob = Knob.init 0 -60 60 1
     , oscillator2DetuneKnob = Knob.init 0 -100 100 1
-    , oscillator1WaveformBtn = Button.init
+    , oscillator1WaveformBtn =
+        Button.init
             [ ( "sin", Sine )
             , ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
             ]
-  --  , oscillator2Waveform = Sawtooth
+    , oscillator2WaveformBtn =
+        Button.init
+            [ ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "sqr", Square )
+            ]
     , fmAmountKnob = Knob.init 0 0 100 1
     , pulseWidthKnob = Knob.init 0 0 100 1
     , ampAttackKnob = Knob.init 0 0 100 1
@@ -92,11 +99,11 @@ setOscillatorsMix knobModel model =
     { model | oscillatorsMixKnob = knobModel }
 
 
-setOscillator1WaveformBtn : Button.Model OscillatorWaveform -> Model-> Model
+setOscillator1WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
 setOscillator1WaveformBtn btn model =
     { model | oscillator1WaveformBtn = btn }
 
 
---setOscillator2WaveformBtn : Button.Model OscillatorWaveform -> Model-> Model
---setOscillator2WaveformBtn btn model =
---    { model | oscillator2Waveform = btn }
+setOscillator2WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
+setOscillator2WaveformBtn btn model =
+    { model | oscillator2WaveformBtn = btn }
