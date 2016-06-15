@@ -49,9 +49,9 @@ type Msg
 view : (String -> Cmd Msg) -> Model Msg -> Html Msg
 view cmdEmmiter model =
     div [ class "waveform-selector" ]
-        [ ul [] <| options model
+        [ ul [ class "waveform-list" ] <| options model
         , button [ class "nord-btn", onClick <| Click cmdEmmiter ]
-            [ text "a" ]
+            []
         ]
 
 
@@ -73,9 +73,10 @@ option model elem label =
             else
                 "unactive"
     in
-        li []
+        li [ class "waveform-option" ]
             [ div [ class ("led " ++ state) ] []
-            , div [ class "waveform-label" ] []
+            , div [ class "waveform-name"  ]
+                [ text label ]
             ]
 
 

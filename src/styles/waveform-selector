@@ -1,0 +1,24 @@
+.waveform-list
+	slist-style-type none
+	display flex
+	flex-direction column
+	padding-left 8px
+
+	
+
+
+.waveform-option
+	display flex
+
+	align-items center
+.waveform-name
+	margin-left 5px
+	font-size 10px
+	
+
+.waveform-selector
+	display flex
+	flex-direction column
+	width 45px
+	margin 0
+	justify-content flex-start
