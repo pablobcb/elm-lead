@@ -23,8 +23,8 @@ type alias Model =
     }
 
 
-create : Int -> Int -> Int -> Int -> Model
-create value min max step =
+init : Int -> Int -> Int -> Int -> Model
+init value min max step =
     { value = value
     , min = min
     , max = max

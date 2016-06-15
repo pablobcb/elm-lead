@@ -3,6 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
+import Component.NordButton as Button
 import Port exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
@@ -78,8 +79,10 @@ filter model =
 oscillators : Model -> Html Msg
 oscillators model =
     section "oscillators"
-        [ oscillator1Waveform model Oscillator1WaveformChange
-        , oscillator2Waveform model Oscillator2WaveformChange
+        [ Button.nordButton Oscillator1WaveformChange
+            oscillator1WaveformPort
+            model.oscillator1WaveformBtn
+          --, oscillator2Waveform model Oscillator2WaveformChange
         , nordKnob OscillatorsMixChange
             oscillatorsBalancePort
             model.oscillatorsMixKnob
@@ -95,45 +98,6 @@ oscillators model =
         , nordKnob FMAmountChange fmAmountPort model.fmAmountKnob "FM"
         , nordKnob PulseWidthChange pulseWidthPort model.pulseWidthKnob "PW"
         ]
-
-
-waveformSelector :
-    List OscillatorWaveform
-    -> (Model -> OscillatorWaveform)
-    -> Model
-    -> (OscillatorWaveform -> Msg)
-    -> Html Msg
-waveformSelector waveforms getter model msg =
-    div []
-        <| List.map
-            (\waveform ->
-                let
-                    isSelected =
-                        getter model == waveform
-                in
-                    label []
-                        [ input
-                            [ type' "radio"
-                            , checked isSelected
-                            , onCheck <| always <| msg waveform
-                            ]
-                            []
-                        , waveform |> toString |> text
-                        ]
-            )
-            waveforms
-
-
-oscillator1Waveform : Model -> (OscillatorWaveform -> Msg) -> Html Msg
-oscillator1Waveform =
-    waveformSelector [ Sawtooth, Sine, Triangle, Square ]
-        .oscillator1Waveform
-
-
-oscillator2Waveform : Model -> (OscillatorWaveform -> Msg) -> Html Msg
-oscillator2Waveform =
-    waveformSelector [ Sawtooth, Triangle, Square ]
-        .oscillator2Waveform
 
 
 view : Model -> Html Msg

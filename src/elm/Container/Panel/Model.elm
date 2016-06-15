@@ -3,7 +3,7 @@ module Container.Panel.Model exposing (..)
 -- where
 
 import Component.Knob as Knob exposing (..)
-
+import Component.NordButton as Button exposing (..)
 
 type OscillatorWaveform
     = Sawtooth
@@ -17,11 +17,11 @@ type OscillatorWaveform
 
 
 type alias Model =
-    { oscillatorsMixKnob : Knob.Model
-    , oscillator1Waveform : OscillatorWaveform
+    { oscillatorsMixKnob : Knob.Model 
+    , oscillator1WaveformBtn : Button.Model OscillatorWaveform
     , oscillator2SemitoneKnob : Knob.Model
     , oscillator2DetuneKnob : Knob.Model
-    , oscillator2Waveform : OscillatorWaveform
+  --  , oscillator2Waveform : OscillatorWaveform
     , pulseWidthKnob : Knob.Model
     , fmAmountKnob : Knob.Model
     , ampAttackKnob : Knob.Model
@@ -38,22 +38,27 @@ type alias Model =
 
 init : Model
 init =
-    { oscillatorsMixKnob = Knob.create 0 -50 50 1
-    , oscillator2SemitoneKnob = Knob.create 0 -60 60 1
-    , oscillator2DetuneKnob = Knob.create 0 -100 100 1
-    , oscillator1Waveform = Sawtooth
-    , oscillator2Waveform = Sawtooth
-    , fmAmountKnob = Knob.create 0 0 100 1
-    , pulseWidthKnob = Knob.create 0 0 100 1
-    , ampAttackKnob = Knob.create 0 0 100 1
-    , ampDecayKnob = Knob.create 0 0 100 1
-    , ampSustainKnob = Knob.create 0 0 100 1
-    , ampReleaseKnob = Knob.create 0 0 100 1
-    , masterVolumeKnob = Knob.create 10 0 100 1
-    , filterAttackKnob = Knob.create 0 0 100 1
-    , filterDecayKnob = Knob.create 0 0 100 1
-    , filterSustainKnob = Knob.create 0 0 100 1
-    , filterReleaseKnob = Knob.create 0 0 100 1
+    { oscillatorsMixKnob = Knob.init 0 -50 50 1
+    , oscillator2SemitoneKnob = Knob.init 0 -60 60 1
+    , oscillator2DetuneKnob = Knob.init 0 -100 100 1
+    , oscillator1WaveformBtn = Button.init
+            [ ( "sin", Sine )
+            , ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "sqr", Square )
+            ]
+  --  , oscillator2Waveform = Sawtooth
+    , fmAmountKnob = Knob.init 0 0 100 1
+    , pulseWidthKnob = Knob.init 0 0 100 1
+    , ampAttackKnob = Knob.init 0 0 100 1
+    , ampDecayKnob = Knob.init 0 0 100 1
+    , ampSustainKnob = Knob.init 0 0 100 1
+    , ampReleaseKnob = Knob.init 0 0 100 1
+    , masterVolumeKnob = Knob.init 10 0 100 1
+    , filterAttackKnob = Knob.init 0 0 100 1
+    , filterDecayKnob = Knob.init 0 0 100 1
+    , filterSustainKnob = Knob.init 0 0 100 1
+    , filterReleaseKnob = Knob.init 0 0 100 1
     }
 
 
@@ -87,11 +92,11 @@ setOscillatorsMix knobModel model =
     { model | oscillatorsMixKnob = knobModel }
 
 
-setOscillator1Waveform : Model -> OscillatorWaveform -> Model
-setOscillator1Waveform model waveform =
-    { model | oscillator1Waveform = waveform }
+setOscillator1WaveformBtn : Button.Model OscillatorWaveform -> Model-> Model
+setOscillator1WaveformBtn btn model =
+    { model | oscillator1WaveformBtn = btn }
 
 
-setOscillator2Waveform : Model -> OscillatorWaveform -> Model
-setOscillator2Waveform model waveform =
-    { model | oscillator2Waveform = waveform }
+--setOscillator2WaveformBtn : Button.Model OscillatorWaveform -> Model-> Model
+--setOscillator2WaveformBtn btn model =
+--    { model | oscillator2Waveform = btn }

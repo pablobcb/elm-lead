@@ -4,12 +4,12 @@ module Container.Panel.Update exposing (..)
 
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
-import Port exposing (..)
+import Component.NordButton as Button
 
 
 type Msg
-    = Oscillator1WaveformChange OscillatorWaveform
-    | Oscillator2WaveformChange OscillatorWaveform
+    = Oscillator1WaveformChange Button.Msg
+    --| Oscillator2WaveformChange OscillatorWaveform
     | Oscillator2SemitoneChange Knob.Msg
     | Oscillator2DetuneChange Knob.Msg
     | FMAmountChange Knob.Msg
@@ -73,12 +73,14 @@ update msg model =
                     setPulseWidth
                     PulseWidthChange
 
-            Oscillator1WaveformChange waveform ->
-                ( setOscillator1Waveform model waveform
-                , toString waveform |> oscillator1WaveformPort
-                )
+            Oscillator1WaveformChange subMsg ->
+                updateMap Button.update
+                    subMsg
+                    .oscillator1WaveformBtn
+                    setOscillator1WaveformBtn
+                    Oscillator1WaveformChange
 
-            Oscillator2WaveformChange waveform ->
-                ( setOscillator2Waveform model waveform
-                , toString waveform |> oscillator2WaveformPort
-                )
+            --Oscillator2WaveformChange waveform ->
+            --    ( setOscillator2Waveform model waveform
+            --    , toString waveform |> oscillator2WaveformPort
+            --    )
