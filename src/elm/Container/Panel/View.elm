@@ -41,10 +41,6 @@ column content =
 
 amplifier : Model -> Html Msg
 amplifier model =
-    let
-        knob =
-            nordKnob (always MasterVolumeChange) (always Cmd.none)
-    in
         section "amplifier"
             [ --knob model.ampAttackKnob "attack"
               --, knob model.ampDecayKnob "decay"
@@ -88,7 +84,7 @@ filter model =
 
 osc1 : Model -> Html Msg
 osc1 model =
-    div [ class "osc1" ]
+    div [ class "oscillators__osc1" ]
         [ Button.nordButton "Waveform"
             Oscillator1WaveformChange
             oscillator1WaveformPort
@@ -125,7 +121,7 @@ oscillatorSection model =
     section "oscillators"
         [ div [ class "oscillators" ]
             [ osc1 model, osc2 model ]
-        , div [ class "oscillators-extra" ]
+        , div [ class "oscillators__extra" ]
             [ nordKnob PulseWidthChange
                 pulseWidthPort
                 model.oscillatorsPulseWidthKnob
