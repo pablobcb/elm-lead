@@ -10,6 +10,7 @@ import Html.Attributes exposing (..)
 import Html.App exposing (map)
 import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
+import Container.Panel.View.Instructions as Instructions exposing (..)
 
 
 nordKnob :
@@ -147,6 +148,7 @@ view model =
             [ amplifier model
             , filter model
             ]
+        , Instructions.instructions 
         ]
 
 
