@@ -1,4 +1,5 @@
 elm-stuff/
 node_modules/
+dist/*.js
 *.swp
 npm-debug.log
