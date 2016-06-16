@@ -103,7 +103,7 @@ view model =
                 [0..127]
                 Midi.midiNoteOctaves
     in
-        div []
+        div [ class "virtual-keyboard"]
             [ ul [ class "keyboard" ] <| keys
             , informationBar model
             ]
