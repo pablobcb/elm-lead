@@ -46,6 +46,16 @@ noteToMidiNumber note =
         Nothing ->
             Debug.crash ("noteToMidiNumber expected a valid MIDI note" ++ (toString note))
 
+midiNoteOctaves : List Int
+midiNoteOctaves =
+            (List.concat
+                <| List.map
+                    (\octave ->
+                        List.repeat 12 octave
+                    )
+                    [-2..7]
+            )
+                ++ (List.repeat 8 8)
 
 midiNotesDict : Dict String MidiNote
 midiNotesDict =
@@ -57,15 +67,7 @@ midiNotesDict =
         midiNotes =
             [0..127]
 
-        octaves =
-            (List.concat
-                <| List.map
-                    (\octave ->
-                        List.repeat 12 octave
-                    )
-                    [-2..7]
-            )
-                ++ (List.repeat 8 8)
+        
     in
         Dict.fromList
             <| List.map3
@@ -73,5 +75,5 @@ midiNotesDict =
                     ( toString ( pianoNote, octave ), midiNote )
                 )
                 pianoNotes
-                octaves
+                midiNoteOctaves
                 midiNotes

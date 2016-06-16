@@ -14,12 +14,7 @@ import Midi exposing (..)
 
 octaveKeys : List String
 octaveKeys =
-    [ "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b" ]
-
-
-midiNotes : List Int
-midiNotes =
-    [0..127]
+    [ "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" ]
 
 
 onScreenKeyboardKeys : List String
@@ -37,21 +32,32 @@ onMouseLeave midiNote =
     midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
 
-key : Model -> String -> MidiNote -> Html Msg
-key model noteName midiNote =
-    li
-        [ getKeyClass model noteName midiNote |> class
-        , onMouseEnter midiNote
-        , onMouseLeave midiNote
-        ]
-        []
+key : Model -> String -> MidiNote -> Int -> Html Msg
+key model noteName midiNote octave =
+    let
+        isCurrentOctave =
+            (model.octave == octave)
+                || ((model.octave == octave - 1)
+                        && List.member noteName
+                            ["c", "c#","d","d#"]
+                   )
+
+        classes =
+            getKeyClass model noteName midiNote isCurrentOctave
+    in
+        li
+            [ classes |> class
+            , onMouseEnter midiNote
+            , onMouseLeave midiNote
+            ]
+            []
 
 
-getKeyClass : Model -> String -> Int -> String
-getKeyClass model noteName midiNote =
+getKeyClass : Model -> String -> Int -> Bool -> String
+getKeyClass model noteName midiNote highlight =
     let
         isSharpKey =
-            String.contains "s" noteName
+            String.contains "#" noteName
 
         middleC =
             if midiNote == 60 then
@@ -76,8 +82,14 @@ getKeyClass model noteName midiNote =
                 ""
             else
                 noteName
+
+        currentOctave =
+            if highlight then
+                "current-octave"
+            else
+                ""
     in
-        [ "key", position, keyPressed, middleC, note ]
+        [ "key", position, keyPressed, note, currentOctave, middleC ]
             |> List.filter ((/=) "")
             |> String.join " "
 
@@ -86,12 +98,21 @@ view : Model -> Html Msg
 view model =
     let
         keys =
-            List.map2 (key model) onScreenKeyboardKeys midiNotes
+            List.map3 (key model)
+                onScreenKeyboardKeys
+                [0..127]
+                Midi.midiNoteOctaves
     in
         div []
             [ ul [ class "keyboard" ] <| keys
             , informationBar model
             ]
+
+
+keyboard : (Msg -> a) -> Model -> Html a
+keyboard keyboardMsg model =
+    Html.App.map keyboardMsg
+        <| view model
 
 
 informationBar : Model -> Html Msg
@@ -113,9 +134,3 @@ informationBar model =
             [ span [ class "information-bar__item" ] [ octaveText |> text ]
             , span [ class "information-bar__item" ] [ velocityText |> text ]
             ]
-
-
-keyboard : (Msg -> a) -> Model -> Html a
-keyboard keyboardMsg model =
-    Html.App.map keyboardMsg
-        <| view model
