@@ -39,7 +39,7 @@ key model noteName midiNote octave =
             (model.octave == octave)
                 || ((model.octave == octave - 1)
                         && List.member noteName
-                            ["c", "c#","d","d#"]
+                            [ "c", "c#", "d", "d#" ]
                    )
 
         classes =
@@ -103,7 +103,7 @@ view model =
                 [0..127]
                 Midi.midiNoteOctaves
     in
-        div [ class "virtual-keyboard"]
+        div [ class "virtual-keyboard" ]
             [ ul [ class "keyboard" ] <| keys
             , informationBar model
             ]
@@ -132,5 +132,6 @@ informationBar model =
     in
         div [ class "information-bar" ]
             [ span [ class "information-bar__item" ] [ octaveText |> text ]
+            , a [ href "https://github.com/pablobcb/elm-lead"] [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
             , span [ class "information-bar__item" ] [ velocityText |> text ]
             ]
