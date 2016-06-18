@@ -23,6 +23,7 @@ type alias Model =
     }
 
 
+
 init : Model
 init =
     { octave = 3
@@ -235,3 +236,11 @@ noteOnCommand velocity midiNoteNumber =
 noteOffCommand : Velocity -> MidiNote -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> midiOutPort
+
+panic : Model -> Model 
+panic model =
+    { model
+        | pressedNotes = []
+        , midiControllerPressedNotes = []
+        , mousePressedNote = Nothing
+    }

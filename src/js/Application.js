@@ -110,6 +110,7 @@ export default class Application {
 
 		// MACRO
 		window.onblur = () => {
+			this.app.ports.panicPort.send(1)
 			this.audioEngine.panic()
 		}
 	}

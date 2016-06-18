@@ -21,11 +21,15 @@ type Msg
     | MouseClickDown
     | MidiMessageIn MidiMessage
     | NoOp
+    | Panic
 
 
 update : Msg -> KbdModel.Model -> ( KbdModel.Model, Cmd a )
 update msg model =
     case msg of
+        Panic ->
+            ( panic model, Cmd.none )
+
         MidiMessageIn midiMsg ->
             Debug.log "MIDI MSG" ( model, Cmd.none )
 

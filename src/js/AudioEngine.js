@@ -90,6 +90,7 @@ export default class AudioEngine {
 	}
 
 	panic = () => {
+		console.log("breno")
 		this.oscillator1.panic()
 		this.oscillator2.panic()
 	}

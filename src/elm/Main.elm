@@ -99,4 +99,5 @@ subscriptions model =
         , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
         , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
         , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
+        , panicPort (\_ -> OnScreenKeyboardMsg Panic)
         ]
