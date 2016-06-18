@@ -72,7 +72,6 @@ export default class Oscillator {
 	panic =	() => {
 		for(const midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				console.log("breno")
 				this.oscillators[midiNote].stop()
 			}
 		}
