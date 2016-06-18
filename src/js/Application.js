@@ -32,7 +32,7 @@ export default class Application {
 				const data = midiMessage.data
 				this.audioEngine.onMIDIMessage(data)
 				this.app.ports.midiInPort.send([
-					data[0] || null,
+					data[0],
 					data[1] || null,
 					data[2] || null
 				])

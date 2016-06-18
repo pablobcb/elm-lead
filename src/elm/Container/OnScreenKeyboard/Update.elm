@@ -31,12 +31,15 @@ update msg model =
             ( panic model, Cmd.none )
 
         MidiMessageIn midiMsg ->
-            --addPressedMidiNote model symbol
-            let
-                _ =
-                    Debug.log "MIDI MSG" midiMsg
-            in
-                ( model, Cmd.none )
+                case midiMsg of
+                    (Just 144) :: (Just midiNote) :: _ ->
+                        ( addPressedMidiNote model midiNote, Cmd.none )
+
+                    (Just 128) :: (Just midiNote) :: _ ->
+                        ( removePressedMidiNote model midiNote, Cmd.none )
+                    
+                    _ ->
+                        ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
