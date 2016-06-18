@@ -31,7 +31,12 @@ update msg model =
             ( panic model, Cmd.none )
 
         MidiMessageIn midiMsg ->
-            Debug.log "MIDI MSG" ( model, Cmd.none )
+            --addPressedMidiNote model symbol
+            let
+                _ =
+                    Debug.log "MIDI MSG" midiMsg
+            in
+                ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )

@@ -8,7 +8,7 @@ port midiOutPort : MidiMessage -> Cmd msg
 
 port midiInPort : (MidiMessage -> msg) -> Sub msg
 
-port panicPort : (Int -> msg) -> Sub msg
+port panicPort : ({} -> msg) -> Sub msg
 
 
 port masterVolumePort : Int -> Cmd msg

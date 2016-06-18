@@ -31,7 +31,11 @@ export default class Application {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
 				this.audioEngine.onMIDIMessage(data)
-				this.app.ports.midiInPort.send([data[0],data[1],data[2]])
+				this.app.ports.midiInPort.send([
+					data[0] || null,
+					data[1] || null,
+					data[2] || null
+				])
 			}
 		}
 	}
@@ -110,7 +114,7 @@ export default class Application {
 
 		// MACRO
 		window.onblur = () => {
-			this.app.ports.panicPort.send(1)
+			this.app.ports.panicPort.send()
 			this.audioEngine.panic()
 		}
 	}
