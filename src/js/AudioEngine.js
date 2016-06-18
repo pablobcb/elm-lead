@@ -1,20 +1,21 @@
 import Oscillator from './Oscillator'
+import CONSTANTS from './Constants'
 
 export default class AudioEngine {
-	constructor () {
+	constructor() {
 		this.context = new AudioContext
 
 		this.initializeMasterVolume()
 
 		this.initializeFilter()
 
-		this.initializeOscillators ()
+		this.initializeOscillators()
 
-		this.initializeOscillatorsGain ()
+		this.initializeOscillatorsGain()
 
-		this.initializeFMGain ()
+		this.initializeFMGain()
 	}
-	
+
 	initializeMasterVolume = () => {
 		this.masterVolume = this.context.createGain()
 		this.masterVolume.gain.value = 0.1
@@ -23,14 +24,16 @@ export default class AudioEngine {
 
 	initializeFilter = () => {
 		this.filter = this.context.createBiquadFilter()
-		this.filter.type = 'lowpass'
+		this.filter.type = CONSTANTS.FILTER_TYPE.LOWPASS
 		this.filter.frequency.value = 10000
 		this.filter.connect(this.masterVolume)
 	}
 
 	initializeOscillators = () => {
-		this.oscillator1 = new Oscillator(this.context, 'sine')
-		this.oscillator2 = new Oscillator(this.context, 'triangle')
+		this.oscillator1 = new Oscillator(this.context,
+			CONSTANTS.WAVEFORM_TYPE.SINE)
+		this.oscillator2 = new Oscillator(this.context,
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE)
 	}
 
 	initializeOscillatorsGain = () => {
@@ -45,10 +48,10 @@ export default class AudioEngine {
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
-	initializeFMGain  = () => {
+	initializeFMGain = () => {
 		this.fmGains = []
-		
-		for(let i=0; i<128; i++) {
+
+		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
 			this.fmGains[i].gain.value = 0
 			this.oscillator2.oscillatorGains[i].connect(this.fmGains[i])
@@ -56,7 +59,7 @@ export default class AudioEngine {
 		}
 	}
 
-	onMIDIMessage  = (data) => {
+	onMIDIMessage = (data) => {
 		//console.log(data)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
@@ -67,10 +70,10 @@ export default class AudioEngine {
 		const velocity = data[2]
 
 		switch (type) {
-			case 144:
+			case CONSTANTS.MIDI_EVENTS.NOTE_ON:
 				this.noteOn(note, velocity)
 				break
-			case 128:
+			case CONSTANTS.MIDI_EVENTS.NOTE_OFF:
 				this.noteOff(note, velocity)
 				break
 		}
@@ -101,11 +104,11 @@ export default class AudioEngine {
 		this.oscillator1Gain.gain.value = .5
 		this.oscillator2Gain.gain.value = .5
 
-		if(oscillatorsBalance > 0) {
+		if (oscillatorsBalance > 0) {
 			this.oscillator1Gain.gain.value -= gainPercentage
 			this.oscillator2Gain.gain.value += gainPercentage
 		}
-		else if(oscillatorsBalance < 0) {
+		else if (oscillatorsBalance < 0) {
 			this.oscillator1Gain.gain.value += gainPercentage
 			this.oscillator2Gain.gain.value -= gainPercentage
 		}
@@ -120,31 +123,42 @@ export default class AudioEngine {
 	}
 
 	setFmAmount = (fmAmount) => {
-		for(let i=0; i<128; i++) {
+		for (let i = 0; i < 128; i++) {
 			this.fmGains[i].gain.value = 10 * fmAmount
 		}
 	}
 
-	setPulseWidth = (pulseWith)  => {
+	setPulseWidth = (pulseWith) => {
 		this.oscillator1.setPulseWidth(pulseWith / 100)
 		this.oscillator2.setPulseWidth(pulseWith / 100)
 	}
 
-	setOscillator1Waveform = (waveform)  => {
-		const validWaveforms = ['sine', 'triangle', 'sawtooth', 'square']
+	setOscillator1Waveform = (waveform) => {
+		const validWaveforms = [
+			CONSTANTS.WAVEFORM_TYPE.SINE,
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.SQUARE
+		]
+		
 		const waveform_ = waveform.toLowerCase()
 
-		if(validWaveforms.indexOf(waveform_) == -1)
+		if (validWaveforms.indexOf(waveform_) == -1)
 			throw new Error('Invalid Waveform Type')
 
 		this.oscillator1.setWaveform(waveform_)
 	}
 
-	setOscillator2Waveform = (waveform)  => {
-		const validWaveforms = ['triangle', 'sawtooth', 'square']
+	setOscillator2Waveform = (waveform) => {
+		const validWaveforms = [
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.SQUARE
+		]
+
 		const waveform_ = waveform.toLowerCase()
 
-		if(validWaveforms.indexOf(waveform_) == -1)
+		if (validWaveforms.indexOf(waveform_) == -1)
 			throw new Error('Invalid Waveform Type')
 
 		this.oscillator2.setWaveform(waveform_)
@@ -161,12 +175,18 @@ export default class AudioEngine {
 	}
 
 	setFilterType = (filterType) => {
-		const validFilterTypes = ['lowpass', 'highpass', 'bandpass', 'notch']
+		const validFilterTypes = [
+			CONSTANTS.FILTER_TYPE.LOWPASS, 
+			CONSTANTS.FILTER_TYPE.HIGHPASS, 
+			CONSTANTS.FILTER_TYPE.BANDPASS, 
+			CONSTANTS.FILTER_TYPE.NOTCH
+		]
+
 		const filterType_ = filterType.toLowerCase()
 
-		if(validFilterTypes.indexOf(filterType_) == -1)
+		if (validFilterTypes.indexOf(filterType_) == -1)
 			throw new Error('Invalid Filter Type')
-		
+
 		this.filter.type = filterType_
 	}
 }
