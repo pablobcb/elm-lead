@@ -83,10 +83,6 @@ export default class AudioEngine {
 				this.context
 			)		
 		}	
-	
-
-		//this.adsr1 = new ADSR(10, 1, .6, 5, this.oscillator1Gain.gain, //this.context)
-		//this.adsr2 = new ADSR(10, 1, .6, 5, this.oscillator1Gain.gain, //this.context)
 		
 	}
 
@@ -103,10 +99,8 @@ export default class AudioEngine {
 	}
 
 	onMIDIMessage = (data) => {
-		//console.log(data)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
-
 		// channel agnostic message type
 		const type = data[0] & 0xf0
 		const note = data[1]
@@ -132,8 +126,14 @@ export default class AudioEngine {
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		this.oscillator1.noteOff(this.context.currentTime, midiNote)
-		this.oscillator2.noteOff(this.context.currentTime, midiNote)
+		//const at = this.oscEnvs[midiNote].stop(this.context.currentTime)
+
+
+		this.oscillator1.noteOff(at, midiNote)
+		this.osc1AmpEnvs[midiNote].off(at)
+
+		this.oscillator2.noteOff(at, midiNote)
+		this.osc2AmpEnvs[midiNote].off(at)
 	}
 
 	panic = () => {

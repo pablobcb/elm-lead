@@ -22,7 +22,7 @@ export default class ADSR {
 		this.target.linearRampToValueAtTime(this.s, now + this.a + this.d)
 	}
 
-	off = () => {
-		this.target.linearRampToValueAtTime(this.s, now + athis.r)
+	off = (at) => {
+		this.target.linearRampToValueAtTime(this.s, at + this.r)
 	}
 }
