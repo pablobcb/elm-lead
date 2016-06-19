@@ -105,6 +105,7 @@ export default class Oscillator {
 		if (midiNoteKey in this.oscillators)
 			return
 
+		const oscGain = this.oscillatorGains[midiNote]
 		const osc = this.context.createOscillator()
 
 		// PW
@@ -120,20 +121,20 @@ export default class Oscillator {
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc.detune.value = this.detune + this.semitone
 		osc.onended = () => {
-			osc.disconnect(this.oscillatorGains[midiNote])
+			osc.disconnect(oscGain)
 			this.frequencyGains[midiNote].disconnect(osc.frequency)
-			this.oscillators[midiNoteKey].disconnect(this.node)
+			//this.oscillators[midiNoteKey].disconnect(oscGain)
 			delete this.oscillators[midiNoteKey]
 		}
 
 		// FM
 		//const fmGain = this.context.createGain()
 		//this.fmGain[midiNote].gain.value = this.fmGain
-		osc.connect(this.oscillatorGains[midiNote])
+		osc.connect(oscGain)
 		this.frequencyGains[midiNote].connect(osc.frequency)
 		//this.frequencyGains[midiNoteKey] = fmGain
 
-		osc.connect(this.node)
+		oscGain.connect(this.node)
 		osc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = osc
 	}

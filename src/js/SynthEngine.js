@@ -5,6 +5,10 @@ import CONSTANTS from './Constants'
 
 export default class AudioEngine {
 	constructor() {
+		this.ampAttack = 10
+		this.ampDecay = 1
+		this.ampSustain = .6
+		this.ampRelease =  5
 		this.context = new AudioContext
 
 		this.initializeMasterVolume()
@@ -18,6 +22,8 @@ export default class AudioEngine {
 		this.initializeAmp()
 
 		this.initializeFMGain()
+
+		
 	}
 
 	initializeMasterVolume = () => {
@@ -53,8 +59,35 @@ export default class AudioEngine {
 	}
 
 	initializeAmp = () => {
-		this.adsr1 = new ADSR(3, 1, .6, 5, this.oscillator1Gain.gain, this.context)
-		this.adsr2 = new ADSR(3, 1, .6, 5, this.oscillator1Gain.gain, this.context)
+		this.osc1AmpEnvs = []
+		this.osc2AmpEnvs = []
+	
+		for (let i = 0; i < 128; i++) {
+			const osc1Gain = this.oscillator1.oscillatorGains[i].gain
+			const osc2Gain = this.oscillator2.oscillatorGains[i].gain
+			this.osc1AmpEnvs[i] = new ADSR(
+				this.ampAttack,
+				this.ampDecay,
+				this.ampSustain,
+				this.ampRelease,
+				osc1Gain, 
+				this.context
+			)
+			
+			this.osc2AmpEnvs[i] = new ADSR(
+				this.ampAttack,
+				this.ampDecay,
+				this.ampSustain,
+				this.ampRelease,
+				osc2Gain, 
+				this.context
+			)		
+		}	
+	
+
+		//this.adsr1 = new ADSR(10, 1, .6, 5, this.oscillator1Gain.gain, //this.context)
+		//this.adsr2 = new ADSR(10, 1, .6, 5, this.oscillator1Gain.gain, //this.context)
+		
 	}
 
 
@@ -90,12 +123,12 @@ export default class AudioEngine {
 	}
 
 	noteOn = (midiNote /*, velocity*/) => {
-		this.adsr1.on()
+		this.osc1AmpEnvs[midiNote].on()
 		this.oscillator1.noteOn(midiNote)
-		
-		this.adsr2.on()
+
+		this.osc2AmpEnvs[midiNote].on()
 		this.oscillator2.noteOn(midiNote)
-		
+
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
