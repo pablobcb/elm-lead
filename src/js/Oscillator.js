@@ -121,6 +121,7 @@ export default class Oscillator {
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc.detune.value = this.detune + this.semitone
 		osc.onended = () => {
+			osc.stop()
 			osc.disconnect(oscGain)
 			this.frequencyGains[midiNote].disconnect(osc.frequency)
 			//this.oscillators[midiNoteKey].disconnect(oscGain)

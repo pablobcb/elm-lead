@@ -23,6 +23,8 @@ export default class ADSR {
 	}
 
 	off = (at) => {
-		this.target.linearRampToValueAtTime(this.s, at + this.r)
+		const now = this.context.currentTime
+		this.target.cancelScheduledValues(now)
+		this.target.linearRampToValueAtTime(this.s, now + this.r)
 	}
 }

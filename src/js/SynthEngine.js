@@ -129,11 +129,11 @@ export default class AudioEngine {
 		//const at = this.oscEnvs[midiNote].stop(this.context.currentTime)
 
 
-		this.oscillator1.noteOff(at, midiNote)
-		this.osc1AmpEnvs[midiNote].off(at)
+		//this.oscillator1.noteOff(at, midiNote)
+		this.osc1AmpEnvs[midiNote].off()
 
-		this.oscillator2.noteOff(at, midiNote)
-		this.osc2AmpEnvs[midiNote].off(at)
+		//this.oscillator2.noteOff(at, midiNote)
+		this.osc2AmpEnvs[midiNote].off()
 	}
 
 	panic = () => {
