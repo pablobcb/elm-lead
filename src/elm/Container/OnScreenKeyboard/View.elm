@@ -67,9 +67,19 @@ getKeyClass model noteName midiNote highlight =
 
         keyPressed =
             if
-                List.member midiNote
-                    <| (List.map snd model.pressedNotes)
-                    ++ model.midiPressedNotes
+                let
+                    mouseNote =
+                        case model.mousePressedNote of
+                            Just note ->
+                                [ note ]
+
+                            _ ->
+                                []
+                in
+                    List.member midiNote
+                        <| (List.map snd model.pressedNotes)
+                        ++ model.midiPressedNotes
+                        ++ mouseNote
             then
                 "pressed"
             else
@@ -135,7 +145,8 @@ informationBar model =
             ("Velocity is " ++ (model |> .velocity |> toString))
     in
         div [ class "information-bar" ]
-            [ span [ class "information-bar__item" ] [ octaveText |> text ]
+            [ span [ class "information-bar__item" ]
+                [ octaveText |> text ]
             , a [ href "https://github.com/pablobcb/elm-lead" ] [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
             , span [ class "information-bar__item" ] [ velocityText |> text ]
             ]
