@@ -14,7 +14,7 @@ export default class Oscillator {
 		this.frequencyGains = [] //this.context.createGain()
 		this.oscillatorGains = []
 
-		for(let i=0; i<128; i++) {
+		for (let i = 0; i < 128; i++) {
 			this.frequencyGains[i] = this.context.createGain()
 			this.oscillatorGains[i] = this.context.createGain()
 		}
@@ -69,9 +69,9 @@ export default class Oscillator {
 		return 440 * Math.pow(2, (note - 69) / 12)
 	}
 
-	panic =	() => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+	panic = () => {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].stop()
 			}
 		}
@@ -79,12 +79,12 @@ export default class Oscillator {
 
 	noteOff = (at, midiNote) => {
 		let midiNoteKey
-		
-		if(midiNote)
+
+		if (midiNote)
 			midiNoteKey = midiNote.toString()
-		
-			
-		if(!(midiNoteKey in this.oscillators))
+
+
+		if (!(midiNoteKey in this.oscillators))
 			return
 
 		this.oscillators[midiNoteKey].stop(at)
@@ -96,13 +96,13 @@ export default class Oscillator {
 		//delete this.frequency[midiNoteKey]
 
 		// OSC
-		
+
 	}
 
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		if(midiNoteKey in this.oscillators)
+		if (midiNoteKey in this.oscillators)
 			return
 
 		const osc = this.context.createOscillator()
@@ -140,8 +140,8 @@ export default class Oscillator {
 
 	setDetune = (detune) => {
 		this.detune = detune
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].detune.value =
 					this.detune + this.semitone
 			}
@@ -150,8 +150,8 @@ export default class Oscillator {
 
 	setSemitone = (semitone) => {
 		this.semitone = semitone * 100
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].detune.value =
 					this.detune + this.semitone
 			}
@@ -159,8 +159,8 @@ export default class Oscillator {
 	}
 
 	setWaveform = (waveform) => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				/*if(waveform == 'square' || this.type == 'square') {
 					this.noteOff(Number(midiNote))
 					this.type = waveform
@@ -174,9 +174,9 @@ export default class Oscillator {
 
 	setPulseWidth = (pulseWidth) => {
 		this.pulseWidth = pulseWidth
-		if(this.type == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
-			for(const midiNote in this.oscillators) {
-				if(this.oscillators.hasOwnProperty(midiNote)) {
+		if (this.type == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
+			for (const midiNote in this.oscillators) {
+				if (this.oscillators.hasOwnProperty(midiNote)) {
 					this.oscillators[midiNote].setWidth(this.pulseWidth)
 				}
 			}
@@ -185,7 +185,7 @@ export default class Oscillator {
 
 	setFMGain = (fmGain) => {
 		this.fmGain = fmGain
-		for(let i=0; i<128; i++) {
+		for (let i = 0; i < 128; i++) {
 			this.frequencyGains[i].gain.value = this.fmGain
 			console.log(this.fmGain)
 		}

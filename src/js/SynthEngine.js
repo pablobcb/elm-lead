@@ -1,4 +1,6 @@
 import Oscillator from './Oscillator'
+import ADSR from './ADSR'
+
 import CONSTANTS from './Constants'
 
 export default class AudioEngine {
@@ -12,6 +14,8 @@ export default class AudioEngine {
 		this.initializeOscillators()
 
 		this.initializeOscillatorsGain()
+
+		this.initializeAmp()
 
 		this.initializeFMGain()
 	}
@@ -48,6 +52,12 @@ export default class AudioEngine {
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
+	initializeAmp = () => {
+		this.adsr1 = new ADSR(3, 1, .6, 5, this.oscillator1Gain.gain, this.context)
+		this.adsr2 = new ADSR(3, 1, .6, 5, this.oscillator1Gain.gain, this.context)
+	}
+
+
 	initializeFMGain = () => {
 		this.fmGains = []
 
@@ -80,8 +90,12 @@ export default class AudioEngine {
 	}
 
 	noteOn = (midiNote /*, velocity*/) => {
+		this.adsr1.on()
 		this.oscillator1.noteOn(midiNote)
+		
+		this.adsr2.on()
 		this.oscillator2.noteOn(midiNote)
+		
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
@@ -136,11 +150,11 @@ export default class AudioEngine {
 	setOscillator1Waveform = (waveform) => {
 		const validWaveforms = [
 			CONSTANTS.WAVEFORM_TYPE.SINE,
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
 			CONSTANTS.WAVEFORM_TYPE.SQUARE
 		]
-		
+
 		const waveform_ = waveform.toLowerCase()
 
 		if (validWaveforms.indexOf(waveform_) == -1)
@@ -151,8 +165,8 @@ export default class AudioEngine {
 
 	setOscillator2Waveform = (waveform) => {
 		const validWaveforms = [
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
 			CONSTANTS.WAVEFORM_TYPE.SQUARE
 		]
 
@@ -176,9 +190,9 @@ export default class AudioEngine {
 
 	setFilterType = (filterType) => {
 		const validFilterTypes = [
-			CONSTANTS.FILTER_TYPE.LOWPASS, 
-			CONSTANTS.FILTER_TYPE.HIGHPASS, 
-			CONSTANTS.FILTER_TYPE.BANDPASS, 
+			CONSTANTS.FILTER_TYPE.LOWPASS,
+			CONSTANTS.FILTER_TYPE.HIGHPASS,
+			CONSTANTS.FILTER_TYPE.BANDPASS,
 			CONSTANTS.FILTER_TYPE.NOTCH
 		]
 
