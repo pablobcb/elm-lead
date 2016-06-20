@@ -10,18 +10,12 @@ import Html.Attributes exposing (..)
 import Html.App exposing (map)
 import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
-import Container.Panel.View.Instructions as Instructions exposing (..)
 
 
-nordKnob :
-    (Knob.Msg -> a)
-    -> (Int -> Cmd Knob.Msg)
-    -> Knob.Model
-    -> String
-    -> Html a
-nordKnob op cmd model label =
+nordKnob : (Knob.Msg -> a) -> Knob.Model -> String -> Html a
+nordKnob msg model label =
     div [ class "knob" ]
-        [ Knob.knob op cmd model
+        [ Knob.knob msg model
         , div [ class "pannel__label" ] [ text label ]
         ]
 
@@ -42,17 +36,16 @@ column content =
 
 amplifier : Model -> Html Msg
 amplifier model =
-        section "amplifier"
-            [ --knob model.ampAttackKnob "attack"
-              --, knob model.ampDecayKnob "decay"
-              --, knob model.ampSustainKnob "sustain"
-              --, knob model.ampReleaseKnob "release"
-              --,
-              nordKnob MasterVolumeChange
-                masterVolumePort
-                model.ampVolumeKnob
-                "gain"
-            ]
+    section "amplifier"
+        [ --knob model.ampAttackKnob "attack"
+          --, knob model.ampDecayKnob "decay"
+          --, knob model.ampSustainKnob "sustain"
+          --, knob model.ampReleaseKnob "release"
+          --,
+          nordKnob MasterVolumeChange
+            model.ampVolumeKnob
+            "gain"
+        ]
 
 
 filter : Model -> Html Msg
@@ -60,11 +53,9 @@ filter model =
     section "filter"
         [ div [ class "filter" ]
             [ nordKnob FilterCutoffChange
-                filterCutoffPort
                 model.filterCutoffKnob
                 "Frequency"
             , nordKnob FilterQChange
-                filterQPort
                 model.filterQKnob
                 "Resonance"
             , Button.nordButton "Filter Type"
@@ -92,7 +83,6 @@ osc1 model =
             model.oscillator1WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         , nordKnob FMAmountChange
-            fmAmountPort
             model.oscillator1FmAmountKnob
             "FM"
         ]
@@ -107,11 +97,9 @@ osc2 model =
             model.oscillator2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
         , nordKnob Oscillator2SemitoneChange
-            oscillator2SemitonePort
             model.oscillator2SemitoneKnob
             "semitone"
         , nordKnob Oscillator2DetuneChange
-            oscillator2DetunePort
             model.oscillator2DetuneKnob
             "detune"
         ]
@@ -124,11 +112,9 @@ oscillatorSection model =
             [ osc1 model, osc2 model ]
         , div [ class "oscillators__extra" ]
             [ nordKnob PulseWidthChange
-                pulseWidthPort
                 model.oscillatorsPulseWidthKnob
                 "PW"
             , nordKnob OscillatorsMixChange
-                oscillatorsBalancePort
                 model.oscillatorsMixKnob
                 "mix"
             ]
@@ -148,7 +134,7 @@ view model =
             [ amplifier model
             , filter model
             ]
-        , Instructions.instructions 
+        , instructions
         ]
 
 
@@ -156,3 +142,91 @@ panel : (Msg -> a) -> Model -> Html a
 panel panelMsg model =
     Html.App.map panelMsg
         <| view model
+
+instructions : Html a
+instructions =
+    div [ class "pannel-instructions" ]
+        [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
+        , table [ class "instructions" ]
+            [ tr [ class "instructions__entry" ]
+                [ td [] [ text "Z" ]
+                , td [ class "instructions__label" ] [ text "octave down" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "X" ]
+                , td [ class "instructions__label" ] [ text "octave up" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "C" ]
+                , td [ class "instructions__label" ] [ text "velocity down" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "V" ]
+                , td [ class "instructions__label" ] [ text "velocity up" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "A" ]
+                , td [ class "instructions__label" ] [ text "play C" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "W" ]
+                , td [ class "instructions__label" ] [ text "play C#" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "S" ]
+                , td [ class "instructions__label" ] [ text "play D" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "E" ]
+                , td [ class "instructions__label" ] [ text "play D#" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "D" ]
+                , td [ class "instructions__label" ] [ text "play E" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "F" ]
+                , td [ class "instructions__label" ] [ text "play F" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "T" ]
+                , td [ class "instructions__label" ] [ text "play F#" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "G" ]
+                , td [ class "instructions__label" ] [ text "play G" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "Y" ]
+                , td [ class "instructions__label" ] [ text "play G#" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "H" ]
+                , td [ class "instructions__label" ] [ text "play A" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "U" ]
+                , td [ class "instructions__label" ] [ text "play A#" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "P" ]
+                , td [ class "instructions__label" ] [ text "play B" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "J" ]
+                , td [ class "instructions__label" ] [ text "play C 8va" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "K" ]
+                , td [ class "instructions__label" ] [ text "play C# 8va" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "O" ]
+                , td [ class "instructions__label" ] [ text "play D 8va" ]
+                ]
+            , tr [ class "instructions__entry" ]
+                [ td [] [ text "L" ]
+                , td [ class "instructions__label" ] [ text "play D# 8va" ]
+                ]
+            ]
+        ]

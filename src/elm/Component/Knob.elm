@@ -12,6 +12,14 @@ import Json.Decode as Json exposing (..)
 -- MODEL
 
 
+type alias YPos =
+    Int
+
+
+type alias Value =
+    Int
+
+
 type alias Model =
     { value : Int
     , initialValue : Int
@@ -21,11 +29,12 @@ type alias Model =
     , initMouseYPos : Int
     , mouseYPos : Int
     , isMouseClicked : Bool
+    , cmdEmitter : Value -> Cmd Msg
     }
 
 
-init : Int -> Int -> Int -> Int -> Model
-init value min max step =
+init : Value -> Value -> Value -> Value -> (Value -> Cmd Msg) -> Model
+init value min max step cmdEmitter =
     { value = value
     , initialValue = value
     , min = min
@@ -34,22 +43,15 @@ init value min max step =
     , initMouseYPos = 0
     , mouseYPos = 0
     , isMouseClicked = False
+    , cmdEmitter = cmdEmitter
     }
 
 
-type alias YPos =
-    Int
-
-
-type alias Value =
-    Int
-
-
 type Msg
-    = MouseMove (YPos -> Cmd Msg) YPos
+    = MouseMove YPos
     | MouseDown YPos
     | MouseUp
-    | Reset (Value -> Cmd Msg)
+    | Reset
 
 
 
@@ -66,54 +68,62 @@ knobStyle =
     ]
 
 
-view : (Int -> Cmd Msg) -> Model -> Html Msg
-view cmdEmmiter model =
+view : Model -> Html Msg
+view model =
     let
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
         div
             [ Html.Events.on "mousedown" <| mapPosition MouseDown
-            , Html.Events.on "dblclick" <| succeed <| Reset cmdEmmiter
+            , Html.Events.on "dblclick" <| succeed Reset
             , class "knob__dial"
             , style knobStyle
             ]
             [ Html.text (toString model.value) ]
 
 
-knob : (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
-knob knobMsg cmdEmmiter model =
+knob : (Msg -> a) -> Model -> Html a
+knob knobMsg model =
     Html.App.map knobMsg
-        <| view (\value -> value |> cmdEmmiter)
-            model
+        <| view model
 
 
 
 -- UPDATE
 
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
-        Reset cmdEmmiter ->
-            ( { model | value = model.initialValue }
-            , cmdEmmiter model.initialValue
-            )
+        Reset ->
+            Debug.log "Reset"
+                ( { model | value = model.initialValue }
+                , model.cmdEmitter model.initialValue
+                )
 
         MouseDown mouseYPos ->
-            ( { model
-                | initMouseYPos = mouseYPos
-                , mouseYPos = mouseYPos
-                , isMouseClicked = True
-              }
-            , Cmd.none
-            )
+            Debug.log "MouseDown"
+                ( { model
+                    | initMouseYPos = mouseYPos
+                    , mouseYPos = mouseYPos
+                    , isMouseClicked = True
+                  }
+                , Cmd.none
+                )
 
         MouseUp ->
-            ( { model | isMouseClicked = False }, Cmd.none )
+               Debug.log "MouseUp"
+                ( { model | isMouseClicked = False }
+                , Cmd.none
+                )
 
-        MouseMove cmdEmmiter mouseYPos ->
+        MouseMove mouseYPos ->
             let
+                _ =
+                    Debug.log "MouseUp" mouseYPos
+
                 newValue =
                     model.value
                         + (model.initMouseYPos - mouseYPos)
@@ -140,5 +150,5 @@ update message model =
                         | value = newValue
                         , initMouseYPos = mouseYPos
                       }
-                    , cmdEmmiter newValue
+                    , model.cmdEmitter newValue
                     )

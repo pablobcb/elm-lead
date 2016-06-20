@@ -19,6 +19,8 @@ type Msg
     | FilterQChange Knob.Msg
     | FilterTypeChange Button.Msg
     | MasterVolumeChange Knob.Msg
+    | MouseUp
+    | MouseMove Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -38,75 +40,81 @@ update msg model =
                 updateMap Knob.update
                     subMsg
                     .ampVolumeKnob
-                    setAmpVolumeKnob 
+                    updateAmpVolumeKnob
                     MasterVolumeChange
 
             OscillatorsMixChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillatorsMixKnob
-                    setOscillatorsMixKnob 
+                    updateOscillatorsMixKnob
                     OscillatorsMixChange
 
             Oscillator2SemitoneChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillator2SemitoneKnob
-                    setOscillator2SemitoneKnob 
+                    updateOscillator2SemitoneKnob
                     Oscillator2SemitoneChange
 
             Oscillator2DetuneChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillator2DetuneKnob
-                    setOscillator2DetuneKnob 
+                    updateOscillator2DetuneKnob
                     Oscillator2DetuneChange
 
             FMAmountChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillator1FmAmountKnob
-                    setOscillator1FmAmountKnob 
+                    updateOscillator1FmAmountKnob
                     FMAmountChange
 
             PulseWidthChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .oscillatorsPulseWidthKnob
-                    setPulseWidthKnob 
+                    updatePulseWidthKnob
                     PulseWidthChange
 
             Oscillator1WaveformChange subMsg ->
                 updateMap Button.update
                     subMsg
                     .oscillator1WaveformBtn
-                    setOscillator1WaveformBtn
+                    updateOscillator1WaveformBtn
                     Oscillator1WaveformChange
-            
+
             Oscillator2WaveformChange subMsg ->
                 updateMap Button.update
                     subMsg
                     .oscillator2WaveformBtn
-                    setOscillator2WaveformBtn
+                    updateOscillator2WaveformBtn
                     Oscillator2WaveformChange
 
             FilterCutoffChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .filterCutoffKnob
-                    setFilterCutoffKnob 
+                    updateFilterCutoffKnob
                     FilterCutoffChange
-            
+
             FilterQChange subMsg ->
                 updateMap Knob.update
                     subMsg
                     .filterQKnob
-                    setFilterQKnob 
+                    updateFilterQKnob
                     FilterQChange
 
             FilterTypeChange subMsg ->
                 updateMap Button.update
                     subMsg
                     .filterTypeBtn
-                    setFilterTypeBtn
+                    updateFilterTypeBtn
                     FilterTypeChange
+
+            MouseUp ->
+                ( Model.mouseUp model, Cmd.none )
+            
+            MouseMove yPos->
+                ( Model.mouseUp model, Cmd.none )
