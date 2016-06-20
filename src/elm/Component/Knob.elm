@@ -68,8 +68,8 @@ knobStyle =
     ]
 
 
-view : Model -> Html Msg
-view model =
+knob : Model -> Html Msg
+knob model =
     let
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
@@ -83,10 +83,10 @@ view model =
             [ Html.text (toString model.value) ]
 
 
-knob : (Msg -> a) -> Model -> Html a
-knob knobMsg model =
-    Html.App.map knobMsg
-        <| view model
+--knob : (Msg -> a) -> Model -> Html a
+--knob knobMsg model =
+--    Html.App.map knobMsg
+--        <| view model
 
 
 

@@ -14,7 +14,6 @@ import Container.OnScreenKeyboard.View as KbdView exposing (..)
 import Container.Panel.Model as PanelModel exposing (..)
 import Container.Panel.Update as PanelUpdate exposing (..)
 import Container.Panel.View as PanelView exposing (..)
-import Component.Knob as Knob exposing (..)
 
 
 main : Program Never
@@ -132,6 +131,6 @@ subscriptions model =
             <| always MouseUp
         , Mouse.moves
             (\pos ->
-                PanelMsg <| Knob.MouseMove pos.y
+                PanelMsg <| PanelUpdate.MouseMove pos.y
             )
         ]

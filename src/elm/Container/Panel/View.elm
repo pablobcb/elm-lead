@@ -12,10 +12,10 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
-nordKnob : (Knob.Msg -> a) -> Knob.Model -> String -> Html a
-nordKnob msg model label =
+--nordKnob : (Knob.Msg -> a) -> Knob.Model -> String -> Html a
+nordKnob  model label =
     div [ class "knob" ]
-        [ Knob.knob msg model
+        [ Knob.knob  model
         , div [ class "pannel__label" ] [ text label ]
         ]
 
@@ -37,12 +37,8 @@ column content =
 amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
-        [ --knob model.ampAttackKnob "attack"
-          --, knob model.ampDecayKnob "decay"
-          --, knob model.ampSustainKnob "sustain"
-          --, knob model.ampReleaseKnob "release"
-          --,
-          nordKnob MasterVolumeChange
+        [ 
+          nordKnob 
             model.ampVolumeKnob
             "gain"
         ]
@@ -52,10 +48,10 @@ filter : Model -> Html Msg
 filter model =
     section "filter"
         [ div [ class "filter" ]
-            [ nordKnob FilterCutoffChange
+            [ nordKnob 
                 model.filterCutoffKnob
                 "Frequency"
-            , nordKnob FilterQChange
+            , nordKnob 
                 model.filterQKnob
                 "Resonance"
             , Button.nordButton "Filter Type"
@@ -82,7 +78,7 @@ osc1 model =
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
-        , nordKnob FMAmountChange
+        , nordKnob  
             model.oscillator1FmAmountKnob
             "FM"
         ]
@@ -96,10 +92,10 @@ osc2 model =
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
-        , nordKnob Oscillator2SemitoneChange
+        , nordKnob 
             model.oscillator2SemitoneKnob
             "semitone"
-        , nordKnob Oscillator2DetuneChange
+        , nordKnob 
             model.oscillator2DetuneKnob
             "detune"
         ]
@@ -111,10 +107,10 @@ oscillatorSection model =
         [ div [ class "oscillators" ]
             [ osc1 model, osc2 model ]
         , div [ class "oscillators__extra" ]
-            [ nordKnob PulseWidthChange
+            [ nordKnob 
                 model.oscillatorsPulseWidthKnob
                 "PW"
-            , nordKnob OscillatorsMixChange
+            , nordKnob 
                 model.oscillatorsMixKnob
                 "mix"
             ]
@@ -143,6 +139,8 @@ panel panelMsg model =
     Html.App.map panelMsg
         <| view model
 
+
+--TODO generate this in smart way
 instructions : Html a
 instructions =
     div [ class "pannel-instructions" ]
