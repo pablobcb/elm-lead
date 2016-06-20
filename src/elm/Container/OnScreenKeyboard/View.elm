@@ -118,7 +118,7 @@ view model =
                 Midi.midiNoteOctaves
     in
         div [ class "virtual-keyboard" ]
-            [ ul [ class "keyboard" ] <| keys
+            [ ul [ class "keyboard", Html.Events.onMouseDown MouseDown ] keys
             , informationBar model
             ]
 

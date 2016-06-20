@@ -17,8 +17,8 @@ type Msg
     | MouseLeave MidiNote
     | KeyOn Char
     | KeyOff Char
-    | MouseClickUp
-    | MouseClickDown
+    | MouseUp
+    | MouseDown
     | MidiMessageIn MidiMessage
     | NoOp
     | Panic
@@ -31,20 +31,20 @@ update msg model =
             ( panic model, Cmd.none )
 
         MidiMessageIn midiMsg ->
-                case midiMsg of
-                    (Just 144) :: (Just midiNote) :: _ ->
-                        ( addPressedMidiNote model midiNote, Cmd.none )
+            case midiMsg of
+                (Just 144) :: (Just midiNote) :: _ ->
+                    ( addPressedMidiNote model midiNote, Cmd.none )
 
-                    (Just 128) :: (Just midiNote) :: _ ->
-                        ( removePressedMidiNote model midiNote, Cmd.none )
-                    
-                    _ ->
-                        ( model, Cmd.none )
+                (Just 128) :: (Just midiNote) :: _ ->
+                    ( removePressedMidiNote model midiNote, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
 
-        MouseClickDown ->
+        MouseDown ->
             let
                 model' =
                     mouseDown model
@@ -65,7 +65,7 @@ update msg model =
                     Nothing ->
                         ( model', Cmd.none )
 
-        MouseClickUp ->
+        MouseUp ->
             let
                 isKeyPressed midiNoteNumber =
                     isJust <| findPressedNote model midiNoteNumber
