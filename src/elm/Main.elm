@@ -97,7 +97,7 @@ subscriptions model =
         [ Keyboard.downs <| handleKeyDown OnScreenKeyboardMsg model.onScreenKeyboard
         , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
         , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
-        , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
+        , Mouse.ups <| always <| OnScreenKeyboardMsg Mousep
         , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
         , panicPort (\_ -> OnScreenKeyboardMsg Panic)
         ]
