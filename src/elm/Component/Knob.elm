@@ -36,7 +36,7 @@ init idKey value min max step cmdEmitter =
     , initialValue = value
     , min = min
     , max = max
-    , step = step * 20
+    , step = step
     , initMouseYPos = 0
     , mouseYPos = 0
     , isMouseClicked = False
@@ -91,6 +91,7 @@ view model =
             ]
             [ Html.text (toString model.value) ]
 
+
 knob : (Msg -> a) -> Model -> Html a
 knob knobMsg model =
     Html.App.map knobMsg
@@ -125,16 +126,17 @@ update message model =
                 )
 
         MouseUp ->
-            ( { model | isMouseClicked = False }
-            , Cmd.none
-            )
+            ( { model | isMouseClicked = False }, Cmd.none )
 
         MouseMove mouseYPos ->
             let
+                direction =
+                    Debug.log "dir" (model.initMouseYPos - mouseYPos)
+                        // abs (model.initMouseYPos - mouseYPos)
+
                 newValue =
                     model.value
-                        + (model.initMouseYPos - mouseYPos)
-                        // abs (model.initMouseYPos - mouseYPos)
+                        + (direction * model.step )
             in
                 if not model.isMouseClicked then
                     ( model, Cmd.none )

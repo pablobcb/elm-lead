@@ -21,23 +21,6 @@ type FilterType
     | Notch
 
 
-
--- this datatype is necessary because knobs are stored
--- inside a Dict, so these types will be converted to Strings
--- and used as keys for the Dict, and later referenced by the view
--- (its senseless to use Stringly Typed data
--- within a Strongly Typed Language)
---type KnobInstance
---    = OscMix
---    | PW
---    | Osc2Semitone
---    | Osc2Detune
---    | FM
---    | AmpGain
---    | FilterCutoff
---    | FilterQ
-
-
 type alias Model =
     { knobs : List Knob.Model
     , filterTypeBtn : Button.Model FilterType
@@ -52,15 +35,31 @@ type alias Model =
 
 knobs : List Knob.Model
 knobs =
-    [ Knob.init Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
-    , Knob.init Knob.PW 0 0 100 1 pulseWidthPort
-    , Knob.init Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
-    , Knob.init Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
-    , Knob.init Knob.FM 0 0 100 1 fmAmountPort
-    , Knob.init Knob.AmpGain 10 0 100 1 masterVolumePort
-    , Knob.init Knob.FilterCutoff 4000 0 10000 1 filterCutoffPort
+    [ Knob.init Knob.OscMix 0 -50 50 2 oscillatorsBalancePort
+    , Knob.init Knob.PW 0 0 100 2 pulseWidthPort
+    , Knob.init Knob.Osc2Semitone 0 -60 60 2 oscillator2SemitonePort
+    , Knob.init Knob.Osc2Detune 0 -100 100 2 oscillator2DetunePort
+    , Knob.init Knob.FM 0 0 100 2 fmAmountPort
+    , Knob.init Knob.AmpGain 10 0 100 2 masterVolumePort
+    , Knob.init Knob.FilterCutoff 4000 0 20000 50 filterCutoffPort
     , Knob.init Knob.FilterQ 1 0 45 1 filterQPort
     ]
+
+findKnob : Model -> KnobInstance -> Knob.Model
+findKnob model knobInstance=
+    let 
+        knob =
+            List.head
+                <| List.filter (\knob' -> knob'.idKey == knobInstance)
+                    model.knobs
+        in 
+            case knob of
+                Nothing ->
+                    Debug.crash "inexistent knob identifier"
+    
+                Just knobModel ->
+                    knobModel
+                    
 
 
 init : Model
