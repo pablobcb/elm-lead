@@ -5,7 +5,6 @@
   "main": "dist/index.html",
   "scripts": {
     "build": "webpack",
-
     "build:production": "webpack -p",
     "dev": "webpack-dev-server --inline --content-base dist/",
     "elm": "rm -rf elm-stuff/build-artifacts && elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
@@ -40,6 +39,7 @@
     "stylint-loader": "^1.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.0",
+    "svg-url-loader": "^1.0.3",
     "webpack": "^1.13.1"
   },
   "dependencies": {

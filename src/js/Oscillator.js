@@ -187,7 +187,6 @@ export default class Oscillator {
 		this.fmGain = fmGain
 		for(let i=0; i<128; i++) {
 			this.frequencyGains[i].gain.value = this.fmGain
-			console.log(this.fmGain)
 		}
 	}
 

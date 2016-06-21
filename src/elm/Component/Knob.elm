@@ -2,10 +2,10 @@ module Component.Knob exposing (..)
 
 --where
 
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, text, img)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
-import Html.Attributes exposing (draggable, style, class)
+import Html.Attributes exposing (draggable, style, class, alt)
 import Json.Decode as Json exposing (succeed, int, (:=))
 
 
@@ -83,11 +83,12 @@ view model =
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
-        div
+        img
             [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
             , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
             , class "knob__dial"
             , style knobStyle
+            --, alt "Kiwi standing on oval"
             ]
             [ Html.text (toString model.value) ]
 
@@ -131,12 +132,12 @@ update message model =
         MouseMove mouseYPos ->
             let
                 direction =
-                    Debug.log "dir" (model.initMouseYPos - mouseYPos)
+                    (model.initMouseYPos - mouseYPos)
                         // abs (model.initMouseYPos - mouseYPos)
 
                 newValue =
                     model.value
-                        + (direction * model.step )
+                        + (direction * model.step)
             in
                 if not model.isMouseClicked then
                     ( model, Cmd.none )

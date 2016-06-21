@@ -1,7 +1,7 @@
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
-	entry: './src/js/main.js',
+	entry: './src/js/index.js',
 	output: {
 		path: `${__dirname}/dist`,
 		filename: 'bundle.js'
@@ -19,6 +19,7 @@ module.exports = {
 			}
 		],
 		loaders: [
+			{	test: /\.svg/, loader: 'svg-url-loader'},
 			{
 				test: /\.styl$/,
 				loader: 'style!css!postcss!stylus'
