@@ -14,6 +14,7 @@ import Container.OnScreenKeyboard.View as KbdView exposing (..)
 import Container.Panel.Model as PanelModel exposing (..)
 import Container.Panel.Update as PanelUpdate exposing (..)
 import Container.Panel.View as PanelView exposing (..)
+import Component.Knob as Knob exposing (..)
 
 
 main : Program Never
@@ -70,7 +71,8 @@ update msg model =
         MouseUp ->
             let
                 ( updatedPanel, panelCmd ) =
-                    PanelUpdate.update PanelUpdate.MouseUp model.panel
+                    PanelUpdate.update (PanelUpdate.KnobMsg Knob.MouseUp)
+                        model.panel
 
                 model' =
                     updatePanel updatedPanel model
@@ -118,19 +120,19 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ midiInPort 
-            (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
-        , panicPort 
-            <| always <| OnScreenKeyboardMsg Panic
+        [ midiInPort (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
+        , panicPort
+            <| always
+            <| OnScreenKeyboardMsg Panic
         , Keyboard.downs
             <| handleKeyDown OnScreenKeyboardMsg
                 model.onScreenKeyboard
-        , Keyboard.ups 
+        , Keyboard.ups
             <| handleKeyUp OnScreenKeyboardMsg
-        , Mouse.ups 
+        , Mouse.ups
             <| always MouseUp
         , Mouse.moves
-            (\pos ->
-                PanelMsg <| PanelUpdate.MouseMove pos.y
+            (\{ y } ->
+                y |> Knob.MouseMove |> PanelUpdate.KnobMsg |> PanelMsg
             )
         ]

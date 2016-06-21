@@ -5,16 +5,17 @@ module Container.Panel.Update exposing (..)
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
 import Component.NordButton as Button
+import Dict exposing (..)
 
 
 type Msg
     = Oscillator1WaveformChange Button.Msg
     | Oscillator2WaveformChange Button.Msg
     | FilterTypeChange Button.Msg
-    | MouseUp
-    | MouseMove Int
+    | KnobMsg Knob.Msg
 
 
+--TODO: put buttons inside dicts
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
@@ -27,15 +28,22 @@ update msg model =
                 , Cmd.map msg' childCmd
                 )
 
-        updateKnobs : Msg -> Knob.Msg -> ( Model, Cmd Msg )
-        updateKnobs  msg' knobMsg =
+        updateKnobs : Knob.Msg -> Msg -> ( Model, Cmd Msg )
+        updateKnobs knobMsg msg' =
             let
-                ( knobs, cmds ) =
+                ( knobNames, knobModels ) =
+                    List.unzip <| Dict.toList model.knobs
+
+                ( knobModels', cmds ) =
                     List.unzip
                         <| List.map
                             --(Knob.update << knobMsg)
                             (\knob -> Knob.update knobMsg knob)
-                            model.knobs
+                            knobModels
+
+                knobs =
+                    Dict.fromList
+                        <| List.map2 (,) knobNames knobModels'
             in
                 ( { model | knobs = knobs }
                 , Cmd.map (always msg') <| Cmd.batch cmds
@@ -63,9 +71,6 @@ update msg model =
                     updateFilterTypeBtn
                     FilterTypeChange
 
-            MouseUp ->
-                updateKnobs MouseUp Knob.MouseUp
+            KnobMsg subMsg ->
+                updateKnobs subMsg (KnobMsg subMsg)
  
-
-            MouseMove yPos ->
-                updateKnobs (MouseMove yPos) (Knob.MouseMove yPos)
