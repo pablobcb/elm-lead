@@ -12,7 +12,7 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
---nordKnob : Model -> b -> String -> Html Msg
+nordKnob : Model -> Knob.KnobInstance -> String -> Html Msg
 nordKnob model knobInstance labelTxt =
     let
         knob =

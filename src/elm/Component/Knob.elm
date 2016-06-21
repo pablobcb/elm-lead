@@ -6,7 +6,7 @@ import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class)
-import Json.Decode as Json exposing (..)
+import Json.Decode as Json exposing (succeed, int, (:=))
 
 
 -- MODEL
@@ -26,8 +26,7 @@ type alias Model =
     , mouseYPos : Int
     , isMouseClicked : Bool
     , cmdEmitter : Int -> Cmd Msg
-    , idKey :KnobInstance
-
+    , idKey : KnobInstance
     }
 
 
@@ -92,11 +91,6 @@ view model =
             ]
             [ Html.text (toString model.value) ]
 
-
-
---knob : (Msg -> a) -> Model -> Html a
-
-
 knob : (Msg -> a) -> Model -> Html a
 knob knobMsg model =
     Html.App.map knobMsg
@@ -105,25 +99,24 @@ knob knobMsg model =
 
 
 -- UPDATE
---update : Msg -> Model a -> ( Model a, Cmd Msg )
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         Reset idKey ->
-            Debug.log "Reset"
-                <| if model.idKey /= idKey then
-                    ( model, Cmd.none )
-                   else
-                    ( { model | value = model.initialValue }
-                    , model.cmdEmitter model.initialValue
-                    )
+            if model.idKey /= idKey then
+                ( model, Cmd.none )
+            else
+                ( { model | value = model.initialValue }
+                , model.cmdEmitter model.initialValue
+                )
 
         MouseDown idKey mouseYPos ->
             if model.idKey /= idKey then
                 ( model, Cmd.none )
             else
-                Debug.log "eu" <| ( { model
+                ( { model
                     | initMouseYPos = mouseYPos
                     , mouseYPos = mouseYPos
                     , isMouseClicked = True
@@ -132,14 +125,12 @@ update message model =
                 )
 
         MouseUp ->
-            Debug.log "MouseUp"
-                ( { model | isMouseClicked = False }
-                , Cmd.none
-                )
+            ( { model | isMouseClicked = False }
+            , Cmd.none
+            )
 
         MouseMove mouseYPos ->
             let
-                --_ =                   Debug.log "MouseUp" mouseYPos
                 newValue =
                     model.value
                         + (model.initMouseYPos - mouseYPos)

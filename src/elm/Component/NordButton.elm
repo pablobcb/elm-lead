@@ -7,7 +7,6 @@ import Html.Events exposing (..)
 import Html.App exposing (map)
 import Html.Attributes exposing (..)
 import Lazy.List exposing (..)
-import Maybe exposing (..)
 
 
 -- MODEL
