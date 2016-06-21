@@ -13,9 +13,7 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
---nordKnob : (Knob.Msg -> a) -> Knob.Model -> String -> Html a
-
-
+nordKnob : Model -> b -> String -> Html Msg
 nordKnob model knobInstance labelTxt =
     case Dict.get (toString knobInstance) model.knobs of
         Nothing ->
@@ -101,9 +99,11 @@ oscillatorSection model =
         [ div [ class "oscillators" ]
             [ osc1 model, osc2 model ]
         , div [ class "oscillators__extra" ]
-            [ nordKnob model Knob.PW
+            [ nordKnob model
+                Knob.PW
                 "PW"
-            , nordKnob model Knob.OscMix
+            , nordKnob model
+                Knob.OscMix
                 "mix"
             ]
         ]
@@ -112,12 +112,7 @@ oscillatorSection model =
 view : Model -> Html Msg
 view model =
     div [ class "panel" ]
-        [ --column
-          --  [ section "lfo1" [ text "breno" ]
-          --  , section "lfo2" [ text "magro" ]
-          --  , section "mod env" [ text "forest psy" ]
-          --  ],
-          column [ oscillatorSection model ]
+        [ column [ oscillatorSection model ]
         , column
             [ amplifier model
             , filter model
@@ -132,95 +127,35 @@ panel panelMsg model =
         <| view model
 
 
-
---TODO generate this in smart way
---list of pair instruction text and map
-
-
 instructions : Html a
 instructions =
-    div [ class "pannel-instructions" ]
-        [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
-        , table [ class "instructions" ]
-            [ tr [ class "instructions__entry" ]
-                [ td [] [ text "Z" ]
-                , td [ class "instructions__label" ] [ text "octave down" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "X" ]
-                , td [ class "instructions__label" ] [ text "octave up" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "C" ]
-                , td [ class "instructions__label" ] [ text "velocity down" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "V" ]
-                , td [ class "instructions__label" ] [ text "velocity up" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "A" ]
-                , td [ class "instructions__label" ] [ text "play C" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "W" ]
-                , td [ class "instructions__label" ] [ text "play C#" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "S" ]
-                , td [ class "instructions__label" ] [ text "play D" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "E" ]
-                , td [ class "instructions__label" ] [ text "play D#" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "D" ]
-                , td [ class "instructions__label" ] [ text "play E" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "F" ]
-                , td [ class "instructions__label" ] [ text "play F" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "T" ]
-                , td [ class "instructions__label" ] [ text "play F#" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "G" ]
-                , td [ class "instructions__label" ] [ text "play G" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "Y" ]
-                , td [ class "instructions__label" ] [ text "play G#" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "H" ]
-                , td [ class "instructions__label" ] [ text "play A" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "U" ]
-                , td [ class "instructions__label" ] [ text "play A#" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "P" ]
-                , td [ class "instructions__label" ] [ text "play B" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "J" ]
-                , td [ class "instructions__label" ] [ text "play C 8va" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "K" ]
-                , td [ class "instructions__label" ] [ text "play C# 8va" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "O" ]
-                , td [ class "instructions__label" ] [ text "play D 8va" ]
-                ]
-            , tr [ class "instructions__entry" ]
-                [ td [] [ text "L" ]
-                , td [ class "instructions__label" ] [ text "play D# 8va" ]
-                ]
+     let
+        hotKeys =
+            [ "Z" , "X" , "C" , "V" , "A" , "W" , "S" , "E"
+            , "D" , "F" , "T" , "G" , "Y" , "H" , "U" , "J", "K"
+            , "O" , "L" , "P"
             ]
-        ]
+
+        instructions =
+            [ "octave down" , "octave up" , "velocity down" , "velocity up" ]
+                ++ (List.map ((++) "play ")
+                        [ "C" , "C#" , "D" , "D#" , "E" , "F"
+                        , "F#" , "G" , "G#" , "A" , "A#" , "B"
+                        , "C 8va" , "C# 8va" , "D 8va" , "D# 8va"
+                        ]
+                   )
+
+    in
+        div [ class "pannel-instructions" ]
+            [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
+            , table [ class "instructions" ]
+                <| List.map2
+                    (\hotkey instruction ->
+                        tr [ class "instructions__entry" ]
+                            [ td [] [ text hotkey ]
+                            , td [ class "instructions__label" ] [ text instruction ]
+                            ]
+                    )
+                    hotKeys
+                    instructions
+            ]
