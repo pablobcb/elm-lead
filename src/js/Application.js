@@ -1,6 +1,6 @@
 import Elm from '../elm/Main.elm'
 
-import AudioEngine from './AudioEngine'
+import SynthEngine from './SynthEngine'
 
 export default class Application {
 
@@ -11,7 +11,7 @@ export default class Application {
 			navigator
 				.requestMIDIAccess()
 				.then(this.onMIDISuccess.bind(this), this.onMIDIFailure)
-				.then(this.initializeAudioEngine.bind(this))
+				.then(this.initializesynthEngine.bind(this))
 		} else {
 			this.onMIDIFailure()
 		}
@@ -30,7 +30,7 @@ export default class Application {
 		for (const input of this.midiAccess.inputs.values()) {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
-				this.audioEngine.onMIDIMessage(data)
+				this.synthEngine.onMIDIMessage(data)
 				this.app.ports.midiInPort.send([
 					data[0],
 					data[1] || null,
@@ -40,9 +40,9 @@ export default class Application {
 		}
 	}
 
-	initializeAudioEngine = () => {
+	initializesynthEngine = () => {
 
-		this.audioEngine = new AudioEngine()
+		this.synthEngine = new SynthEngine()
 
 		// MIDI
 		if(this.midiAccess)
@@ -50,72 +50,72 @@ export default class Application {
 
 		this.app.ports.midiOutPort
 			.subscribe((midiDataArray) => {
-				this.audioEngine.onMIDIMessage(midiDataArray)
+				this.synthEngine.onMIDIMessage(midiDataArray)
 			})
 
 		// VOLUME
 		this.app.ports.masterVolumePort
 			.subscribe((masterVolumeValue) => {
 				console.log(masterVolumeValue)
-				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
+				this.synthEngine.setMasterVolumeGain(masterVolumeValue)
 			})
 
 		// OSCILLATORS
 		this.app.ports.oscillatorsBalancePort
 			.subscribe((oscillatorsBalanceValue) => {
-				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
+				this.synthEngine.setOscillatorsBalance(oscillatorsBalanceValue)
 			})
 
 		this.app.ports.oscillator2SemitonePort
 			.subscribe((oscillatorSemitoneValue) => {
-				this.audioEngine.setOscillator2Semitone(oscillatorSemitoneValue)
+				this.synthEngine.setOscillator2Semitone(oscillatorSemitoneValue)
 			})
 
 		this.app.ports.oscillator2DetunePort
 			.subscribe((oscillatorDetuneValue) => {
-				this.audioEngine.setOscillator2Detune(oscillatorDetuneValue)
+				this.synthEngine.setOscillator2Detune(oscillatorDetuneValue)
 			})
 
 		this.app.ports.fmAmountPort
 			.subscribe((fmAmountValue) => {
-				this.audioEngine.setFmAmount(fmAmountValue)
+				this.synthEngine.setFmAmount(fmAmountValue)
 			})
 
 		this.app.ports.pulseWidthPort
 			.subscribe((pulseWidthValue) => {
-				this.audioEngine.setPulseWidth(pulseWidthValue)
+				this.synthEngine.setPulseWidth(pulseWidthValue)
 			})
 
 		this.app.ports.oscillator1WaveformPort
 			.subscribe((waveform) => {
-				this.audioEngine.setOscillator1Waveform(waveform)
+				this.synthEngine.setOscillator1Waveform(waveform)
 			})
 
 		this.app.ports.oscillator2WaveformPort
 			.subscribe((waveform) => {
-				this.audioEngine.setOscillator2Waveform(waveform)
+				this.synthEngine.setOscillator2Waveform(waveform)
 			})
 
 		// FILTER
 		this.app.ports.filterCutoffPort
 			.subscribe((freq) => {
-				this.audioEngine.setFilterCutoff(freq)
+				this.synthEngine.setFilterCutoff(freq)
 			})
 
 		this.app.ports.filterQPort
 			.subscribe((amount) => {
-				this.audioEngine.setFilterQ(amount)
+				this.synthEngine.setFilterQ(amount)
 			})
 		
 		this.app.ports.filterTypePort
 			.subscribe((filterType) => {
-				this.audioEngine.setFilterType(filterType)
+				this.synthEngine.setFilterType(filterType)
 			})
 
 		// MACRO
 		window.onblur = () => {
 			this.app.ports.panicPort.send()
-			this.audioEngine.panic()
+			this.synthEngine.panic()
 		}
 	}
 

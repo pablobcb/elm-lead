@@ -1,8 +1,14 @@
 import Oscillator from './Oscillator'
+import ADSR from './ADSR'
+
 import CONSTANTS from './Constants'
 
 export default class AudioEngine {
 	constructor() {
+		this.ampAttack = 10
+		this.ampDecay = 1
+		this.ampSustain = .6
+		this.ampRelease =  5
 		this.context = new AudioContext
 
 		this.initializeMasterVolume()
@@ -13,7 +19,11 @@ export default class AudioEngine {
 
 		this.initializeOscillatorsGain()
 
+		this.initializeAmp()
+
 		this.initializeFMGain()
+
+		
 	}
 
 	initializeMasterVolume = () => {
@@ -48,6 +58,35 @@ export default class AudioEngine {
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
+	initializeAmp = () => {
+		this.osc1AmpEnvs = []
+		this.osc2AmpEnvs = []
+	
+		for (let i = 0; i < 128; i++) {
+			const osc1Gain = this.oscillator1.oscillatorGains[i].gain
+			const osc2Gain = this.oscillator2.oscillatorGains[i].gain
+			this.osc1AmpEnvs[i] = new ADSR(
+				this.ampAttack,
+				this.ampDecay,
+				this.ampSustain,
+				this.ampRelease,
+				osc1Gain, 
+				this.context
+			)
+			
+			this.osc2AmpEnvs[i] = new ADSR(
+				this.ampAttack,
+				this.ampDecay,
+				this.ampSustain,
+				this.ampRelease,
+				osc2Gain, 
+				this.context
+			)		
+		}	
+		
+	}
+
+
 	initializeFMGain = () => {
 		this.fmGains = []
 
@@ -60,10 +99,8 @@ export default class AudioEngine {
 	}
 
 	onMIDIMessage = (data) => {
-		//console.log(data)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf
-
 		// channel agnostic message type
 		const type = data[0] & 0xf0
 		const note = data[1]
@@ -80,13 +117,23 @@ export default class AudioEngine {
 	}
 
 	noteOn = (midiNote /*, velocity*/) => {
+		this.osc1AmpEnvs[midiNote].on()
 		this.oscillator1.noteOn(midiNote)
+
+		this.osc2AmpEnvs[midiNote].on()
 		this.oscillator2.noteOn(midiNote)
+
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		this.oscillator1.noteOff(this.context.currentTime, midiNote)
-		this.oscillator2.noteOff(this.context.currentTime, midiNote)
+		//const at = this.oscEnvs[midiNote].stop(this.context.currentTime)
+
+
+		//this.oscillator1.noteOff(at, midiNote)
+		this.osc1AmpEnvs[midiNote].off()
+
+		//this.oscillator2.noteOff(at, midiNote)
+		this.osc2AmpEnvs[midiNote].off()
 	}
 
 	panic = () => {
@@ -136,11 +183,11 @@ export default class AudioEngine {
 	setOscillator1Waveform = (waveform) => {
 		const validWaveforms = [
 			CONSTANTS.WAVEFORM_TYPE.SINE,
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
 			CONSTANTS.WAVEFORM_TYPE.SQUARE
 		]
-		
+
 		const waveform_ = waveform.toLowerCase()
 
 		if (validWaveforms.indexOf(waveform_) == -1)
@@ -151,8 +198,8 @@ export default class AudioEngine {
 
 	setOscillator2Waveform = (waveform) => {
 		const validWaveforms = [
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE, 
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH, 
+			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
 			CONSTANTS.WAVEFORM_TYPE.SQUARE
 		]
 
@@ -176,9 +223,9 @@ export default class AudioEngine {
 
 	setFilterType = (filterType) => {
 		const validFilterTypes = [
-			CONSTANTS.FILTER_TYPE.LOWPASS, 
-			CONSTANTS.FILTER_TYPE.HIGHPASS, 
-			CONSTANTS.FILTER_TYPE.BANDPASS, 
+			CONSTANTS.FILTER_TYPE.LOWPASS,
+			CONSTANTS.FILTER_TYPE.HIGHPASS,
+			CONSTANTS.FILTER_TYPE.BANDPASS,
 			CONSTANTS.FILTER_TYPE.NOTCH
 		]
 
