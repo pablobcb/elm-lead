@@ -2,10 +2,10 @@ module Component.Knob exposing (..)
 
 --where
 
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, text, img)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
-import Html.Attributes exposing (draggable, style, class)
+import Html.Attributes exposing (draggable, style, class, alt, src)
 import Json.Decode as Json exposing (succeed, int, (:=))
 
 
@@ -36,7 +36,7 @@ init idKey value min max step cmdEmitter =
     , initialValue = value
     , min = min
     , max = max
-    , step = step * 20
+    , step = step
     , initMouseYPos = 0
     , mouseYPos = 0
     , isMouseClicked = False
@@ -95,15 +95,18 @@ view model =
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
-        div
+        img
             [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
             , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
             , class "knob__dial"
             , style knobStyle
+            , alt "oops!"
+            , src "knob-fg.svg"
             ]
             [ div [ class "knob__indicator"]
                 [ Html.text (toString model.value) ]
             ]
+
 
 knob : (Msg -> a) -> Model -> Html a
 knob knobMsg model =
@@ -139,16 +142,17 @@ update message model =
                 )
 
         MouseUp ->
-            ( { model | isMouseClicked = False }
-            , Cmd.none
-            )
+            ( { model | isMouseClicked = False }, Cmd.none )
 
         MouseMove mouseYPos ->
             let
+                direction =
+                    (model.initMouseYPos - mouseYPos)
+                        // abs (model.initMouseYPos - mouseYPos)
+
                 newValue =
                     model.value
-                        + (model.initMouseYPos - mouseYPos)
-                        // abs (model.initMouseYPos - mouseYPos)
+                        + (direction * model.step)
             in
                 if not model.isMouseClicked then
                     ( model, Cmd.none )
