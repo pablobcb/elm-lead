@@ -3,16 +3,9 @@ module Container.OnScreenKeyboard.Model exposing (..)
 -- where
 
 import List exposing (..)
-import Maybe.Extra exposing (..)
 import Note exposing (..)
 import Midi exposing (..)
 import Port exposing (..)
-import String exposing (..)
-import Html exposing (..)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (class)
-import Html.App exposing (map)
-import Char exposing (..)
 
 
 type alias PressedKey =
@@ -26,7 +19,7 @@ type alias Model =
     , clickedAndHovering : Bool
     , mouseHoverNote : Maybe MidiNote
     , mousePressedNote : Maybe MidiNote
-    , midiControllerPressedNotes : List MidiNote
+    , midiPressedNotes : List MidiNote
     }
 
 
@@ -38,7 +31,7 @@ init =
     , clickedAndHovering = False
     , mouseHoverNote = Nothing
     , mousePressedNote = Nothing
-    , midiControllerPressedNotes = []
+    , midiPressedNotes = []
     }
 
 
@@ -216,12 +209,38 @@ removeClickedNote model midiNote =
 
 addPressedNote : Model -> Char -> Model
 addPressedNote model symbol =
-    { model | pressedNotes = (.pressedNotes model) ++ [ ( symbol, keyToMidiNoteNumber ( symbol, .octave model ) ) ] }
+    { model
+        | pressedNotes =
+            (.pressedNotes model)
+                ++ [ ( symbol, keyToMidiNoteNumber ( symbol, .octave model ) ) ]
+    }
 
 
 removePressedNote : Model -> Char -> Model
 removePressedNote model symbol =
-    { model | pressedNotes = List.filter (\( symbol', _ ) -> symbol /= symbol') model.pressedNotes }
+    { model
+        | pressedNotes =
+            List.filter (\( symbol', _ ) -> symbol /= symbol')
+                model.pressedNotes
+    }
+
+
+addPressedMidiNote : Model -> MidiNote -> Model
+addPressedMidiNote model midiNote =
+    { model
+        | midiPressedNotes =
+            (.midiPressedNotes model)
+                ++ [ midiNote ]
+    }
+
+
+removePressedMidiNote : Model -> MidiNote -> Model
+removePressedMidiNote model midiNote =
+    { model
+        | midiPressedNotes =
+            List.filter (\midiNote' -> midiNote /= midiNote')
+                model.midiPressedNotes
+    }
 
 
 findPressedKey : Model -> Char -> Maybe PressedKey
@@ -242,3 +261,12 @@ noteOnCommand velocity midiNoteNumber =
 noteOffCommand : Velocity -> MidiNote -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> midiOutPort
+
+
+panic : Model -> Model
+panic model =
+    { model
+        | pressedNotes = []
+        , midiPressedNotes = []
+        , mousePressedNote = Nothing
+    }

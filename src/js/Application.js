@@ -22,7 +22,7 @@ export default class Application {
 	}
 
 	onMIDIFailure = () => {
-		alert('Your browser doesnt support WebMIDI API. Use WebMIDIAPIShim')
+		alert('Your browser doesnt support WebMIDI API. Use another browser or install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
 	initializeMidiAccess = () => {
@@ -31,7 +31,11 @@ export default class Application {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
 				this.audioEngine.onMIDIMessage(data)
-				this.app.ports.midiInPort.send([data[0],data[1],data[2]])
+				this.app.ports.midiInPort.send([
+					data[0],
+					data[1] || null,
+					data[2] || null
+				])
 			}
 		}
 	}
@@ -40,6 +44,7 @@ export default class Application {
 
 		this.audioEngine = new AudioEngine()
 
+		// MIDI
 		if(this.midiAccess)
 			this.initializeMidiAccess()
 
@@ -48,11 +53,14 @@ export default class Application {
 				this.audioEngine.onMIDIMessage(midiDataArray)
 			})
 
+		// VOLUME
 		this.app.ports.masterVolumePort
 			.subscribe((masterVolumeValue) => {
+				console.log(masterVolumeValue)
 				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
 
+		// OSCILLATORS
 		this.app.ports.oscillatorsBalancePort
 			.subscribe((oscillatorsBalanceValue) => {
 				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
@@ -88,7 +96,25 @@ export default class Application {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
+		// FILTER
+		this.app.ports.filterCutoffPort
+			.subscribe((freq) => {
+				this.audioEngine.setFilterCutoff(freq)
+			})
+
+		this.app.ports.filterQPort
+			.subscribe((amount) => {
+				this.audioEngine.setFilterQ(amount)
+			})
+		
+		this.app.ports.filterTypePort
+			.subscribe((filterType) => {
+				this.audioEngine.setFilterType(filterType)
+			})
+
+		// MACRO
 		window.onblur = () => {
+			this.app.ports.panicPort.send()
 			this.audioEngine.panic()
 		}
 	}

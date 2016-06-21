@@ -9,6 +9,9 @@ port midiOutPort : MidiMessage -> Cmd msg
 port midiInPort : (MidiMessage -> msg) -> Sub msg
 
 
+port panicPort : ({} -> msg) -> Sub msg
+
+
 port masterVolumePort : Int -> Cmd msg
 
 
@@ -31,3 +34,12 @@ port fmAmountPort : Int -> Cmd msg
 
 
 port pulseWidthPort : Int -> Cmd msg
+
+
+port filterCutoffPort : Int -> Cmd msg
+
+
+port filterQPort : Int -> Cmd msg
+
+
+port filterTypePort : String -> Cmd msg

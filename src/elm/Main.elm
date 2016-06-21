@@ -14,6 +14,7 @@ import Container.OnScreenKeyboard.View as KbdView exposing (..)
 import Container.Panel.Model as PanelModel exposing (..)
 import Container.Panel.Update as PanelUpdate exposing (..)
 import Container.Panel.View as PanelView exposing (..)
+import Component.Knob as Knob exposing (..)
 
 
 main : Program Never
@@ -57,27 +58,52 @@ updatePanel panel model =
 type Msg
     = PanelMsg PanelUpdate.Msg
     | OnScreenKeyboardMsg KbdUpdate.Msg
+    | MouseUp
+
+
+
+--update map
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        MouseUp ->
+            let
+                ( updatedPanel, panelCmd ) =
+                    PanelUpdate.update (PanelUpdate.KnobMsg Knob.MouseUp)
+                        model.panel
+
+                model' =
+                    updatePanel updatedPanel model
+
+                ( updatedKbd, kbdCmd ) =
+                    KbdUpdate.update KbdUpdate.MouseUp model'.onScreenKeyboard
+
+                model'' =
+                    updateOnScreenKeyboard updatedKbd model'
+            in
+                ( model''
+                , Cmd.map (always MouseUp)
+                    <| Cmd.batch [ panelCmd, kbdCmd ]
+                )
+
         PanelMsg subMsg ->
             let
-                ( updatedPanel, _ ) =
+                ( updatedPanel, panelCmd ) =
                     PanelUpdate.update subMsg model.panel
             in
                 ( updatePanel updatedPanel model
-                , Cmd.map PanelMsg Cmd.none
+                , Cmd.map PanelMsg panelCmd
                 )
 
         OnScreenKeyboardMsg subMsg ->
             let
-                ( updatedKbd, _ ) =
+                ( updatedKbd, kbdCmd ) =
                     KbdUpdate.update subMsg model.onScreenKeyboard
             in
                 ( updateOnScreenKeyboard updatedKbd model
-                , Cmd.map OnScreenKeyboardMsg Cmd.none
+                , Cmd.map OnScreenKeyboardMsg kbdCmd
                 )
 
 
@@ -94,9 +120,19 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Keyboard.downs <| handleKeyDown OnScreenKeyboardMsg model.onScreenKeyboard
-        , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
-        , Mouse.downs <| always <| OnScreenKeyboardMsg MouseClickDown
-        , Mouse.ups <| always <| OnScreenKeyboardMsg MouseClickUp
-        , midiInPort (\m -> OnScreenKeyboardMsg <| MidiMessageIn m)
+        [ midiInPort (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
+        , panicPort
+            <| always
+            <| OnScreenKeyboardMsg Panic
+        , Keyboard.downs
+            <| handleKeyDown OnScreenKeyboardMsg
+                model.onScreenKeyboard
+        , Keyboard.ups
+            <| handleKeyUp OnScreenKeyboardMsg
+        , Mouse.ups
+            <| always MouseUp
+        , Mouse.moves
+            (\{ y } ->
+                y |> Knob.MouseMove |> PanelUpdate.KnobMsg |> PanelMsg
+            )
         ]

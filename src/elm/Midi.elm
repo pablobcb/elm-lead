@@ -11,20 +11,22 @@ type alias MidiNote =
 
 
 type alias MidiMessage =
-    List Int
+    List (Maybe Int)
 
 
+noteOn : Int
 noteOn =
     144
 
 
+noteOff : Int
 noteOff =
     128
 
 
 makeMidiMessage : MidiNote -> Velocity -> Int -> MidiMessage
 makeMidiMessage note velocity type_ =
-    [ type_, note, velocity ]
+    List.map Just [ type_, note, velocity ]
 
 
 noteOnMessage : MidiNote -> Velocity -> MidiMessage
@@ -47,6 +49,18 @@ noteToMidiNumber note =
             Debug.crash ("noteToMidiNumber expected a valid MIDI note" ++ (toString note))
 
 
+midiNoteOctaves : List Int
+midiNoteOctaves =
+    (List.concat
+        <| List.map
+            (\octave ->
+                List.repeat 12 octave
+            )
+            [-2..7]
+    )
+        ++ (List.repeat 8 8)
+
+
 midiNotesDict : Dict String MidiNote
 midiNotesDict =
     let
@@ -56,16 +70,6 @@ midiNotesDict =
 
         midiNotes =
             [0..127]
-
-        octaves =
-            (List.concat
-                <| List.map
-                    (\octave ->
-                        List.repeat 12 octave
-                    )
-                    [-2..7]
-            )
-                ++ (List.repeat 8 8)
     in
         Dict.fromList
             <| List.map3
@@ -73,5 +77,5 @@ midiNotesDict =
                     ( toString ( pianoNote, octave ), midiNote )
                 )
                 pianoNotes
-                octaves
+                midiNoteOctaves
                 midiNotes

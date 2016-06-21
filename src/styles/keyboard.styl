@@ -1,3 +1,7 @@
+.virtual-keyboard
+	position fixed
+	bottom 0
+	
 .keyboard
 	margin $unit
 	padding 0
@@ -5,6 +9,7 @@
 	display flex
 	align-items flex-end
 	justify-content center
+
 
 	.key
 		margin 0
@@ -16,21 +21,29 @@
 		&.lower
 			height $lower-key-height
 			width $lower-key-width
-			z-index 1
+
 			border-left $hair-space solid
-			border-bottom $hair-space solid #bbb
-			background linear-gradient(to bottom, #eee 0, #fff 100%)
+			border-bottom $hair-space solid $border-bottom-color
+			background linear-gradient(to bottom, $key-gradient-from-color 0,  $key-gradient-to-color 100%)
+
+			&.current-octave
+				background $octave-highlight-color
+
+			
 
 			&:active
-				border-top $hair-space solid #777
-				border-left $hair-space solid #999
-				border-bottom $hair-space solid #999
-				background  linear-gradient(to bottom, #fff 0, #e9e9e9 100%)
-				box-shadow 2px 0 3px rgba(0,0,0, .1) inset, -5px 5px 20px rgba(0,0,0, .2) inset,0 0 3px rgba(0,0,0, .2)
+				//border-top $hair-space solid $border-top-color
+				//border-left $hair-space solid $border-left-color
+				//border-bottom $hair-space solid $border-bottom-color
+				//background  linear-gradient(to bottom, $active-key-from-color //0, $active-key-to-color 100%)
+				//box-shadow 2px 0 3px rgba(0, 0, 0, .1) inset, -5px 5px 20px //rgba(0, 0, 0, .4) inset,0 0 3px rgba(0, 0, 0, .4)
+				//background $octave-highlight-color
 
 			&.pressed
-				background  linear-gradient(to bottom, #fff 0, #e9e9e9 100%)
-				box-shadow 2px 0 3px rgba(0,0,0, .1) inset, -5px 5px 20px rgba(0,0,0, .2) inset,0 0 3px rgba(0,0,0, .2)
+				background  linear-gradient(to bottom, $active-key-from-color 0, $active-key-to-color 100%)
+				box-shadow 2px 0 3px rgba(0,0,0, .1) inset, -5px 5px 20px rgba(0,0,0, .4) inset,0 0 3px rgba(0,0,0, .4)
+				background $octave-highlight-color
+			
 
 
 		&.higher
@@ -40,17 +53,20 @@
 			margin-bottom @height
 			margin-left $higher-key-left-margin
 			z-index 2
-			border 1px solid #000
-			background linear-gradient(45deg, #222 0, #555 100%)
+			border 1px solid $higher-key-border-color = #000
+			background linear-gradient(45deg, #222 0, #9E9E9E 100%)
 
 			&.pressed
-				background linear-gradient(to right, #444 0, #222 100%)
-				box-shadow -1px -1px 2px rgba(255,255,255, .2) inset, 0 -2px 2px 3px rgba(0,0,0, .6) inset, 0 1px 2px rgba(0,0,0, .5)
+				background linear-gradient(45deg, #222 0, #676464 100%)
+
+				//box-shadow -1px -1px 2px rgba(255,255,255, .2) inset, 0 -2px //2px 3px rgba(0,0,0, .6) inset, 0 1px 2px rgba(0,0,0, .5)
 
 			&:active
-				background linear-gradient(to right, #444 0, #222 100%)
-				box-shadow -1px -1px 2px rgba(255,255,255, .2) inset, 0 -2px 2px 3px rgba(0,0,0, .6) inset, 0 1px 2px rgba(0,0,0, .5)
+				background linear-gradient(45deg, #222 0, #676464 100%)
 
+				//box-shadow -1px -1px 2px rgba(255,255,255, .2) inset, 0 -2px //2px 3px rgba(0,0,0, .6) inset, 0 1px 2px rgba(0,0,0, .5)
+
+		
 		&.a,
 		&.b,
 		&.e,
@@ -59,12 +75,13 @@
 		&.d,
 		&.c
 			margin 0
-			margin-left -0.25 * $lower-key-width
+			margin-left -.25 * $lower-key-width
 
 		&.e,
 		&.b
 			margin-right .25 * $lower-key-width
 
-		&.c3
-			background #6b77a1
+		// &.c3
+		//	background #6b77a1
 
+		

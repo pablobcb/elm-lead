@@ -2,11 +2,8 @@ module Container.OnScreenKeyboard.Update exposing (..)
 
 --where
 
-import Container.Panel.Model as Model exposing (..)
 import Container.OnScreenKeyboard.Model as KbdModel exposing (..)
-import Component.Knob as Knob
 import Midi exposing (..)
-import Port exposing (..)
 import Char exposing (..)
 import Maybe.Extra exposing (..)
 
@@ -20,22 +17,34 @@ type Msg
     | MouseLeave MidiNote
     | KeyOn Char
     | KeyOff Char
-    | MouseClickUp
-    | MouseClickDown
+    | MouseUp
+    | MouseDown
     | MidiMessageIn MidiMessage
     | NoOp
+    | Panic
 
 
 update : Msg -> KbdModel.Model -> ( KbdModel.Model, Cmd a )
 update msg model =
     case msg of
+        Panic ->
+            ( panic model, Cmd.none )
+
         MidiMessageIn midiMsg ->
-            Debug.log "MIDI MSG" ( model, Cmd.none )
+            case midiMsg of
+                (Just 144) :: (Just midiNote) :: _ ->
+                    ( addPressedMidiNote model midiNote, Cmd.none )
+
+                (Just 128) :: (Just midiNote) :: _ ->
+                    ( removePressedMidiNote model midiNote, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
 
-        MouseClickDown ->
+        MouseDown ->
             let
                 model' =
                     mouseDown model
@@ -56,7 +65,7 @@ update msg model =
                     Nothing ->
                         ( model', Cmd.none )
 
-        MouseClickUp ->
+        MouseUp ->
             let
                 isKeyPressed midiNoteNumber =
                     isJust <| findPressedNote model midiNoteNumber

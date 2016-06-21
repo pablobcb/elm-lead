@@ -1,62 +1,84 @@
 module Component.Knob exposing (..)
 
--- where
+--where
 
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class)
-import Json.Decode as Json exposing (..)
+import Json.Decode as Json exposing (succeed, int, (:=))
 
 
 -- MODEL
-
-
-type alias Model =
-    { value : Int
-    , min : Int
-    , max : Int
-    , step : Int
-    , yPos : Int
-    }
-
-
-create : Int -> Int -> Int -> Int -> Model
-create value min max step =
-    { value = value
-    , min = min
-    , max = max
-    , step = step
-    , yPos = 0
-    }
 
 
 type alias YPos =
     Int
 
 
-type alias Value =
-    Int
+type alias Model =
+    { value : Int
+    , initialValue : Int
+    , min : Int
+    , max : Int
+    , step : Int
+    , initMouseYPos : Int
+    , mouseYPos : Int
+    , isMouseClicked : Bool
+    , cmdEmitter : Int -> Cmd Msg
+    , idKey : KnobInstance
+    }
+
+
+init : KnobInstance -> Int -> Int -> Int -> Int -> (Int -> Cmd Msg) -> Model
+init idKey value min max step cmdEmitter =
+    { value = value
+    , initialValue = value
+    , min = min
+    , max = max
+    , step = step * 20
+    , initMouseYPos = 0
+    , mouseYPos = 0
+    , isMouseClicked = False
+    , cmdEmitter = cmdEmitter
+    , idKey = idKey
+    }
 
 
 type Msg
-    = ValueChange (Value -> Cmd Msg) YPos
-    | MouseDragStart YPos
+    = MouseMove YPos
+    | MouseDown KnobInstance YPos
+    | MouseUp
+    | Reset KnobInstance
 
 
-knobStyle : List ( String, String )
-knobStyle =
-    [ ( "-webkit-user-drag", "element" )
-    , ( "-webkit-user-select", "none" )
-    ]
+type KnobInstance
+    = OscMix
+    | PW
+    | Osc2Semitone
+    | Osc2Detune
+    | FM
+    | AmpGain
+    | FilterCutoff
+    | FilterQ
 
 
 
 -- VIEW
 
 
-view : (Int -> Cmd Msg) -> Model -> Html Msg
-view cmdEmmiter model =
+knobStyle : List ( String, String )
+knobStyle =
+    [ ( "-webkit-user-select", "none" )
+    , ( "-moz-user-select", "-moz-none" )
+    , ( "-khtml-user-select", "none" )
+    , ( "-ms-user-select", "none" )
+    , ( "user-select", "none" )
+    ]
+
+
+view : Model -> Html Msg
+view model =
     let
         -- These are defined in terms of degrees, with 0 pointing straight up
         visualMinimum = -140
@@ -70,25 +92,23 @@ view cmdEmmiter model =
         direction' = (toString direction) ++ "deg"
         knobStyle = [("transform", "rotate(" ++ direction' ++ ")")]
 
-        positionMap msg =
+        mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
         div
-            [ Html.Events.on "drag" <| positionMap <| ValueChange cmdEmmiter
-            , Html.Events.on "dragstart" <| positionMap MouseDragStart
-            , style knobStyle
+            [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
+            , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
             , class "knob__dial"
+            , style knobStyle
             ]
             [ div [ class "knob__indicator"]
                 [ Html.text (toString model.value) ]
             ]
 
-
-knob : String -> (Msg -> a) -> (Int -> Cmd Msg) -> Model -> Html a
-knob label knobMsg cmdEmmiter model =
+knob : (Msg -> a) -> Model -> Html a
+knob knobMsg model =
     Html.App.map knobMsg
-        <| view (\value -> value |> cmdEmmiter)
-            model
+        <| view model
 
 
 
@@ -98,22 +118,58 @@ knob label knobMsg cmdEmmiter model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
-        MouseDragStart yPos ->
-            ( { model | yPos = yPos }, Cmd.none )
+        Reset idKey ->
+            if model.idKey /= idKey then
+                ( model, Cmd.none )
+            else
+                ( { model | value = model.initialValue }
+                , model.cmdEmitter model.initialValue
+                )
 
-        ValueChange cmdEmmiter yPos ->
+        MouseDown idKey mouseYPos ->
+            if model.idKey /= idKey then
+                ( model, Cmd.none )
+            else
+                ( { model
+                    | initMouseYPos = mouseYPos
+                    , mouseYPos = mouseYPos
+                    , isMouseClicked = True
+                  }
+                , Cmd.none
+                )
+
+        MouseUp ->
+            ( { model | isMouseClicked = False }
+            , Cmd.none
+            )
+
+        MouseMove mouseYPos ->
             let
                 newValue =
-                    if yPos < model.yPos then
-                        model.value + model.step
-                    else if yPos > model.yPos then
-                        model.value - model.step
-                    else
-                        model.value
+                    model.value
+                        + (model.initMouseYPos - mouseYPos)
+                        // abs (model.initMouseYPos - mouseYPos)
             in
-                if newValue > model.max || newValue < model.min then
+                if not model.isMouseClicked then
                     ( model, Cmd.none )
+                else if newValue > model.max then
+                    ( { model
+                        | value = model.max
+                        , initMouseYPos = mouseYPos
+                      }
+                    , Cmd.none
+                    )
+                else if newValue < model.min then
+                    ( { model
+                        | value = model.min
+                        , initMouseYPos = mouseYPos
+                      }
+                    , Cmd.none
+                    )
                 else
-                    ( { model | value = newValue }
-                    , cmdEmmiter newValue
+                    ( { model
+                        | value = newValue
+                        , initMouseYPos = mouseYPos
+                      }
+                    , model.cmdEmitter newValue
                     )
