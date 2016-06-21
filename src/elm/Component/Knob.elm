@@ -5,7 +5,7 @@ module Component.Knob exposing (..)
 import Html exposing (Html, button, div, text, img)
 import Html.Events exposing (onClick)
 import Html.App exposing (map)
-import Html.Attributes exposing (draggable, style, class, alt)
+import Html.Attributes exposing (draggable, style, class, alt, src)
 import Json.Decode as Json exposing (succeed, int, (:=))
 
 
@@ -88,7 +88,8 @@ view model =
             , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
             , class "knob__dial"
             , style knobStyle
-            --, alt "Kiwi standing on oval"
+            , alt "oops!"
+            , src "knob-fg.svg"
             ]
             [ Html.text (toString model.value) ]
 
