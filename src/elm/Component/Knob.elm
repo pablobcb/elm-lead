@@ -16,10 +16,6 @@ type alias YPos =
     Int
 
 
-type alias Value =
-    Int
-
-
 type alias Model =
     { value : Int
     , initialValue : Int
@@ -29,14 +25,13 @@ type alias Model =
     , initMouseYPos : Int
     , mouseYPos : Int
     , isMouseClicked : Bool
-    , cmdEmitter : Value -> Cmd Msg
-    , idKey :
-        KnobInstance
-        --TODOtransform in a
+    , cmdEmitter : Int -> Cmd Msg
+    , idKey :KnobInstance
+
     }
 
 
-init : KnobInstance -> Value -> Value -> Value -> Value -> (Value -> Cmd Msg) -> Model
+init : KnobInstance -> Int -> Int -> Int -> Int -> (Int -> Cmd Msg) -> Model
 init idKey value min max step cmdEmitter =
     { value = value
     , initialValue = value
@@ -102,6 +97,7 @@ view model =
 --knob : (Msg -> a) -> Model -> Html a
 
 
+knob : (Msg -> a) -> Model -> Html a
 knob knobMsg model =
     Html.App.map knobMsg
         <| view model
@@ -124,17 +120,16 @@ update message model =
                     )
 
         MouseDown idKey mouseYPos ->
-            Debug.log "MouseDown"
-                <| if model.idKey /= idKey then
-                    ( model, Cmd.none )
-                   else
-                    ( { model
-                        | initMouseYPos = mouseYPos
-                        , mouseYPos = mouseYPos
-                        , isMouseClicked = True
-                      }
-                    , Cmd.none
-                    )
+            if model.idKey /= idKey then
+                ( model, Cmd.none )
+            else
+                Debug.log "eu" <| ( { model
+                    | initMouseYPos = mouseYPos
+                    , mouseYPos = mouseYPos
+                    , isMouseClicked = True
+                  }
+                , Cmd.none
+                )
 
         MouseUp ->
             Debug.log "MouseUp"
@@ -144,9 +139,7 @@ update message model =
 
         MouseMove mouseYPos ->
             let
-                _ =
-                    Debug.log "MouseUp" mouseYPos
-
+                --_ =                   Debug.log "MouseUp" mouseYPos
                 newValue =
                     model.value
                         + (model.initMouseYPos - mouseYPos)

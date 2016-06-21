@@ -17,7 +17,7 @@ nordKnob model knobInstance labelTxt =
     let
         knob =
             List.head
-                <| List.filter (\knob' -> knob'.idKey /= knobInstance)
+                <| List.filter (\knob' -> knob'.idKey == knobInstance)
                     model.knobs
     in
         case knob of
