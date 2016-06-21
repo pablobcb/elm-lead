@@ -45,15 +45,15 @@ column content =
 amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
-        [ nordKnob model AmpGain "gain" ]
+        [ nordKnob model Knob.AmpGain "gain" ]
 
 
 filter : Model -> Html Msg
 filter model =
     section "filter"
         [ div [ class "filter" ]
-            [ nordKnob model FilterCutoff "Frequency"
-            , nordKnob model FilterQ "Resonance"
+            [ nordKnob model Knob.FilterCutoff "Frequency"
+            , nordKnob model Knob.FilterQ "Resonance"
             , Button.nordButton "Filter Type"
                 FilterTypeChange
                 filterTypePort
@@ -78,7 +78,7 @@ osc1 model =
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
-        , nordKnob model FM "FM"
+        , nordKnob model Knob.FM "FM"
         ]
 
 
@@ -90,8 +90,8 @@ osc2 model =
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
-        , nordKnob model Osc2Semitone "semitone"
-        , nordKnob model Osc2Detune "detune"
+        , nordKnob model Knob.Osc2Semitone "semitone"
+        , nordKnob model Knob.Osc2Detune "detune"
         ]
 
 
@@ -101,9 +101,9 @@ oscillatorSection model =
         [ div [ class "oscillators" ]
             [ osc1 model, osc2 model ]
         , div [ class "oscillators__extra" ]
-            [ nordKnob model PW
+            [ nordKnob model Knob.PW
                 "PW"
-            , nordKnob model OscMix
+            , nordKnob model Knob.OscMix
                 "mix"
             ]
         ]

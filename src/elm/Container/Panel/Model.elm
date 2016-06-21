@@ -28,17 +28,15 @@ type FilterType
 -- and used as keys for the Dict, and later referenced by the view
 -- (its senseless to use Stringly Typed data
 -- within a Strongly Typed Language)
-
-
-type KnobInstance
-    = OscMix
-    | PW
-    | Osc2Semitone
-    | Osc2Detune
-    | FM
-    | AmpGain
-    | FilterCutoff
-    | FilterQ
+--type KnobInstance
+--    = OscMix
+--    | PW
+--    | Osc2Semitone
+--    | Osc2Detune
+--    | FM
+--    | AmpGain
+--    | FilterCutoff
+--    | FilterQ
 
 
 type alias Model =
@@ -58,18 +56,18 @@ knobs =
     let
         knob instance current min max step port' =
             ( (toString instance)
-            , Knob.init current min max step port'
+            , Knob.init current min max step port' instance
             )
     in
         Dict.fromList
-            [ knob OscMix 0 -50 50 1 oscillatorsBalancePort
-            , knob PW 0 0 100 1 pulseWidthPort
-            , knob Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
-            , knob Osc2Detune 0 -100 100 1 oscillator2DetunePort
-            , knob FM 0 0 100 1 fmAmountPort
-            , knob AmpGain 10 0 100 1 masterVolumePort
-            , knob FilterCutoff 4000 0 10000 1 filterCutoffPort
-            , knob FilterQ 1 0 45 1 filterQPort
+            [ knob Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
+            , knob Knob.PW 0 0 100 1 pulseWidthPort
+            , knob Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
+            , knob Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
+            , knob Knob.FM 0 0 100 1 fmAmountPort
+            , knob Knob.AmpGain 10 0 100 1 masterVolumePort
+            , knob Knob.FilterCutoff 4000 0 10000 1 filterCutoffPort
+            , knob Knob.FilterQ 1 0 45 1 filterQPort
             ]
 
 
