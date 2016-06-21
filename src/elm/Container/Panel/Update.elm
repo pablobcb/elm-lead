@@ -5,7 +5,6 @@ module Container.Panel.Update exposing (..)
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
 import Component.NordButton as Button
-import Dict exposing (..)
 
 
 type Msg
@@ -15,7 +14,6 @@ type Msg
     | KnobMsg Knob.Msg
 
 
---TODO: put buttons inside dicts
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
@@ -31,19 +29,12 @@ update msg model =
         updateKnobs : Knob.Msg -> Msg -> ( Model, Cmd Msg )
         updateKnobs knobMsg msg' =
             let
-                ( knobNames, knobModels ) =
-                    List.unzip <| Dict.toList model.knobs
-
-                ( knobModels', cmds ) =
+                ( knobs, cmds ) =
                     List.unzip
                         <| List.map
                             --(Knob.update << knobMsg)
                             (\knob -> Knob.update knobMsg knob)
-                            knobModels
-
-                knobs =
-                    Dict.fromList
-                        <| List.map2 (,) knobNames knobModels'
+                            model.knobs
             in
                 ( { model | knobs = knobs }
                 , Cmd.map (always msg') <| Cmd.batch cmds
@@ -73,4 +64,3 @@ update msg model =
 
             KnobMsg subMsg ->
                 updateKnobs subMsg (KnobMsg subMsg)
- 

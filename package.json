@@ -8,7 +8,7 @@
 
     "build:production": "webpack -p",
     "dev": "webpack-dev-server --inline --content-base dist/",
-    "elm": "elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
+    "elm": "rm -rf elm-stuff/build-artifacts && elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

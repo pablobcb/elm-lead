@@ -196,12 +196,14 @@ type alias Model =
     , mouseYPos : Int
     , isMouseClicked : Bool
     , cmdEmitter : Value -> Cmd Msg
-    , idKey : KnobInstance
+    , idKey :
+        KnobInstance
+        --TODOtransform in a
     }
 
 
-init : Value -> Value -> Value -> Value -> (Value -> Cmd Msg) -> KnobInstance -> Model
-init value min max step cmdEmitter idKey =
+init : KnobInstance -> Value -> Value -> Value -> Value -> (Value -> Cmd Msg) -> Model
+init idKey value min max step cmdEmitter =
     { value = value
     , initialValue = value
     , min = min

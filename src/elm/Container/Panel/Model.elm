@@ -5,7 +5,6 @@ module Container.Panel.Model exposing (..)
 import Component.Knob as Knob exposing (..)
 import Component.NordButton as Button exposing (..)
 import Port exposing (..)
-import Dict exposing (..)
 
 
 type OscillatorWaveform
@@ -40,7 +39,7 @@ type FilterType
 
 
 type alias Model =
-    { knobs : Dict String Knob.Model
+    { knobs : List Knob.Model
     , filterTypeBtn : Button.Model FilterType
     , oscillator2WaveformBtn : Button.Model OscillatorWaveform
     , oscillator1WaveformBtn : Button.Model OscillatorWaveform
@@ -51,24 +50,17 @@ type alias Model =
 --TODO: colocar as portas dos botoes no model
 
 
-knobs : Dict String Knob.Model
+knobs : List Knob.Model
 knobs =
-    let
-        knob instance current min max step port' =
-            ( (toString instance)
-            , Knob.init current min max step port' instance
-            )
-    in
-        Dict.fromList
-            [ knob Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
-            , knob Knob.PW 0 0 100 1 pulseWidthPort
-            , knob Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
-            , knob Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
-            , knob Knob.FM 0 0 100 1 fmAmountPort
-            , knob Knob.AmpGain 10 0 100 1 masterVolumePort
-            , knob Knob.FilterCutoff 4000 0 10000 1 filterCutoffPort
-            , knob Knob.FilterQ 1 0 45 1 filterQPort
-            ]
+    [ Knob.init Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
+    , Knob.init Knob.PW 0 0 100 1 pulseWidthPort
+    , Knob.init Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
+    , Knob.init Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
+    , Knob.init Knob.FM 0 0 100 1 fmAmountPort
+    , Knob.init Knob.AmpGain 10 0 100 1 masterVolumePort
+    , Knob.init Knob.FilterCutoff 4000 0 10000 1 filterCutoffPort
+    , Knob.init Knob.FilterQ 1 0 45 1 filterQPort
+    ]
 
 
 init : Model

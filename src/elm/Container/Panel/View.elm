@@ -6,24 +6,29 @@ import Component.Knob as Knob
 import Component.NordButton as Button
 import Port exposing (..)
 import Html exposing (..)
-import Dict exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
 import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
-nordKnob : Model -> b -> String -> Html Msg
+--nordKnob : Model -> b -> String -> Html Msg
 nordKnob model knobInstance labelTxt =
-    case Dict.get (toString knobInstance) model.knobs of
-        Nothing ->
-            Debug.crash "inexistent knob identifier"
+    let
+        knob =
+            List.head
+                <| List.filter (\knob' -> knob'.idKey /= knobInstance)
+                    model.knobs
+    in
+        case knob of
+            Nothing ->
+                Debug.crash "inexistent knob identifier"
 
-        Just knobModel ->
-            div [ class "knob" ]
-                [ Knob.knob KnobMsg knobModel
-                , div [ class "pannel__label" ] [ text labelTxt ]
-                ]
+            Just knobModel ->
+                div [ class "knob" ]
+                    [ Knob.knob KnobMsg knobModel
+                    , div [ class "pannel__label" ] [ text labelTxt ]
+                    ]
 
 
 section : String -> List (Html a) -> Html a
@@ -129,22 +134,51 @@ panel panelMsg model =
 
 instructions : Html a
 instructions =
-     let
+    let
         hotKeys =
-            [ "Z" , "X" , "C" , "V" , "A" , "W" , "S" , "E"
-            , "D" , "F" , "T" , "G" , "Y" , "H" , "U" , "J", "K"
-            , "O" , "L" , "P"
+            [ "Z"
+            , "X"
+            , "C"
+            , "V"
+            , "A"
+            , "W"
+            , "S"
+            , "E"
+            , "D"
+            , "F"
+            , "T"
+            , "G"
+            , "Y"
+            , "H"
+            , "U"
+            , "J"
+            , "K"
+            , "O"
+            , "L"
+            , "P"
             ]
 
         instructions =
-            [ "octave down" , "octave up" , "velocity down" , "velocity up" ]
+            [ "octave down", "octave up", "velocity down", "velocity up" ]
                 ++ (List.map ((++) "play ")
-                        [ "C" , "C#" , "D" , "D#" , "E" , "F"
-                        , "F#" , "G" , "G#" , "A" , "A#" , "B"
-                        , "C 8va" , "C# 8va" , "D 8va" , "D# 8va"
+                        [ "C"
+                        , "C#"
+                        , "D"
+                        , "D#"
+                        , "E"
+                        , "F"
+                        , "F#"
+                        , "G"
+                        , "G#"
+                        , "A"
+                        , "A#"
+                        , "B"
+                        , "C 8va"
+                        , "C# 8va"
+                        , "D 8va"
+                        , "D# 8va"
                         ]
                    )
-
     in
         div [ class "pannel-instructions" ]
             [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
