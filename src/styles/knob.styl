@@ -1,3 +1,5 @@
+@import './mixins'
+
 .knob
 	text-align center
 	// width 100%
@@ -7,3 +9,6 @@
 
 .knob__dial
 	font-size 20px
+
+.knob__label
+	panel-label($knob-label-background-color)

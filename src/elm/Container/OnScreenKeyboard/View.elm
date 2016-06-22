@@ -59,12 +59,6 @@ getKeyClass model noteName midiNote highlight =
         isSharpKey =
             String.contains "#" noteName
 
-        middleC =
-            if midiNote == 60 then
-                "c3"
-            else
-                ""
-
         keyPressed =
             if
                 let
@@ -81,29 +75,31 @@ getKeyClass model noteName midiNote highlight =
                         ++ model.midiPressedNotes
                         ++ mouseNote
             then
-                "pressed"
+                "keyboard__key--pressed"
             else
                 ""
 
         position =
-            if isSharpKey then
-                "higher"
-            else
-                "lower"
+            "keyboard__key--"
+                ++ (if isSharpKey then
+                        "higher"
+                    else
+                        "lower"
+                   )
 
         note =
             if (String.length noteName) > 1 then
                 ""
             else
-                noteName
+                "keyboard__key--" ++ noteName
 
         currentOctave =
             if highlight then
-                "current-octave"
+                "keyboard__key--current-octave"
             else
                 ""
     in
-        [ "key", position, keyPressed, note, currentOctave, middleC ]
+        [ "keyboard__key", position, keyPressed, note, currentOctave ]
             |> List.filter ((/=) "")
             |> String.join " "
 

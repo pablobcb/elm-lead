@@ -27,7 +27,7 @@ nordKnob model knobInstance labelTxt =
             Just knobModel ->
                 div [ class "knob" ]
                     [ Knob.knob KnobMsg knobModel
-                    , div [ class "pannel__label" ] [ text labelTxt ]
+                    , div [ class "knob__label" ] [ text labelTxt ]
                     ]
 
 
