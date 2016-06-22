@@ -1,9 +1,9 @@
 import Oscillator from './Oscillator'
-import NoiseOscillator from './Oscillator'
+import NoiseOscillator from './NoiseOscillator'
 import CONSTANTS from './Constants'
 
 export default class AudioEngine {
-	constructor() {
+	constructor () {
 		this.context = new AudioContext
 
 		this.initializeMasterVolume()
@@ -144,9 +144,9 @@ export default class AudioEngine {
 		]
 		
 		const waveform_ = waveform.toLowerCase()
-
+		
 		if (validWaveforms.indexOf(waveform_) == -1)
-			throw new Error('Invalid Waveform Type')
+			throw new Error(`Invalid Waveform Type ${waveform_}`)
 
 		this.oscillator1.setWaveform(waveform_)
 	}
@@ -164,14 +164,15 @@ export default class AudioEngine {
 		const waveform_ = waveform.toLowerCase()
 
 		if (validWaveforms.indexOf(waveform_) == -1)
-			throw new Error('Invalid Waveform Type')
-
-		const osc2 = waveform_ === CONSTANTS.WAVEFORM_TYPE.NOISE ?
-			new NoiseOscillator(this.context) :
-			new Oscillator(this.context, CONSTANTS.WAVEFORM_TYPE.TRIANGLE)
+			throw new Error(`Invalid Waveform Type ${waveform_}`)
 
 
-		this.oscillator2 = osc2
+		if(waveform_ === CONSTANTS.WAVEFORM_TYPE.NOISE){
+			this.oscillator2 = new NoiseOscillator(this.context)
+		} else {
+			this.oscillator2.setWaveform(waveform_)
+		}
+
 	}
 
 
