@@ -3,7 +3,8 @@ module Container.Panel.Model exposing (..)
 -- where
 
 import Component.Knob as Knob exposing (..)
-import Component.NordButton as Button exposing (..)
+import Component.OptionPicker as OptionPicker exposing (..)
+import Port exposing (..)
 
 
 type OscillatorWaveform
@@ -14,98 +15,78 @@ type OscillatorWaveform
     | WhiteNoise
 
 
-
--- TODO : prefix all knobs with section name
+type FilterType
+    = Lowpass
+    | Highpass
+    | Bandpass
+    | Notch
 
 
 type alias Model =
-    { oscillatorsMixKnob : Knob.Model
-    , oscillator1WaveformBtn : Button.Model OscillatorWaveform
-    , oscillator2WaveformBtn : Button.Model OscillatorWaveform
-    , oscillator2SemitoneKnob : Knob.Model
-    , oscillator2DetuneKnob : Knob.Model
-    , pulseWidthKnob : Knob.Model
-    , fmAmountKnob : Knob.Model
-    , ampAttackKnob : Knob.Model
-    , ampDecayKnob : Knob.Model
-    , ampSustainKnob : Knob.Model
-    , ampReleaseKnob : Knob.Model
-    , masterVolumeKnob : Knob.Model
-    , filterAttackKnob : Knob.Model
-    , filterDecayKnob : Knob.Model
-    , filterSustainKnob : Knob.Model
-    , filterReleaseKnob : Knob.Model
+    { knobs : List Knob.Model
+    , filterTypeBtn : OptionPicker.Model FilterType
+    , oscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform
+    , oscillator1WaveformBtn : OptionPicker.Model OscillatorWaveform
     }
+
+
+
+--TODO: colocar as portas dos botoes no model
+
+
+knobs : List Knob.Model
+knobs =
+    [ Knob.init Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
+    , Knob.init Knob.PW 0 0 100 1 pulseWidthPort
+    , Knob.init Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
+    , Knob.init Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
+    , Knob.init Knob.FM 0 0 100 1 fmAmountPort
+    , Knob.init Knob.AmpGain 10 0 100 1 ampVolumePort
+    , Knob.init Knob.AmpAttack 10 0 100 1 ampAttackPort
+    , Knob.init Knob.AmpDecay 10 0 100 1 ampDecayPort
+    , Knob.init Knob.AmpSustain 10 0 100 1 ampSustainPort
+    , Knob.init Knob.FilterCutoff 4000 0 10000 1 filterCutoffPort
+    , Knob.init Knob.FilterQ 1 0 45 1 filterQPort
+    ]
 
 
 init : Model
 init =
-    { oscillatorsMixKnob = Knob.init 0 -50 50 1
-    , oscillator2SemitoneKnob = Knob.init 0 -60 60 1
-    , oscillator2DetuneKnob = Knob.init 0 -100 100 1
+    { knobs = knobs
+    , filterTypeBtn =
+        OptionPicker.init
+            [ ( "LP", Lowpass )
+            , ( "HP", Highpass )
+            , ( "BP", Bandpass )
+            , ( "notch", Notch )
+            ]
     , oscillator1WaveformBtn =
-        Button.init
+        OptionPicker.init
             [ ( "sin", Sine )
             , ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
             ]
     , oscillator2WaveformBtn =
-        Button.init
+        OptionPicker.init
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
             , ( "noise", WhiteNoise )
             ]
-    , fmAmountKnob = Knob.init 0 0 100 1
-    , pulseWidthKnob = Knob.init 0 0 100 1
-    , ampAttackKnob = Knob.init 0 0 100 1
-    , ampDecayKnob = Knob.init 0 0 100 1
-    , ampSustainKnob = Knob.init 0 0 100 1
-    , ampReleaseKnob = Knob.init 0 0 100 1
-    , masterVolumeKnob = Knob.init 10 0 100 1
-    , filterAttackKnob = Knob.init 0 0 100 1
-    , filterDecayKnob = Knob.init 0 0 100 1
-    , filterSustainKnob = Knob.init 0 0 100 1
-    , filterReleaseKnob = Knob.init 0 0 100 1
     }
 
 
-setFmAmount : Knob.Model -> Model -> Model
-setFmAmount knobModel model =
-    { model | fmAmountKnob = knobModel }
-
-
-setPulseWidth : Knob.Model -> Model -> Model
-setPulseWidth knobModel model =
-    { model | pulseWidthKnob = knobModel }
-
-
-setOscillator2Detune : Knob.Model -> Model -> Model
-setOscillator2Detune knobModel model =
-    { model | oscillator2DetuneKnob = knobModel }
-
-
-setOscillator2Semitone : Knob.Model -> Model -> Model
-setOscillator2Semitone knobModel model =
-    { model | oscillator2SemitoneKnob = knobModel }
-
-
-setMasterVolume : Knob.Model -> Model -> Model
-setMasterVolume knobModel model =
-    { model | masterVolumeKnob = knobModel }
-
-
-setOscillatorsMix : Knob.Model -> Model -> Model
-setOscillatorsMix knobModel model =
-    { model | oscillatorsMixKnob = knobModel }
-
-
-setOscillator1WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
-setOscillator1WaveformBtn btn model =
+updateOscillator1WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
+updateOscillator1WaveformBtn btn model =
     { model | oscillator1WaveformBtn = btn }
 
 
-setOscillator2WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
-setOscillator2WaveformBtn btn model =
+updateOscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
+updateOscillator2WaveformBtn btn model =
     { model | oscillator2WaveformBtn = btn }
+
+
+updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
+updateFilterTypeBtn btn model =
+    { model | filterTypeBtn = btn }

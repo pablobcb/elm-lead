@@ -5,8 +5,10 @@
   "main": "dist/index.html",
   "scripts": {
     "build": "webpack",
+
+    "build:production": "webpack -p",
     "dev": "webpack-dev-server --inline --content-base dist/",
-    "elm": "elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
+    "elm": "rm -rf elm-stuff/build-artifacts && elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/pablobcb/elm-lead/issues"
   },
-  "homepage": "https://github.com/pablobcb/elm-osiris#readme",
+  "homepage": "https://github.com/pablobcb/elm-lead#readme",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.9.0",

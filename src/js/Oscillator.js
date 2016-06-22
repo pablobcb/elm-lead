@@ -1,3 +1,5 @@
+import CONSTANTS from './Constants'
+
 export default class Oscillator {
 	constructor (context, initalWaveform) {
 		this.context = context
@@ -48,7 +50,7 @@ export default class Oscillator {
 
 		node.setWidth = function (width) {
 			node.width.value = width
-		}
+		}'lowpass
 
 		node.connect = function () {
 			pulseShaper.connect.apply(pulseShaper, arguments)
@@ -70,14 +72,18 @@ export default class Oscillator {
 	panic =	() => {
 		for(const midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.noteOff(Number(midiNote))
+				this.oscillators[midiNote].stop()
 			}
 		}
 	}
 
 	noteOff = (at, midiNote) => {
-		const midiNoteKey = midiNote.toString()
-
+		let midiNoteKey
+		
+		if(midiNote)
+			midiNoteKey = midiNote.toString()
+		
+			
 		if(!(midiNoteKey in this.oscillators))
 			return
 
@@ -168,7 +174,7 @@ export default class Oscillator {
 
 	setPulseWidth = (pulseWidth) => {
 		this.pulseWidth = pulseWidth
-		if(this.type == 'square') {
+		if(this.type == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
 			for(const midiNote in this.oscillators) {
 				if(this.oscillators.hasOwnProperty(midiNote)) {
 					this.oscillators[midiNote].setWidth(this.pulseWidth)

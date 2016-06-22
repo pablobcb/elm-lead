@@ -3,7 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
-import Component.NordButton as Button
+import Component.OptionPicker as OptionPicker
 import Port exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -12,17 +12,23 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
-nordKnob :
-    (Knob.Msg -> a)
-    -> (Int -> Cmd Knob.Msg)
-    -> Knob.Model
-    -> String
-    -> Html a
-nordKnob op cmd model label =
-    div [ class "knob" ]
-        [ Knob.knob op cmd model
-        , div [ class "knob__label" ] [ text label ]
-        ]
+nordKnob : Model -> Knob.KnobInstance -> String -> Html Msg
+nordKnob model knobInstance labelTxt =
+    let
+        knob =
+            List.head
+                <| List.filter (\knob' -> knob'.idKey == knobInstance)
+                    model.knobs
+    in
+        case knob of
+            Nothing ->
+                Debug.crash "inexistent knob identifier"
+
+            Just knobModel ->
+                div [ class "knob" ]
+                    [ Knob.knob KnobMsg knobModel
+                    , div [ class "knob__label" ] [ text labelTxt ]
+                    ]
 
 
 section : String -> List (Html a) -> Html a
@@ -41,87 +47,80 @@ column content =
 
 amplifier : Model -> Html Msg
 amplifier model =
-    let
-        knob =
-            nordKnob (always MasterVolumeChange) (always Cmd.none)
-    in
-        section "amplifier"
-            [ --knob model.ampAttackKnob "attack"
-              --, knob model.ampDecayKnob "decay"
-              --, knob model.ampSustainKnob "sustain"
-              --, knob model.ampReleaseKnob "release"
-              --,
-              nordKnob MasterVolumeChange
-                masterVolumePort
-                model.masterVolumeKnob
-                "gain"
+    section "amplifier"
+        [ div [ class "amplifier" ]
+            [ nordKnob model Knob.AmpAttack "attack"
+            , nordKnob model Knob.AmpDecay "decay"
+            , nordKnob model Knob.AmpSustain "sustain"
+            , nordKnob model Knob.AmpGain "gain"
             ]
+        ]
 
 
 filter : Model -> Html Msg
 filter model =
-    let
-        knob =
-            nordKnob (always MasterVolumeChange) (always Cmd.none)
-    in
-        section "filter" []
+    section "filter"
+        [ div [ class "filter" ]
+            [ nordKnob model Knob.FilterCutoff "Frequency"
+            , nordKnob model Knob.FilterQ "Resonance"
+            , OptionPicker.optionPicker "Filter Type"
+                FilterTypeChange
+                filterTypePort
+                model.filterTypeBtn
+            ]
+        ]
 
 
-
---[ knob model.filterAttackKnob "attack"
---, knob model.filterDecayKnob "decay"
---, knob model.filterSustainKnob "sustain"
---, knob model.filterReleaseKnob "release"
---]
-
-
-
-oscillators : Model -> Html Msg
-oscillators model =
-    section "oscillators"
-        [ Button.nordButton Oscillator1WaveformChange
+osc1 : Model -> Html Msg
+osc1 model =
+    div [ class "oscillators__osc1" ]
+        [ OptionPicker.optionPicker "Waveform"
+            Oscillator1WaveformChange
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
-        , Button.nordButton Oscillator2WaveformChange
+        , span [ class "oscillators__label" ] [ text "OSC 1" ]
+        , nordKnob model Knob.FM "FM"
+        ]
+
+
+osc2 : Model -> Html Msg
+osc2 model =
+    div [ class "oscillators__osc2" ]
+        [ nordKnob model Knob.Osc2Semitone "semitone"
+        , OptionPicker.optionPicker "Waveform"
+            Oscillator2WaveformChange
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
-        , nordKnob OscillatorsMixChange
-            oscillatorsBalancePort
-            model.oscillatorsMixKnob
-            "mix"
-        , nordKnob Oscillator2SemitoneChange
-            oscillator2SemitonePort
-            model.oscillator2SemitoneKnob
-            "semitone"
-        , nordKnob Oscillator2DetuneChange
-            oscillator2DetunePort
-            model.oscillator2DetuneKnob
-            "detune"
-        , nordKnob FMAmountChange
-            fmAmountPort
-            model.fmAmountKnob
-            "FM"
-        , nordKnob PulseWidthChange
-            pulseWidthPort
-            model.pulseWidthKnob
-            "PW"
+        , span [ class "oscillators__label" ] [ text "OSC 2" ]
+        , nordKnob model Knob.Osc2Detune "detune"
+        ]
+
+
+oscillatorSection : Model -> Html Msg
+oscillatorSection model =
+    section "oscillators"
+        [ div [ class "oscillators" ]
+            [ osc1 model, osc2 model ]
+        , div [ class "oscillators__extra" ]
+            [ nordKnob model
+                Knob.PW
+                "PW"
+            , nordKnob model
+                Knob.OscMix
+                "mix"
+            ]
         ]
 
 
 view : Model -> Html Msg
 view model =
     div [ class "panel" ]
-        [ --column
-          --  [ section "lfo1" [ text "breno" ]
-          --  , section "lfo2" [ text "magro" ]
-          --  , section "mod env" [ text "forest psy" ]
-          --  ]
-        --,
-         column [ oscillators model ]
+        [ column [ oscillatorSection model ]
         , column
             [ amplifier model
-            --, filter model
+            , filter model
             ]
+        , instructions
         ]
 
 
@@ -129,3 +128,66 @@ panel : (Msg -> a) -> Model -> Html a
 panel panelMsg model =
     Html.App.map panelMsg
         <| view model
+
+
+instructions : Html a
+instructions =
+    let
+        hotKeys =
+            [ "Z"
+            , "X"
+            , "C"
+            , "V"
+            , "A"
+            , "W"
+            , "S"
+            , "E"
+            , "D"
+            , "F"
+            , "T"
+            , "G"
+            , "Y"
+            , "H"
+            , "U"
+            , "J"
+            , "K"
+            , "O"
+            , "L"
+            , "P"
+            ]
+
+        instructions =
+            [ "octave down", "octave up", "velocity down", "velocity up" ]
+                ++ (List.map ((++) "play ")
+                        [ "C"
+                        , "C#"
+                        , "D"
+                        , "D#"
+                        , "E"
+                        , "F"
+                        , "F#"
+                        , "G"
+                        , "G#"
+                        , "A"
+                        , "A#"
+                        , "B"
+                        , "C 8va"
+                        , "C# 8va"
+                        , "D 8va"
+                        , "D# 8va"
+                        ]
+                   )
+    in
+        div [ class "pannel-instructions" ]
+            [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
+            , table [ class "instructions" ]
+                <| List.map2
+                    (\hotkey instruction ->
+                        tr [ class "instructions__entry" ]
+                            [ td [] [ text hotkey ]
+                            , td [ class "instructions__label" ] [ text instruction ]
+                            ]
+                    )
+                    hotKeys
+                    instructions
+            ]

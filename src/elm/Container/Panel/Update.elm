@@ -4,18 +4,14 @@ module Container.Panel.Update exposing (..)
 
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
-import Component.NordButton as Button
+import Component.OptionPicker as OptionPicker
 
 
 type Msg
-    = Oscillator1WaveformChange Button.Msg
-    | Oscillator2WaveformChange Button.Msg
-    | Oscillator2SemitoneChange Knob.Msg
-    | Oscillator2DetuneChange Knob.Msg
-    | FMAmountChange Knob.Msg
-    | PulseWidthChange Knob.Msg
-    | OscillatorsMixChange Knob.Msg
-    | MasterVolumeChange Knob.Msg
+    = Oscillator1WaveformChange OptionPicker.Msg
+    | Oscillator2WaveformChange OptionPicker.Msg
+    | FilterTypeChange OptionPicker.Msg
+    | KnobMsg Knob.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -29,60 +25,42 @@ update msg model =
                 ( reduxor updatedChildModel model
                 , Cmd.map msg' childCmd
                 )
+
+        updateKnobs : Knob.Msg -> Msg -> ( Model, Cmd Msg )
+        updateKnobs knobMsg msg' =
+            let
+                ( knobs, cmds ) =
+                    List.unzip
+                        <| List.map
+                            --(Knob.update << knobMsg)
+                            (\knob -> Knob.update knobMsg knob)
+                            model.knobs
+            in
+                ( { model | knobs = knobs }
+                , Cmd.map (always msg') <| Cmd.batch cmds
+                )
     in
         case msg of
-            MasterVolumeChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .masterVolumeKnob
-                    setMasterVolume
-                    MasterVolumeChange
-
-            OscillatorsMixChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .oscillatorsMixKnob
-                    setOscillatorsMix
-                    OscillatorsMixChange
-
-            Oscillator2SemitoneChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .oscillator2SemitoneKnob
-                    setOscillator2Semitone
-                    Oscillator2SemitoneChange
-
-            Oscillator2DetuneChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .oscillator2DetuneKnob
-                    setOscillator2Detune
-                    Oscillator2DetuneChange
-
-            FMAmountChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .fmAmountKnob
-                    setFmAmount
-                    FMAmountChange
-
-            PulseWidthChange subMsg ->
-                updateMap Knob.update
-                    subMsg
-                    .pulseWidthKnob
-                    setPulseWidth
-                    PulseWidthChange
-
             Oscillator1WaveformChange subMsg ->
-                updateMap Button.update
+                updateMap OptionPicker.update
                     subMsg
                     .oscillator1WaveformBtn
-                    setOscillator1WaveformBtn
+                    updateOscillator1WaveformBtn
                     Oscillator1WaveformChange
-            
+
             Oscillator2WaveformChange subMsg ->
-                updateMap Button.update
+                updateMap OptionPicker.update
                     subMsg
                     .oscillator2WaveformBtn
-                    setOscillator2WaveformBtn
+                    updateOscillator2WaveformBtn
                     Oscillator2WaveformChange
+
+            FilterTypeChange subMsg ->
+                updateMap OptionPicker.update
+                    subMsg
+                    .filterTypeBtn
+                    updateFilterTypeBtn
+                    FilterTypeChange
+
+            KnobMsg subMsg ->
+                updateKnobs subMsg (KnobMsg subMsg)

@@ -31,7 +31,11 @@ export default class Application {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
 				this.audioEngine.onMIDIMessage(data)
-				this.app.ports.midiInPort.send([data[0],data[1],data[2]])
+				this.app.ports.midiInPort.send([
+					data[0],
+					data[1] || null,
+					data[2] || null
+				])
 			}
 		}
 	}
@@ -39,7 +43,14 @@ export default class Application {
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine()
+		// MACRO
+		
+		window.onblur = () => {
+			this.app.ports.panicPort.send()
+			this.audioEngine.panic()
+		}
 
+		// MIDI
 		if(this.midiAccess)
 			this.initializeMidiAccess()
 
@@ -48,12 +59,32 @@ export default class Application {
 				this.audioEngine.onMIDIMessage(midiDataArray)
 			})
 
-		this.app.ports.masterVolumePort
+		// AMP
+		this.app.ports.ampVolumePort
 			.subscribe((masterVolumeValue) => {
 				console.log(masterVolumeValue)
 				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
+		
+		this.app.ports.ampAttackPort
+			.subscribe((attackValue) => {
+				console.log(attackValue)
+				//this.audioEngine.setAmpAttack(attackValue)
+			})
+		
+		this.app.ports.ampDecayPort
+			.subscribe((decayValue) => {
+				console.log(decayValue)
+				//this.audioEngine.setAmpDecay(decayValue)
+			})
 
+		this.app.ports.ampSustainPort
+			.subscribe((sustainLevel) => {
+				console.log(sustainLevel)
+				//this.audioEngine.setAmpSustain(sustainLevel)
+			})
+
+		// OSCILLATORS
 		this.app.ports.oscillatorsBalancePort
 			.subscribe((oscillatorsBalanceValue) => {
 				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
@@ -89,9 +120,21 @@ export default class Application {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
-		window.onblur = () => {
-			this.audioEngine.panic()
-		}
+		// FILTER
+		this.app.ports.filterCutoffPort
+			.subscribe((freq) => {
+				this.audioEngine.setFilterCutoff(freq)
+			})
+
+		this.app.ports.filterQPort
+			.subscribe((amount) => {
+				this.audioEngine.setFilterQ(amount)
+			})
+
+		this.app.ports.filterTypePort
+			.subscribe((filterType) => {
+				this.audioEngine.setFilterType(filterType)
+			})		
 	}
 
 }
