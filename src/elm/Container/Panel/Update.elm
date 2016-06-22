@@ -4,13 +4,13 @@ module Container.Panel.Update exposing (..)
 
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
-import Component.NordButton as Button
+import Component.OptionPicker as OptionPicker
 
 
 type Msg
-    = Oscillator1WaveformChange Button.Msg
-    | Oscillator2WaveformChange Button.Msg
-    | FilterTypeChange Button.Msg
+    = Oscillator1WaveformChange OptionPicker.Msg
+    | Oscillator2WaveformChange OptionPicker.Msg
+    | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
 
 
@@ -42,21 +42,21 @@ update msg model =
     in
         case msg of
             Oscillator1WaveformChange subMsg ->
-                updateMap Button.update
+                updateMap OptionPicker.update
                     subMsg
                     .oscillator1WaveformBtn
                     updateOscillator1WaveformBtn
                     Oscillator1WaveformChange
 
             Oscillator2WaveformChange subMsg ->
-                updateMap Button.update
+                updateMap OptionPicker.update
                     subMsg
                     .oscillator2WaveformBtn
                     updateOscillator2WaveformBtn
                     Oscillator2WaveformChange
 
             FilterTypeChange subMsg ->
-                updateMap Button.update
+                updateMap OptionPicker.update
                     subMsg
                     .filterTypeBtn
                     updateFilterTypeBtn

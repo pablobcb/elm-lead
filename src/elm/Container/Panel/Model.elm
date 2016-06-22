@@ -3,7 +3,7 @@ module Container.Panel.Model exposing (..)
 -- where
 
 import Component.Knob as Knob exposing (..)
-import Component.NordButton as Button exposing (..)
+import Component.OptionPicker as OptionPicker exposing (..)
 import Port exposing (..)
 
 
@@ -23,9 +23,9 @@ type FilterType
 
 type alias Model =
     { knobs : List Knob.Model
-    , filterTypeBtn : Button.Model FilterType
-    , oscillator2WaveformBtn : Button.Model OscillatorWaveform
-    , oscillator1WaveformBtn : Button.Model OscillatorWaveform
+    , filterTypeBtn : OptionPicker.Model FilterType
+    , oscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform
+    , oscillator1WaveformBtn : OptionPicker.Model OscillatorWaveform
     }
 
 
@@ -53,21 +53,21 @@ init : Model
 init =
     { knobs = knobs
     , filterTypeBtn =
-        Button.init
+        OptionPicker.init
             [ ( "LP", Lowpass )
             , ( "HP", Highpass )
             , ( "BP", Bandpass )
             , ( "notch", Notch )
             ]
     , oscillator1WaveformBtn =
-        Button.init
+        OptionPicker.init
             [ ( "sin", Sine )
             , ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
             ]
     , oscillator2WaveformBtn =
-        Button.init
+        OptionPicker.init
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "sqr", Square )
@@ -76,16 +76,16 @@ init =
     }
 
 
-updateOscillator1WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
+updateOscillator1WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
 updateOscillator1WaveformBtn btn model =
     { model | oscillator1WaveformBtn = btn }
 
 
-updateOscillator2WaveformBtn : Button.Model OscillatorWaveform -> Model -> Model
+updateOscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
 updateOscillator2WaveformBtn btn model =
     { model | oscillator2WaveformBtn = btn }
 
 
-updateFilterTypeBtn : Button.Model FilterType -> Model -> Model
+updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
 updateFilterTypeBtn btn model =
     { model | filterTypeBtn = btn }

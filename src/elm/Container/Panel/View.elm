@@ -3,7 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
-import Component.NordButton as Button
+import Component.OptionPicker as OptionPicker
 import Port exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -63,7 +63,7 @@ filter model =
         [ div [ class "filter" ]
             [ nordKnob model Knob.FilterCutoff "Frequency"
             , nordKnob model Knob.FilterQ "Resonance"
-            , Button.nordButton "Filter Type"
+            , OptionPicker.optionPicker "Filter Type"
                 FilterTypeChange
                 filterTypePort
                 model.filterTypeBtn
@@ -74,7 +74,7 @@ filter model =
 osc1 : Model -> Html Msg
 osc1 model =
     div [ class "oscillators__osc1" ]
-        [ Button.nordButton "Waveform"
+        [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
             oscillator1WaveformPort
             model.oscillator1WaveformBtn
@@ -85,8 +85,8 @@ osc1 model =
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "osc2" ]
-        [ Button.nordButton "Waveform"
+    div [ class "oscillators__osc2" ]
+        [ OptionPicker.optionPicker "Waveform"
             Oscillator2WaveformChange
             oscillator2WaveformPort
             model.oscillator2WaveformBtn

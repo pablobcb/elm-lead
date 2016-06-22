@@ -1,4 +1,4 @@
-module Component.NordButton exposing (..)
+module Component.OptionPicker exposing (..)
 
 -- where
 
@@ -80,9 +80,9 @@ option model elem label =
             ]
 
 
-nordButton : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
-nordButton label knobMsg cmdEmmiter model =
-    Html.App.map knobMsg
+optionPicker : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
+optionPicker label pickerMsg cmdEmmiter model =
+    Html.App.map pickerMsg
         <| view (\value -> value |> cmdEmmiter)
             label
             model
