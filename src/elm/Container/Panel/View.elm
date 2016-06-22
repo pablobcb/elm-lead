@@ -50,7 +50,7 @@ amplifier model =
     section "amplifier"
         [ nordKnob model Knob.AmpAttack "attack" 
         , nordKnob model Knob.AmpDecay "decay" 
-        , nordKnob model Knob.AmpGain "sustain"
+        , nordKnob model Knob.AmpSustain "sustain"
         , nordKnob model Knob.AmpGain "gain"
         ]
 

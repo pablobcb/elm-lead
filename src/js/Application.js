@@ -43,6 +43,12 @@ export default class Application {
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine()
+		// MACRO
+		
+		window.onblur = () => {
+			this.app.ports.panicPort.send()
+			this.audioEngine.panic()
+		}
 
 		// MIDI
 		if(this.midiAccess)
@@ -57,22 +63,22 @@ export default class Application {
 		this.app.ports.ampVolumePort
 			.subscribe((masterVolumeValue) => {
 				console.log(masterVolumeValue)
-				//this.audioEngine.setMasterVolumeGain(masterVolumeValue)
+				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
 		
-		this.app.ports.ampAttackVolumePort
+		this.app.ports.ampAttackPort
 			.subscribe((attackValue) => {
 				console.log(attackValue)
 				//this.audioEngine.setAmpAttack(attackValue)
 			})
 		
-		this.app.ports.ampDecayVolumePort
+		this.app.ports.ampDecayPort
 			.subscribe((decayValue) => {
 				console.log(decayValue)
 				//this.audioEngine.setAmpDecay(decayValue)
 			})
 
-		this.app.ports.ampSustainVolumePort
+		this.app.ports.ampSustainPort
 			.subscribe((sustainLevel) => {
 				console.log(sustainLevel)
 				//this.audioEngine.setAmpSustain(sustainLevel)
@@ -128,13 +134,7 @@ export default class Application {
 		this.app.ports.filterTypePort
 			.subscribe((filterType) => {
 				this.audioEngine.setFilterType(filterType)
-			})
-
-		// MACRO
-		window.onblur = () => {
-			this.app.ports.panicPort.send()
-			this.audioEngine.panic()
-		}
+			})		
 	}
 
 }
