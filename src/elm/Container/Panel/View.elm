@@ -49,8 +49,8 @@ amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
         [ div [ class "amplifier" ]
-            [ nordKnob model Knob.AmpAttack "attack" 
-            , nordKnob model Knob.AmpDecay "decay" 
+            [ nordKnob model Knob.AmpAttack "attack"
+            , nordKnob model Knob.AmpDecay "decay"
             , nordKnob model Knob.AmpSustain "sustain"
             , nordKnob model Knob.AmpGain "gain"
             ]
@@ -86,12 +86,12 @@ osc1 model =
 osc2 : Model -> Html Msg
 osc2 model =
     div [ class "oscillators__osc2" ]
-        [ OptionPicker.optionPicker "Waveform"
+        [ nordKnob model Knob.Osc2Semitone "semitone"
+        , OptionPicker.optionPicker "Waveform"
             Oscillator2WaveformChange
             oscillator2WaveformPort
             model.oscillator2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
-        , nordKnob model Knob.Osc2Semitone "semitone"
         , nordKnob model Knob.Osc2Detune "detune"
         ]
 
