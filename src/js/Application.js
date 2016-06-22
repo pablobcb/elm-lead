@@ -53,11 +53,29 @@ export default class Application {
 				this.audioEngine.onMIDIMessage(midiDataArray)
 			})
 
-		// VOLUME
-		this.app.ports.masterVolumePort
+		// AMP
+		this.app.ports.ampVolumePort
 			.subscribe((masterVolumeValue) => {
 				console.log(masterVolumeValue)
-				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
+				//this.audioEngine.setMasterVolumeGain(masterVolumeValue)
+			})
+		
+		this.app.ports.ampAttackVolumePort
+			.subscribe((attackValue) => {
+				console.log(attackValue)
+				//this.audioEngine.setAmpAttack(attackValue)
+			})
+		
+		this.app.ports.ampDecayVolumePort
+			.subscribe((decayValue) => {
+				console.log(decayValue)
+				//this.audioEngine.setAmpDecay(decayValue)
+			})
+
+		this.app.ports.ampSustainVolumePort
+			.subscribe((sustainLevel) => {
+				console.log(sustainLevel)
+				//this.audioEngine.setAmpSustain(sustainLevel)
 			})
 
 		// OSCILLATORS
@@ -106,7 +124,7 @@ export default class Application {
 			.subscribe((amount) => {
 				this.audioEngine.setFilterQ(amount)
 			})
-		
+
 		this.app.ports.filterTypePort
 			.subscribe((filterType) => {
 				this.audioEngine.setFilterType(filterType)

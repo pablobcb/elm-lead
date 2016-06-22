@@ -59,8 +59,12 @@ type KnobInstance
     | Osc2Detune
     | FM
     | AmpGain
+    | AmpAttack
+    | AmpDecay
+    | AmpSustain
     | FilterCutoff
     | FilterQ
+    
 
 
 

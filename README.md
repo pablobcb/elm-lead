@@ -1,6 +1,6 @@
 # Web Lead
 
-browser-based synthetizer with MIDI support 
+browser-based polyphonic synthetizer with MIDI support 
 
 inspired on Clavia's Nord Lead series
 
@@ -17,7 +17,7 @@ inspired on Clavia's Nord Lead series
 
 ## Build Instructions
 
-`npm run build`
+`npm run build:production`
 
 ## Coding Style
-install and config [elm-format](https://github.com/avh4/elm-format)
+- Install and config [elm-format](https://github.com/avh4/elm-format)

@@ -48,7 +48,11 @@ column content =
 amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
-        [ nordKnob model Knob.AmpGain "gain" ]
+        [ nordKnob model Knob.AmpAttack "attack" 
+        , nordKnob model Knob.AmpDecay "decay" 
+        , nordKnob model Knob.AmpGain "sustain"
+        , nordKnob model Knob.AmpGain "gain"
+        ]
 
 
 filter : Model -> Html Msg
@@ -63,14 +67,6 @@ filter model =
                 model.filterTypeBtn
             ]
         ]
-
-
-
---[ knob model.filterAttackKnob "attack"
---, knob model.filterDecayKnob "decay"
---, knob model.filterSustainKnob "sustain"
---, knob model.filterReleaseKnob "release"
---]
 
 
 osc1 : Model -> Html Msg
