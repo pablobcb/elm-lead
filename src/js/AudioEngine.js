@@ -166,13 +166,14 @@ export default class AudioEngine {
 		if (validWaveforms.indexOf(waveform_) == -1)
 			throw new Error(`Invalid Waveform Type ${waveform_}`)
 
-
 		if(waveform_ === CONSTANTS.WAVEFORM_TYPE.NOISE){
 			this.oscillator2 = new NoiseOscillator(this.context)
 		} else {
-			this.oscillator2.setWaveform(waveform_)
+			// TODO store knob values inside app
+			this.oscillator2 =  new Oscillator(this.context, waveform_)
 		}
 
+		this.oscillator2.connect(this.oscillator2Gain)
 	}
 
 

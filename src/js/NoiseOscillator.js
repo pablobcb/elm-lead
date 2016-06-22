@@ -2,9 +2,10 @@ export default class NoiseOscillator {
 	constructor (context) {
 		this.context = context
 		this.node = this.context.createGain()
-		this.node.gain.value = 1
+		this.node.gain.value = .5
 		this.oscillators = {}
 		this.oscillatorGains = []
+		this.type = 'whitenoise'
 
 		for(let i=0; i<128; i++) {
 			this.oscillatorGains[i] = this.context.createGain()
@@ -59,15 +60,23 @@ export default class NoiseOscillator {
 			}
 		}
 
-		// Get an AudioBufferSourceNode.
-		// This is the AudioNode to use when we want to play an AudioBuffer
+		
+
+
 		const noiseOsc = this.context.createBufferSource()
-		// set the buffer in the AudioBufferSourceNode
+		noiseOsc.onended = () => {
+			noiseOsc.disconnect(this.oscillatorGains[midiNote])
+			//this.oscillators[midiNoteKey].disconnect(this.node)
+			delete this.oscillators[midiNoteKey]
+		}
+
 		noiseOsc.buffer = myArrayBuffer
-		// connect the AudioBufferSourceNode to the
-		// destination so we can hear the sound
-		noiseOsc.connect(this.context.destination)
-		this.oscillatorGains[midiNote].connect(this.node)
+		noiseOsc.loop = true
+
+
+		const gain = this.oscillatorGains[midiNoteKey]
+		noiseOsc.connect(gain)
+		gain.connect(this.node)
 		noiseOsc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = noiseOsc
 	

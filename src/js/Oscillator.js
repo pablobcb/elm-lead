@@ -1,12 +1,12 @@
 import CONSTANTS from './Constants'
 
 export default class Oscillator {
-	constructor (context, initalWaveform) {
+	constructor (context, waveform) {
 		this.context = context
 		this.node = this.context.createGain()
 		this.node.gain.value = 1
 		this.oscillators = {}
-		this.type = initalWaveform
+		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
 		this.pulseWidth = 0
@@ -19,51 +19,6 @@ export default class Oscillator {
 			this.oscillatorGains[i] = this.context.createGain()
 		}
 	}
-
-	/*createPulseOscillator = () => {
-		const pulseCurve = new Float32Array(256)
-		for(let i=0; i<128; i++) {
-			pulseCurve[i] = -1
-			pulseCurve[i + 128] = 1
-		}
-
-		const constantOneCurve = new Float32Array(2)
-		constantOneCurve[0] = 1
-		constantOneCurve[1] = 1
-
-		const node = this.context.createOscillator()
-		node.type = 'sawtooth'
-
-		const pulseShaper = this.context.createWaveShaper()
-		pulseShaper.curve = pulseCurve
-		node.connect(pulseShaper)
-
-		const widthGain = this.context.createGain()
-		widthGain.gain.value = 0
-		node.width = widthGain.gain
-		widthGain.connect(pulseShaper)
-
-		const constantOneShaper = this.context.createWaveShaper()
-		constantOneShaper.curve = constantOneCurve
-		node.connect(constantOneShaper)
-		constantOneShaper.connect(widthGain)
-
-		node.setWidth = function (width) {
-			node.width.value = width
-		}'lowpass
-
-		node.connect = function () {
-			pulseShaper.connect.apply(pulseShaper, arguments)
-			return node
-		}
-
-		node.disconnect = function () {
-			pulseShaper.disconnect.apply(pulseShaper, arguments)
-			return node
-		}
-
-		return node
-	}*/
 
 	frequencyFromNoteNumber = (note) => {
 		return 440 * Math.pow(2, (note - 69) / 12)
