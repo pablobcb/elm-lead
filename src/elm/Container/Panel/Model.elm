@@ -37,7 +37,7 @@ type alias Model =
 knobs : List Knob.Model
 knobs =
     [ Knob.init Knob.OscMix 0 -50 50 1 oscillatorsBalancePort
-    , Knob.init Knob.PW 0 0 100 1 pulseWidthPort
+    , Knob.init Knob.PW 0 0 90 1 pulseWidthPort
     , Knob.init Knob.Osc2Semitone 0 -60 60 1 oscillator2SemitonePort
     , Knob.init Knob.Osc2Detune 0 -100 100 1 oscillator2DetunePort
     , Knob.init Knob.FM 0 0 100 1 fmAmountPort

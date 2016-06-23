@@ -86,6 +86,7 @@ export default class Application {
 			})
 
 		// OSCILLATORS
+		
 		this.app.ports.oscillatorsBalancePort
 			.subscribe((oscillatorsBalanceValue) => {
 				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)

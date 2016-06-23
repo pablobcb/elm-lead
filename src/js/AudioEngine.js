@@ -169,10 +169,10 @@ export default class AudioEngine {
 		}
 	}
 
-	//setPulseWidth = (pulseWith) => {
-	//	this.oscillator1.setPulseWidth(pulseWith / 100)
-	//	this.oscillator2.setPulseWidth(pulseWith / 100)
-	//}
+	setPulseWidth = (pulseWith) => {
+		this.oscillator1.setPulseWidth(pulseWith / 100)
+		this.oscillator2.setPulseWidth(pulseWith / 100)
+	}
 
 	setOscillator1Waveform = (waveform) => {
 		const validWaveforms = [
@@ -186,10 +186,8 @@ export default class AudioEngine {
 		
 		if (validWaveforms.indexOf(waveform_) == -1)
 			throw new Error(`Invalid Waveform Type ${waveform_}`)
-
-
 		
-			this.oscillator1.setWaveform(waveform_)
+		this.oscillator1.setWaveform(waveform_)
 	}
 
 
@@ -210,7 +208,7 @@ export default class AudioEngine {
 		if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 				&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
 
-			if(nextWaveform === 'square'){
+			if(nextWaveform ===  CONSTANTS.WAVEFORM_TYPE.SQUARE){
 				this.swapOsc2(new PulseOscillator(this.context), 
 					this.oscillator2Gain)
 			}	

@@ -9,7 +9,6 @@ export default class Oscillator {
 		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
-		this.pulseWidth = 0
 		this.fmGain = 0
 		this.frequencyGains = [] //this.context.createGain()
 		this.oscillatorGains = []
@@ -56,7 +55,6 @@ export default class Oscillator {
 
 		osc.type = this.type
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
-		//debugger
 		osc.detune.value = this.detune + this.semitone
 		osc.onended = () => {
 			osc.disconnect(this.oscillatorGains[midiNote])
@@ -122,4 +120,6 @@ export default class Oscillator {
 		this.output.disconnect(node)
 		return this
 	}
+
+	setPulseWidth = () => {}
 }

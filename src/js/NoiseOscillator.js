@@ -14,7 +14,6 @@ export default class NoiseOscillator {
 		}
 	}
 
-
 	panic =	() => {
 		for(const midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
@@ -62,19 +61,13 @@ export default class NoiseOscillator {
 			}
 		}
 
-		
-
-
 		const noiseOsc = this.context.createBufferSource()
-		noiseOsc.onended = () => {
-			noiseOsc.disconnect(this.oscillatorGains[midiNote])
-			noiseOsc.disconnect(this.frequencyGains[midiNote].gain)
-			//this.oscillators[midiNoteKey].disconnect(this.node)
-			delete this.oscillators[midiNoteKey]
-		}
-
 		noiseOsc.buffer = myArrayBuffer
 		noiseOsc.loop = true
+		noiseOsc.onended = () => {
+			
+			delete this.oscillators[midiNoteKey]
+		}
 
 		const gain = this.oscillatorGains[midiNoteKey]
 		noiseOsc.connect(gain)
@@ -87,7 +80,9 @@ export default class NoiseOscillator {
 
 	setSemitone = () => {}
 
-	setDetune = () => {}	
+	setDetune = () => {}
+
+	setPulseWidth = () => {}
 
 	connect = function (node) {
 		this.node.connect(node)

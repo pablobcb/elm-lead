@@ -63,17 +63,6 @@ export default class PulseOscillator {
 		}
 	}
 
-	setPulseWidth = (pulseWidth) => {
-		this.pulseWidth = pulseWidth
-		if(this.type == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
-			for(const midiNote in this.oscillators) {
-				if(this.oscillators.hasOwnProperty(midiNote)) {
-					this.oscillators[midiNote].setWidth(this.pulseWidth)
-				}
-			}
-		}
-	}
-
 	setFMGain = (fmGain) => {
 		this.fmGain = fmGain
 		for(let i=0; i<128; i++) {
@@ -98,7 +87,7 @@ export default class PulseOscillator {
 		this.sawNode.connect(this.pulseShaper)
 		
 		const widthGain = this.context.createGain()
-		widthGain.gain.value = 0
+		widthGain.gain.value = this.pulseWidth
 		this.sawNode.width = widthGain.gain
 		
 		widthGain.connect(this.pulseShaper)
@@ -142,7 +131,8 @@ export default class PulseOscillator {
 
 	}
 
-	setWidth = (width) => {
+	setPulseWidth = (width) => {
+		this.pulseWidth = width
 		this.sawNode.width.value = width
 	}
 
