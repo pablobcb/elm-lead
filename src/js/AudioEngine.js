@@ -196,17 +196,17 @@ export default class AudioEngine {
 		]
 
 
-		const waveform_ = waveform.toLowerCase()
+		const nextWaveform = waveform.toLowerCase()
 
-		if (validWaveforms.indexOf(waveform_) == -1)
-			throw new Error(`Invalid Waveform Type ${waveform_}`)
+		if (validWaveforms.indexOf(nextWaveform) == -1)
+			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 
 		if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& waveform_ !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
-				this.oscillator2.setWaveform(waveform_)
+			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
+				this.oscillator2.setWaveform(nextWaveform)
 		}
 		else if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& waveform_ === CONSTANTS.WAVEFORM_TYPE.NOISE ){
+			&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE ){
 				this.oscillator2 = new NoiseOscillator(this.context)
 				this.oscillator2.connect(this.oscillator2Gain)
 				this.oscillator2.oscillatorGains.map((oscGain, i) =>
@@ -214,8 +214,14 @@ export default class AudioEngine {
 				)
 		}
 		else if(this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& waveform_ !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
-				this.oscillator2 =  new Oscillator(this.context, waveform_)
+			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
+				this.oscillator2 =  new Oscillator(this.context, nextWaveform)
+
+				this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
+				this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
+				this.oscillator2Gain.gain.value(this.panelState.oscs.osc2Gain)
+
+
 				this.oscillator2.oscillatorGains.map((oscGain, i) =>
 					oscGain.connect(this.fmGains[i])
 				)
