@@ -21,7 +21,7 @@ export default class PulseOscillator {
 		this.semitone = 0
 		this.pulseWidth = 0
 		this.fmGain = 0
-		this.frequencyGains = [] //this.context.createGain()
+		this.frequencyGains = []
 		this.oscillatorGains = []
 
 		for(let i=0; i<128; i++) {
@@ -85,8 +85,9 @@ export default class PulseOscillator {
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		debugger
+		//debugger
 		if(midiNoteKey in this.oscillators){
+			console.log(this.oscillators)
 			return
 		}
 
@@ -112,21 +113,18 @@ export default class PulseOscillator {
 		this.sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		this.sawNode.detune.value = this.detune + this.semitone
 		
-		this.sawNode.onended = () => {			
-			this.pulseShaper.disconnect(this.oscillatorGains[midiNote])
-			this.frequencyGains[midiNote].disconnect(this.sawNode.frequency)
-			delete this.oscillators[midiNoteKey]
-		}
-
-
 		this.pulseShaper.connect(this.oscillatorGains[midiNote])
-		
 		this.frequencyGains[midiNote].connect(this.sawNode.frequency)
-
-
 		this.pulseShaper.connect(this.output)
+		
 		this.sawNode.start(this.context.currentTime)
+		
 		this.oscillators[midiNoteKey] = this.sawNode
+
+		this.sawNode.onended = () => {		
+			delete this.oscillators[midiNoteKey]	
+
+		}		
 	}
 
 
