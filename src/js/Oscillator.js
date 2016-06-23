@@ -62,17 +62,9 @@ export default class Oscillator {
 
 		const osc = this.context.createOscillator()
 
-		// PW
-		/*const osc = this.type != 'square' ?
-			this.context.createOscillator() :
-			this.createPulseOscillator()
-
-		if(this.type == 'square')
-			osc.setWidth(this.pulseWidth)*/
-
-		// OSC
 		osc.type = this.type
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
+		//debugger
 		osc.detune.value = this.detune + this.semitone
 		osc.onended = () => {
 			osc.disconnect(this.oscillatorGains[midiNote])
@@ -81,12 +73,9 @@ export default class Oscillator {
 			delete this.oscillators[midiNoteKey]
 		}
 
-		// FM
-		//const fmGain = this.context.createGain()
-		//this.fmGain[midiNote].gain.value = this.fmGain
 		osc.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(osc.frequency)
-		//this.frequencyGains[midiNoteKey] = fmGain
+
 
 		osc.connect(this.node)
 		osc.start(this.context.currentTime)
@@ -98,7 +87,7 @@ export default class Oscillator {
 		for(const midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].detune.value =
-					this.detune + this.semitone
+					detune + this.semitone
 			}
 		}
 	}
@@ -116,11 +105,6 @@ export default class Oscillator {
 	setWaveform = (waveform) => {
 		for(const midiNote in this.oscillators) {
 			if(this.oscillators.hasOwnProperty(midiNote)) {
-				/*if(waveform == 'square' || this.type == 'square') {
-					this.noteOff(Number(midiNote))
-					this.type = waveform
-					this.noteOn(Number(midiNote))
-				}*/
 				this.oscillators[midiNote].type = waveform
 			}
 		}
