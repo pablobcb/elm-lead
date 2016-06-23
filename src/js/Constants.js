@@ -1,4 +1,5 @@
 export default {
+	MAX_NOTES: 128,
 	FILTER_TYPE: {
 		HIGHPASS: 'highpass',
 		LOWPASS: 'lowpass',

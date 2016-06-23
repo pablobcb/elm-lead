@@ -71,7 +71,7 @@ init =
         OptionPicker.init
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
-            , ( "sqr", Square )
+            , ( "pulse", Square )
             , ( "noise", WhiteNoise )
             ]
     }

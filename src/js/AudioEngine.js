@@ -12,7 +12,8 @@ export default class AudioEngine {
 			amp: {},
 			oscs: {
 				osc2Semitone: 0, 
-				osc2Detune: 0
+				osc2Detune: 0,
+				osc1FmGain : 0
 			}
 		}
 
@@ -84,7 +85,7 @@ export default class AudioEngine {
 
 		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
-			this.fmGains[i].gain.value = 0
+			this.fmGains[i].gain.value = this.panelState.oscs.osc1FmGain
 
 			//TODO : MOVE FM GAIN TO OSC CLASS
 			this.oscillator2.oscillatorGains[i].connect(this.fmGains[i])
@@ -164,8 +165,10 @@ export default class AudioEngine {
 	}
 
 	setFmAmount = (fmAmount) => {
-		for (let i = 0; i < 128; i++) {
-			this.fmGains[i].gain.value = 10 * fmAmount
+		const amount = 10 * fmAmount
+		this.panelState.oscs.osc1FmGain = amount
+		for (let i = 0; i < CONSTANTS.MAX_NOTES ; i++) {			
+			this.fmGains[i].gain.value = amount
 		}
 	}
 
@@ -182,12 +185,13 @@ export default class AudioEngine {
 			CONSTANTS.WAVEFORM_TYPE.SQUARE
 		]
 		
-		const waveform_ = waveform.toLowerCase()
+		const nextWaveform = waveform.toLowerCase()
 		
-		if (validWaveforms.indexOf(waveform_) == -1)
-			throw new Error(`Invalid Waveform Type ${waveform_}`)
+		if (validWaveforms.indexOf(nextWaveform) == -1)
+			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 		
-		this.oscillator1.setWaveform(waveform_)
+		this.oscillator1.setWaveform(nextWaveform)
+		
 	}
 
 
@@ -242,13 +246,33 @@ export default class AudioEngine {
 
 		this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
 		this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
-				
-		this.oscillator2.connect(gainB)
-
 		this.oscillator2.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
-		)
+		)	
+		this.oscillator2.connect(gainB)
 
+		
+
+	}
+
+	//god this is ugly
+	swapOsc1 = (osc, gainB) => {
+		const now = this.context.currentTime
+		for(const midiNote in this.oscillator1.oscillators) {
+				if(this.oscillator1.oscillators.hasOwnProperty(midiNote)) {
+					osc.noteOn(midiNote)
+					this.oscillator1.noteOff(now, midiNote)
+				}
+		}
+		this.oscillator1 = osc
+	
+		//for(let i = 0 ; i < CONSTANTS.MAX_NOTES ; i++)
+		//	this.fmGains[i].gain.value = this.panelState.oscs.osc1FmGain
+		
+		this.oscillator1.oscillatorGains.map((oscGain, i) =>
+			oscGain.connect(this.fmGains[i])
+		)
+		this.oscillator1.connect(gainB)
 	}
 
 

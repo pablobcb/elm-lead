@@ -136,6 +136,8 @@ export default class PulseOscillator {
 		this.sawNode.width.value = width
 	}
 
+	setWaveform = () => {}
+
 	connect = function (node) {
 		this.output.connect(node)
 		return this
