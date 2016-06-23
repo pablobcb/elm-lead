@@ -5,9 +5,11 @@ export default class NoiseOscillator {
 		this.node.gain.value = .5
 		this.oscillators = {}
 		this.oscillatorGains = []
+		this.frequencyGains = []
 		this.type = 'whitenoise'
 
 		for(let i=0; i<128; i++) {
+			this.frequencyGains[i] = this.context.createGain()
 			this.oscillatorGains[i] = this.context.createGain()
 		}
 	}
@@ -66,6 +68,7 @@ export default class NoiseOscillator {
 		const noiseOsc = this.context.createBufferSource()
 		noiseOsc.onended = () => {
 			noiseOsc.disconnect(this.oscillatorGains[midiNote])
+			noiseOsc.disconnect(this.frequencyGains[midiNote].gain)
 			//this.oscillators[midiNoteKey].disconnect(this.node)
 			delete this.oscillators[midiNoteKey]
 		}
@@ -73,16 +76,18 @@ export default class NoiseOscillator {
 		noiseOsc.buffer = myArrayBuffer
 		noiseOsc.loop = true
 
-
 		const gain = this.oscillatorGains[midiNoteKey]
 		noiseOsc.connect(gain)
+		noiseOsc.connect(this.frequencyGains[midiNote].gain)
 		gain.connect(this.node)
 		noiseOsc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = noiseOsc
 	
 	}
 
-	
+	setSemitone = () => {}
+
+	setDetune = () => {}	
 
 	connect = function (node) {
 		this.node.connect(node)

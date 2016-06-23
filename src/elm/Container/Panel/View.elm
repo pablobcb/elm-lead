@@ -102,10 +102,11 @@ oscillatorSection model =
         [ div [ class "oscillators" ]
             [ osc1 model, osc2 model ]
         , div [ class "oscillators__extra" ]
-            [ nordKnob model
-                Knob.PW
-                "PW"
-            , nordKnob model
+            [ --nordKnob model
+             ---   Knob.PW
+            --    "PW"
+           --a , 
+            nordKnob model
                 Knob.OscMix
                 "mix"
             ]
