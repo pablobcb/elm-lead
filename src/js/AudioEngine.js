@@ -9,7 +9,10 @@ export default class AudioEngine {
 		this.panelState = { 
 			filter : {}, 
 			amp: {},
-			oscs: {osc2Semitone:0, osc2Detune:0}
+			oscs: {
+				osc2Semitone: 0, 
+				osc2Detune: 0
+			}
 		}
 
 		this.initializeMasterVolume()
@@ -208,48 +211,38 @@ export default class AudioEngine {
 		else if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE ){
 				
-				const nextOsc = new NoiseOscillator(this.context)
-				const now = this.context.currentTime
-
-				for(const midiNote in this.oscillator2.oscillators) {
-					if(this.oscillator2.oscillators.hasOwnProperty(midiNote)) {
-						nextOsc.noteOn(midiNote)
-						this.oscillator2.noteOff(now, midiNote)
-					}
-				}
-
-				this.oscillator2 = nextOsc
-				this.oscillator2.connect(this.oscillator2Gain)
-				this.oscillator2.oscillatorGains.map((oscGain, i) =>
-					oscGain.connect(this.fmGains[i])
-				)
+				const noiseOsc = new NoiseOscillator(this.context)
+				this.swapOsc2(noiseOsc, this.oscillator2Gain)
 		}
 		else if(this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
-				const nextOsc = new Oscillator(this.context, nextWaveform)
 
-				const now = this.context.currentTime
-
-				for(const midiNote in this.oscillator2.oscillators) {
-					if(this.oscillator2.oscillators.hasOwnProperty(midiNote)) {
-						nextOsc.noteOn(midiNote)
-						this.oscillator2.noteOff(now, midiNote)
-					}
-				}
-
-				this.oscillator2 = nextOsc
-				// FIX DETUNE AND BALANCE
-				this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
-				this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
-				this.oscillator2Gain.gain.value = this.panelState.oscs.osc2Gain
-
-
-				this.oscillator2.oscillatorGains.map((oscGain, i) =>
-					oscGain.connect(this.fmGains[i])
-				)
-				this.oscillator2.connect(this.oscillator2Gain)
+				const osc = new Oscillator(this.context, nextWaveform)
+				this.swapOsc2(osc, this.oscillator2Gain)
+				
 		}
 				
+	}
+
+	swapOsc2 = (osc, gainB) => {
+		const now = this.context.currentTime
+		for(const midiNote in this.oscillator2.oscillators) {
+				if(this.oscillator2.oscillators.hasOwnProperty(midiNote)) {
+					osc.noteOn(midiNote)
+					this.oscillator2.noteOff(now, midiNote)
+				}
+		}
+		this.oscillator2  = osc
+
+		this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
+		this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
+				
+		this.oscillator2.connect(gainB)
+
+		this.oscillator2.oscillatorGains.map((oscGain, i) =>
+			oscGain.connect(this.fmGains[i])
+		)
+
 	}
 
 
