@@ -77,22 +77,24 @@ osc1 model =
         [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
             oscillator1WaveformPort
-            model.oscillator1WaveformBtn
-        , span [ class "oscillators__label" ] [ text "OSC 1" ]
+            model.oscillator1WaveformBtn        
         , nordKnob model Knob.FM "FM"
+        , span [ class "oscillators__label" ] [ text "OSC 1" ]
         ]
 
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "oscillators__osc2" ]
-        [ nordKnob model Knob.Osc2Semitone "semitone"
-        , OptionPicker.optionPicker "Waveform"
-            Oscillator2WaveformChange
-            oscillator2WaveformPort
-            model.oscillator2WaveformBtn
-        , span [ class "oscillators__label" ] [ text "OSC 2" ]
-        , nordKnob model Knob.Osc2Detune "detune"
+    div [class "fix-me"]
+        [ div [ class "oscillators__osc2" ]
+            [ nordKnob model Knob.Osc2Semitone "semitone"
+            , OptionPicker.optionPicker "Waveform"
+                Oscillator2WaveformChange
+                oscillator2WaveformPort
+                model.oscillator2WaveformBtn
+            , nordKnob model Knob.Osc2Detune "detune"
+            ]
+        , div [class "fix-me2"] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
 
