@@ -3,8 +3,8 @@ import CONSTANTS from './Constants'
 export default class Oscillator {
 	constructor (context, waveform) {
 		this.context = context
-		this.node = this.context.createGain()
-		this.node.gain.value = 1
+		this.output = this.context.createGain()
+		this.output.gain.value = 1
 		this.oscillators = {}
 		this.type = waveform
 		this.detune = 0
@@ -44,14 +44,6 @@ export default class Oscillator {
 
 		this.oscillators[midiNoteKey].stop(at)
 
-		// FM
-		/*this.frequency[midiNoteKey]
-			.disconnect(this.oscillators[midiNoteKey].frequency)*/
-
-		//delete this.frequency[midiNoteKey]
-
-		// OSC
-		
 	}
 
 	noteOn = (midiNote) => {
@@ -69,7 +61,7 @@ export default class Oscillator {
 		osc.onended = () => {
 			osc.disconnect(this.oscillatorGains[midiNote])
 			this.frequencyGains[midiNote].disconnect(osc.frequency)
-			this.oscillators[midiNoteKey].disconnect(this.node)
+			this.oscillators[midiNoteKey].disconnect(this.output)
 			delete this.oscillators[midiNoteKey]
 		}
 
@@ -77,7 +69,7 @@ export default class Oscillator {
 		this.frequencyGains[midiNote].connect(osc.frequency)
 
 
-		osc.connect(this.node)
+		osc.connect(this.output)
 		osc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = osc
 	}
@@ -111,16 +103,7 @@ export default class Oscillator {
 		this.type = waveform
 	}
 
-	setPulseWidth = (pulseWidth) => {
-		this.pulseWidth = pulseWidth
-		if(this.type == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
-			for(const midiNote in this.oscillators) {
-				if(this.oscillators.hasOwnProperty(midiNote)) {
-					this.oscillators[midiNote].setWidth(this.pulseWidth)
-				}
-			}
-		}
-	}
+
 
 	setFMGain = (fmGain) => {
 		this.fmGain = fmGain
@@ -131,12 +114,12 @@ export default class Oscillator {
 	}
 
 	connect = function (node) {
-		this.node.connect(node)
+		this.output.connect(node)
 		return this
 	}
 
 	disconnect = function (node) {
-		this.node.disconnect(node)
+		this.output.disconnect(node)
 		return this
 	}
 }

@@ -1,4 +1,5 @@
 import Oscillator from './Oscillator'
+import PulseOscillator from './PulseOscillator'
 import NoiseOscillator from './NoiseOscillator'
 import CONSTANTS from './Constants'
 
@@ -186,7 +187,9 @@ export default class AudioEngine {
 		if (validWaveforms.indexOf(waveform_) == -1)
 			throw new Error(`Invalid Waveform Type ${waveform_}`)
 
-		this.oscillator1.setWaveform(waveform_)
+
+		
+			this.oscillator1.setWaveform(waveform_)
 	}
 
 
@@ -205,23 +208,28 @@ export default class AudioEngine {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 
 		if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
+				&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
+
+			if(nextWaveform === 'square'){
+				this.swapOsc2(new PulseOscillator(this.context), 
+					this.oscillator2Gain)
+			}	
+			else
 				this.oscillator2.setWaveform(nextWaveform)
 		}
 		else if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE ){
-				
-				const noiseOsc = new NoiseOscillator(this.context)
-				this.swapOsc2(noiseOsc, this.oscillator2Gain)
+				&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE ){
+
+			this.swapOsc2(new NoiseOscillator(this.context), 
+				this.oscillator2Gain)
 		}
 		else if(this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
-
-				const osc = new Oscillator(this.context, nextWaveform)
-				this.swapOsc2(osc, this.oscillator2Gain)
-				
-		}
-				
+				&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE ){
+			this.swapOsc2(
+				new Oscillator(this.context, nextWaveform), 
+				this.oscillator2Gain
+			)				
+		}				
 	}
 
 	swapOsc2 = (osc, gainB) => {
@@ -232,7 +240,7 @@ export default class AudioEngine {
 					this.oscillator2.noteOff(now, midiNote)
 				}
 		}
-		this.oscillator2  = osc
+		this.oscillator2 = osc
 
 		this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
 		this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
