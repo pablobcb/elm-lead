@@ -1,7 +1,6 @@
 import BaseOscillator from './BaseOscillator'
 import CONSTANTS from '../../Constants'
 
-
 const pulseCurve = new Float32Array(256)
 for(let i=0;i<128;i++) {
 	pulseCurve[i] = -1
@@ -20,8 +19,11 @@ export default class PulseOscillator extends BaseOscillator {
 		this.semitone = 0
 		this.pulseWidth = 0
 		this.fmGain = 0
-		this.widthGain = this.context.createGain()
+		this.widthGains = []
 
+		for(let i=0; i<128; i++) {
+			this.widthGains[i] = this.context.createGain()
+		}
 	}
 
 	setDetune = (detune) => {
@@ -67,17 +69,15 @@ export default class PulseOscillator extends BaseOscillator {
 		pulseShaper.curve = pulseCurve
 		sawNode.connect(pulseShaper)
 		
-		
-		this.widthGain.gain.value = this.pulseWidth
-		//debugger
-		//sawNode.width = this.widthGain.gain
-		
-		this.widthGain.connect(pulseShaper)
+		const widthGain = this.widthGains[midiNote]
+		widthGain.gain.value = this.pulseWidth
+
+		widthGain.connect(pulseShaper)
 		
 		const constantOneShaper = this.context.createWaveShaper()
 		constantOneShaper.curve = constantOneCurve
 		sawNode.connect(constantOneShaper)
-		constantOneShaper.connect(this.widthGain)
+		constantOneShaper.connect(widthGain)
 
 
 		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
@@ -99,11 +99,8 @@ export default class PulseOscillator extends BaseOscillator {
 	setPulseWidth = (width) => {
 		this.pulseWidth = width
 		
-		if(this.widthGain){
-			this.widthGain.gain.value = width
-		}
+		this.widthGains.forEach(widthGain => {
+			widthGain.gain.value = width
+		})
 	}
-
 }
-
-
