@@ -1,4 +1,5 @@
 import BaseOscillator from './BaseOscillator'
+import CONSTANTS from '../../Constants'
 
 
 const pulseCurve = new Float32Array(256)
@@ -19,6 +20,8 @@ export default class PulseOscillator extends BaseOscillator {
 		this.semitone = 0
 		this.pulseWidth = 0
 		this.fmGain = 0
+		this.widthGain = this.context.createGain()
+
 	}
 
 	setDetune = (detune) => {
@@ -57,50 +60,48 @@ export default class PulseOscillator extends BaseOscillator {
 			return
 		}
 
-		this.sawNode = this.context.createOscillator()
-		this.sawNode.type = 'sawtooth'
-		this.pulseShaper = this.context.createWaveShaper()
-		this.pulseShaper.curve = pulseCurve
-		this.sawNode.connect(this.pulseShaper)
+		const sawNode = this.context.createOscillator()
+		sawNode.type = CONSTANTS.WAVEFORM_TYPE.SAWTOOTH
+
+		const pulseShaper = this.context.createWaveShaper()
+		pulseShaper.curve = pulseCurve
+		sawNode.connect(pulseShaper)
 		
-		this.widthGain = this.context.createGain()
+		
 		this.widthGain.gain.value = this.pulseWidth
-		this.sawNode.width = this.widthGain.gain
+		//debugger
+		//sawNode.width = this.widthGain.gain
 		
-		this.widthGain.connect(this.pulseShaper)
+		this.widthGain.connect(pulseShaper)
 		
-		this.constantOneShaper = this.context.createWaveShaper()
-		this.constantOneShaper.curve = constantOneCurve
-		this.sawNode.connect(this.constantOneShaper)
-		this.constantOneShaper.connect(this.widthGain)
-	
+		const constantOneShaper = this.context.createWaveShaper()
+		constantOneShaper.curve = constantOneCurve
+		sawNode.connect(constantOneShaper)
+		constantOneShaper.connect(this.widthGain)
 
 
-		this.sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
-		this.sawNode.detune.value = this.detune + this.semitone
+		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
+		sawNode.detune.value = this.detune + this.semitone
 		
-		this.pulseShaper.connect(this.oscillatorGains[midiNote])
-		this.frequencyGains[midiNote].connect(this.sawNode.frequency)
-		this.pulseShaper.connect(this.output)
+		pulseShaper.connect(this.oscillatorGains[midiNote])
+		this.frequencyGains[midiNote].connect(sawNode.frequency)
+		pulseShaper.connect(this.output)
 		
-		this.sawNode.start(this.context.currentTime)
+		sawNode.start(this.context.currentTime)
 		
-		this.oscillators[midiNoteKey] = this.sawNode
+		this.oscillators[midiNoteKey] = sawNode
 
-		this.sawNode.onended = () => {		
+		sawNode.onended = () => {		
 			delete this.oscillators[midiNoteKey]
 		}
-		console.log(this)
 	}
 
 	setPulseWidth = (width) => {
 		this.pulseWidth = width
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				console.log(midiNote)
-				this.oscillators[midiNote].width = width
-			}
-		}	
+		
+		if(this.widthGain){
+			this.widthGain.gain.value = width
+		}
 	}
 
 }
