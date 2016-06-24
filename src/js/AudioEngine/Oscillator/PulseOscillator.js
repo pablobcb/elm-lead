@@ -1,3 +1,5 @@
+import BaseOscillator from './BaseOscillator'
+
 
 const pulseCurve = new Float32Array(256)
 for(let i=0;i<128;i++) {
@@ -6,42 +8,18 @@ for(let i=0;i<128;i++) {
 }
 
 const constantOneCurve = new Float32Array(2)
-constantOneCurve[0]=1
-constantOneCurve[1]=1
+constantOneCurve[0] = 1
+constantOneCurve[1] = 1
 
-
-export default class PulseOscillator {
+export default class PulseOscillator extends BaseOscillator {
 	constructor (context) {
-		this.context = context
-		this.output = this.context.createGain()
-		this.output.gain.value = 1
-		this.oscillators = {}
+		super(context)
 		this.type = 'pulse'
 		this.detune = 0
 		this.semitone = 0
 		this.pulseWidth = 0
 		this.fmGain = 0
-		this.frequencyGains = []
-		this.oscillatorGains = []
-
-		for(let i=0; i<128; i++) {
-			this.frequencyGains[i] = this.context.createGain()
-			this.oscillatorGains[i] = this.context.createGain()
-		}
 	}
-
-	frequencyFromNoteNumber = (note) => {
-		return 440 * Math.pow(2, (note - 69) / 12)
-	}
-
-	panic =	() => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].stop()
-			}
-		}
-	}
-
 
 	setDetune = (detune) => {
 		this.detune = detune
@@ -117,35 +95,9 @@ export default class PulseOscillator {
 	}
 
 
-	noteOff = (at, midiNote) => {
-		let midiNoteKey
-		
-		if(midiNote)
-			midiNoteKey = midiNote.toString()
-		
-			
-		if(!(midiNoteKey in this.oscillators))
-			return
-
-		this.oscillators[midiNoteKey].stop(at)
-
-	}
-
 	setPulseWidth = (width) => {
 		this.pulseWidth = width
 		this.sawNode.width.value = width
-	}
-
-	setWaveform = () => {}
-
-	connect = function (node) {
-		this.output.connect(node)
-		return this
-	}
-
-	disconnect = function (node) {
-		this.output.disconnect(node)
-		return this
 	}
 
 }

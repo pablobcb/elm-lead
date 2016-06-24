@@ -1,48 +1,14 @@
-import CONSTANTS from './Constants'
+import BaseOscillator from './BaseOscillator'
 
-export default class Oscillator {
+
+export default class Oscillator extends BaseOscillator {
 	constructor (context, waveform) {
-		this.context = context
-		this.output = this.context.createGain()
-		this.output.gain.value = 1
-		this.oscillators = {}
+		super(context)
 		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
 		this.fmGain = 0
-		this.frequencyGains = [] //this.context.createGain()
-		this.oscillatorGains = []
-
-		for(let i=0; i<128; i++) {
-			this.frequencyGains[i] = this.context.createGain()
-			this.oscillatorGains[i] = this.context.createGain()
-		}
-	}
-
-	frequencyFromNoteNumber = (note) => {
-		return 440 * Math.pow(2, (note - 69) / 12)
-	}
-
-	panic =	() => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].stop()
-			}
-		}
-	}
-
-	noteOff = (at, midiNote) => {
-		let midiNoteKey
 		
-		if(midiNote)
-			midiNoteKey = midiNote.toString()
-		
-			
-		if(!(midiNoteKey in this.oscillators))
-			return
-
-		this.oscillators[midiNoteKey].stop(at)
-
 	}
 
 	noteOn = (midiNote) => {
@@ -111,15 +77,4 @@ export default class Oscillator {
 		}
 	}
 
-	connect = function (node) {
-		this.output.connect(node)
-		return this
-	}
-
-	disconnect = function (node) {
-		this.output.disconnect(node)
-		return this
-	}
-
-	setPulseWidth = () => {}
 }

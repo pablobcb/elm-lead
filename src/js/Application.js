@@ -1,6 +1,6 @@
 import Elm from '../elm/Main.elm'
 
-import AudioEngine from './AudioEngine'
+import AudioEngine from './AudioEngine/AudioEngine'
 
 export default class Application {
 

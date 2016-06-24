@@ -1,7 +1,7 @@
-import Oscillator from './Oscillator'
-import PulseOscillator from './PulseOscillator'
-import NoiseOscillator from './NoiseOscillator'
-import CONSTANTS from './Constants'
+import Oscillator from './Oscillator/Oscillator'
+import PulseOscillator from './Oscillator/PulseOscillator'
+import NoiseOscillator from './Oscillator/NoiseOscillator'
+import CONSTANTS from '../Constants'
 
 export default class AudioEngine {
 	constructor () {

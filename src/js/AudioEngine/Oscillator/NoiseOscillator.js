@@ -1,39 +1,13 @@
-export default class NoiseOscillator {
+import BaseOscillator from './BaseOscillator'
+
+export default class NoiseOscillator extends BaseOscillator{
 	constructor (context) {
-		this.context = context
-		this.node = this.context.createGain()
-		this.node.gain.value = .5
-		this.oscillators = {}
-		this.oscillatorGains = []
-		this.frequencyGains = []
+		super(context)
+
 		this.type = 'whitenoise'
 
-		for(let i=0; i<128; i++) {
-			this.frequencyGains[i] = this.context.createGain()
-			this.oscillatorGains[i] = this.context.createGain()
-		}
 	}
 
-	panic =	() => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].stop()
-			}
-		}
-	}
-
-	noteOff = (at, midiNote) => {
-		let midiNoteKey
-		
-		if(midiNote)
-			midiNoteKey = midiNote.toString()
-		
-			
-		if(!(midiNoteKey in this.oscillators))
-			return
-
-		this.oscillators[midiNoteKey].stop()
-	}
 
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
@@ -72,25 +46,10 @@ export default class NoiseOscillator {
 		const gain = this.oscillatorGains[midiNoteKey]
 		noiseOsc.connect(gain)
 		noiseOsc.connect(this.frequencyGains[midiNote].gain)
-		gain.connect(this.node)
+		gain.connect(this.output)
 		noiseOsc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = noiseOsc
 	
 	}
 
-	setSemitone = () => {}
-
-	setDetune = () => {}
-
-	setPulseWidth = () => {}
-
-	connect = function (node) {
-		this.node.connect(node)
-		return this
-	}
-
-	disconnect = function (node) {
-		this.node.disconnect(node)
-		return this
-	}
 }
