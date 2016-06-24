@@ -9,6 +9,8 @@ export default class Oscillator extends BaseOscillator {
 		this.semitone = 0
 	}
 
+	_ = () => {}
+	
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 

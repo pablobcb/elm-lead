@@ -4,9 +4,9 @@ export default class ADSR {
 		this.attack = a
 		this.decay = d
 		this.sustain = s
-		this.release = r
+		this.release = 1// r
 		this.level = level
-		this.amount = 10
+		this.amount = 2
 		this.context = context
 
 
@@ -22,10 +22,10 @@ export default class ADSR {
 											+ this.attack + this.decay)
 	}
 
-	off = (at, target) => {
+	off = (target) => {
 		const now = this.context.currentTime
 		target.cancelScheduledValues(now)
-		target.stop()
-		//this.target.linearRampToValueAtTime(this.s, now + this.r)
+		target.linearRampToValueAtTime(0.1, now + this.release)
+		debugger
 	}
 }

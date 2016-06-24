@@ -14,7 +14,7 @@ export default class SynthEngine {
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
 				Q: 0
 			}, 
-			amp: new ADSR(this.context, 0, .5, 1, .2, .1),
+			amp: new ADSR(this.context, 0, .5, .7, .2, .1),
 			oscs: {
 				osc1: {
 					waveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
@@ -35,13 +35,15 @@ export default class SynthEngine {
 
 		this.initializeFilter()
 
-		this.initializeOscillators()
+		this.oscillator1 = new Oscillator(this.context,
+			this.state.oscs.osc1.waveformType)
+
+		this.oscillator2 = new Oscillator(this.context,
+			this.state.oscs.osc2.waveformType)
 
 		this.initializeOscillatorsGain()
 
-		this.initializeFMGain()
-
-		
+		this.initializeFMGain()		
 	}
 
 	initializeMasterOutput = () => {
@@ -59,15 +61,6 @@ export default class SynthEngine {
 		
 		this.filter.connect(this.masterVolume)
 	}
-
-	initializeOscillators = () => {
-		this.oscillator1 = new Oscillator(this.context,
-			this.state.oscs.osc1.waveformType)
-
-		this.oscillator2 = new Oscillator(this.context,
-			this.state.oscs.osc2.waveformType)
-	}
-
 
 	initializeOscillatorsGain = () => {
 		this.oscillator1Gain = this.context.createGain()
@@ -120,8 +113,12 @@ export default class SynthEngine {
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		this.oscillator1.noteOff(this.context.currentTime, midiNote)
-		this.oscillator2.noteOff(this.context.currentTime, midiNote)
+		const releaseCallback = (oscGain,osc ) => {
+			this.state.amp.off(oscGain, osc)
+		}
+
+		this.oscillator1.noteOff(midiNote, releaseCallback)
+		this.oscillator2.noteOff(midiNote, releaseCallback)
 	}
 
 	panic = () => {
@@ -264,9 +261,7 @@ export default class SynthEngine {
 		}
 		this.oscillator1 = osc
 	
-		//for(let i = 0 ; i < CONSTANTS.MAX_NOTES ; i++)
-		//	this.fmGains[i].gain.value = this.state.oscs.osc1.fmGain
-		
+
 		this.oscillator1.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)
