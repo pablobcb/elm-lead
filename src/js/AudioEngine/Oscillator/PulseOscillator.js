@@ -52,7 +52,6 @@ export default class PulseOscillator extends BaseOscillator {
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		//debugger
 		if(midiNoteKey in this.oscillators){
 			console.log(this.oscillators)
 			return
@@ -64,16 +63,16 @@ export default class PulseOscillator extends BaseOscillator {
 		this.pulseShaper.curve = pulseCurve
 		this.sawNode.connect(this.pulseShaper)
 		
-		const widthGain = this.context.createGain()
-		widthGain.gain.value = this.pulseWidth
-		this.sawNode.width = widthGain.gain
+		this.widthGain = this.context.createGain()
+		this.widthGain.gain.value = this.pulseWidth
+		this.sawNode.width = this.widthGain.gain
 		
-		widthGain.connect(this.pulseShaper)
+		this.widthGain.connect(this.pulseShaper)
 		
 		this.constantOneShaper = this.context.createWaveShaper()
 		this.constantOneShaper.curve = constantOneCurve
 		this.sawNode.connect(this.constantOneShaper)
-		this.constantOneShaper.connect(widthGain)
+		this.constantOneShaper.connect(this.widthGain)
 	
 
 
@@ -89,15 +88,19 @@ export default class PulseOscillator extends BaseOscillator {
 		this.oscillators[midiNoteKey] = this.sawNode
 
 		this.sawNode.onended = () => {		
-			delete this.oscillators[midiNoteKey]	
-
-		}		
+			delete this.oscillators[midiNoteKey]
+		}
+		console.log(this)
 	}
-
 
 	setPulseWidth = (width) => {
 		this.pulseWidth = width
-		this.sawNode.width.value = width
+		for(const midiNote in this.oscillators) {
+			if(this.oscillators.hasOwnProperty(midiNote)) {
+				console.log(midiNote)
+				this.oscillators[midiNote].width = width
+			}
+		}	
 	}
 
 }

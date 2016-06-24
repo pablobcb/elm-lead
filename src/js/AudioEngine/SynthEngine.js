@@ -26,7 +26,8 @@ export default class SynthEngine {
 					gain: .5,
 					semitone: 0,
 					detune: 0
-				}
+				},
+				pw: 0
 			}
 		}
 
@@ -149,8 +150,6 @@ export default class SynthEngine {
 		}
 		this.state.oscs.osc1.gain = this.oscillator1Gain.gain.value
 		this.state.oscs.osc2.gain = this.oscillator2Gain.gain.value
-
-		console.log(this.state)
 	}
 
 	setOscillator2Semitone = (oscillatorSemitone) => {
@@ -172,8 +171,10 @@ export default class SynthEngine {
 	}
 
 	setPulseWidth = (pulseWith) => {
-		this.oscillator1.setPulseWidth(pulseWith / 100)
-		this.oscillator2.setPulseWidth(pulseWith / 100)
+		const pw = pulseWith / 100
+
+		this.state.oscs.pw = pw
+		this.oscillator2.setPulseWidth(pw)
 	}
 
 	setOscillator1Waveform = (waveform) => {
@@ -232,7 +233,6 @@ export default class SynthEngine {
 			)				
 		}
 		this.state.oscs.osc2.waveformType = nextWaveform
-		console.log(this.state.oscs.osc2)
 	}
 
 	swapOsc2 = (osc, gainB) => {
@@ -244,7 +244,7 @@ export default class SynthEngine {
 				}
 		}
 		this.oscillator2 = osc
-
+		this.oscillator2.setPulseWidth(this.state.oscs.pw)
 		this.oscillator2.setDetune(this.state.oscs.osc2.detune)
 		this.oscillator2.setSemitone(this.state.oscs.osc2.semitone)
 		this.oscillator2.oscillatorGains.map((oscGain, i) =>
@@ -298,4 +298,5 @@ export default class SynthEngine {
 
 		this.filter.type = filterType_
 	}
+
 }
