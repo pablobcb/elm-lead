@@ -4,7 +4,7 @@ module Container.Panel.View exposing (..)
 
 import Component.Knob as Knob
 import Component.OptionPicker as OptionPicker
-import Port exposing (..)
+import Port
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
@@ -65,7 +65,7 @@ filter model =
             , nordKnob model Knob.FilterQ "Resonance"
             , OptionPicker.optionPicker "Filter Type"
                 FilterTypeChange
-                filterTypePort
+                Port.filterType
                 model.filterTypeBtn
             ]
         ]
@@ -76,8 +76,8 @@ osc1 model =
     div [ class "oscillators__osc1" ]
         [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
-            oscillator1WaveformPort
-            model.oscillator1WaveformBtn        
+            Port.oscillator1Waveform
+            model.oscillator1WaveformBtn
         , nordKnob model Knob.FM "FM"
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         ]
@@ -85,16 +85,16 @@ osc1 model =
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [class "fix-me"]
+    div [ class "fix-me" ]
         [ div [ class "oscillators__osc2" ]
             [ nordKnob model Knob.Osc2Semitone "semitone"
             , OptionPicker.optionPicker "Waveform"
                 Oscillator2WaveformChange
-                oscillator2WaveformPort
+                Port.oscillator2Waveform
                 model.oscillator2WaveformBtn
             , nordKnob model Knob.Osc2Detune "detune"
             ]
-        , div [class "fix-me2"] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
+        , div [ class "fix-me2" ] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
 
