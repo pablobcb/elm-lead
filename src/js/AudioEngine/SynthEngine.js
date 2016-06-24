@@ -8,7 +8,7 @@ export default class SynthEngine {
 	constructor () {
 		this.context = new AudioContext
 
-		this.panelState = { 
+		this.state = { 
 			filter: {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
@@ -16,14 +16,17 @@ export default class SynthEngine {
 			}, 
 			amp: new ADSR(this.context, 0, .5, 1, .2, .1),
 			oscs: {
-				osc1WaveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
-				osc1Gain: .5,
-				osc1FmGain : 0,
-				
-				osc2WaveformType: CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
-				osc2Gain: .5,
-				osc2Semitone: 0, 
-				osc2Detune: 0
+				osc1: {
+					waveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
+					gain: .5,
+					fmGain : 0
+				},				
+				osc2: {
+					waveformType: CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+					gain: .5,
+					semitone: 0,
+					detune: 0
+				}
 			}
 		}
 
@@ -43,36 +46,36 @@ export default class SynthEngine {
 	initializeMasterOutput = () => {
 		this.masterVolume = this.context.createGain()
 
-		this.masterVolume.gain.value = this.panelState.amp.level
+		this.masterVolume.gain.value = this.state.amp.level
 		this.masterVolume.connect(this.context.destination)
 	}
 
 	initializeFilter = () => {
 		this.filter = this.context.createBiquadFilter()
-		this.filter.type = this.panelState.filter.type
-		this.filter.frequency.value = this.panelState.filter.frequency
-		this.filter.Q.value = this.panelState.filter.Q
+		this.filter.type = this.state.filter.type
+		this.filter.frequency.value = this.state.filter.frequency
+		this.filter.Q.value = this.state.filter.Q
 		
 		this.filter.connect(this.masterVolume)
 	}
 
 	initializeOscillators = () => {
 		this.oscillator1 = new Oscillator(this.context,
-			this.panelState.oscs.osc1WaveformType)
+			this.state.oscs.osc1.waveformType)
 
 		this.oscillator2 = new Oscillator(this.context,
-			this.panelState.oscs.osc2WaveformType)
+			this.state.oscs.osc2.waveformType)
 	}
 
 
 	initializeOscillatorsGain = () => {
 		this.oscillator1Gain = this.context.createGain()
-		this.oscillator1Gain.gain.value = this.panelState.oscs.osc1Gain
+		this.oscillator1Gain.gain.value = this.state.oscs.osc1.gain
 		this.oscillator1Gain.connect(this.filter)
 		this.oscillator1.connect(this.oscillator1Gain)
 
 		this.oscillator2Gain = this.context.createGain()
-		this.oscillator2Gain.gain.value = this.panelState.oscs.osc2Gain
+		this.oscillator2Gain.gain.value = this.state.oscs.osc2.gain
 		this.oscillator2Gain.connect(this.filter)
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
@@ -82,7 +85,7 @@ export default class SynthEngine {
 
 		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
-			this.fmGains[i].gain.value = this.panelState.oscs.osc1FmGain
+			this.fmGains[i].gain.value = this.state.oscs.osc1.fmGain
 
 			//TODO : MOVE FM GAIN TO OSC CLASS
 			this.oscillator2.oscillatorGains[i].connect(this.fmGains[i])
@@ -127,39 +130,42 @@ export default class SynthEngine {
 
 	setMasterVolumeGain = (masterVolumeGain) => {
 		const vol =  masterVolumeGain / 100
-		this.panelState.amp.level = vol
+		this.state.amp.level = vol
 		this.masterVolume.gain.value = vol
 
 	}
 
 	setOscillatorsBalance = (oscillatorsBalance) => {
 		const gainPercentage = Math.abs(oscillatorsBalance) / 100
+		this.oscillator1Gain.gain.value = .5
+		this.oscillator2Gain.gain.value = .5
 
 		if (oscillatorsBalance > 0) {
 			this.oscillator1Gain.gain.value -= gainPercentage
 			this.oscillator2Gain.gain.value += gainPercentage
-		}
-		else if (oscillatorsBalance < 0) {
+		} else if (oscillatorsBalance < 0) {
 			this.oscillator1Gain.gain.value += gainPercentage
 			this.oscillator2Gain.gain.value -= gainPercentage
 		}
-		this.panelState.oscs.osc1Gain = this.oscillator1Gain.gain.value
-		this.panelState.oscs.osc2Gain = this.oscillator1Gain.gain.value
+		this.state.oscs.osc1.gain = this.oscillator1Gain.gain.value
+		this.state.oscs.osc2.gain = this.oscillator2Gain.gain.value
+
+		console.log(this.state)
 	}
 
 	setOscillator2Semitone = (oscillatorSemitone) => {
-		this.panelState.oscs.osc2Semitone = oscillatorSemitone
+		this.state.oscs.osc2.semitone = oscillatorSemitone
 		this.oscillator2.setSemitone(oscillatorSemitone)
 	}
 
 	setOscillator2Detune = (oscillatorDetune) => {
-		this.panelState.oscs.osc2Detune = oscillatorDetune
+		this.state.oscs.osc2.detune = oscillatorDetune
 		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
 	setFmAmount = (fmAmount) => {
 		const amount = 10 * fmAmount
-		this.panelState.oscs.osc1FmGain = amount
+		this.state.oscs.osc1.fmGain = amount
 		for (let i = 0; i < CONSTANTS.MAX_NOTES ; i++) {			
 			this.fmGains[i].gain.value = amount
 		}
@@ -224,7 +230,9 @@ export default class SynthEngine {
 				new Oscillator(this.context, nextWaveform), 
 				this.oscillator2Gain
 			)				
-		}				
+		}
+		this.state.oscs.osc2.waveformType = nextWaveform
+		console.log(this.state.oscs.osc2)
 	}
 
 	swapOsc2 = (osc, gainB) => {
@@ -237,8 +245,8 @@ export default class SynthEngine {
 		}
 		this.oscillator2 = osc
 
-		this.oscillator2.setDetune(this.panelState.oscs.osc2Detune)
-		this.oscillator2.setSemitone(this.panelState.oscs.osc2Semitone)
+		this.oscillator2.setDetune(this.state.oscs.osc2.detune)
+		this.oscillator2.setSemitone(this.state.oscs.osc2.semitone)
 		this.oscillator2.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)	
@@ -257,7 +265,7 @@ export default class SynthEngine {
 		this.oscillator1 = osc
 	
 		//for(let i = 0 ; i < CONSTANTS.MAX_NOTES ; i++)
-		//	this.fmGains[i].gain.value = this.panelState.oscs.osc1FmGain
+		//	this.fmGains[i].gain.value = this.state.oscs.osc1.fmGain
 		
 		this.oscillator1.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])

@@ -7,8 +7,6 @@ export default class Oscillator extends BaseOscillator {
 		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
-		this.fmGain = 0
-		
 	}
 
 	noteOn = (midiNote) => {
@@ -70,10 +68,8 @@ export default class Oscillator extends BaseOscillator {
 
 
 	setFMGain = (fmGain) => {
-		this.fmGain = fmGain
 		for(let i=0; i<128; i++) {
-			this.frequencyGains[i].gain.value = this.fmGain
-			console.log(this.fmGain)
+			this.frequencyGains[i].gain.value = fmGain
 		}
 	}
 
