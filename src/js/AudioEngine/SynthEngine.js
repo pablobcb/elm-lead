@@ -1,23 +1,33 @@
 import Oscillator from './Oscillator/Oscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
+import ADSR from './ADSR'
 import CONSTANTS from '../Constants'
 
-export default class AudioEngine {
+export default class SynthEngine {
 	constructor () {
 		this.context = new AudioContext
 
 		this.panelState = { 
-			filter : {}, 
-			amp: {},
+			filter: {
+				frequency: 12000,
+				type: CONSTANTS.FILTER_TYPE.LOWPASS,
+				Q: 0
+			}, 
+			amp: new ADSR(this.context, 0, .5, 1, .2, .1),
 			oscs: {
+				osc1WaveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
+				osc1Gain: .5,
+				osc1FmGain : 0,
+				
+				osc2WaveformType: CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
+				osc2Gain: .5,
 				osc2Semitone: 0, 
-				osc2Detune: 0,
-				osc1FmGain : 0
+				osc2Detune: 0
 			}
 		}
 
-		this.initializeMasterVolume()
+		this.initializeMasterOutput()
 
 		this.initializeFilter()
 
@@ -30,54 +40,41 @@ export default class AudioEngine {
 		
 	}
 
-	initializeMasterVolume = () => {
-		const initialAmpLevel =  0.1
+	initializeMasterOutput = () => {
 		this.masterVolume = this.context.createGain()
 
-		this.masterVolume.gain.value = initialAmpLevel
-		this.panelState.amp.level = initialAmpLevel
-
+		this.masterVolume.gain.value = this.panelState.amp.level
 		this.masterVolume.connect(this.context.destination)
 	}
 
 	initializeFilter = () => {
-		const initialFreq = 12000
 		this.filter = this.context.createBiquadFilter()
-
-		this.panelState.filter.type = CONSTANTS.FILTER_TYPE.LOWPASS
-		this.filter.type = CONSTANTS.FILTER_TYPE.LOWPASS
-
-		this.filter.frequency.value = initialFreq
-		this.panelState.filter.frequency = initialFreq
+		this.filter.type = this.panelState.filter.type
+		this.filter.frequency.value = this.panelState.filter.frequency
+		this.filter.Q.value = this.panelState.filter.Q
 		
 		this.filter.connect(this.masterVolume)
 	}
 
 	initializeOscillators = () => {
-		this.panelState.oscs.osc1WaveformType = CONSTANTS.WAVEFORM_TYPE.SINE
 		this.oscillator1 = new Oscillator(this.context,
-			CONSTANTS.WAVEFORM_TYPE.SINE)
-		
-		this.panelState.oscs.osc1WaveformType = CONSTANTS.WAVEFORM_TYPE.TRIANGLE
-		this.oscillator2 = new Oscillator(this.context,
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE)
+			this.panelState.oscs.osc1WaveformType)
 
+		this.oscillator2 = new Oscillator(this.context,
+			this.panelState.oscs.osc2WaveformType)
 	}
 
+
 	initializeOscillatorsGain = () => {
-		const initialGain = .5
 		this.oscillator1Gain = this.context.createGain()
-		this.oscillator1Gain.gain.value = initialGain		
+		this.oscillator1Gain.gain.value = this.panelState.oscs.osc1Gain
 		this.oscillator1Gain.connect(this.filter)
 		this.oscillator1.connect(this.oscillator1Gain)
 
 		this.oscillator2Gain = this.context.createGain()
-		this.oscillator2Gain.gain.value = initialGain
+		this.oscillator2Gain.gain.value = this.panelState.oscs.osc2Gain
 		this.oscillator2Gain.connect(this.filter)
 		this.oscillator2.connect(this.oscillator2Gain)
-
-		this.panelState.oscs.osc1Gain = initialGain
-		this.panelState.oscs.osc2Gain = initialGain
 	}
 
 	initializeFMGain = () => {
@@ -137,10 +134,6 @@ export default class AudioEngine {
 
 	setOscillatorsBalance = (oscillatorsBalance) => {
 		const gainPercentage = Math.abs(oscillatorsBalance) / 100
-
-		//is this necessary? initOscGain does it already
-		this.oscillator1Gain.gain.value = .5
-		this.oscillator2Gain.gain.value = .5
 
 		if (oscillatorsBalance > 0) {
 			this.oscillator1Gain.gain.value -= gainPercentage
@@ -250,9 +243,6 @@ export default class AudioEngine {
 			oscGain.connect(this.fmGains[i])
 		)	
 		this.oscillator2.connect(gainB)
-
-		
-
 	}
 
 	//god this is ugly
