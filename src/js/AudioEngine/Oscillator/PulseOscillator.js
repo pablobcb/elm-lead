@@ -57,7 +57,7 @@ export default class PulseOscillator extends BaseOscillator {
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		if(midiNoteKey in this.oscillators){
+		if (midiNoteKey in this.oscillators) {
 			console.log(this.oscillators)
 			return
 		}
@@ -68,12 +68,12 @@ export default class PulseOscillator extends BaseOscillator {
 		const pulseShaper = this.context.createWaveShaper()
 		pulseShaper.curve = pulseCurve
 		sawNode.connect(pulseShaper)
-		
+
 		const widthGain = this.widthGains[midiNote]
 		widthGain.gain.value = this.pulseWidth
 
 		widthGain.connect(pulseShaper)
-		
+
 		const constantOneShaper = this.context.createWaveShaper()
 		constantOneShaper.curve = constantOneCurve
 		sawNode.connect(constantOneShaper)
@@ -82,23 +82,23 @@ export default class PulseOscillator extends BaseOscillator {
 
 		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		sawNode.detune.value = this.detune + this.semitone
-		
+
 		pulseShaper.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(sawNode.frequency)
 		pulseShaper.connect(this.output)
-		
+
 		sawNode.start(this.context.currentTime)
-		
+
 		this.oscillators[midiNoteKey] = sawNode
 
-		sawNode.onended = () => {		
+		sawNode.onended = () => {
 			delete this.oscillators[midiNoteKey]
 		}
 	}
 
 	setPulseWidth = (width) => {
 		this.pulseWidth = width
-		
+
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = width
 		})
