@@ -13,37 +13,28 @@ $knob-indicator = white
 	height $knob-size
 	width $knob-size
 	border-radius: ($knob-size / 2)
-	background-color $knob-darker
-
-.knob__dial
-	position: absolute;
-	top $knob-inner-distance
-	left $knob-inner-distance
-	height $knob-inner-size
-	width $knob-inner-size
-	border-radius ($knob-inner-size / 2)
-	background-color $knob-lighter
-
-.knob__indicator
-	width 2px
-	height ($knob-inner-size / 2)
-	background-color $knob-indicator
-	margin-left ($knob-inner-size / 2)
-	text-align center
-	// width 100%
-	width 55px
-	height 65px
-	font-size 15px
-
-.knob__dial
-	font-size 20px
-	width 40px
-	height 35px
 
 	background  url('../../images/knob-bg.svg')
 	background-size 45px
 	background-repeat no-repeat
 	background-position center
+
+.knob__dial
+	position absolute
+	top $knob-inner-distance
+	left $knob-inner-distance
+	height $knob-inner-size
+	width $knob-inner-size
+
+.knob__indicator
+	width 2px
+	height ($knob-inner-size / 2)
+	// background-color $knob-indicator
+	margin-left ($knob-inner-size / 2)
+	text-align center
+	width 55px
+	height 65px
+	font-size 15px
 
 .knob__label
 	panel-label($knob-label-background-color)
