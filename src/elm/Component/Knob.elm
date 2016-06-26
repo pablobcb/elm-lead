@@ -107,9 +107,7 @@ view model =
             , alt "oops!"
             , src "knob-fg.svg"
             ]
-            [ div [ class "knob__indicator"]
-                [ Html.text (toString model.value) ]
-            ]
+            [ ]
 
 
 knob : (Msg -> a) -> Model -> Html a
