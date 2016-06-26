@@ -1,0 +1,27 @@
+led($size = 20px, $color = #444444)
+	width $size
+	height $size
+	background-color $background-led-color
+	border-radius 50%
+	box-shadow black 0 0 1px 0, $color $size * -.1 $size * -.2 $size * .6 2px inset, 0 0 $size * .5 0 $color
+
+nord-btn()
+	background-color #4b4b4b
+	cursor pointer
+	outline 0
+	width $btn-width
+	height $btn-height
+	border-radius $btn-border-radius
+	border 6px solid $btn-background-color
+	
+	&:active
+		border-color black
+		background-color $btn-background-color
+
+panel-label($bg-color)
+	font-size 70%
+	background-color $bg-color
+	border-radius ($unit / 2)
+	width 60px
+	text-align center
+	user-select none

@@ -1,4 +1,4 @@
-module Component.NordButton exposing (..)
+module Component.OptionPicker exposing (..)
 
 -- where
 
@@ -47,10 +47,10 @@ type Msg
 
 view : (String -> Cmd Msg) -> String -> Model a -> Html Msg
 view cmdEmmiter label model =
-    div [ class "option-selector" ]
-        [ span [ class "pannel__label" ] [ text label ]
-        , ul [ class "option-list" ] <| options model
-        , button [ class "nord-btn", onClick <| Click cmdEmmiter ]
+    div [ class "option-picker" ]
+        [ span [ class "option-picker__label" ] [ text label ]
+        , ul [ class "option-picker__list" ] <| options model
+        , button [ class "option-picker__btn", onClick <| Click cmdEmmiter ]
             []
         ]
 
@@ -69,20 +69,20 @@ option model elem label =
     let
         state =
             if elem == model.currentElem then
-                "active"
+                "option-picker__item--active"
             else
-                "unactive"
+                "option-picker__item--inactive"
     in
-        li [ class "option" ]
-            [ div [ class ("led " ++ state) ] []
-            , div [ class "option-name" ]
+        li [ class "option-picker__item" ]
+            [ div [ class state ] []
+            , div [ class "option-picker__item-id" ]
                 [ text label ]
             ]
 
 
-nordButton : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
-nordButton label knobMsg cmdEmmiter model =
-    Html.App.map knobMsg
+optionPicker : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
+optionPicker label pickerMsg cmdEmmiter model =
+    Html.App.map pickerMsg
         <| view (\value -> value |> cmdEmmiter)
             label
             model

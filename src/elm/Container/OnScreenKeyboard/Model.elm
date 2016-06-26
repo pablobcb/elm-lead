@@ -5,7 +5,7 @@ module Container.OnScreenKeyboard.Model exposing (..)
 import List exposing (..)
 import Note exposing (..)
 import Midi exposing (..)
-import Port exposing (..)
+import Port
 
 
 type alias PressedKey =
@@ -255,12 +255,12 @@ findPressedNote model midiNote =
 
 noteOnCommand : Velocity -> MidiNote -> Cmd msg
 noteOnCommand velocity midiNoteNumber =
-    noteOnMessage midiNoteNumber velocity |> midiOutPort
+    noteOnMessage midiNoteNumber velocity |> Port.midiOut
 
 
 noteOffCommand : Velocity -> MidiNote -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
-    noteOffMessage midiNoteNumber velocity |> midiOutPort
+    noteOffMessage midiNoteNumber velocity |> Port.midiOut
 
 
 panic : Model -> Model

@@ -5,7 +5,7 @@ module Main exposing (..)
 import Html exposing (Html, button, div, text, li, ul)
 import Html.App
 import Html.Attributes exposing (..)
-import Port exposing (..)
+import Port
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard.Model as KbdModel exposing (..)
@@ -120,8 +120,8 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ midiInPort (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
-        , panicPort
+        [ Port.midiIn (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
+        , Port.panic
             <| always
             <| OnScreenKeyboardMsg Panic
         , Keyboard.downs

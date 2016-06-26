@@ -6,6 +6,7 @@ $knob-darker = #6E6E82
 $knob-lighter = #485A7B
 $knob-indicator = white
 
+@import './mixins'
 
 .knob
 	position relative
@@ -43,3 +44,6 @@ $knob-indicator = white
 	background-size 45px
 	background-repeat no-repeat
 	background-position center
+
+.knob__label
+	panel-label($knob-label-background-color)

@@ -3,8 +3,8 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
-import Component.NordButton as Button
-import Port exposing (..)
+import Component.OptionPicker as OptionPicker
+import Port
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
@@ -27,7 +27,7 @@ nordKnob model knobInstance labelTxt =
             Just knobModel ->
                 div [ class "knob" ]
                     [ Knob.knob KnobMsg knobModel
-                    , div [ class "pannel__label" ] [ text labelTxt ]
+                    , div [ class "knob__label" ] [ text labelTxt ]
                     ]
 
 
@@ -48,7 +48,13 @@ column content =
 amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
-        [ nordKnob model Knob.AmpGain "gain" ]
+        [ div [ class "amplifier" ]
+            [ nordKnob model Knob.AmpAttack "attack"
+            , nordKnob model Knob.AmpDecay "decay"
+            , nordKnob model Knob.AmpSustain "sustain"
+            , nordKnob model Knob.AmpGain "gain"
+            ]
+        ]
 
 
 filter : Model -> Html Msg
@@ -57,44 +63,38 @@ filter model =
         [ div [ class "filter" ]
             [ nordKnob model Knob.FilterCutoff "Frequency"
             , nordKnob model Knob.FilterQ "Resonance"
-            , Button.nordButton "Filter Type"
+            , OptionPicker.optionPicker "Filter Type"
                 FilterTypeChange
-                filterTypePort
+                Port.filterType
                 model.filterTypeBtn
             ]
         ]
 
 
-
---[ knob model.filterAttackKnob "attack"
---, knob model.filterDecayKnob "decay"
---, knob model.filterSustainKnob "sustain"
---, knob model.filterReleaseKnob "release"
---]
-
-
 osc1 : Model -> Html Msg
 osc1 model =
     div [ class "oscillators__osc1" ]
-        [ Button.nordButton "Waveform"
+        [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
-            oscillator1WaveformPort
+            Port.oscillator1Waveform
             model.oscillator1WaveformBtn
-        , span [ class "oscillators__label" ] [ text "OSC 1" ]
         , nordKnob model Knob.FM "FM"
+        , span [ class "oscillators__label" ] [ text "OSC 1" ]
         ]
 
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "osc2" ]
-        [ Button.nordButton "Waveform"
-            Oscillator2WaveformChange
-            oscillator2WaveformPort
-            model.oscillator2WaveformBtn
-        , span [ class "oscillators__label" ] [ text "OSC 2" ]
-        , nordKnob model Knob.Osc2Semitone "semitone"
-        , nordKnob model Knob.Osc2Detune "detune"
+    div [ class "fix-me" ]
+        [ div [ class "oscillators__osc2" ]
+            [ nordKnob model Knob.Osc2Semitone "semitone"
+            , OptionPicker.optionPicker "Waveform"
+                Oscillator2WaveformChange
+                Port.oscillator2Waveform
+                model.oscillator2WaveformBtn
+            , nordKnob model Knob.Osc2Detune "detune"
+            ]
+        , div [ class "fix-me2" ] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
 

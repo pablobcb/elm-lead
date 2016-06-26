@@ -1,6 +1,6 @@
 import Elm from '../elm/Main.elm'
 
-import AudioEngine from './AudioEngine'
+import AudioEngine from './AudioEngine/SynthEngine'
 
 export default class Application {
 
@@ -22,7 +22,8 @@ export default class Application {
 	}
 
 	onMIDIFailure = () => {
-		alert('Your browser doesnt support WebMIDI API. Use another browser or install the Jazz Midi Plugin http://jazz-soft.net/')
+		alert('Your browser doesnt support WebMIDI API. Use another browser or \
+			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
 	initializeMidiAccess = () => {
@@ -31,7 +32,7 @@ export default class Application {
 			input.onmidimessage = (midiMessage) => {
 				const data = midiMessage.data
 				this.audioEngine.onMIDIMessage(data)
-				this.app.ports.midiInPort.send([
+				this.app.ports.midiIn.send([
 					data[0],
 					data[1] || null,
 					data[2] || null
@@ -43,79 +44,98 @@ export default class Application {
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine()
+		// MACRO
+		
+		window.onblur = () => {
+			this.app.ports.panic .send()
+			this.audioEngine.panic()
+		}
 
 		// MIDI
 		if(this.midiAccess)
 			this.initializeMidiAccess()
 
-		this.app.ports.midiOutPort
+		this.app.ports.midiOut 
 			.subscribe((midiDataArray) => {
 				this.audioEngine.onMIDIMessage(midiDataArray)
 			})
 
-		// VOLUME
-		this.app.ports.masterVolumePort
+		// AMP
+		this.app.ports.ampVolume 
 			.subscribe((masterVolumeValue) => {
 				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
 			})
+		
+		this.app.ports.ampAttack 
+			.subscribe((attackValue) => {
+				console.log(attackValue)
+				//this.audioEngine.setAmpAttack(attackValue)
+			})
+		
+		this.app.ports.ampDecay 
+			.subscribe((decayValue) => {
+				console.log(decayValue)
+				//this.audioEngine.setAmpDecay(decayValue)
+			})
+
+		this.app.ports.ampSustain 
+			.subscribe((sustainLevel) => {
+				console.log(sustainLevel)
+				//this.audioEngine.setAmpSustain(sustainLevel)
+			})
 
 		// OSCILLATORS
-		this.app.ports.oscillatorsBalancePort
+		
+		this.app.ports.oscillatorsBalance 
 			.subscribe((oscillatorsBalanceValue) => {
 				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
 			})
 
-		this.app.ports.oscillator2SemitonePort
+		this.app.ports.oscillator2Semitone 
 			.subscribe((oscillatorSemitoneValue) => {
 				this.audioEngine.setOscillator2Semitone(oscillatorSemitoneValue)
 			})
 
-		this.app.ports.oscillator2DetunePort
+		this.app.ports.oscillator2Detune 
 			.subscribe((oscillatorDetuneValue) => {
 				this.audioEngine.setOscillator2Detune(oscillatorDetuneValue)
 			})
 
-		this.app.ports.fmAmountPort
+		this.app.ports.fmAmount 
 			.subscribe((fmAmountValue) => {
 				this.audioEngine.setFmAmount(fmAmountValue)
 			})
 
-		this.app.ports.pulseWidthPort
+		this.app.ports.pulseWidth 
 			.subscribe((pulseWidthValue) => {
 				this.audioEngine.setPulseWidth(pulseWidthValue)
 			})
 
-		this.app.ports.oscillator1WaveformPort
+		this.app.ports.oscillator1Waveform 
 			.subscribe((waveform) => {
 				this.audioEngine.setOscillator1Waveform(waveform)
 			})
 
-		this.app.ports.oscillator2WaveformPort
+		this.app.ports.oscillator2Waveform 
 			.subscribe((waveform) => {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
 		// FILTER
-		this.app.ports.filterCutoffPort
+		this.app.ports.filterCutoff 
 			.subscribe((freq) => {
 				this.audioEngine.setFilterCutoff(freq)
 			})
 
-		this.app.ports.filterQPort
+		this.app.ports.filterQ 
 			.subscribe((amount) => {
 				this.audioEngine.setFilterQ(amount)
 			})
-		
-		this.app.ports.filterTypePort
+
+		this.app.ports.filterType 
 			.subscribe((filterType) => {
 				this.audioEngine.setFilterType(filterType)
-			})
-
-		// MACRO
-		window.onblur = () => {
-			this.app.ports.panicPort.send()
-			this.audioEngine.panic()
-		}
+			})		
 	}
 
 }
