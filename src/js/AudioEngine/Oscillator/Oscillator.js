@@ -1,6 +1,5 @@
 import BaseOscillator from './BaseOscillator'
 
-
 export default class Oscillator extends BaseOscillator {
 	constructor (context, waveform) {
 		super(context)
@@ -12,8 +11,9 @@ export default class Oscillator extends BaseOscillator {
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		if(midiNoteKey in this.oscillators)
+		if (midiNoteKey in this.oscillators) {
 			return
+		}
 
 		const osc = this.context.createOscillator()
 
@@ -38,18 +38,17 @@ export default class Oscillator extends BaseOscillator {
 
 	setDetune = (detune) => {
 		this.detune = detune
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value =
-					detune + this.semitone
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
+				this.oscillators[midiNote].detune.value = detune + this.semitone
 			}
 		}
 	}
 
 	setSemitone = (semitone) => {
 		this.semitone = semitone * 100
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].detune.value =
 					this.detune + this.semitone
 			}
@@ -64,8 +63,6 @@ export default class Oscillator extends BaseOscillator {
 		}
 		this.type = waveform
 	}
-
-
 
 	setFMGain = (fmGain) => {
 		for(let i=0; i<128; i++) {

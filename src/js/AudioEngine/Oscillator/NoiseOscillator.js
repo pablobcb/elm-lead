@@ -1,28 +1,27 @@
 import BaseOscillator from './BaseOscillator'
 
-export default class NoiseOscillator extends BaseOscillator{
+export default class NoiseOscillator extends BaseOscillator {
+
 	constructor (context) {
 		super(context)
 
 		this.type = 'whitenoise'
-
 	}
-
 
 	noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		if(midiNoteKey in this.oscillators)
+		if (midiNoteKey in this.oscillators) {
 			return
+		}
 
-		
 		const channels = 2
 		// Create an empty two-second stereo buffer at the
 		// sample rate of the AudioContext
 		const frameCount = this.context.sampleRate * 2.0
 
-		const myArrayBuffer = this.context
-			.createBuffer(2, frameCount, this.context.sampleRate)
+		const myArrayBuffer =
+			this.context.createBuffer(2, frameCount, this.context.sampleRate)
 
 
 		for (let channel = 0; channel < channels; channel++) {
@@ -39,7 +38,6 @@ export default class NoiseOscillator extends BaseOscillator{
 		noiseOsc.buffer = myArrayBuffer
 		noiseOsc.loop = true
 		noiseOsc.onended = () => {
-			
 			delete this.oscillators[midiNoteKey]
 		}
 
@@ -49,7 +47,6 @@ export default class NoiseOscillator extends BaseOscillator{
 		gain.connect(this.output)
 		noiseOsc.start(this.context.currentTime)
 		this.oscillators[midiNoteKey] = noiseOsc
-	
 	}
 
 }
