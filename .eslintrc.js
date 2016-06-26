@@ -25,8 +25,8 @@ module.exports = {
 		"prefer-template": [ "warn" ],
 		"quotes": [ "warn", "single" ],
 		"semi": [ "warn", "never" ],
+		"space-before-blocks": ["warn", "always"],
 		"space-before-function-paren": [ "warn" ],
 		"space-in-parens": ["warn", "never"],
-
 	}
 }
