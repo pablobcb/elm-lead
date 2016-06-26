@@ -14,18 +14,17 @@ $knob-indicator = white
 .knob__scale
 	height $knob-size
 	width $knob-size
+	margin-left auto
+	margin-right auto
+	margin-bottom 2px
 
 	background  url('../../images/knob-bg.svg')
-	background-size 45px
+	background-size $knob-size
 	background-repeat no-repeat
 	background-position center
 
 .knob__dial
-	position absolute
-	top $knob-inner-distance
-	left $knob-inner-distance
-	height $knob-inner-size
-	width $knob-inner-size
+	margin 5px
 
 .knob__label
 	panel-label($knob-label-background-color)
