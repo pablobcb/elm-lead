@@ -22,6 +22,7 @@ type alias Model =
     , min : Int
     , max : Int
     , step : Int
+    , label : String
     , initMouseYPos : Int
     , mouseYPos : Int
     , isMouseClicked : Bool
@@ -30,13 +31,14 @@ type alias Model =
     }
 
 
-init : KnobInstance -> Int -> Int -> Int -> Int -> (Int -> Cmd Msg) -> Model
-init idKey value min max step cmdEmitter =
+init : KnobInstance -> Int -> Int -> Int -> Int -> String -> (Int -> Cmd Msg) -> Model
+init idKey value min max step label cmdEmitter =
     { value = value
     , initialValue = value
     , min = min
     , max = max
     , step = step
+    , label = label
     , initMouseYPos = 0
     , mouseYPos = 0
     , isMouseClicked = False
@@ -99,15 +101,23 @@ view model =
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
-        img
-            [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
-            , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
-            , class "knob__dial"
-            , style knobStyle
-            , alt <| toString model.value
-            , src "knob-fg.svg"
+        div [ class "knob" ]
+            [ div
+                [ class "knob__scale" ]
+                [ img
+                    [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
+                    , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
+                    , class "knob__dial"
+                    , style knobStyle
+                    , alt <| toString model.value
+                    , src "knob-fg.svg"
+                    ]
+                    [ ]
+                ]
+            , div
+                [ class "knob__label" ]
+                [ text model.label ]
             ]
-            [ ]
 
 
 knob : (Msg -> a) -> Model -> Html a
