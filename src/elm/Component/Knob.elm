@@ -104,7 +104,7 @@ view model =
             , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
             , class "knob__dial"
             , style knobStyle
-            , alt "oops!"
+            , alt <| toString model.value
             , src "knob-fg.svg"
             ]
             [ ]
