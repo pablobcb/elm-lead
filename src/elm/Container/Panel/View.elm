@@ -70,7 +70,7 @@ filter model =
 
 osc1 : Model -> Html Msg
 osc1 model =
-    div [ class "oscillators__osc1" ]
+    div [ class "oscillators--top-left" ]
         [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
             Port.oscillator1Waveform
@@ -82,8 +82,9 @@ osc1 model =
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "fix-me" ]
-        [ div [ class "oscillators__osc2" ]
+    div [ class "oscillators--top-left" ]
+        [ div
+            [ ]
             [ nordKnob model Knob.Osc2Semitone
             , OptionPicker.optionPicker "Waveform"
                 Oscillator2WaveformChange
@@ -91,16 +92,17 @@ osc2 model =
                 model.oscillator2WaveformBtn
             , nordKnob model Knob.Osc2Detune
             ]
-        , div [ class "fix-me2" ] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
+        , div
+            [ class "fix-me2" ]
+            [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
 
 oscillatorSection : Model -> Html Msg
 oscillatorSection model =
     section "oscillators"
-        [ div [ class "oscillators" ]
-            [ osc1 model, osc2 model ]
-        , div [ class "oscillators__extra" ]
+        [ div [ ] [ osc1 model, osc2 model ]
+        , div [ class "oscillators--bottom" ]
             [ nordKnob model Knob.PW
             , nordKnob model Knob.OscMix
             ]
