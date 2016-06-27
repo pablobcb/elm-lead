@@ -4,12 +4,14 @@ module Container.Panel.Update exposing (..)
 
 import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
+import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
 
 
 type Msg
     = Oscillator1WaveformChange OptionPicker.Msg
     | Oscillator2WaveformChange OptionPicker.Msg
+    | Oscillator2KbdTrackToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
 
@@ -61,6 +63,13 @@ update msg model =
                     .filterTypeBtn
                     updateFilterTypeBtn
                     FilterTypeChange
+
+            Oscillator2KbdTrackToggle subMsg ->
+                updateMap Switch.update
+                    subMsg
+                    .oscillator2KbdTrackSwitch
+                    updateOscillator2KbdTrack
+                    Oscillator2KbdTrackToggle
 
             KnobMsg subMsg ->
                 updateKnobs subMsg (KnobMsg subMsg)

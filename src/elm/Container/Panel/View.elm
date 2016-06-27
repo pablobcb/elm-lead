@@ -3,6 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
+import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
 import Port
 import Html exposing (..)
@@ -83,17 +84,18 @@ osc1 model =
 osc2 : Model -> Html Msg
 osc2 model =
     div [ class "oscillators--top-left" ]
-        [ div
-            [ ]
+        [ div []
             [ nordKnob model Knob.Osc2Semitone
             , OptionPicker.optionPicker "Waveform"
                 Oscillator2WaveformChange
                 Port.oscillator2Waveform
                 model.oscillator2WaveformBtn
             , nordKnob model Knob.Osc2Detune
+            , Switch.switch "kbd track"
+                Oscillator2KbdTrackToggle
+                model.oscillator2KbdTrackSwitch
             ]
-        , div
-            [ class "fix-me2" ]
+        , div [ class "fix-me2" ]
             [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
@@ -101,7 +103,7 @@ osc2 model =
 oscillatorSection : Model -> Html Msg
 oscillatorSection model =
     section "oscillators"
-        [ div [ ] [ osc1 model, osc2 model ]
+        [ div [] [ osc1 model, osc2 model ]
         , div [ class "oscillators--bottom" ]
             [ nordKnob model Knob.PW
             , nordKnob model Knob.OscMix

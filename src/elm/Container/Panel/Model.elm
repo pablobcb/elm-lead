@@ -3,6 +3,7 @@ module Container.Panel.Model exposing (..)
 -- where
 
 import Component.Knob as Knob exposing (..)
+import Component.Switch as Switch exposing (..)
 import Component.OptionPicker as OptionPicker exposing (..)
 import Port
 
@@ -27,11 +28,9 @@ type alias Model =
     , filterTypeBtn : OptionPicker.Model FilterType
     , oscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform
     , oscillator1WaveformBtn : OptionPicker.Model OscillatorWaveform
+    , oscillator2KbdTrackSwitch : Switch.Model
     }
 
-
-
---TODO: colocar as portas dos botoes no model
 
 
 knobs : List Knob.Model
@@ -49,26 +48,27 @@ knobs =
     , Knob.init Knob.FilterQ 1 0 127 1 "resonance" Port.filterQ
     ]
 
+
 findKnob : Model -> KnobInstance -> Knob.Model
-findKnob model knobInstance=
+findKnob model knobInstance =
     let
         knob =
             List.head
                 <| List.filter (\knob' -> knob'.idKey == knobInstance)
                     model.knobs
-        in
-            case knob of
-                Nothing ->
-                    Debug.crash "inexistent knob identifier"
+    in
+        case knob of
+            Nothing ->
+                Debug.crash "inexistent knob identifier"
 
-                Just knobModel ->
-                    knobModel
-
+            Just knobModel ->
+                knobModel
 
 
 init : Model
 init =
     { knobs = knobs
+    , oscillator2KbdTrackSwitch = Switch.init True Port.oscillator2KbdTrack
     , filterTypeBtn =
         OptionPicker.init
             [ ( "LP", Lowpass )
@@ -102,6 +102,9 @@ updateOscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model ->
 updateOscillator2WaveformBtn btn model =
     { model | oscillator2WaveformBtn = btn }
 
+updateOscillator2KbdTrack : Switch.Model -> Model -> Model
+updateOscillator2KbdTrack switch model =
+    { model | oscillator2KbdTrackSwitch = switch }
 
 updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
 updateFilterTypeBtn btn model =
