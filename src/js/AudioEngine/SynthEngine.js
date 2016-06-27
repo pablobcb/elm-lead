@@ -186,8 +186,9 @@ export default class SynthEngine {
 
 		const nextWaveform = waveform.toLowerCase()
 
-		if (validWaveforms.indexOf(nextWaveform) == -1)
+		if (validWaveforms.indexOf(nextWaveform) == -1) {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
+		}
 
 		this.oscillator1.setWaveform(nextWaveform)
 
@@ -205,8 +206,9 @@ export default class SynthEngine {
 
 		const nextWaveform = waveform.toLowerCase()
 
-		if (validWaveforms.indexOf(nextWaveform) == -1)
+		if (validWaveforms.indexOf(nextWaveform) == -1) {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
+		}
 
 		if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 				&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
@@ -215,8 +217,9 @@ export default class SynthEngine {
 				this.swapOsc2(new PulseOscillator(this.context),
 					this.oscillator2Gain)
 			}
-			else
+			else {
 				this.oscillator2.setWaveform(nextWaveform)
+			}
 		}
 		else if(this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 				&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE) {
@@ -299,7 +302,7 @@ export default class SynthEngine {
 
 		const filterType_ = filterType.toLowerCase()
 
-		if (validFilterTypes.indexOf(filterType_) == -1){
+		if (validFilterTypes.indexOf(filterType_) == -1) {
 			throw new Error('Invalid Filter Type')
 		}
 

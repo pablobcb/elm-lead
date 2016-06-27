@@ -26,7 +26,7 @@ export default class Application {
 			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
-	initializeMidiAccess = () => {
+	manageMidiDevices = () => {
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of this.midiAccess.inputs.values()) {
 			input.onmidimessage = (midiMessage) => {
@@ -40,6 +40,12 @@ export default class Application {
 			}
 		}
 	}
+	
+	initializeMidiAccess = () => {
+		this.manageMidiDevices()		
+		this.midiAccess.onstatechange = this.manageMidiDevices
+	}
+
 
 	initializeAudioEngine = () => {
 
