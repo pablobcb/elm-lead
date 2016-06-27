@@ -1,4 +1,4 @@
-import BaseOscillator from './BaseOscillator'
+import Oscillator from './Oscillator'
 import CONSTANTS from '../../Constants'
 
 const pulseCurve = new Float32Array(256)
@@ -11,47 +11,15 @@ const constantOneCurve = new Float32Array(2)
 constantOneCurve[0] = 1
 constantOneCurve[1] = 1
 
-export default class PulseOscillator extends BaseOscillator {
+export default class PulseOscillator extends Oscillator {
 	constructor (context) {
-		super(context)
-		this.type = 'pulse'
-		this.detune = 0
-		this.semitone = 0
+		super(context, 'pulse')
 		this.pulseWidth = 0
-		this.fmGain = 0
 		this.widthGains = []
 
 
-		for(let i=0; i<128; i++) {
+		for(let i = 0; i < 128; i++) {
 			this.widthGains[i] = this.context.createGain()
-		}
-	}
-
-	setDetune = (detune) => {
-		this.detune = detune
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value =
-					detune + this.semitone
-			}
-		}
-	}
-
-	setSemitone = (semitone) => {
-		this.semitone = semitone * 100
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value =
-					this.detune + this.semitone
-			}
-		}
-	}
-
-	setFMGain = (fmGain) => {
-		this.fmGain = fmGain
-		for(let i=0; i<128; i++) {
-			this.frequencyGains[i].gain.value = this.fmGain
-			console.log(this.fmGain)
 		}
 	}
 
