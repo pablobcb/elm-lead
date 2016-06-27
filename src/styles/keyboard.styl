@@ -1,3 +1,11 @@
+$lower-key-height = 3 * $unit
+$lower-key-width = $unit
+$higher-key-height = 1.5 * $unit
+$higher-key-width = $unit / 2
+$higher-key-left-margin = .25 * $negative-unit
+
+$full-kbd-width = 75 * $lower-key-width
+
 .keyboard
 	margin $unit
 	padding 0
@@ -12,7 +20,7 @@
 		padding 0
 		list-style none
 		position relative
-		float left		
+		float left
 
 		&.keyboard__key--lower
 			height $lower-key-height
@@ -21,6 +29,8 @@
 			border-left $hair-space solid
 			border-bottom $hair-space solid $border-bottom-color
 			background linear-gradient(to bottom, $key-gradient-from-color 0,  $key-gradient-to-color 100%)
+
+			
 
 
 		&.keyboard__key--current-octave
@@ -55,7 +65,19 @@
 		&.keyboard__key--e,
 		&.keyboard__key--b
 			margin-right .25 * $lower-key-width
-
 		
+		&.keyboard__key--full
+			@media only screen and (max-width : 1280px)
+				display none
 
-		
+		&.keyboard__key--big
+			@media only screen and (max-width : 1080px)
+				display none
+
+		&.keyboard__key--medium
+			@media only screen and (max-width : 898px)
+				display none
+
+		&.keyboard__key--small
+			@media only screen and (max-width : 480px)
+				display none

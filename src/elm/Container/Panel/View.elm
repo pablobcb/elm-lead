@@ -175,7 +175,7 @@ instructions =
                         ]
                    )
     in
-        div [ class "pannel-instructions" ]
+        div [ class "instructions-container" ]
             [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
             , table [ class "instructions" ]
                 <| List.map2
