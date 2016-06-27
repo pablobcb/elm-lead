@@ -54,4 +54,4 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         Click ->
-            ( { model | on = not model.on }, model.cmdEmitter model.on )
+            ( { model | on = not model.on }, model.cmdEmitter <| not model.on )

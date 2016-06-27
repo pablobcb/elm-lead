@@ -47,6 +47,8 @@ export default class BaseOscillator {
 
 	setWaveform = () => {}
 
+	setKbdTrack = () => {}
+
 	connect = function (node) {
 		this.output.connect(node)
 		return this

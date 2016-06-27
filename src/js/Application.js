@@ -122,6 +122,11 @@ export default class Application {
 				this.audioEngine.setOscillator2Waveform(waveform)
 			})
 
+		this.app.ports.oscillator2KbdTrack
+			.subscribe((kbdTrackState) => {
+				this.audioEngine.setOscillator2KbdTrack(kbdTrackState)
+			})
+
 		// FILTER
 		this.app.ports.filterCutoff
 			.subscribe((freq) => {

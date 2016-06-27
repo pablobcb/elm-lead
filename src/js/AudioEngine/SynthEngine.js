@@ -25,7 +25,8 @@ export default class SynthEngine {
 					waveformType: CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
 					gain: .5,
 					semitone: 0,
-					detune: 0
+					detune: 0,
+					kbdTrack: true
 				},
 				pw: 0
 			}
@@ -281,6 +282,11 @@ export default class SynthEngine {
 		this.filter.Q.value = q
 	}
 
+	setOscillator2KbdTrack = (state) => {
+		this.state.oscs.osc2.kbdTrack = state
+		this.oscillator2.setKbdTrack(state)
+	}
+
 	setFilterType = (filterType) => {
 		const validFilterTypes = [
 			CONSTANTS.FILTER_TYPE.LOWPASS, 
@@ -291,8 +297,9 @@ export default class SynthEngine {
 
 		const filterType_ = filterType.toLowerCase()
 
-		if (validFilterTypes.indexOf(filterType_) == -1)
+		if (validFilterTypes.indexOf(filterType_) == -1){
 			throw new Error('Invalid Filter Type')
+		}
 
 		this.filter.type = filterType_
 	}
