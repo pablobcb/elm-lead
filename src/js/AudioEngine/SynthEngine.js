@@ -12,7 +12,8 @@ export default class SynthEngine {
 			filter: {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
-				Q: 0
+				Q: 0,
+				amp: new ADSR(this.context, 0, .5, .7, .2, .1)
 			}, 
 			amp: new ADSR(this.context, 0, .5, .7, .2, .1),
 			oscs: {
@@ -111,7 +112,7 @@ export default class SynthEngine {
 
 	noteOn = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, this.state.amp.on)
-		this.oscillator2.noteOn(midiNote, this.state.amp.on)		
+		this.oscillator2.noteOn(midiNote, this.state.amp.on)
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
@@ -274,18 +275,42 @@ export default class SynthEngine {
 	}
 
 
-	setFilterCutoff = (freq) => {
-		this.filter.frequency.value = freq
-	}
-
-
-	setFilterQ = (q) => {
-		this.filter.Q.value = q
-	}
-
+	
 	setOscillator2KbdTrack = (state) => {
 		this.state.oscs.osc2.kbdTrack = state
 		this.oscillator2.setKbdTrack(state)
+	}	
+
+	setAmpAttack = (attack) => {
+		this.state.amp.attack = attack / 50
+	}
+
+	setAmpDecay = (decay) => {
+		this.state.amp.decay = decay / 50
+	}
+
+	setAmpSustain = (sustain) => {
+		this.state.amp.sustain = sustain / 50
+	}
+
+	setAmpRelease = (release) => {
+		this.state.amp.release = release / 50
+	}
+
+	setFilterAttack = (attack) => {
+		this.state.filter.amp.attack = attack / 50
+	}
+
+	setFilterDecay = (decay) => {
+		this.state.filter.amp.decay = decay / 50
+	}
+
+	setFilterSustain = (sustain) => {
+		this.state.filter.amp.sustain = sustain / 50
+	}
+
+	setFilterRelease = (release) => {
+		this.state.filter.amp.release = release / 50
 	}
 
 	setFilterType = (filterType) => {
@@ -305,20 +330,14 @@ export default class SynthEngine {
 		this.filter.type = filterType_
 	}
 
-	setAmpAttack = (attack) => {
-		this.state.amp.attack = attack / 50
+	setFilterCutoff = (freq) => {
+		this.filter.frequency.value = freq
 	}
 
-	setAmpDecay = (decay) => {
-		this.state.amp.decay = decay / 50
+
+	setFilterQ = (q) => {
+		this.filter.Q.value = q
 	}
 
-	setAmpSustain = (sustain) => {
-		this.state.amp.sustain = sustain / 50
-	}
-
-	setAmpRelease = (release) => {
-		this.state.amp.release = release / 50
-	}
 
 }

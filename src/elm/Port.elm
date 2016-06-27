@@ -58,3 +58,15 @@ port filterQ : Int -> Cmd msg
 
 
 port filterType : String -> Cmd msg
+
+
+port filterAttack : Int -> Cmd msg
+
+
+port filterDecay : Int -> Cmd msg
+
+
+port filterSustain : Int -> Cmd msg
+
+
+port filterRelease : Int -> Cmd msg

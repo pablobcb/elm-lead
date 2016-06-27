@@ -136,6 +136,26 @@ export default class Application {
 			})
 
 		// FILTER
+		this.app.ports.filterAttack
+			.subscribe((attackValue) => {
+				this.audioEngine.setFilterAttack(attackValue)
+			})
+
+		this.app.ports.filterDecay
+			.subscribe((decayValue) => {
+				this.audioEngine.setFilterDecay(decayValue)
+			})
+
+		this.app.ports.filterSustain
+			.subscribe((sustainLevel) => {
+				this.audioEngine.setFilterSustain(sustainLevel)
+			})
+		
+		this.app.ports.filterRelease
+			.subscribe((releaseLevel) => {
+				this.audioEngine.setFilterRelease(releaseLevel)
+			})
+
 		this.app.ports.filterCutoff
 			.subscribe((freq) => {
 				this.audioEngine.setFilterCutoff(freq)

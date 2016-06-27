@@ -60,7 +60,11 @@ filter : Model -> Html Msg
 filter model =
     section "filter"
         [ div [ class "filter" ]
-            [ nordKnob model Knob.FilterCutoff
+            [ nordKnob model Knob.FilterAttack
+            , nordKnob model Knob.FilterDecay
+            , nordKnob model Knob.FilterSustain
+            , nordKnob model Knob.FilterRelease
+            , nordKnob model Knob.FilterCutoff
             , nordKnob model Knob.FilterQ
             , OptionPicker.optionPicker "Filter Type"
                 FilterTypeChange
