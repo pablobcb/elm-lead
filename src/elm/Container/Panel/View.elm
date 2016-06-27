@@ -3,6 +3,7 @@ module Container.Panel.View exposing (..)
 -- where
 
 import Component.Knob as Knob
+import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
 import Port
 import Html exposing (..)
@@ -12,8 +13,8 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
-nordKnob : Model -> Knob.KnobInstance -> String -> Html Msg
-nordKnob model knobInstance labelTxt =
+nordKnob : Model -> Knob.KnobInstance -> Html Msg
+nordKnob model knobInstance =
     let
         knob =
             List.head
@@ -25,10 +26,7 @@ nordKnob model knobInstance labelTxt =
                 Debug.crash "inexistent knob identifier"
 
             Just knobModel ->
-                div [ class "knob" ]
-                    [ Knob.knob KnobMsg knobModel
-                    , div [ class "knob__label" ] [ text labelTxt ]
-                    ]
+                Knob.knob KnobMsg knobModel
 
 
 section : String -> List (Html a) -> Html a
@@ -49,10 +47,11 @@ amplifier : Model -> Html Msg
 amplifier model =
     section "amplifier"
         [ div [ class "amplifier" ]
-            [ nordKnob model Knob.AmpAttack "attack"
-            , nordKnob model Knob.AmpDecay "decay"
-            , nordKnob model Knob.AmpSustain "sustain"
-            , nordKnob model Knob.AmpGain "gain"
+            [ nordKnob model Knob.AmpAttack
+            , nordKnob model Knob.AmpDecay
+            , nordKnob model Knob.AmpSustain
+            , nordKnob model Knob.AmpRelease
+            , nordKnob model Knob.AmpGain
             ]
         ]
 
@@ -61,8 +60,8 @@ filter : Model -> Html Msg
 filter model =
     section "filter"
         [ div [ class "filter" ]
-            [ nordKnob model Knob.FilterCutoff "Frequency"
-            , nordKnob model Knob.FilterQ "Resonance"
+            [ nordKnob model Knob.FilterCutoff
+            , nordKnob model Knob.FilterQ
             , OptionPicker.optionPicker "Filter Type"
                 FilterTypeChange
                 Port.filterType
@@ -73,43 +72,42 @@ filter model =
 
 osc1 : Model -> Html Msg
 osc1 model =
-    div [ class "oscillators__osc1" ]
+    div [ class "oscillators--top-left" ]
         [ OptionPicker.optionPicker "Waveform"
             Oscillator1WaveformChange
             Port.oscillator1Waveform
             model.oscillator1WaveformBtn
-        , nordKnob model Knob.FM "FM"
+        , nordKnob model Knob.FM
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         ]
 
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "fix-me" ]
-        [ div [ class "oscillators__osc2" ]
-            [ nordKnob model Knob.Osc2Semitone "semitone"
+    div [ class "oscillators--top-left" ]
+        [ div []
+            [ nordKnob model Knob.Osc2Semitone
             , OptionPicker.optionPicker "Waveform"
                 Oscillator2WaveformChange
                 Port.oscillator2Waveform
                 model.oscillator2WaveformBtn
-            , nordKnob model Knob.Osc2Detune "detune"
+            , nordKnob model Knob.Osc2Detune
+            , Switch.switch "kbd track"
+                Oscillator2KbdTrackToggle
+                model.oscillator2KbdTrackSwitch
             ]
-        , div [ class "fix-me2" ] [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
+        , div [ class "fix-me2" ]
+            [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
         ]
 
 
 oscillatorSection : Model -> Html Msg
 oscillatorSection model =
     section "oscillators"
-        [ div [ class "oscillators" ]
-            [ osc1 model, osc2 model ]
-        , div [ class "oscillators__extra" ]
-            [ nordKnob model
-                Knob.PW
-                "PW"
-            , nordKnob model
-                Knob.OscMix
-                "mix"
+        [ div [] [ osc1 model, osc2 model ]
+        , div [ class "oscillators--bottom" ]
+            [ nordKnob model Knob.PW
+            , nordKnob model Knob.OscMix
             ]
         ]
 
@@ -180,7 +178,7 @@ instructions =
                         ]
                    )
     in
-        div [ class "pannel-instructions" ]
+        div [ class "instructions-container" ]
             [ span [ class "instructions__title" ] [ text "INSTRUCTIONS" ]
             , table [ class "instructions" ]
                 <| List.map2

@@ -12,6 +12,7 @@ module.exports = {
 	plugins: [
 	],
 	rules: {
+		"curly": [ "warn", "all" ],
 		"indent": [ "warn", "tab", { "SwitchCase": 1 } ],
 		"linebreak-style": [ "warn", "unix" ],
 		"max-len": [ "warn", 80 ],
@@ -25,8 +26,8 @@ module.exports = {
 		"prefer-template": [ "warn" ],
 		"quotes": [ "warn", "single" ],
 		"semi": [ "warn", "never" ],
+		"space-before-blocks": ["warn", "always"],
 		"space-before-function-paren": [ "warn" ],
 		"space-in-parens": ["warn", "never"],
-
 	}
 }

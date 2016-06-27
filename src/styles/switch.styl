@@ -1,0 +1,47 @@
+@import './mixins'
+
+
+.switch
+	display flex
+	flex-direction column
+	width $btn-width
+	margin 0
+	justify-content flex-start
+
+
+	
+.switch__list
+	list-style-type none
+	display flex
+	flex-direction column
+	padding-left 4.5px
+	margin-top 0
+	margin-bottom 4px
+	user-select none
+
+.switch__item
+	padding-left 4.5px
+	margin-bottom 4px
+	display flex
+	align-items center
+
+.switch__item--active
+	led(6px, $active-led-color)
+
+.switch__item--inactive
+	led(6px, $inactive-led-color)
+
+.switch__label
+	font-size 10px
+	margin-left 5px
+
+
+.switch__btn
+	nord-btn()
+
+
+	
+
+		
+
+	

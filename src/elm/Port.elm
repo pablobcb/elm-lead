@@ -24,6 +24,9 @@ port oscillator2Semitone : Int -> Cmd msg
 port oscillator2Detune : Int -> Cmd msg
 
 
+port oscillator2KbdTrack : Bool -> Cmd msg
+
+
 port oscillatorsBalance : Int -> Cmd msg
 
 
@@ -40,6 +43,9 @@ port ampDecay : Int -> Cmd msg
 
 
 port ampSustain : Int -> Cmd msg
+
+
+port ampRelease : Int -> Cmd msg
 
 
 port pulseWidth : Int -> Cmd msg

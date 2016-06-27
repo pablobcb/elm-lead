@@ -1,4 +1,5 @@
 export default class BaseOscillator {
+
 	constructor (context) {
 		this.context = context
 		this.output = this.context.createGain()
@@ -6,8 +7,10 @@ export default class BaseOscillator {
 		this.oscillators = {}
 		this.oscillatorGains = []
 		this.frequencyGains = []
+		this.kbdTrack = true
 
-		for(let i=0; i<128; i++) {
+
+		for(let i = 0; i <128; i++) {
 			//TODO: create FM osc and let it holdd the gains,
 			// instead of the modular like it is
 			this.frequencyGains[i] = this.context.createGain()
@@ -16,32 +19,30 @@ export default class BaseOscillator {
 	}
 
 	panic =	() => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillators) {
+			if (this.oscillators.hasOwnProperty(midiNote)) {
 				this.oscillators[midiNote].stop()
 			}
 		}
 	}
 
 	frequencyFromNoteNumber = (note) => {
-		return 440 * Math.pow(2, (note - 69) / 12)
+		const note_ = this.kbdTrack ? note : 60
+		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
 	noteOff = (midiNote, releaseCallback) => {
 		let midiNoteKey
-		
-		if(midiNote)
+
+		if (midiNote) {
 			midiNoteKey = midiNote.toString()
-		
-			
-		if(!(midiNoteKey in this.oscillators))
-			return
+		}
 
 		const oscGain = this.oscillatorGains[midiNote].gain
 		
 		const osc = this.oscillators[midiNoteKey]
 
-		releaseCallback(oscGain)
+		releaseCallback(oscGain, osc)
 		//osc.stop(at)
 	}
 
@@ -52,6 +53,11 @@ export default class BaseOscillator {
 	setPulseWidth = () => {}
 
 	setWaveform = () => {}
+
+	setKbdTrack = (state) => {
+		this.kbdTrack = state
+	}
+
 
 	connect = function (node) {
 		this.output.connect(node)

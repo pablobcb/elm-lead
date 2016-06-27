@@ -98,8 +98,20 @@ getKeyClass model noteName midiNote highlight =
                 "keyboard__key--current-octave"
             else
                 ""
+
+        visibily =
+            if midiNote < 12 || midiNote > 120 then
+                "keyboard__key--full"
+            else if midiNote < 24 || midiNote > 108 then
+                "keyboard__key--big"
+            else if midiNote < 48 || midiNote > 96 then 
+                "keyboard__key--medium"
+            else if midiNote < 72 then
+                "keyboard__key--small"
+            else
+                ""
     in
-        [ "keyboard__key", position, keyPressed, note, currentOctave ]
+        [ "keyboard__key", position, keyPressed, note, currentOctave, visibily ]
             |> List.filter ((/=) "")
             |> String.join " "
 

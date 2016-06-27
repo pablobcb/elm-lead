@@ -1,14 +1,33 @@
+$knob-size = 48px
+$knob-inner-size = ($knob-size - ($knob-size / 6))
+$knob-inner-distance = ($knob-size / 12)
+
+$knob-darker = #6E6E82
+$knob-lighter = #485A7B
+$knob-indicator = white
+
 @import './mixins'
 
 .knob
-	text-align center
-	// width 100%
-	width 55px
-	height 55px
-	font-size 15px
+	position relative
+
+.knob__scale
+	height $knob-size
+	width $knob-size
+	margin-left auto
+	margin-right auto
+	margin-bottom 2px
+
+	background  url('../../images/knob-bg.svg')
+	background-size $knob-size
+	background-repeat no-repeat
+	background-position center
 
 .knob__dial
-	font-size 20px
+	margin 5px
+	user-select none
 
 .knob__label
 	panel-label($knob-label-background-color)
+	margin-left auto
+	margin-right auto
