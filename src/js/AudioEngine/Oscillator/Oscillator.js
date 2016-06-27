@@ -6,7 +6,6 @@ export default class Oscillator extends BaseOscillator {
 		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
-		this.kbdTrack = true
 	}
 
 	//shutup visual studio
@@ -22,8 +21,7 @@ export default class Oscillator extends BaseOscillator {
 		const osc = this.context.createOscillator()
 
 		osc.type = this.type
-		osc.frequency.value = this.frequencyFromNoteNumber(
-			this.kbdTrack ? midiNote : 60)
+		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 
 		osc.detune.value = this.detune + this.semitone
 		osc.onended = () => {
@@ -75,9 +73,4 @@ export default class Oscillator extends BaseOscillator {
 			this.frequencyGains[i].gain.value = fmGain
 		}
 	}
-
-	setKbdTrack = (state) => {
-		this.kbdTrack = state
-	}
-
 }

@@ -7,7 +7,7 @@ export default class BaseOscillator {
 		this.oscillators = {}
 		this.oscillatorGains = []
 		this.frequencyGains = []
-		this.type = 'whitenoise'
+		this.kbdTrack = true
 
 		for (let i=0; i < 128; i++) {
 			this.frequencyGains[i] = this.context.createGain()
@@ -24,7 +24,8 @@ export default class BaseOscillator {
 	}
 
 	frequencyFromNoteNumber = (note) => {
-		return 440 * Math.pow(2, (note - 69) / 12)
+		const note_ = this.kbdTrack ? note : 60
+		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
 	noteOff = (at, midiNote) => {
@@ -47,7 +48,10 @@ export default class BaseOscillator {
 
 	setWaveform = () => {}
 
-	setKbdTrack = () => {}
+	setKbdTrack = (state) => {
+		this.kbdTrack = state
+	}
+
 
 	connect = function (node) {
 		this.output.connect(node)

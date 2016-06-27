@@ -245,7 +245,9 @@ export default class SynthEngine {
 		this.oscillator2 = osc
 		this.oscillator2.setPulseWidth(this.state.oscs.pw)
 		this.oscillator2.setDetune(this.state.oscs.osc2.detune)
+		this.oscillator2.setKbdTrack(this.state.oscs.osc2.kbdTrack)
 		this.oscillator2.setSemitone(this.state.oscs.osc2.semitone)
+
 		this.oscillator2.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)

@@ -20,7 +20,7 @@ export default class PulseOscillator extends BaseOscillator {
 		this.pulseWidth = 0
 		this.fmGain = 0
 		this.widthGains = []
-		this.kbdTrack = true
+
 
 		for(let i=0; i<128; i++) {
 			this.widthGains[i] = this.context.createGain()
@@ -81,8 +81,7 @@ export default class PulseOscillator extends BaseOscillator {
 		constantOneShaper.connect(widthGain)
 
 		//move kbdtrack to base oscillator
-		sawNode.frequency.value = this.frequencyFromNoteNumber(this.kbdTrack ?
-			midiNote : 60)
+		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		sawNode.detune.value = this.detune + this.semitone
 
 		pulseShaper.connect(this.oscillatorGains[midiNote])
@@ -104,9 +103,5 @@ export default class PulseOscillator extends BaseOscillator {
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = width
 		})
-	}
-
-	setKbdTrack = (state) => {
-		this.kbdTrack = state
 	}
 }
