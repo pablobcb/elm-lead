@@ -52,6 +52,7 @@ type Msg
     | MouseDown KnobInstance YPos
     | MouseUp
     | Reset KnobInstance
+    | NoOp
 
 
 type KnobInstance
@@ -118,6 +119,10 @@ view model =
                 [ img
                     [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
                     , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
+                    , Html.Events.onWithOptions "dragstart"
+                        { stopPropagation = True, preventDefault = True }
+                        <| succeed
+                        <| NoOp
                     , class "knob__dial"
                     , Html.Attributes.attribute "draggable" "false"
                     , style knobStyle
@@ -144,6 +149,9 @@ knob knobMsg model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
+        NoOp ->
+            ( model, Cmd.none )
+
         Reset idKey ->
             if model.idKey /= idKey then
                 ( model, Cmd.none )
