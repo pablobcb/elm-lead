@@ -108,6 +108,7 @@ view model =
                     [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
                     , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
                     , class "knob__dial"
+                    , Html.Attributes.attribute "draggable" "false"
                     , style knobStyle
                     , alt <| toString model.value
                     , src "knob-fg.svg"
