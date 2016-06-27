@@ -37,7 +37,7 @@ init idKey value min max step label cmdEmitter =
     , initialValue = value
     , min = min
     , max = max
-    , step = step
+    , step = step * 2
     , label = label
     , initMouseYPos = 0
     , mouseYPos = 0
@@ -69,7 +69,6 @@ type KnobInstance
 
 
 
-
 -- VIEW
 
 
@@ -87,23 +86,35 @@ view : Model -> Html Msg
 view model =
     let
         -- These are defined in terms of degrees, with 0 pointing straight up
-        visualMinimum = -140
-        visualMaximum = 140
-        visualRange = 280
+        visualMinimum =
+            -150
 
-        valueRange = (model.max - model.min)
-        value = (toFloat model.value) / (toFloat valueRange)
+        visualMaximum =
+            150
 
-        direction = visualMinimum + (value * visualRange)
-        direction' = (toString direction) ++ "deg"
-        knobStyle = [("transform", "rotate(" ++ direction' ++ ")")]
+        visualRange =
+            300
+
+        valueRange =
+            (model.max - model.min)
+
+        value =
+            (toFloat model.value) / (toFloat valueRange)
+
+        direction =
+            visualMinimum + (value * visualRange)
+
+        direction' =
+            (toString direction) ++ "deg"
+
+        knobStyle =
+            [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
 
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
     in
         div [ class "knob" ]
-            [ div
-                [ class "knob__scale" ]
+            [ div [ class "knob__scale" ]
                 [ img
                     [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
                     , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
@@ -113,10 +124,9 @@ view model =
                     , alt <| toString model.value
                     , src "knob-fg.svg"
                     ]
-                    [ ]
+                    []
                 ]
-            , div
-                [ class "knob__label" ]
+            , div [ class "knob__label" ]
                 [ text model.label ]
             ]
 
@@ -159,6 +169,9 @@ update message model =
 
         MouseMove mouseYPos ->
             let
+                model' =
+                    { model | initMouseYPos = mouseYPos }
+
                 direction =
                     (model.initMouseYPos - mouseYPos)
                         // abs (model.initMouseYPos - mouseYPos)
@@ -167,26 +180,11 @@ update message model =
                     model.value
                         + (direction * model.step)
             in
-                if not model.isMouseClicked then
-                    ( model, Cmd.none )
-                else if newValue > model.max then
-                    ( { model
-                        | value = model.max
-                        , initMouseYPos = mouseYPos
-                      }
-                    , Cmd.none
-                    )
+                if not model'.isMouseClicked then
+                    ( model', Cmd.none )
+                else if newValue > model'.max then
+                    ( { model' | value = model'.max }, Cmd.none )
                 else if newValue < model.min then
-                    ( { model
-                        | value = model.min
-                        , initMouseYPos = mouseYPos
-                      }
-                    , Cmd.none
-                    )
+                    ( { model' | value = model.min }, Cmd.none )
                 else
-                    ( { model
-                        | value = newValue
-                        , initMouseYPos = mouseYPos
-                      }
-                    , model.cmdEmitter newValue
-                    )
+                    ( { model' | value = newValue }, model.cmdEmitter newValue )
