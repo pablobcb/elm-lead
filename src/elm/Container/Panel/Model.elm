@@ -37,16 +37,16 @@ type alias Model =
 knobs : List Knob.Model
 knobs =
     [ Knob.init Knob.OscMix 0 -50 50 1 "OscMix" Port.oscillatorsBalance
-    , Knob.init Knob.PW 0 0 90 1 "PW" Port.pulseWidth
+    , Knob.init Knob.PW 0 0 127 1 "PW" Port.pulseWidth
     , Knob.init Knob.Osc2Semitone 0 -60 60 1 "semitone" Port.oscillator2Semitone
     , Knob.init Knob.Osc2Detune 0 -100 100 1 "detune" Port.oscillator2Detune
-    , Knob.init Knob.FM 0 0 100 1 "FM" Port.fmAmount
-    , Knob.init Knob.AmpGain 10 0 100 1 "gain" Port.ampVolume
-    , Knob.init Knob.AmpAttack 10 0 100 1 "attack" Port.ampAttack
-    , Knob.init Knob.AmpDecay 10 0 100 1 "decay" Port.ampDecay
-    , Knob.init Knob.AmpSustain 10 0 100 1 "sustain" Port.ampSustain
-    , Knob.init Knob.FilterCutoff 4000 0 10000 1 "frequency" Port.filterCutoff
-    , Knob.init Knob.FilterQ 1 0 45 1 "resonance" Port.filterQ
+    , Knob.init Knob.FM 0 0 127 1 "FM" Port.fmAmount
+    , Knob.init Knob.AmpGain 10 0 127 1 "gain" Port.ampVolume
+    , Knob.init Knob.AmpAttack 10 0 127 1 "attack" Port.ampAttack
+    , Knob.init Knob.AmpDecay 10 0 127 1 "decay" Port.ampDecay
+    , Knob.init Knob.AmpSustain 10 0 127 1 "sustain" Port.ampSustain
+    , Knob.init Knob.FilterCutoff 64 0 127 1 "frequency" Port.filterCutoff
+    , Knob.init Knob.FilterQ 1 0 127 1 "resonance" Port.filterQ
     ]
 
 findKnob : Model -> KnobInstance -> Knob.Model
