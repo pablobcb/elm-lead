@@ -12,6 +12,7 @@ module.exports = {
 	plugins: [
 	],
 	rules: {
+		"curly": [ "warn", "all" ],
 		"indent": [ "warn", "tab", { "SwitchCase": 1 } ],
 		"linebreak-style": [ "warn", "unix" ],
 		"max-len": [ "warn", 80 ],
