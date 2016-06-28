@@ -1,39 +1,41 @@
-.oscillators
-    display flex
-    justify-content center
-    width 100%
+.oscillators__osc1,
+.oscillators__osc2,
+.oscillators__extra
+	display flex
+	text-align center
+	padding-top ($unit / 2)
+	padding-bottom ($unit / 2)
+
+.oscillators__osc1,
+.oscillators__osc2
+	justify-content space-around
 
 .oscillators__osc1
-    width 25%
-    border-right solid 2px $section-title-background-color
-    
+	flex-direction column
+	width 35%
+	border-right solid 2px $section-title-background-color
 
 .oscillators__osc2
-    display flex
+	flex-direction row
+	flex-wrap wrap
+	width 65%
 
-    flex-direction row
-    justify-content space-between
-
-.fix-me
-    display flex
-    flex-direction column
-    width 75%
-    justify-content space-around
-
-.fix-me2
-    margin-left 140px
+	.knob,
+	.option-picker
+		width 50%
+	
+	.oscillators__label
+		width 100%
 
 .oscillators__extra
-    display flex
-    justify-content space-around
-    border-top solid 2px $section-title-background-color
-
+	flex-grow 2
+	justify-content space-around
+	border-top solid 2px $section-title-background-color
 
 .oscillators__label
-    font-weight bold
-    text-align center
-    color $section-title-background-color
-    font-size 140%
-    user-select none
-    bottom 0
-
+	font-weight bold
+	text-align center
+	color $section-title-background-color
+	font-size 140%
+	user-select none
+	bottom 0

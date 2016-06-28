@@ -3,7 +3,16 @@
 	color $text-color
 	border-radius ($unit / 2)
 
+.section--with-bevel
+	.section__content
+		padding 0
+		align-items stretch
+
 .section__content
+	display flex
+	flex-wrap wrap
+	justify-content space-between
+	align-items center
 	padding ($unit / 2) $unit
 
 .section__content--beveled
