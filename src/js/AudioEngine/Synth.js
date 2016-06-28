@@ -2,9 +2,10 @@ import Oscillator from './Oscillator/Oscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 import ADSR from './ADSR'
+import MIDI from './MIDI'
 import CONSTANTS from '../Constants'
 
-export default class SynthEngine {
+export default class Synth {
 	constructor () {
 		this.context = new AudioContext
 
@@ -12,9 +13,10 @@ export default class SynthEngine {
 			filter: {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
-				Q: 0
-			},
-			amp: new ADSR(this.context, 0, .5, 1, .2, .1),
+				Q: 0,
+				amp: new ADSR(this.context, 0, .5, .7, .2)
+			}, 
+			amp: new ADSR(this.context, 0, .5, .7, .2),
 			oscs: {
 				osc1: {
 					waveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
@@ -36,17 +38,22 @@ export default class SynthEngine {
 
 		this.initializeFilter()
 
-		this.initializeOscillators()
+		this.oscillator1 = new Oscillator(this.context,
+			this.state.oscs.osc1.waveformType)
+
+		this.oscillator2 = new Oscillator(this.context,
+			this.state.oscs.osc2.waveformType)
 
 		this.initializeOscillatorsGain()
 
-		this.initializeFMGain()
+		this.initializeFMGain()		
+
 	}
 
 	initializeMasterOutput = () => {
 		this.masterVolume = this.context.createGain()
 
-		this.masterVolume.gain.value = this.state.amp.level
+		this.masterVolume.gain.value = .1 // this.state.amp.level
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -58,15 +65,6 @@ export default class SynthEngine {
 
 		this.filter.connect(this.masterVolume)
 	}
-
-	initializeOscillators = () => {
-		this.oscillator1 = new Oscillator(this.context,
-			this.state.oscs.osc1.waveformType)
-
-		this.oscillator2 = new Oscillator(this.context,
-			this.state.oscs.osc2.waveformType)
-	}
-
 
 	initializeOscillatorsGain = () => {
 		this.oscillator1Gain = this.context.createGain()
@@ -96,31 +94,35 @@ export default class SynthEngine {
 	onMIDIMessage = (data) => {
 		//console.log(data)
 		// var cmd = data[0] >> 4
-		// var channel = data[0] & 0xf
-
+		// var channel = data[0] & 0xf		
 		// channel agnostic message type
 		const type = data[0] & 0xf0
 		const note = data[1]
 		const velocity = data[2]
+		//debugger
 
 		switch (type) {
-			case CONSTANTS.MIDI_EVENTS.NOTE_ON:
+			case CONSTANTS.MIDI_EVENT.NOTE_ON:
 				this.noteOn(note, velocity)
 				break
-			case CONSTANTS.MIDI_EVENTS.NOTE_OFF:
+			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
 				this.noteOff(note, velocity)
 				break
 		}
 	}
 
 	noteOn = (midiNote /*, velocity*/) => {
-		this.oscillator1.noteOn(midiNote)
-		this.oscillator2.noteOn(midiNote)
+		this.oscillator1.noteOn(midiNote, this.state.amp.on)
+		this.oscillator2.noteOn(midiNote, this.state.amp.on)
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		this.oscillator1.noteOff(this.context.currentTime, midiNote)
-		this.oscillator2.noteOff(this.context.currentTime, midiNote)
+		const releaseCallback = (oscGain,osc) => {
+			this.state.amp.off(oscGain, osc)
+		}
+
+		this.oscillator1.noteOff(midiNote, releaseCallback)
+		this.oscillator2.noteOff(midiNote, releaseCallback)
 	}
 
 	panic = () => {
@@ -128,8 +130,8 @@ export default class SynthEngine {
 		this.oscillator2.panic()
 	}
 
-	setMasterVolumeGain = (masterVolumeGain) => {
-		const vol =  masterVolumeGain / 100
+	setMasterVolumeGain = (midiValue) => {		
+		const vol =  MIDI.logScaleToMax(midiValue, 1)
 		this.state.amp.level = vol
 		this.masterVolume.gain.value = vol
 
@@ -163,50 +165,40 @@ export default class SynthEngine {
 
 	setFmAmount = (fmAmount) => {
 		const amount = 10 * fmAmount
+		
 		this.state.oscs.osc1.fmGain = amount
 		for (let i = 0; i < CONSTANTS.MAX_NOTES ; i++) {
 			this.fmGains[i].gain.value = amount
 		}
 	}
 
-	setPulseWidth = (pulseWith) => {
-		const pw = pulseWith / 100
+	setPulseWidth = (midiValue) => {
+		const pw = MIDI.logScaleToMax(midiValue, .9)
 
 		this.state.oscs.pw = pw
 		this.oscillator2.setPulseWidth(pw)
 	}
 
 	setOscillator1Waveform = (waveform) => {
-		const validWaveforms = [
-			CONSTANTS.WAVEFORM_TYPE.SINE,
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
-			CONSTANTS.WAVEFORM_TYPE.SQUARE
-		]
-
 		const nextWaveform = waveform.toLowerCase()
 
-		if (validWaveforms.indexOf(nextWaveform) == -1) {
+		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(nextWaveform) == -1) {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 		}
 
 		this.oscillator1.setWaveform(nextWaveform)
-
 	}
-
-
+		
+	setOscillator2KbdTrack = (state) => {
+		this.state.oscs.osc2.kbdTrack = state
+		this.oscillator2.setKbdTrack(state)
+	}	
+	
 	setOscillator2Waveform = (waveform) => {
-		const validWaveforms = [
-			CONSTANTS.WAVEFORM_TYPE.TRIANGLE,
-			CONSTANTS.WAVEFORM_TYPE.SAWTOOTH,
-			CONSTANTS.WAVEFORM_TYPE.SQUARE,
-			CONSTANTS.WAVEFORM_TYPE.NOISE
-		]
-
 
 		const nextWaveform = waveform.toLowerCase()
 
-		if (validWaveforms.indexOf(nextWaveform) == -1) {
+		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(nextWaveform) == -1) {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 		}
 
@@ -267,10 +259,6 @@ export default class SynthEngine {
 			}
 		}
 		this.oscillator1 = osc
-
-		//for(let i = 0 ; i < CONSTANTS.MAX_NOTES ; i++)
-		//	this.fmGains[i].gain.value = this.state.oscs.osc1.fmGain
-
 		this.oscillator1.oscillatorGains.map((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)
@@ -279,32 +267,55 @@ export default class SynthEngine {
 
 
 	setFilterCutoff = (midiValue) => {		
-		const freq = 1.6 * 440 * Math.pow(2, (midiValue - 69) / 12)
-		this.filter.frequency.value = freq
+		this.filter.frequency.value = MIDI.toFilterCutoffFrequency(midiValue)
 	}
-
 
 	setFilterQ = (midiValue) => {
-		const value = 20 * (midiValue / 127)
-		this.filter.Q.value = value
+		this.filter.Q.value = MIDI.toFilterQAmount(midiValue)
 	}
 
-	setOscillator2KbdTrack = (state) => {
-		this.state.oscs.osc2.kbdTrack = state
-		this.oscillator2.setKbdTrack(state)
+	setAmpAttack = (midiValue) => {
+		this.state.amp.attack = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setAmpDecay = (midiValue) => {
+		this.state.amp.decay = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setAmpSustain = (midiValue) => {
+		this.state.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
+	}
+
+	setAmpRelease = (midiValue) => {
+		this.state.amp.release = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterAttack = (midiValue) => {
+		this.state.filter.amp.attack = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterDecay = (midiValue) => {
+		this.state.filter.amp.decay = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterSustain = (midiValue) => {
+		this.state.filter.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
+	}
+
+	setFilterRelease = (midiValue) => {
+		this.state.filter.amp.release = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
 	setFilterType = (filterType) => {
-		const validFilterTypes = [
-			CONSTANTS.FILTER_TYPE.LOWPASS, 
-			CONSTANTS.FILTER_TYPE.HIGHPASS, 
-			CONSTANTS.FILTER_TYPE.BANDPASS, 
-			CONSTANTS.FILTER_TYPE.NOTCH
-		]
-
 		const filterType_ = filterType.toLowerCase()
 
-		if (validFilterTypes.indexOf(filterType_) == -1) {
+		if (CONSTANTS.FILTER_TYPES.indexOf(filterType_) == -1) {
 			throw new Error('Invalid Filter Type')
 		}
 

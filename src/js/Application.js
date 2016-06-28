@@ -1,6 +1,7 @@
 import Elm from '../elm/Main.elm'
 
-import AudioEngine from './AudioEngine/SynthEngine'
+import AudioEngine from './AudioEngine/Synth'
+import MIDI from './AudioEngine/MIDI'
 
 export default class Application {
 
@@ -26,19 +27,11 @@ export default class Application {
 			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
+	
+
 	manageMidiDevices = () => {
-		// loop over all available inputs and listen for any MIDI input
-		for (const input of this.midiAccess.inputs.values()) {
-			input.onmidimessage = (midiMessage) => {
-				const data = midiMessage.data
-				this.audioEngine.onMIDIMessage(data)
-				this.app.ports.midiIn.send([
-					data[0],
-					data[1] || null,
-					data[2] || null
-				])
-			}
-		}
+		MIDI.manageMidiDevices(this.midiAccess, 
+			this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
 	}
 	
 	initializeMidiAccess = () => {
@@ -75,20 +68,22 @@ export default class Application {
 
 		this.app.ports.ampAttack
 			.subscribe((attackValue) => {
-				console.log(attackValue)
-				//this.audioEngine.setAmpAttack(attackValue)
+				this.audioEngine.setAmpAttack(attackValue)
 			})
 
 		this.app.ports.ampDecay
 			.subscribe((decayValue) => {
-				console.log(decayValue)
-				//this.audioEngine.setAmpDecay(decayValue)
+				this.audioEngine.setAmpDecay(decayValue)
 			})
 
 		this.app.ports.ampSustain
 			.subscribe((sustainLevel) => {
-				console.log(sustainLevel)
-				//this.audioEngine.setAmpSustain(sustainLevel)
+				this.audioEngine.setAmpSustain(sustainLevel)
+			})
+		
+		this.app.ports.ampRelease
+			.subscribe((releaseLevel) => {
+				this.audioEngine.setAmpRelease(releaseLevel)
 			})
 
 		// OSCILLATORS
@@ -134,6 +129,26 @@ export default class Application {
 			})
 
 		// FILTER
+		this.app.ports.filterAttack
+			.subscribe((attackValue) => {
+				this.audioEngine.setFilterAttack(attackValue)
+			})
+
+		this.app.ports.filterDecay
+			.subscribe((decayValue) => {
+				this.audioEngine.setFilterDecay(decayValue)
+			})
+
+		this.app.ports.filterSustain
+			.subscribe((sustainLevel) => {
+				this.audioEngine.setFilterSustain(sustainLevel)
+			})
+		
+		this.app.ports.filterRelease
+			.subscribe((releaseLevel) => {
+				this.audioEngine.setFilterRelease(releaseLevel)
+			})
+
 		this.app.ports.filterCutoff
 			.subscribe((freq) => {
 				this.audioEngine.setFilterCutoff(freq)

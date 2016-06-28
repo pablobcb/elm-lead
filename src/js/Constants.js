@@ -6,6 +6,7 @@ export default {
 		BANDPASS: 'bandpass',
 		NOTCH: 'notch'
 	},
+	FILTER_TYPES: ['highpass', 'lowpass', 'bandpass', 'notch'],
 	WAVEFORM_TYPE: {
 		SAWTOOTH: 'sawtooth',
 		TRIANGLE: 'triangle',
@@ -13,8 +14,11 @@ export default {
 		SQUARE : 'square',
 		NOISE : 'whitenoise'
 	},
-	MIDI_EVENTS: {
+	OSC1_WAVEFORM_TYPES: ['sine', 'triangle', 'sawtooth', 'square'],
+	OSC2_WAVEFORM_TYPES: ['triangle', 'sawtooth', 'square', 'whitenoise'],
+	MIDI_EVENT: {
 		NOTE_ON: 144,
 		NOTE_OFF: 128
-	}
+	},
+	MAX_ENVELOPE_TIME: 5 // in seconds
 }

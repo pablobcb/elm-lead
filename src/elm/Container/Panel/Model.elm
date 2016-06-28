@@ -32,7 +32,6 @@ type alias Model =
     }
 
 
-
 knobs : List Knob.Model
 knobs =
     [ Knob.init Knob.OscMix 0 -50 50 1 "OscMix" Port.oscillatorsBalance
@@ -44,8 +43,13 @@ knobs =
     , Knob.init Knob.AmpAttack 10 0 127 1 "attack" Port.ampAttack
     , Knob.init Knob.AmpDecay 10 0 127 1 "decay" Port.ampDecay
     , Knob.init Knob.AmpSustain 10 0 127 1 "sustain" Port.ampSustain
+    , Knob.init Knob.AmpRelease 10 0 127 1 "release" Port.ampRelease
     , Knob.init Knob.FilterCutoff 64 0 127 1 "frequency" Port.filterCutoff
     , Knob.init Knob.FilterQ 1 0 127 1 "resonance" Port.filterQ
+    , Knob.init Knob.FilterAttack 0 0 127 1 "attack" Port.filterAttack
+    , Knob.init Knob.FilterDecay 0 0 127 1 "decay" Port.filterDecay
+    , Knob.init Knob.FilterSustain 127 0 127 1 "sustain" Port.filterSustain
+    , Knob.init Knob.FilterRelease 0 0 127 1 "release" Port.filterRelease
     ]
 
 
@@ -102,9 +106,11 @@ updateOscillator2WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model ->
 updateOscillator2WaveformBtn btn model =
     { model | oscillator2WaveformBtn = btn }
 
+
 updateOscillator2KbdTrack : Switch.Model -> Model -> Model
 updateOscillator2KbdTrack switch model =
     { model | oscillator2KbdTrackSwitch = switch }
+
 
 updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
 updateFilterTypeBtn btn model =

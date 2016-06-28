@@ -11,7 +11,7 @@ export default class Oscillator extends BaseOscillator {
 	//shutup visual studio
 	_ = () => {}
 	
-	noteOn = (midiNote) => {
+	noteOn = (midiNote, noteOnCB) => {
 		const midiNoteKey = midiNote.toString()
 
 		if (midiNoteKey in this.oscillators) {
@@ -37,6 +37,7 @@ export default class Oscillator extends BaseOscillator {
 
 		osc.connect(this.output)
 		osc.start(this.context.currentTime)
+		noteOnCB(this.output.gain)
 		this.oscillators[midiNoteKey] = osc
 	}
 

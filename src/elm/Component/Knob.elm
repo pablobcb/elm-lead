@@ -65,8 +65,13 @@ type KnobInstance
     | AmpAttack
     | AmpDecay
     | AmpSustain
+    | AmpRelease
     | FilterCutoff
     | FilterQ
+    | FilterAttack
+    | FilterDecay
+    | FilterSustain
+    | FilterRelease
 
 
 

@@ -45,6 +45,9 @@ port ampDecay : Int -> Cmd msg
 port ampSustain : Int -> Cmd msg
 
 
+port ampRelease : Int -> Cmd msg
+
+
 port pulseWidth : Int -> Cmd msg
 
 
@@ -55,3 +58,15 @@ port filterQ : Int -> Cmd msg
 
 
 port filterType : String -> Cmd msg
+
+
+port filterAttack : Int -> Cmd msg
+
+
+port filterDecay : Int -> Cmd msg
+
+
+port filterSustain : Int -> Cmd msg
+
+
+port filterRelease : Int -> Cmd msg
