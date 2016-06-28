@@ -27,19 +27,6 @@ export default class Application {
 			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
-	
-
-	manageMidiDevices = () => {
-		MIDI.manageMidiDevices(this.midiAccess, 
-			this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
-	}
-	
-	initializeMidiAccess = () => {
-		this.manageMidiDevices()		
-		this.midiAccess.onstatechange = this.manageMidiDevices
-	}
-
-
 	initializeAudioEngine = () => {
 
 		this.audioEngine = new AudioEngine()
@@ -49,16 +36,6 @@ export default class Application {
 			this.app.ports.panic .send()
 			this.audioEngine.panic()
 		}
-
-		// MIDI
-		if (this.midiAccess) {
-			this.initializeMidiAccess()
-		}
-
-		this.app.ports.midiOut
-			.subscribe((midiDataArray) => {
-				this.audioEngine.onMIDIMessage(midiDataArray)
-			})
 
 		// AMP
 		this.app.ports.ampVolume
@@ -163,6 +140,18 @@ export default class Application {
 			.subscribe((filterType) => {
 				this.audioEngine.setFilterType(filterType)
 			})
+		
+		// MIDI
+		if (this.midiAccess) {
+			MIDI.manageMidiDevices(this.midiAccess, 
+			this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
+		}
+
+		this.app.ports.midiOut
+			.subscribe((midiDataArray) => {
+				this.audioEngine.onMIDIMessage(midiDataArray)
+			})
+
 	}
 
 }

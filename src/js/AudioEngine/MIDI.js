@@ -6,6 +6,21 @@ const midiToFreq = (midiValue) => (
 	440 * Math.pow(2, (midiValue - 69) / 12)
 )
 
+const manageMidiDevices = (midiAccess, midiPort, onMIDIMessage) => {
+	// loop over all available inputs and listen for any MIDI input
+	for (const input of midiAccess.inputs.values()) {
+		input.onmidimessage = (midiMessage) => {
+			const data = midiMessage.data
+			onMIDIMessage(data)
+			midiPort.send([
+				data[0],
+				data[1] || null,
+				data[2] || null
+			])
+		}
+	}
+}
+
 export default {
 
 	// functions below scales midi values to synth parameters
@@ -24,17 +39,9 @@ export default {
 	),
 
 	manageMidiDevices : (midiAccess, midiPort, onMIDIMessage) => {
-		// loop over all available inputs and listen for any MIDI input
-		for (const input of midiAccess.inputs.values()) {
-			input.onmidimessage = (midiMessage) => {
-				const data = midiMessage.data
-				onMIDIMessage(data)
-				midiPort.send([
-					data[0],
-					data[1] || null,
-					data[2] || null
-				])
-			}
+		midiAccess.onstatechange = () => {
+			manageMidiDevices(midiAccess, midiPort, onMIDIMessage)
 		}
+		manageMidiDevices(midiAccess, midiPort, onMIDIMessage)
 	}
 }
