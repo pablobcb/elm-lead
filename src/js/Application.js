@@ -50,13 +50,13 @@ export default class Application {
 
 		// OSCILLATORS
 
-		this.app.ports.oscillatorsBalance
+		this.app.ports.oscsBalance
 			.subscribe(this.synth.setOscillatorsBalance)
 
-		this.app.ports.oscillator2Semitone
+		this.app.ports.osc2Semitone
 			.subscribe(this.synth.setOscillator2Semitone)
 
-		this.app.ports.oscillator2Detune
+		this.app.ports.osc2Detune
 			.subscribe(this.synth.setOscillator2Detune)
 
 		this.app.ports.fmAmount
@@ -65,13 +65,13 @@ export default class Application {
 		this.app.ports.pulseWidth
 			.subscribe(this.synth.setPulseWidth)
 
-		this.app.ports.oscillator1Waveform
+		this.app.ports.osc1Waveform
 			.subscribe(this.synth.setOscillator1Waveform)
 
-		this.app.ports.oscillator2Waveform
+		this.app.ports.osc2Waveform
 			.subscribe(this.synth.setOscillator2Waveform)
 
-		this.app.ports.oscillator2KbdTrack
+		this.app.ports.osc2KbdTrack
 			.subscribe(this.synth.setOscillator2KbdTrack)
 
 		// FILTER

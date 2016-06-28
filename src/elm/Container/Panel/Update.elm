@@ -9,9 +9,9 @@ import Component.OptionPicker as OptionPicker
 
 
 type Msg
-    = Oscillator1WaveformChange OptionPicker.Msg
-    | Oscillator2WaveformChange OptionPicker.Msg
-    | Oscillator2KbdTrackToggle Switch.Msg
+    = Osc1WaveformChange OptionPicker.Msg
+    | Osc2WaveformChange OptionPicker.Msg
+    | Osc2KbdTrackToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
 
@@ -43,19 +43,19 @@ update msg model =
                 )
     in
         case msg of
-            Oscillator1WaveformChange subMsg ->
+            Osc1WaveformChange subMsg ->
                 updateMap OptionPicker.update
                     subMsg
-                    .oscillator1WaveformBtn
-                    updateOscillator1WaveformBtn
-                    Oscillator1WaveformChange
+                    .osc1WaveformBtn
+                    updateOsc1WaveformBtn
+                    Osc1WaveformChange
 
-            Oscillator2WaveformChange subMsg ->
+            Osc2WaveformChange subMsg ->
                 updateMap OptionPicker.update
                     subMsg
-                    .oscillator2WaveformBtn
-                    updateOscillator2WaveformBtn
-                    Oscillator2WaveformChange
+                    .osc2WaveformBtn
+                    updateOsc2WaveformBtn
+                    Osc2WaveformChange
 
             FilterTypeChange subMsg ->
                 updateMap OptionPicker.update
@@ -64,12 +64,12 @@ update msg model =
                     updateFilterTypeBtn
                     FilterTypeChange
 
-            Oscillator2KbdTrackToggle subMsg ->
+            Osc2KbdTrackToggle subMsg ->
                 updateMap Switch.update
                     subMsg
-                    .oscillator2KbdTrackSwitch
-                    updateOscillator2KbdTrack
-                    Oscillator2KbdTrackToggle
+                    .osc2KbdTrackSwitch
+                    updateOsc2KbdTrack
+                    Osc2KbdTrackToggle
 
             KnobMsg subMsg ->
                 updateKnobs subMsg (KnobMsg subMsg)

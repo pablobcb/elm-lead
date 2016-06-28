@@ -12,22 +12,22 @@ port midiIn : (MidiMessage -> msg) -> Sub msg
 port panic : ({} -> msg) -> Sub msg
 
 
-port oscillator1Waveform : String -> Cmd msg
+port osc1Waveform : String -> Cmd msg
 
 
-port oscillator2Waveform : String -> Cmd msg
+port osc2Waveform : String -> Cmd msg
 
 
-port oscillator2Semitone : Int -> Cmd msg
+port osc2Semitone : Int -> Cmd msg
 
 
-port oscillator2Detune : Int -> Cmd msg
+port osc2Detune : Int -> Cmd msg
 
 
-port oscillator2KbdTrack : Bool -> Cmd msg
+port osc2KbdTrack : Bool -> Cmd msg
 
 
-port oscillatorsBalance : Int -> Cmd msg
+port oscsBalance : Int -> Cmd msg
 
 
 port fmAmount : Int -> Cmd msg

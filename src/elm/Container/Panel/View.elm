@@ -78,9 +78,9 @@ osc1 : Model -> Html Msg
 osc1 model =
     div [ class "oscillators--top-left" ]
         [ OptionPicker.optionPicker "Waveform"
-            Oscillator1WaveformChange
-            Port.oscillator1Waveform
-            model.oscillator1WaveformBtn
+            Osc1WaveformChange
+            Port.osc1Waveform
+            model.osc1WaveformBtn
         , nordKnob model Knob.FM
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         ]
@@ -92,13 +92,13 @@ osc2 model =
         [ div []
             [ nordKnob model Knob.Osc2Semitone
             , OptionPicker.optionPicker "Waveform"
-                Oscillator2WaveformChange
-                Port.oscillator2Waveform
-                model.oscillator2WaveformBtn
+                Osc2WaveformChange
+                Port.osc2Waveform
+                model.osc2WaveformBtn
             , nordKnob model Knob.Osc2Detune
             , Switch.switch "kbd track"
-                Oscillator2KbdTrackToggle
-                model.oscillator2KbdTrackSwitch
+                Osc2KbdTrackToggle
+                model.osc2KbdTrackSwitch
             ]
         , div [ class "fix-me2" ]
             [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
