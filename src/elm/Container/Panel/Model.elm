@@ -40,11 +40,11 @@ knobs =
     , Knob.init Knob.Osc2Detune 0 -100 100 1 "detune" Port.oscillator2Detune
     , Knob.init Knob.FM 0 0 127 1 "FM" Port.fmAmount
     , Knob.init Knob.AmpGain 10 0 127 1 "gain" Port.ampVolume
-    , Knob.init Knob.AmpAttack 10 0 127 1 "attack" Port.ampAttack
-    , Knob.init Knob.AmpDecay 10 0 127 1 "decay" Port.ampDecay
-    , Knob.init Knob.AmpSustain 10 0 127 1 "sustain" Port.ampSustain
-    , Knob.init Knob.AmpRelease 10 0 127 1 "release" Port.ampRelease
-    , Knob.init Knob.FilterCutoff 64 0 127 1 "frequency" Port.filterCutoff
+    , Knob.init Knob.AmpAttack 1 0 127 1 "attack" Port.ampAttack
+    , Knob.init Knob.AmpDecay 127 0 127 1 "decay" Port.ampDecay
+    , Knob.init Knob.AmpSustain 1 0 127 1 "sustain" Port.ampSustain
+    , Knob.init Knob.AmpRelease 127 0 127 1 "release" Port.ampRelease
+    , Knob.init Knob.FilterCutoff 127 0 127 1 "frequency" Port.filterCutoff
     , Knob.init Knob.FilterQ 1 0 127 1 "resonance" Port.filterQ
     , Knob.init Knob.FilterAttack 0 0 127 1 "attack" Port.filterAttack
     , Knob.init Knob.FilterDecay 0 0 127 1 "decay" Port.filterDecay

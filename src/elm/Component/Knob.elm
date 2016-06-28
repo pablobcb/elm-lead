@@ -37,7 +37,7 @@ init idKey value min max step label cmdEmitter =
     , initialValue = value
     , min = min
     , max = max
-    , step = step * 2
+    , step = step * 3
     , label = label
     , initMouseYPos = 0
     , mouseYPos = 0
@@ -108,17 +108,15 @@ view model =
             (toFloat model.value) / (toFloat valueRange)
 
         direction =
-            visualMinimum + (value * visualRange)
-
-        direction' =
-            (toString
-                <| direction
+            visualMinimum
+                + (value * visualRange)
                 + if model.min < 0 then
                     150
                   else
                     0
-            )
-                ++ "deg"
+
+        direction' =
+            (toString direction) ++ "deg"
 
         knobStyle =
             [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
