@@ -39,119 +39,78 @@ export default class Application {
 
 		// AMP
 		this.app.ports.ampVolume
-			.subscribe((masterVolumeValue) => {
-				this.audioEngine.setMasterVolumeGain(masterVolumeValue)
-			})
+			.subscribe(this.audioEngine.setMasterVolumeGain)
 
 		this.app.ports.ampAttack
-			.subscribe((attackValue) => {
-				this.audioEngine.setAmpAttack(attackValue)
-			})
+			.subscribe(this.audioEngine.setAmpAttack)
 
 		this.app.ports.ampDecay
-			.subscribe((decayValue) => {
-				this.audioEngine.setAmpDecay(decayValue)
-			})
+			.subscribe(this.audioEngine.setAmpDecay)
 
 		this.app.ports.ampSustain
-			.subscribe((sustainLevel) => {
-				this.audioEngine.setAmpSustain(sustainLevel)
-			})
+			.subscribe(this.audioEngine.setAmpSustain)
 		
 		this.app.ports.ampRelease
-			.subscribe((releaseLevel) => {
-				this.audioEngine.setAmpRelease(releaseLevel)
-			})
+			.subscribe(this.audioEngine.setAmpRelease)
 
 		// OSCILLATORS
 
 		this.app.ports.oscillatorsBalance
-			.subscribe((oscillatorsBalanceValue) => {
-				this.audioEngine.setOscillatorsBalance(oscillatorsBalanceValue)
-			})
+			.subscribe(this.audioEngine.setOscillatorsBalance)
 
 		this.app.ports.oscillator2Semitone
-			.subscribe((oscillatorSemitoneValue) => {
-				this.audioEngine.setOscillator2Semitone(oscillatorSemitoneValue)
-			})
+			.subscribe(this.audioEngine.setOscillator2Semitone)
 
 		this.app.ports.oscillator2Detune
-			.subscribe((oscillatorDetuneValue) => {
-				this.audioEngine.setOscillator2Detune(oscillatorDetuneValue)
-			})
+			.subscribe(this.audioEngine.setOscillator2Detune)
 
 		this.app.ports.fmAmount
-			.subscribe((fmAmountValue) => {
-				this.audioEngine.setFmAmount(fmAmountValue)
-			})
+			.subscribe(this.audioEngine.setFmAmount)
 
 		this.app.ports.pulseWidth
-			.subscribe((pulseWidthValue) => {
-				this.audioEngine.setPulseWidth(pulseWidthValue)
-			})
+			.subscribe(this.audioEngine.setPulseWidth)
 
 		this.app.ports.oscillator1Waveform
-			.subscribe((waveform) => {
-				this.audioEngine.setOscillator1Waveform(waveform)
-			})
+			.subscribe(this.audioEngine.setOscillator1Waveform)
 
 		this.app.ports.oscillator2Waveform
-			.subscribe((waveform) => {
-				this.audioEngine.setOscillator2Waveform(waveform)
-			})
+			.subscribe(this.audioEngine.setOscillator2Waveform)
 
 		this.app.ports.oscillator2KbdTrack
-			.subscribe((kbdTrackState) => {
-				this.audioEngine.setOscillator2KbdTrack(kbdTrackState)
-			})
+			.subscribe(this.audioEngine.setOscillator2KbdTrack)
 
 		// FILTER
 		this.app.ports.filterAttack
-			.subscribe((attackValue) => {
-				this.audioEngine.setFilterAttack(attackValue)
-			})
+			.subscribe(this.audioEngine.setFilterAttack)
 
 		this.app.ports.filterDecay
-			.subscribe((decayValue) => {
-				this.audioEngine.setFilterDecay(decayValue)
-			})
+			.subscribe(this.audioEngine.setFilterDecay)
 
 		this.app.ports.filterSustain
-			.subscribe((sustainLevel) => {
-				this.audioEngine.setFilterSustain(sustainLevel)
-			})
+			.subscribe(this.audioEngine.setFilterSustain)
 		
 		this.app.ports.filterRelease
-			.subscribe((releaseLevel) => {
-				this.audioEngine.setFilterRelease(releaseLevel)
-			})
+			.subscribe(this.audioEngine.setFilterRelease)
 
 		this.app.ports.filterCutoff
-			.subscribe((freq) => {
-				this.audioEngine.setFilterCutoff(freq)
-			})
+			.subscribe(this.audioEngine.setFilterCutoff)
 
 		this.app.ports.filterQ
-			.subscribe((amount) => {
-				this.audioEngine.setFilterQ(amount)
-			})
+			.subscribe(this.audioEngine.setFilterQ)
+
 
 		this.app.ports.filterType
-			.subscribe((filterType) => {
-				this.audioEngine.setFilterType(filterType)
-			})
+			.subscribe(this.audioEngine.setFilterType)
+
 		
 		// MIDI
 		if (this.midiAccess) {
 			MIDI.manageMidiDevices(this.midiAccess, 
-			this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
+				this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
 		}
 
 		this.app.ports.midiOut
-			.subscribe((midiDataArray) => {
-				this.audioEngine.onMIDIMessage(midiDataArray)
-			})
+			.subscribe(this.audioEngine.onMIDIMessage)
 
 	}
-
 }
