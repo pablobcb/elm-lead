@@ -1,6 +1,6 @@
 import Elm from '../elm/Main.elm'
 
-import AudioEngine from './AudioEngine/Synth'
+import Synth from './AudioEngine/Synth'
 import MIDI from './AudioEngine/MIDI'
 
 export default class Application {
@@ -12,7 +12,7 @@ export default class Application {
 			navigator
 				.requestMIDIAccess()
 				.then(this.onMIDISuccess.bind(this), this.onMIDIFailure)
-				.then(this.initializeAudioEngine.bind(this))
+				.then(this.initializeSynth.bind(this))
 		} else {
 			this.onMIDIFailure()
 		}
@@ -27,90 +27,85 @@ export default class Application {
 			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
 
-	initializeAudioEngine = () => {
+	initializeSynth = () => {
 
-		this.audioEngine = new AudioEngine()
+		this.synth = new Synth()
 		// MACRO
 
 		window.onblur = () => {
-			this.app.ports.panic .send()
-			this.audioEngine.panic()
+			this.app.ports.panic.send()
+			this.synth.panic()
 		}
 
 		// AMP
-		this.app.ports.ampVolume
-			.subscribe(this.audioEngine.setMasterVolumeGain)
+		this.app.ports.ampVolume.subscribe(this.synth.setMasterVolumeGain)
 
-		this.app.ports.ampAttack
-			.subscribe(this.audioEngine.setAmpAttack)
+		this.app.ports.ampAttack.subscribe(this.synth.setAmpAttack)
 
-		this.app.ports.ampDecay
-			.subscribe(this.audioEngine.setAmpDecay)
+		this.app.ports.ampDecay.subscribe(this.synth.setAmpDecay)
 
-		this.app.ports.ampSustain
-			.subscribe(this.audioEngine.setAmpSustain)
+		this.app.ports.ampSustain.subscribe(this.synth.setAmpSustain)
 		
-		this.app.ports.ampRelease
-			.subscribe(this.audioEngine.setAmpRelease)
+		this.app.ports.ampRelease.subscribe(this.synth.setAmpRelease)
 
 		// OSCILLATORS
 
 		this.app.ports.oscillatorsBalance
-			.subscribe(this.audioEngine.setOscillatorsBalance)
+			.subscribe(this.synth.setOscillatorsBalance)
 
 		this.app.ports.oscillator2Semitone
-			.subscribe(this.audioEngine.setOscillator2Semitone)
+			.subscribe(this.synth.setOscillator2Semitone)
 
 		this.app.ports.oscillator2Detune
-			.subscribe(this.audioEngine.setOscillator2Detune)
+			.subscribe(this.synth.setOscillator2Detune)
 
 		this.app.ports.fmAmount
-			.subscribe(this.audioEngine.setFmAmount)
+			.subscribe(this.synth.setFmAmount)
 
 		this.app.ports.pulseWidth
-			.subscribe(this.audioEngine.setPulseWidth)
+			.subscribe(this.synth.setPulseWidth)
 
 		this.app.ports.oscillator1Waveform
-			.subscribe(this.audioEngine.setOscillator1Waveform)
+			.subscribe(this.synth.setOscillator1Waveform)
 
 		this.app.ports.oscillator2Waveform
-			.subscribe(this.audioEngine.setOscillator2Waveform)
+			.subscribe(this.synth.setOscillator2Waveform)
 
 		this.app.ports.oscillator2KbdTrack
-			.subscribe(this.audioEngine.setOscillator2KbdTrack)
+			.subscribe(this.synth.setOscillator2KbdTrack)
 
 		// FILTER
 		this.app.ports.filterAttack
-			.subscribe(this.audioEngine.setFilterAttack)
+			.subscribe(this.synth.setFilterAttack)
 
 		this.app.ports.filterDecay
-			.subscribe(this.audioEngine.setFilterDecay)
+			.subscribe(this.synth.setFilterDecay)
 
 		this.app.ports.filterSustain
-			.subscribe(this.audioEngine.setFilterSustain)
+			.subscribe(this.synth.setFilterSustain)
 		
 		this.app.ports.filterRelease
-			.subscribe(this.audioEngine.setFilterRelease)
+			.subscribe(this.synth.setFilterRelease)
 
 		this.app.ports.filterCutoff
-			.subscribe(this.audioEngine.setFilterCutoff)
+			.subscribe(this.synth.setFilterCutoff)
 
 		this.app.ports.filterQ
-			.subscribe(this.audioEngine.setFilterQ)
+			.subscribe(this.synth.setFilterQ)
 
 
 		this.app.ports.filterType
-			.subscribe(this.audioEngine.setFilterType)
+			.subscribe(this.synth.setFilterType)
 
 		
 		// MIDI
 		if (this.midiAccess) {
 			MIDI.manageMidiDevices(this.midiAccess, 
-				this.app.ports.midiIn, this.audioEngine.onMIDIMessage)
+				this.app.ports.midiIn, this.synth.onMIDIMessage)
 		}
 
 		this.app.ports.midiOut
-			.subscribe(this.audioEngine.onMIDIMessage)
+			.subscribe(this.synth.onMIDIMessage)
 
 	}
 }
