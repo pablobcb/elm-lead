@@ -70,6 +70,9 @@ filter model =
                 FilterTypeChange
                 Port.filterType
                 model.filterTypeBtn
+            , Switch.switch "distortion"
+                FilterDistortionToggle
+                model.osc2KbdTrackSwitch
             ]
         ]
 

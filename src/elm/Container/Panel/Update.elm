@@ -12,6 +12,7 @@ type Msg
     = Osc1WaveformChange OptionPicker.Msg
     | Osc2WaveformChange OptionPicker.Msg
     | Osc2KbdTrackToggle Switch.Msg
+    | FilterDistortionToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
 
@@ -70,6 +71,13 @@ update msg model =
                     .osc2KbdTrackSwitch
                     updateOsc2KbdTrack
                     Osc2KbdTrackToggle
+
+            FilterDistortionToggle subMsg ->
+                updateMap Switch.update
+                    subMsg
+                    .filterDistortionSwitch
+                    updateOsc2KbdTrack
+                    FilterDistortionToggle
 
             KnobMsg subMsg ->
                 updateKnobs subMsg (KnobMsg subMsg)

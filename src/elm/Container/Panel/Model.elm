@@ -29,6 +29,7 @@ type alias Model =
     , osc2WaveformBtn : OptionPicker.Model OscillatorWaveform
     , osc1WaveformBtn : OptionPicker.Model OscillatorWaveform
     , osc2KbdTrackSwitch : Switch.Model
+    , filterDistortionSwitch : Switch.Model
     }
 
 
@@ -73,6 +74,7 @@ init : Model
 init =
     { knobs = knobs
     , osc2KbdTrackSwitch = Switch.init True Port.osc2KbdTrack
+    , filterDistortionSwitch = Switch.init False Port.filterDistortion
     , filterTypeBtn =
         OptionPicker.init
             [ ( "LP", Lowpass )
