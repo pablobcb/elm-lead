@@ -130,11 +130,10 @@ export default class Synth {
 		this.oscillator2.panic()
 	}
 
-	setMasterVolumeGain = (midiValue) => {		
+	setMasterVolumeGain = (midiValue) => {
 		const vol =  MIDI.logScaleToMax(midiValue, 1)
 		this.state.amp.level = vol
 		this.masterVolume.gain.value = vol
-
 	}
 
 	setOscillatorsBalance = (oscillatorsBalance) => {

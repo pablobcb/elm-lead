@@ -72,6 +72,7 @@ type KnobInstance
     | FilterDecay
     | FilterSustain
     | FilterRelease
+    | FilterEnvelopeAmount
 
 
 

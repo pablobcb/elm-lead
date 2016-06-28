@@ -70,3 +70,6 @@ port filterSustain : Int -> Cmd msg
 
 
 port filterRelease : Int -> Cmd msg
+
+
+port filterEnvelopeAmount : Int -> Cmd msg

@@ -70,6 +70,7 @@ filter model =
                 FilterTypeChange
                 Port.filterType
                 model.filterTypeBtn
+            , nordKnob model Knob.FilterEnvelopeAmount
             ]
         ]
 
