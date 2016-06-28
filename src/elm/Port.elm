@@ -73,3 +73,6 @@ port filterRelease : Int -> Cmd msg
 
 
 port filterDistortion : Bool -> Cmd msg
+
+
+port filterEnvelopeAmount : Int -> Cmd msg

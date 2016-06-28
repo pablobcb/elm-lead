@@ -14,9 +14,9 @@ export default class Synth {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
 				Q: 0,
-				amp: new ADSR(this.context, 0, .5, .7, .2)
+				amp: new ADSR(this.context, 0, .5, .7, .2, 0)
 			}, 
-			amp: new ADSR(this.context, 0, .5, .7, .2),
+			amp: new ADSR(this.context, 0, .5, .7, .2, 1),
 			oscs: {
 				osc1: {
 					waveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
@@ -114,6 +114,8 @@ export default class Synth {
 	noteOn = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, this.state.amp.on)
 		this.oscillator2.noteOn(midiNote, this.state.amp.on)
+		//this.state.filter.amp.on(this.filter.frequency)
+		
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
@@ -130,11 +132,10 @@ export default class Synth {
 		this.oscillator2.panic()
 	}
 
-	setMasterVolumeGain = (midiValue) => {		
+	setMasterVolumeGain = (midiValue) => {
 		const vol =  MIDI.logScaleToMax(midiValue, 1)
 		this.state.amp.level = vol
 		this.masterVolume.gain.value = vol
-
 	}
 
 	setOscillatorsBalance = (oscillatorsBalance) => {
@@ -291,6 +292,11 @@ export default class Synth {
 	setAmpRelease = (midiValue) => {
 		this.state.amp.release = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	//FILTER
+	setFilterEnvelopeAmount = (midiValue) => {
+		this.state.filter.amp.amount = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 	setFilterAttack = (midiValue) => {

@@ -51,6 +51,13 @@ knobs =
     , Knob.init Knob.FilterDecay 0 0 127 1 "decay" Port.filterDecay
     , Knob.init Knob.FilterSustain 127 0 127 1 "sustain" Port.filterSustain
     , Knob.init Knob.FilterRelease 0 0 127 1 "release" Port.filterRelease
+    , Knob.init Knob.FilterEnvelopeAmount
+        0
+        0
+        127
+        1
+        "Envelope amount"
+        Port.filterEnvelopeAmount
     ]
 
 
