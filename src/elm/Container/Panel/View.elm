@@ -13,6 +13,11 @@ import Container.Panel.Model as Model exposing (..)
 import Container.Panel.Update as Update exposing (..)
 
 
+type Bevel
+    = WithBevel
+    | WithoutBevel
+
+
 nordKnob : Model -> Knob.KnobInstance -> Html Msg
 nordKnob model knobInstance =
     let
@@ -29,13 +34,22 @@ nordKnob model knobInstance =
                 Knob.knob KnobMsg knobModel
 
 
-section : String -> List (Html a) -> Html a
-section title content =
-    div [ class "section" ]
-        [ div [ class "section__title" ]
-            [ text title ]
-        , div [ class "section__content" ] content
-        ]
+section : Bevel -> String -> List (Html a) -> Html a
+section bevelType title content =
+    let
+        sectionClass =
+            case bevelType of
+                WithBevel ->
+                    "section section--with-bevel"
+
+                WithoutBevel ->
+                    "section"
+    in
+        div [ class sectionClass ]
+            [ div [ class "section__title" ]
+                [ text title ]
+            , div [ class "section__content" ] content
+            ]
 
 
 column : List (Html a) -> Html a
@@ -45,7 +59,8 @@ column content =
 
 amplifier : Model -> Html Msg
 amplifier model =
-    section "amplifier"
+    section WithoutBevel
+        "amplifier"
         [ div [ class "amplifier" ]
             [ nordKnob model Knob.AmpAttack
             , nordKnob model Knob.AmpDecay
@@ -58,7 +73,8 @@ amplifier model =
 
 filter : Model -> Html Msg
 filter model =
-    section "filter"
+    section WithoutBevel
+        "filter"
         [ div [ class "filter" ]
             [ nordKnob model Knob.FilterAttack
             , nordKnob model Knob.FilterDecay
@@ -111,9 +127,11 @@ osc2 model =
 
 oscillatorSection : Model -> Html Msg
 oscillatorSection model =
-    section "oscillators"
-        [ div [] [ osc1 model, osc2 model ]
-        , div [ class "oscillators--bottom" ]
+    section WithBevel
+        "oscillators"
+        [ osc1 model
+        , osc2 model
+        , div [ class "oscillators__extra" ]
             [ nordKnob model Knob.PW
             , nordKnob model Knob.OscMix
             ]
