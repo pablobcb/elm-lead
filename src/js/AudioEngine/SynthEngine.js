@@ -278,7 +278,8 @@ export default class SynthEngine {
 	}
 
 
-	setFilterCutoff = (freq) => {
+	setFilterCutoff = (midiValue) => {
+		const freq = 1.6 * 440 * Math.pow(2, (midiValue - 69) / 12)
 		this.filter.frequency.value = freq
 	}
 
