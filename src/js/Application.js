@@ -75,6 +75,9 @@ export default class Application {
 			.subscribe(this.synth.setOscillator2KbdTrack)
 
 		// FILTER
+		this.app.ports.filterEnvelopeAmount
+			.subscribe(this.synth.setFilterEnvelopeAmount)
+
 		this.app.ports.filterAttack
 			.subscribe(this.synth.setFilterAttack)
 
@@ -92,7 +95,6 @@ export default class Application {
 
 		this.app.ports.filterQ
 			.subscribe(this.synth.setFilterQ)
-
 
 		this.app.ports.filterType
 			.subscribe(this.synth.setFilterType)

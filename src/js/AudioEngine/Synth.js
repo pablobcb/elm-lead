@@ -14,9 +14,9 @@ export default class Synth {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
 				Q: 0,
-				amp: new ADSR(this.context, 0, .5, .7, .2)
+				amp: new ADSR(this.context, 0, .5, .7, .2, 0)
 			}, 
-			amp: new ADSR(this.context, 0, .5, .7, .2),
+			amp: new ADSR(this.context, 0, .5, .7, .2, 1),
 			oscs: {
 				osc1: {
 					waveformType: CONSTANTS.WAVEFORM_TYPE.SINE,
@@ -290,6 +290,11 @@ export default class Synth {
 	setAmpRelease = (midiValue) => {
 		this.state.amp.release = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	//FILTER
+	setFilterEnvelopeAmount = (midiValue) => {
+		this.state.filter.amp.amount = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 	setFilterAttack = (midiValue) => {

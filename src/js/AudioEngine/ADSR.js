@@ -1,11 +1,11 @@
 export default class ADSR {
 	//TODO: use 0.000001 for attack and release
-	constructor (context, a, d, s, r) {
+	constructor (context, a, d, s, amount) {
 		this.attack = a
 		this.decay = d
 		this.sustain = s
 		this.release = r
-		this.amount = 1
+		this.amount = amount
 		this.context = context
 	}
 
