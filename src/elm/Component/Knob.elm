@@ -111,7 +111,14 @@ view model =
             visualMinimum + (value * visualRange)
 
         direction' =
-            (toString direction) ++ "deg"
+            (toString
+                <| direction
+                + if model.min < 0 then
+                    150
+                  else
+                    0
+            )
+                ++ "deg"
 
         knobStyle =
             [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
