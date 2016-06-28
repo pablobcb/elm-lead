@@ -61,13 +61,11 @@ amplifier : Model -> Html Msg
 amplifier model =
     section WithoutBevel
         "amplifier"
-        [ div [ class "amplifier" ]
-            [ nordKnob model Knob.AmpAttack
-            , nordKnob model Knob.AmpDecay
-            , nordKnob model Knob.AmpSustain
-            , nordKnob model Knob.AmpRelease
-            , nordKnob model Knob.AmpGain
-            ]
+        [ nordKnob model Knob.AmpAttack
+        , nordKnob model Knob.AmpDecay
+        , nordKnob model Knob.AmpSustain
+        , nordKnob model Knob.AmpRelease
+        , nordKnob model Knob.AmpGain
         ]
 
 
@@ -75,53 +73,48 @@ filter : Model -> Html Msg
 filter model =
     section WithoutBevel
         "filter"
-        [ div [ class "filter" ]
-            [ nordKnob model Knob.FilterAttack
-            , nordKnob model Knob.FilterDecay
-            , nordKnob model Knob.FilterSustain
-            , nordKnob model Knob.FilterRelease
-            , nordKnob model Knob.FilterCutoff
-            , nordKnob model Knob.FilterQ
-            , OptionPicker.optionPicker "Filter Type"
-                FilterTypeChange
-                Port.filterType
-                model.filterTypeBtn
-            , Switch.switch "distortion"
-                FilterDistortionToggle
-                model.osc2KbdTrackSwitch
-            , nordKnob model Knob.FilterEnvelopeAmount
-            ]
+        [ nordKnob model Knob.FilterAttack
+        , nordKnob model Knob.FilterDecay
+        , nordKnob model Knob.FilterSustain
+        , nordKnob model Knob.FilterRelease
+        , nordKnob model Knob.FilterCutoff
+        , nordKnob model Knob.FilterQ
+        , OptionPicker.optionPicker "Filter Type"
+            FilterTypeChange
+            Port.filterType
+            model.filterTypeBtn
+        , Switch.switch "distortion"
+            FilterDistortionToggle
+            model.osc2KbdTrackSwitch
+        , nordKnob model Knob.FilterEnvelopeAmount
         ]
 
 
 osc1 : Model -> Html Msg
 osc1 model =
-    div [ class "oscillators--top-left" ]
+    div [ class "oscillators__osc1" ]
         [ OptionPicker.optionPicker "Waveform"
             Osc1WaveformChange
             Port.osc1Waveform
             model.osc1WaveformBtn
-        , nordKnob model Knob.FM
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
+        , nordKnob model Knob.FM
         ]
 
 
 osc2 : Model -> Html Msg
 osc2 model =
-    div [ class "oscillators--top-left" ]
-        [ div []
-            [ nordKnob model Knob.Osc2Semitone
-            , OptionPicker.optionPicker "Waveform"
-                Osc2WaveformChange
-                Port.osc2Waveform
-                model.osc2WaveformBtn
-            , nordKnob model Knob.Osc2Detune
-            , Switch.switch "kbd track"
-                Osc2KbdTrackToggle
-                model.osc2KbdTrackSwitch
-            ]
-        , div [ class "fix-me2" ]
-            [ span [ class "oscillators__label" ] [ text "OSC 2" ] ]
+    div [ class "oscillators__osc2" ]
+        [ nordKnob model Knob.Osc2Semitone
+        , OptionPicker.optionPicker "Waveform"
+            Osc2WaveformChange
+            Port.osc2Waveform
+            model.osc2WaveformBtn
+        , span [ class "oscillators__label" ] [ text "OSC 2" ]
+        , nordKnob model Knob.Osc2Detune
+        , Switch.switch "kbd track"
+            Osc2KbdTrackToggle
+            model.osc2KbdTrackSwitch
         ]
 
 
