@@ -114,6 +114,8 @@ export default class Synth {
 	noteOn = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, this.state.amp.on)
 		this.oscillator2.noteOn(midiNote, this.state.amp.on)
+		//this.state.filter.amp.on(this.filter.frequency)
+		
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
