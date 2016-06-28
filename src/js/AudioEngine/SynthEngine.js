@@ -284,8 +284,9 @@ export default class SynthEngine {
 	}
 
 
-	setFilterQ = (q) => {
-		this.filter.Q.value = q
+	setFilterQ = (midiValue) => {
+		const value = 20 * (midiValue / 127)
+		this.filter.Q.value = value
 	}
 
 	setOscillator2KbdTrack = (state) => {
