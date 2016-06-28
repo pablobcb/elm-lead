@@ -55,11 +55,15 @@ module.exports = {
 						'transform-class-properties'
 					]
 				}
+			},
+			{
+				test: /\.ts$/,
+				loader: 'ts-loader'
 			}
 		]
 	},
 	resolve: {
-		extensions: ['', '.js', '.styl', '.elm', '.css']
+		extensions: ['', '.js', '.ts', '.styl', '.elm', '.css']
 	},
 	stylint: {
 		config: `${__dirname}/.stylintrc`
