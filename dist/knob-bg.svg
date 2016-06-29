@@ -10,12 +10,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="36.203247mm"
-   height="36.203247mm"
-   viewBox="0 0 128.27922 128.27922"
+   width="95"
+   height="95"
+   viewBox="0 0 95.000001 95.000001"
    id="svg2"
    version="1.1"
-   sodipodi:docname="bg.svg"
+   sodipodi:docname="knob-bg.svg"
    inkscape:version="0.91 r13725">
   <defs
      id="defs4">
@@ -123,11 +123,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5357125"
-     inkscape:cx="452.87865"
-     inkscape:cy="-83.460546"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="-14.794083"
+     inkscape:cy="96.566707"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g6790"
      showgrid="false"
      inkscape:snap-object-midpoints="false"
      inkscape:snap-others="true"
@@ -145,12 +145,19 @@
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     units="px">
     <inkscape:grid
        type="xygrid"
        id="grid6887"
-       originx="-5.956824"
-       originy="-922.10008" />
+       originx="-5.9568231"
+       originy="-922.09998" />
+    <sodipodi:guide
+       position="134.79086,343.16329"
+       orientation="0,1"
+       id="guide4803" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -169,10 +176,10 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline"
-     transform="translate(-5.9568241,-1.9828982)">
+     transform="translate(-5.9568232,-35.262201)">
     <g
        id="g6790"
-       transform="translate(-24.380296,-715.14568)">
+       transform="matrix(0.7404283,0,0,0.7404283,-16.505639,-495.70166)">
       <circle
          transform="scale(-1,1)"
          r="63.63961"
@@ -278,5 +285,5 @@
      id="layer2"
      inkscape:label="knob-foreground"
      style="display:inline"
-     transform="translate(-5.9568241,-1.9828982)" />
+     transform="translate(-5.9568232,-35.262201)" />
 </svg>
