@@ -1,6 +1,6 @@
 import BaseOscillator from './BaseOscillator'
 
-export default class Oscillator extends BaseOscillator {
+export default class FMOscillator extends BaseOscillator {
 	constructor (context, waveform) {
 		super(context)
 		this.type = waveform

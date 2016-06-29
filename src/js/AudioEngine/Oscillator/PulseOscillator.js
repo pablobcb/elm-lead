@@ -1,4 +1,4 @@
-import Oscillator from './Oscillator'
+import FMOscillator from './FMOscillator'
 import CONSTANTS from '../../Constants'
 
 const pulseCurve = new Float32Array(256)
@@ -11,7 +11,7 @@ const constantOneCurve = new Float32Array(2)
 constantOneCurve[0] = 1
 constantOneCurve[1] = 1
 
-export default class PulseOscillator extends Oscillator {
+export default class PulseOscillator extends FMOscillator {
 	constructor (context) {
 		super(context, 'pulse')
 		this.pulseWidth = 0

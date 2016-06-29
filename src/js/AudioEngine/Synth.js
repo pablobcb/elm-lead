@@ -1,4 +1,4 @@
-import Oscillator from './Oscillator/Oscillator'
+import FMOscillator from './Oscillator/FMOscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 import ADSR from './ADSR'
@@ -39,10 +39,10 @@ export default class Synth {
 
 		this.initializeFilter()
 
-		this.oscillator1 = new Oscillator(this.context,
+		this.oscillator1 = new FMOscillator(this.context,
 			this.state.oscs.osc1.waveformType)
 
-		this.oscillator2 = new Oscillator(this.context,
+		this.oscillator2 = new FMOscillator(this.context,
 			this.state.oscs.osc2.waveformType)
 
 		this.initializeOscillatorsGain()
@@ -224,7 +224,7 @@ export default class Synth {
 		else if(this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
 				&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 			this.swapOsc2(
-				new Oscillator(this.context, nextWaveform),
+				new FMOscillator(this.context, nextWaveform),
 				this.oscillator2Gain
 			)
 		}

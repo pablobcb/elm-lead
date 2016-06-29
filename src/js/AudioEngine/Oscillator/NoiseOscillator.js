@@ -8,7 +8,8 @@ export default class NoiseOscillator extends BaseOscillator {
 		this.type = 'whitenoise'
 	}
 
-	noteOn = (midiNote) => {
+	_  = () => {}
+	noteOn = (midiNote, noteOnCB) => {
 		const midiNoteKey = midiNote.toString()
 
 		if (midiNoteKey in this.oscillators) {
@@ -46,6 +47,7 @@ export default class NoiseOscillator extends BaseOscillator {
 		noiseOsc.connect(this.frequencyGains[midiNote].gain)
 		gain.connect(this.output)
 		noiseOsc.start(this.context.currentTime)
+		noteOnCB(this.output.gain)
 		this.oscillators[midiNoteKey] = noiseOsc
 	}
 
