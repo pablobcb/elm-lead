@@ -14,7 +14,8 @@ export default class Synth {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
 				Q: 0,
-				amp: new ADSR(this.context, 0, .5, .7, .2, 0)
+				amp: new ADSR(this.context, 0, .5, .7, .2, 0),
+				distortion : false
 			}, 
 			amp: new ADSR(this.context, 0, .5, .7, .2, 1),
 			oscs: {
@@ -190,7 +191,7 @@ export default class Synth {
 		this.oscillator1.setWaveform(nextWaveform)
 	}
 		
-	setOscillator2KbdTrack = (state) => {
+	toggleOsc2KbdTrack = (state) => {
 		this.state.oscs.osc2.kbdTrack = state
 		this.oscillator2.setKbdTrack(state)
 	}	
@@ -328,4 +329,9 @@ export default class Synth {
 		this.filter.type = filterType_
 	}
 
+
+	toggleFilterDistortion = state => {
+		this.state.filter.distortion = state
+		console.log(this.state.filter.distortion)
+	}
 }

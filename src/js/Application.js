@@ -72,7 +72,7 @@ export default class Application {
 			.subscribe(this.synth.setOscillator2Waveform)
 
 		this.app.ports.osc2KbdTrack
-			.subscribe(this.synth.setOscillator2KbdTrack)
+			.subscribe(this.synth.toggleOsc2KbdTrack)
 
 		// FILTER
 		this.app.ports.filterEnvelopeAmount
@@ -98,6 +98,9 @@ export default class Application {
 
 		this.app.ports.filterType
 			.subscribe(this.synth.setFilterType)
+		
+		this.app.ports.filterDistortion
+			.subscribe(this.synth.toggleFilterDistortion)		
 
 		
 		// MIDI

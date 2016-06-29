@@ -124,3 +124,7 @@ updateOsc2KbdTrack switch model =
 updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
 updateFilterTypeBtn btn model =
     { model | filterTypeBtn = btn }
+
+updateFilterDistortionSwitch : Switch.Model -> Model -> Model
+updateFilterDistortionSwitch switch model =
+    { model | filterDistortionSwitch = switch }

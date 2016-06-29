@@ -83,7 +83,7 @@ filter model =
             model.filterTypeBtn
         , Switch.switch "distortion"
             FilterDistortionToggle
-            model.osc2KbdTrackSwitch
+            model.filterDistortionSwitch
         , nordKnob model Knob.FilterEnvelopeAmount
         ]
 

@@ -76,7 +76,7 @@ update msg model =
                 updateMap Switch.update
                     subMsg
                     .filterDistortionSwitch
-                    updateOsc2KbdTrack
+                    updateFilterDistortionSwitch
                     FilterDistortionToggle
 
             KnobMsg subMsg ->
