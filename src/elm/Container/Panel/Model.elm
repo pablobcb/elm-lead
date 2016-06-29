@@ -61,6 +61,35 @@ knobs =
     ]
 
 
+init : Model
+init =
+    { knobs = knobs
+    , osc2KbdTrackSwitch = Switch.init True Port.osc2KbdTrack
+    , filterDistortionSwitch = Switch.init False Port.filterDistortion
+    , filterTypeBtn =
+        OptionPicker.init Port.filterType
+            [ ( "LP", Lowpass )
+            , ( "HP", Highpass )
+            , ( "BP", Bandpass )
+            , ( "notch", Notch )
+            ]
+    , osc1WaveformBtn =
+        OptionPicker.init Port.osc1Waveform
+            [ ( "sin", Sine )
+            , ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "sqr", Square )
+            ]
+    , osc2WaveformBtn =
+        OptionPicker.init Port.osc2Waveform
+            [ ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "pulse", Square )
+            , ( "noise", WhiteNoise )
+            ]
+    }
+
+
 findKnob : Model -> KnobInstance -> Knob.Model
 findKnob model knobInstance =
     let
@@ -75,35 +104,6 @@ findKnob model knobInstance =
 
             Just knobModel ->
                 knobModel
-
-
-init : Model
-init =
-    { knobs = knobs
-    , osc2KbdTrackSwitch = Switch.init True Port.osc2KbdTrack
-    , filterDistortionSwitch = Switch.init False Port.filterDistortion
-    , filterTypeBtn =
-        OptionPicker.init
-            [ ( "LP", Lowpass )
-            , ( "HP", Highpass )
-            , ( "BP", Bandpass )
-            , ( "notch", Notch )
-            ]
-    , osc1WaveformBtn =
-        OptionPicker.init
-            [ ( "sin", Sine )
-            , ( "tri", Triangle )
-            , ( "saw", Sawtooth )
-            , ( "sqr", Square )
-            ]
-    , osc2WaveformBtn =
-        OptionPicker.init
-            [ ( "tri", Triangle )
-            , ( "saw", Sawtooth )
-            , ( "pulse", Square )
-            , ( "noise", WhiteNoise )
-            ]
-    }
 
 
 updateOsc1WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model

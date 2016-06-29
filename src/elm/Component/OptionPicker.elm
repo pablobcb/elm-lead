@@ -1,7 +1,5 @@
 module Component.OptionPicker exposing (..)
 
--- where
-
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.App exposing (map)
@@ -9,18 +7,16 @@ import Html.Attributes exposing (..)
 import Lazy.List exposing (..)
 
 
--- MODEL
-
-
 type alias Model a =
     { elems : List ( String, a )
     , currentElem : a
     , options : List ( String, a )
+    , cmdEmmiter : String -> Cmd Msg
     }
 
 
-init : List ( String, a ) -> Model a
-init elems =
+init : (String -> Cmd Msg) -> List ( String, a ) -> Model a
+init cmdEmmiter elems =
     let
         current =
             snd
@@ -34,23 +30,20 @@ init elems =
         { elems = elems
         , currentElem = current
         , options = elems
+        , cmdEmmiter = cmdEmmiter
         }
 
 
 type Msg
-    = Click (String -> Cmd Msg)
+    = Click
 
 
-
--- VIEW
-
-
-view : (String -> Cmd Msg) -> String -> Model a -> Html Msg
-view cmdEmmiter label model =
+view : String -> Model a -> Html Msg
+view label model =
     div [ class "option-picker" ]
         [ span [ class "option-picker__label" ] [ text label ]
         , ul [ class "option-picker__list" ] <| options model
-        , button [ class "option-picker__btn", onClick <| Click cmdEmmiter ]
+        , button [ class "option-picker__btn", onClick Click ]
             []
         ]
 
@@ -80,16 +73,9 @@ option model elem label =
             ]
 
 
-optionPicker : String -> (Msg -> b) -> (String -> Cmd Msg) -> Model c -> Html b
-optionPicker label pickerMsg cmdEmmiter model =
-    Html.App.map pickerMsg
-        <| view (\value -> value |> cmdEmmiter)
-            label
-            model
-
-
-
--- UPDATE
+optionPicker : String -> (Msg -> b) -> Model c -> Html b
+optionPicker label pickerMsg model =
+    Html.App.map pickerMsg <| view label model
 
 
 getNextElem : List ( String, a ) -> ( String, a )
@@ -109,7 +95,7 @@ getNextElem elems =
 update : Msg -> Model a -> ( Model a, Cmd Msg )
 update message model =
     case message of
-        Click cmdEmmiter ->
+        Click ->
             let
                 elems =
                     Lazy.List.cycle <| Lazy.List.fromList model.elems
@@ -128,5 +114,5 @@ update message model =
                 ( model'
                 , nextElem
                     |> toString
-                    |> cmdEmmiter
+                    |> model.cmdEmmiter
                 )

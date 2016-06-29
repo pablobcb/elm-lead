@@ -5,7 +5,6 @@ module Container.Panel.View exposing (..)
 import Component.Knob as Knob
 import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
-import Port
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
@@ -81,7 +80,6 @@ filter model =
         , nordKnob model Knob.FilterQ
         , OptionPicker.optionPicker "Filter Type"
             FilterTypeChange
-            Port.filterType
             model.filterTypeBtn
         , Switch.switch "distortion"
             FilterDistortionToggle
@@ -95,7 +93,6 @@ osc1 model =
     div [ class "oscillators__osc1" ]
         [ OptionPicker.optionPicker "Waveform"
             Osc1WaveformChange
-            Port.osc1Waveform
             model.osc1WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         , nordKnob model Knob.FM
@@ -108,7 +105,6 @@ osc2 model =
         [ nordKnob model Knob.Osc2Semitone
         , OptionPicker.optionPicker "Waveform"
             Osc2WaveformChange
-            Port.osc2Waveform
             model.osc2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
         , nordKnob model Knob.Osc2Detune
