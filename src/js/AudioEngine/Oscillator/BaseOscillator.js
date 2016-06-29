@@ -42,8 +42,8 @@ export default class BaseOscillator {
 		
 		const osc = this.oscillators[midiNoteKey]
 
-		//releaseCallback(oscGain, osc)
-		osc.stop()
+		releaseCallback(oscGain, osc)
+		//osc.stop()
 	}
 
 	setSemitone = () => {}

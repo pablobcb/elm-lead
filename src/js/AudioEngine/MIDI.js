@@ -35,7 +35,7 @@ export default {
 	),
 
 	logScaleToMax : (midiValue, max) => (
-		Math.pow(midiValue / MIDI_MAX_VALUE, max) * max
+		(Math.pow(2, midiValue / MIDI_MAX_VALUE) - 1) * max
 	),
 
 	manageMidiDevices : (midiAccess, midiPort, onMIDIMessage) => {

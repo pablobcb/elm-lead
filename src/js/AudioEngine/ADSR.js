@@ -9,6 +9,7 @@ export default class ADSR {
 		this.context = context
 	}
 
+	_  = () => {}
 	on = (target) => {
 		const now = this.context.currentTime
 		target.cancelScheduledValues(now)
@@ -20,11 +21,11 @@ export default class ADSR {
 
 	off = (target, osc) => {
 		const now = this.context.currentTime
-		//target.cancelScheduledValues(now)
-		//target.setValueAtTime(target.value, now)
+		target.cancelScheduledValues(now)
+		target.setValueAtTime(target.value, now)
 		//target.setTargetAtTime(0.00001, now, this.release)
 		target.value = 0.0
-		//target.linearRampToValueAtTime(0.1, now + this.release)
+		target.linearRampToValueAtTime(0.1, now + this.release)
 		osc.stop(now + this.release)
 		//debugger
 	}
