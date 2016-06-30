@@ -9,7 +9,7 @@ export default class NoiseOscillator extends BaseOscillator {
 	}
 
 	_  = () => {}
-	noteOn = (midiNote, noteOnCB) => {
+	_noteOn = (midiNote, noteOnCB) => {
 		const midiNoteKey = midiNote.toString()
 
 		if (midiNoteKey in this.oscillators) {
@@ -38,16 +38,12 @@ export default class NoiseOscillator extends BaseOscillator {
 		const noiseOsc = this.context.createBufferSource()
 		noiseOsc.buffer = myArrayBuffer
 		noiseOsc.loop = true
-		noiseOsc.onended = () => {
-			delete this.oscillators[midiNoteKey]
-		}
 
 		const gain = this.oscillatorGains[midiNoteKey]
 		noiseOsc.connect(gain)
 		noiseOsc.connect(this.frequencyGains[midiNote].gain)
-		gain.connect(this.output)
-		noiseOsc.start(this.context.currentTime)
-		noteOnCB(this.output.gain)
+		//gain.connect(this.output)
+		
 		this.oscillators[midiNoteKey] = noiseOsc
 	}
 

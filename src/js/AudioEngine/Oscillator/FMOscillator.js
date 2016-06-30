@@ -30,17 +30,10 @@ export default class FMOscillator extends BaseOscillator {
 
 		osc.type = this.type
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
-
 		osc.detune.value = this.detune + this.semitone
-		osc.onended = () => {
-			delete this.oscillators[midiNoteKey]			
-		}
 
 		osc.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(osc.frequency)
-
-		osc.start(this.context.currentTime)
-		noteOnCB(this.oscillatorGains[midiNote].gain)
 
 		this.oscillators[midiNoteKey] = osc
 	}

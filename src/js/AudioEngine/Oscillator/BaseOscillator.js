@@ -33,7 +33,13 @@ export default class BaseOscillator {
 	}
 
 	noteOn = (midiNote, noteOnCB) => {
+		const midiNoteKey = midiNote.toString()
 		this._noteOn(midiNote, noteOnCB)
+		this.oscillators[midiNoteKey].onended = () => {
+			delete this.oscillators[midiNoteKey]
+		}
+		this.oscillators[midiNoteKey].start(this.context.currentTime)
+		noteOnCB(this.oscillatorGains[midiNote].gain)
 	}
 
 	noteOff = (midiNote, noteOffCB) => {		

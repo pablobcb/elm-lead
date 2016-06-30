@@ -12,6 +12,7 @@ export default class ADSR {
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
+		this.decayTo = 0
 	}
 
 	_  = () => {}
@@ -23,11 +24,23 @@ export default class ADSR {
 		var phase = truncateTime / time
 		var value = start + phase * difference
 
-		if (value <= start) {
-			value = start
+		if(difference >= 0)
+		{
+			if (value <= start) {
+				value = start
+			}
+			if (value >= end) {
+				value = end
+			}
 		}
-		if (value >= end) {
-			value = end
+		else
+		{
+			if (value >= start) {
+				value = start
+			}
+			if (value <= end) {
+				value = end
+			}
 		}
 
 		return value
@@ -36,28 +49,34 @@ export default class ADSR {
 	on = (target) => {
 		const now = this.context.currentTime
 		this.startedAt = now
-		this.decayFrom = now + this.attack
+		this.decayFrom = this.startedAt + this.attack
+		this.decayTo = this.decayFrom + this.decay
+
 		target.cancelScheduledValues(now)
 		target.setValueAtTime(0, now)
-		target.linearRampToValueAtTime(this.amount, now + this.attack)
-		target.setTargetAtTime(this.sustain, now + this.attack, this.decay)
+		target.linearRampToValueAtTime(this.amount, this.decayFrom)
+		target.linearRampToValueAtTime(this.sustain, this.decayTo)
+		//target.setTargetAtTime(this.sustain, now + this.attack, this.decay)
 	}
 
 	off = (target) => {		
 		const now = this.context.currentTime
+		let valueAtTime = this.sustain
 
-		const lastValue = this.getValue(0, this.amount, 
-			this.startedAt, this.decayFrom, now)
 		target.cancelScheduledValues(now)
 
 		if(this.attack && now < this.decayFrom) {
-			target.setValueAtTime(lastValue, now)
-			target.linearRampToValueAtTime(0, now + this.release)
+			valueAtTime = this.getValue(0, this.amount, 
+				this.startedAt, this.decayFrom, now)
 		}
-		else {
-			target.setValueAtTime(this.sustain, now)
-			target.linearRampToValueAtTime(0, now + this.release)
+		else if(now >= this.decayFrom && now < this.decayTo) {
+			
+			valueAtTime = this.getValue(this.amount, this.sustain, 
+				this.decayFrom, this.decayTo, now)
 		}
+
+		target.setValueAtTime(valueAtTime, now)
+		target.linearRampToValueAtTime(0, now + this.release)
 		
 		return now + this.release
 	}

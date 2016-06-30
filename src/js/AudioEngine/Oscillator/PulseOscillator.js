@@ -23,7 +23,10 @@ export default class PulseOscillator extends FMOscillator {
 		}
 	}
 
-	noteOn = (midiNote) => {
+	//shutup visual studio
+	_ = () => {}
+
+	_noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
 		if (midiNoteKey in this.oscillators) {
@@ -54,15 +57,9 @@ export default class PulseOscillator extends FMOscillator {
 
 		pulseShaper.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(sawNode.frequency)
-		pulseShaper.connect(this.output)
-
-		sawNode.start(this.context.currentTime)
+		//pulseShaper.connect(this.output)
 
 		this.oscillators[midiNoteKey] = sawNode
-
-		sawNode.onended = () => {
-			delete this.oscillators[midiNoteKey]
-		}
 	}
 
 	setPulseWidth = (width) => {
