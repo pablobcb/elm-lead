@@ -46,7 +46,9 @@ export default class FMOscillator extends BaseOscillator {
 
 		osc.start(this.context.currentTime)
 
-		noteOnCB(this.oscillatorGains[midiNote].gain)
+		//if(noteOnCB) {
+			noteOnCB(this.oscillatorGains[midiNote].gain)
+		//}
 
 		this.oscillators[midiNoteKey] = osc
 

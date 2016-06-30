@@ -10,24 +10,57 @@ export default class ADSR {
 		this.release = r
 		this.amount = amount
 		this.context = context
+		this.startedAt = 0
+		this.decayFrom = 0
 	}
 
 	_  = () => {}
+
+	getValue = (start, end, fromTime, toTime, at) => {
+		var difference = end - start
+		var time = toTime - fromTime
+		var truncateTime = at - fromTime
+		var phase = truncateTime / time
+		var value = start + phase * difference
+
+		if (value <= start) {
+			value = start
+		}
+		if (value >= end) {
+			value = end
+		}
+
+		return value
+	}
+
 	on = (target) => {
 		const now = this.context.currentTime
+		this.startedAt = now
+		this.decayFrom = now + this.attack
 		target.cancelScheduledValues(now)
-		//target.setValueAtTime(0, now)
+		target.setValueAtTime(0, now)
 		target.linearRampToValueAtTime(this.amount, now + this.attack)
-		target.linearRampToValueAtTime(
-			this.sustain, now + this.attack + this.decay)
+		//target.linearRampToValueAtTime(
+		//	this.sustain, now + this.attack + this.decay)
+		//target.setTargetAtTime(0.00001, now, 0.01)
+		//target.setTargetAtTime(this.amount, now, this.attack)
+		target.setTargetAtTime(this.sustain, now + this.attack, this.decay)
 	}
 
 	off = (target) => {		
 		const now = this.context.currentTime
-		target.cancelScheduledValues(now)
-		//target.setValueAtTime(target.value, now)
 
-		target.linearRampToValueAtTime(0.00001, now + this.release)
+		const lastValue = this.getValue(0, this.amount, this.startedAt, this.decayFrom, now)
+		target.cancelScheduledValues(now)
+
+		if(this.attack && now < this.decayFrom) {
+			target.setValueAtTime(lastValue, now)
+			target.linearRampToValueAtTime(0, now + this.release)
+		}
+		else {
+			target.setValueAtTime(this.sustain, now)
+			target.linearRampToValueAtTime(0, now + this.release)
+		}
 		//target.cancelScheduledValues(now + this.release)
 		return now + this.release
 	}
