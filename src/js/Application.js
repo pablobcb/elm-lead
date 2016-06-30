@@ -100,8 +100,10 @@ export default class Application {
 			.subscribe(this.synth.setFilterType)
 		
 		this.app.ports.filterDistortion
-			.subscribe(this.synth.toggleFilterDistortion)		
+			.subscribe(this.synth.toggleFilterDistortion)	
 
+		this.app.ports.filterEnvelopeAmount
+			.subscribe(this.synth.state.filter.amp.setEnvelopeAmount)
 		
 		// MIDI
 		if (this.midiAccess) {

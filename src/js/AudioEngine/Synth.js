@@ -14,7 +14,7 @@ export default class Synth {
 				frequency: 12000,
 				type: CONSTANTS.FILTER_TYPE.LOWPASS,
 				Q: 0,
-				amp: new ADSR(this.context, 0, .5, .7, .2, 0),
+				amp: new ADSR(this.context, 0, .5, .7, .2, 8000),
 				distortion : false
 			}, 
 			amp: new ADSR(this.context, 0, .5, .7, .2, 1),
@@ -59,12 +59,14 @@ export default class Synth {
 	}
 
 	initializeFilter = () => {
+		this.filterEnvelopeGain = this.context.createGain()
 		this.filter = this.context.createBiquadFilter()
 		this.filter.type = this.state.filter.type
 		this.filter.frequency.value = this.state.filter.frequency
 		this.filter.Q.value = this.state.filter.Q
 
-		this.filter.connect(this.masterVolume)
+		this.filter.connect(this.filterEnvelopeGain)
+		this.filterEnvelopeGain.connect(this.masterVolume)
 	}
 
 	initializeOscillatorsGain = () => {
@@ -115,11 +117,15 @@ export default class Synth {
 		this.oscillator1.noteOn(midiNote, this.state.amp.on)
 		this.oscillator2.noteOn(midiNote, this.state.amp.on)
 		
+		this.state.filter.amp.on(this.filter.frequency, 
+			this.filter.frequency.value)	
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOff(midiNote, this.state.amp.off)
 		this.oscillator2.noteOff(midiNote, this.state.amp.off)
+
+		this.state.filter.amp.off(this.filter.frequency)
 	}
 
 	panic = () => {
