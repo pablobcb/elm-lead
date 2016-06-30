@@ -18,11 +18,11 @@ export default class ADSR {
 	_  = () => {}
 
 	getValue = (start, end, fromTime, toTime, at) => {
-		var difference = end - start
-		var time = toTime - fromTime
-		var truncateTime = at - fromTime
-		var phase = truncateTime / time
-		var value = start + phase * difference
+		const difference = end - start
+		const time = toTime - fromTime
+		const truncateTime = at - fromTime
+		const phase = truncateTime / time
+		let value = start + phase * difference
 
 		if(difference >= 0)
 		{

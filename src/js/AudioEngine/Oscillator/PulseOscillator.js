@@ -46,13 +46,10 @@ export default class PulseOscillator extends FMOscillator {
 		sawNode.connect(constantOneShaper)
 		constantOneShaper.connect(widthGain)
 
-		//move kbdtrack to base oscillator
 		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		sawNode.detune.value = this.detune + this.semitone
 
 		this.pulseShaper.connect(this.oscillatorGains[midiNote])
-		//sawNode.connect(this.frequencyGains[midiNote])
-		//pulseShaper.connect(this.output)
 
 		this.oscillators[midiNoteKey] = sawNode
 	}

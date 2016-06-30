@@ -29,7 +29,8 @@ export default class FMOscillator extends BaseOscillator {
 		this.detune = detune
 		for (const midiNote in this.oscillators) {
 			if (this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value = detune + this.semitone
+				this.oscillators[midiNote].detune.value = 
+					detune + this.semitone
 			}
 		}
 	}

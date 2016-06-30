@@ -100,7 +100,6 @@ export default class Synth {
 		const type = data[0] & 0xf0
 		const note = data[1]
 		const velocity = data[2]
-		//debugger
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
@@ -115,15 +114,12 @@ export default class Synth {
 	noteOn = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, this.state.amp.on)
 		this.oscillator2.noteOn(midiNote, this.state.amp.on)
-		//this.state.filter.amp.on(this.filter.frequency)
 		
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
 		this.oscillator1.noteOff(midiNote, this.state.amp.off)
 		this.oscillator2.noteOff(midiNote, this.state.amp.off)
-		//const now = this.context.currentTime
-		//this.masterVolume.gain.linearRampToValueAtTime(0.1, now + 2)
 	}
 
 	panic = () => {
@@ -248,28 +244,11 @@ export default class Synth {
 		this.oscillator2.setKbdTrack(this.state.oscs.osc2.kbdTrack)
 		this.oscillator2.setSemitone(this.state.oscs.osc2.semitone)
 
-		this.oscillator2.oscillatorGains.map((oscGain, i) =>
+		this.oscillator2.oscillatorGains.forEach((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)
 		this.oscillator2.connect(gainB)
 	}
-
-	//god this is ugly
-	swapOsc1 = (osc, gainB) => {
-		const now = this.context.currentTime
-		for (const midiNote in this.oscillator1.oscillators) {
-			if (this.oscillator1.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillator1.noteOff(now, midiNote)
-				osc.noteOn(midiNote)
-			}
-		}
-		this.oscillator1 = osc
-		this.oscillator1.oscillatorGains.map((oscGain, i) =>
-			oscGain.connect(this.fmGains[i])
-		)
-		this.oscillator1.connect(gainB)
-	}
-
 
 	setFilterCutoff = (midiValue) => {		
 		this.filter.frequency.value = MIDI.toFilterCutoffFrequency(midiValue)
@@ -292,6 +271,5 @@ export default class Synth {
 
 	toggleFilterDistortion = state => {
 		this.state.filter.distortion = state
-		console.log(this.state.filter.distortion)
 	}
 }
