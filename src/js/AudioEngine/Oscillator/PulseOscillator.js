@@ -32,14 +32,14 @@ export default class PulseOscillator extends FMOscillator {
 		const sawNode = this.context.createOscillator()
 		sawNode.type = CONSTANTS.WAVEFORM_TYPE.SAWTOOTH
 
-		const pulseShaper = this.context.createWaveShaper()
-		pulseShaper.curve = pulseCurve
-		sawNode.connect(pulseShaper)
+		this.pulseShaper = this.context.createWaveShaper()
+		this.pulseShaper.curve = pulseCurve
+		sawNode.connect(this.pulseShaper)
 
 		const widthGain = this.widthGains[midiNote]
 		widthGain.gain.value = this.pulseWidth
 
-		widthGain.connect(pulseShaper)
+		widthGain.connect(this.pulseShaper)
 
 		const constantOneShaper = this.context.createWaveShaper()
 		constantOneShaper.curve = constantOneCurve
@@ -50,11 +50,15 @@ export default class PulseOscillator extends FMOscillator {
 		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		sawNode.detune.value = this.detune + this.semitone
 
-		pulseShaper.connect(this.oscillatorGains[midiNote])
+		this.pulseShaper.connect(this.oscillatorGains[midiNote])
 		//sawNode.connect(this.frequencyGains[midiNote])
 		//pulseShaper.connect(this.output)
 
 		this.oscillators[midiNoteKey] = sawNode
+	}
+
+	_onended = () => {
+		this.pulseShaper.disconnect()
 	}
 
 	setPulseWidth = (width) => {

@@ -48,6 +48,8 @@ export default class BaseOscillator {
 
 		this._noteOn(midiNote)
 		this.oscillators[midiNoteKey].onended = () => {
+			this._onended(this.oscillators[midiNoteKey])
+			this.oscillators[midiNoteKey].disconnect()
 			delete this.oscillators[midiNoteKey]
 		}
 		this.oscillators[midiNoteKey].start(now)
@@ -82,6 +84,7 @@ export default class BaseOscillator {
 		this.kbdTrack = state
 	}
 
+	_onended = () => {}
 
 	connect = function (node) {
 		this.output.connect(node)
