@@ -11,21 +11,8 @@ export default class FMOscillator extends BaseOscillator {
 	//shutup visual studio
 	_ = () => {}
 	
-	_noteOn = (midiNote, noteOnCB) => {
+	_noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
-		const now = this.context.currentTime
-
-		if (midiNoteKey in this.oscillators) {
-			this.oscillators[midiNoteKey]
-				.stop(now)
-			this.oscillators[midiNoteKey]
-				.disconnect(this.oscillatorGains[midiNote])
-			this.frequencyGains[midiNote]
-				.disconnect(this.oscillators[midiNoteKey].frequency)
-			
-			delete this.oscillators[midiNoteKey]
-		} 
-
 		const osc = this.context.createOscillator()
 
 		osc.type = this.type

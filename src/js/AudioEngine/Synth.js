@@ -54,7 +54,7 @@ export default class Synth {
 	initializeMasterOutput = () => {
 		this.masterVolume = this.context.createGain()
 
-		this.masterVolume.gain.value = .1 // this.state.amp.level
+		this.masterVolume.gain.value = .05 // this.state.amp.level
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -233,10 +233,15 @@ export default class Synth {
 		const now = this.context.currentTime
 		for (const midiNote in this.oscillator2.oscillators) {
 			if (this.oscillator2.oscillators.hasOwnProperty(midiNote)) {
-				osc.noteOn(midiNote)
 				this.oscillator2.noteOff(now, midiNote)
+				osc.noteOn(midiNote)
 			}
 		}
+		this.oscillator2.oscillatorGains.forEach((oscGain, i) =>
+			oscGain.disconnect(this.fmGains[i])		
+		)
+		this.oscillator2.disconnect(gainB)
+
 		this.oscillator2 = osc
 		this.oscillator2.setPulseWidth(this.state.oscs.pw)
 		this.oscillator2.setDetune(this.state.oscs.osc2.detune)
@@ -254,8 +259,8 @@ export default class Synth {
 		const now = this.context.currentTime
 		for (const midiNote in this.oscillator1.oscillators) {
 			if (this.oscillator1.oscillators.hasOwnProperty(midiNote)) {
-				osc.noteOn(midiNote)
 				this.oscillator1.noteOff(now, midiNote)
+				osc.noteOn(midiNote)
 			}
 		}
 		this.oscillator1 = osc

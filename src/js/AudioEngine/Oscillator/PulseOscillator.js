@@ -29,11 +29,6 @@ export default class PulseOscillator extends FMOscillator {
 	_noteOn = (midiNote) => {
 		const midiNoteKey = midiNote.toString()
 
-		if (midiNoteKey in this.oscillators) {
-			console.log(this.oscillators)
-			return
-		}
-
 		const sawNode = this.context.createOscillator()
 		sawNode.type = CONSTANTS.WAVEFORM_TYPE.SAWTOOTH
 
@@ -56,7 +51,7 @@ export default class PulseOscillator extends FMOscillator {
 		sawNode.detune.value = this.detune + this.semitone
 
 		pulseShaper.connect(this.oscillatorGains[midiNote])
-		this.frequencyGains[midiNote].connect(sawNode.frequency)
+		//sawNode.connect(this.frequencyGains[midiNote])
 		//pulseShaper.connect(this.output)
 
 		this.oscillators[midiNoteKey] = sawNode
