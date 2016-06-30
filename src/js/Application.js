@@ -40,13 +40,13 @@ export default class Application {
 		// AMP
 		this.app.ports.ampVolume.subscribe(this.synth.setMasterVolumeGain)
 
-		this.app.ports.ampAttack.subscribe(this.synth.setAmpAttack)
+		this.app.ports.ampAttack.subscribe(this.synth.state.amp.setAttack)
 
-		this.app.ports.ampDecay.subscribe(this.synth.setAmpDecay)
+		this.app.ports.ampDecay.subscribe(this.synth.state.amp.setDecay)
 
-		this.app.ports.ampSustain.subscribe(this.synth.setAmpSustain)
+		this.app.ports.ampSustain.subscribe(this.synth.state.amp.setSustain)
 		
-		this.app.ports.ampRelease.subscribe(this.synth.setAmpRelease)
+		this.app.ports.ampRelease.subscribe(this.synth.state.amp.setRelease)
 
 		// OSCILLATORS
 
@@ -79,16 +79,16 @@ export default class Application {
 			.subscribe(this.synth.setFilterEnvelopeAmount)
 
 		this.app.ports.filterAttack
-			.subscribe(this.synth.setFilterAttack)
+			.subscribe(this.synth.state.filter.amp.setAttack)
 
 		this.app.ports.filterDecay
-			.subscribe(this.synth.setFilterDecay)
+			.subscribe(this.synth.state.filter.amp.setDecay)
 
 		this.app.ports.filterSustain
-			.subscribe(this.synth.setFilterSustain)
+			.subscribe(this.synth.state.filter.amp.setSustain)
 		
 		this.app.ports.filterRelease
-			.subscribe(this.synth.setFilterRelease)
+			.subscribe(this.synth.state.filter.amp.setRelease)
 
 		this.app.ports.filterCutoff
 			.subscribe(this.synth.setFilterCutoff)

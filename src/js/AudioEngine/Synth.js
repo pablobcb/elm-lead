@@ -120,12 +120,10 @@ export default class Synth {
 	}
 
 	noteOff = (midiNote /*, velocity*/) => {
-		const releaseCallback = (oscGain,osc) => {
-			this.state.amp.off(oscGain, osc)
-		}
-
-		this.oscillator1.noteOff(midiNote, releaseCallback)
-		this.oscillator2.noteOff(midiNote, releaseCallback)
+		this.oscillator1.noteOff(midiNote, this.state.amp.off)
+		this.oscillator2.noteOff(midiNote, this.state.amp.off)
+		//const now = this.context.currentTime
+		//this.masterVolume.gain.linearRampToValueAtTime(0.1, now + 2)
 	}
 
 	panic = () => {
@@ -274,49 +272,6 @@ export default class Synth {
 
 	setFilterQ = (midiValue) => {
 		this.filter.Q.value = MIDI.toFilterQAmount(midiValue)
-	}
-
-	setAmpAttack = (midiValue) => {
-		this.state.amp.attack = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setAmpDecay = (midiValue) => {
-		this.state.amp.decay = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setAmpSustain = (midiValue) => {
-		this.state.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
-	}
-
-	setAmpRelease = (midiValue) => {
-		this.state.amp.release = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	//FILTER
-	setFilterEnvelopeAmount = (midiValue) => {
-		this.state.filter.amp.amount = MIDI.logScaleToMax(midiValue, 1)
-	}
-
-	setFilterAttack = (midiValue) => {
-		this.state.filter.amp.attack = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setFilterDecay = (midiValue) => {
-		this.state.filter.amp.decay = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setFilterSustain = (midiValue) => {
-		this.state.filter.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
-	}
-
-	setFilterRelease = (midiValue) => {
-		this.state.filter.amp.release = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
 	setFilterType = (filterType) => {

@@ -13,10 +13,18 @@ export default class FMOscillator extends BaseOscillator {
 	
 	noteOn = (midiNote, noteOnCB) => {
 		const midiNoteKey = midiNote.toString()
+		const now = this.context.currentTime
 
 		if (midiNoteKey in this.oscillators) {
-			return
-		}
+			this.oscillators[midiNoteKey]
+				.stop(now)
+			this.oscillators[midiNoteKey]
+				.disconnect(this.oscillatorGains[midiNote])
+			this.frequencyGains[midiNote]
+				.disconnect(this.oscillators[midiNoteKey].frequency)
+			
+			delete this.oscillators[midiNoteKey]
+		} 
 
 		const osc = this.context.createOscillator()
 
@@ -24,21 +32,25 @@ export default class FMOscillator extends BaseOscillator {
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 
 		osc.detune.value = this.detune + this.semitone
-		osc.onended = () => {
-			osc.disconnect(this.oscillatorGains[midiNote])
-			this.frequencyGains[midiNote].disconnect(osc.frequency)
-			this.oscillators[midiNoteKey].disconnect(this.output)
-			delete this.oscillators[midiNoteKey]
+		osc.onended = () => {			
+			//osc.disconnect(this.oscillatorGains[midiNote])
+			//this.frequencyGains[midiNote].disconnect(osc.frequency)
+			delete this.oscillators[midiNoteKey]		
+
+			console.log("ended", this.oscillators[midiNoteKey])
+			
 		}
 
 		osc.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(osc.frequency)
 
-
-		osc.connect(this.output)
 		osc.start(this.context.currentTime)
-		noteOnCB(this.output.gain)
+
+		noteOnCB(this.oscillatorGains[midiNote].gain)
+
 		this.oscillators[midiNoteKey] = osc
+
+		console.log("on", this.oscillators[midiNoteKey])
 	}
 
 	setDetune = (detune) => {

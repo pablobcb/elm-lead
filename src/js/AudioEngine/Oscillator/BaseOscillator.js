@@ -15,6 +15,7 @@ export default class BaseOscillator {
 			// instead of the modular like it is
 			this.frequencyGains[i] = this.context.createGain()
 			this.oscillatorGains[i] = this.context.createGain()
+			this.oscillatorGains[i].connect(this.output)
 		}
 	}
 
@@ -31,19 +32,21 @@ export default class BaseOscillator {
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
-	noteOff = (midiNote, releaseCallback) => {
-		let midiNoteKey
-
-		if (midiNote) {
-			midiNoteKey = midiNote.toString()
-		}
-
-		const oscGain = this.oscillatorGains[midiNote].gain
-		
+	noteOff = (midiNote, noteOffCB) => {		
+		const midiNoteKey = midiNote.toString()		
 		const osc = this.oscillators[midiNoteKey]
 
-		releaseCallback(oscGain, osc)
-		//osc.stop()
+		console.log("off", this.oscillators[midiNoteKey])
+		if(!osc) {
+			return
+		}
+		const now = this.context.currentTime
+		const oscGain = this.oscillatorGains[midiNote].gain		
+		const releaseTime = noteOffCB(oscGain)
+
+		osc.stop(releaseTime)
+
+		console.log(releaseTime-now)
 	}
 
 	setSemitone = () => {}
