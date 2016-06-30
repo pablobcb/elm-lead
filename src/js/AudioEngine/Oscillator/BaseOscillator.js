@@ -32,21 +32,22 @@ export default class BaseOscillator {
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
+	noteOn = (midiNote, noteOnCB) => {
+		this._noteOn(midiNote, noteOnCB)
+	}
+
 	noteOff = (midiNote, noteOffCB) => {		
 		const midiNoteKey = midiNote.toString()		
 		const osc = this.oscillators[midiNoteKey]
 
-		console.log("off", this.oscillators[midiNoteKey])
 		if(!osc) {
 			return
 		}
-		const now = this.context.currentTime
+
 		const oscGain = this.oscillatorGains[midiNote].gain		
 		const releaseTime = noteOffCB(oscGain)
 
 		osc.stop(releaseTime)
-
-		console.log(releaseTime-now)
 	}
 
 	setSemitone = () => {}

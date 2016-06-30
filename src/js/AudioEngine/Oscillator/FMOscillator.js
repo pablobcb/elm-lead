@@ -11,7 +11,7 @@ export default class FMOscillator extends BaseOscillator {
 	//shutup visual studio
 	_ = () => {}
 	
-	noteOn = (midiNote, noteOnCB) => {
+	_noteOn = (midiNote, noteOnCB) => {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
@@ -32,27 +32,17 @@ export default class FMOscillator extends BaseOscillator {
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 
 		osc.detune.value = this.detune + this.semitone
-		osc.onended = () => {			
-			//osc.disconnect(this.oscillatorGains[midiNote])
-			//this.frequencyGains[midiNote].disconnect(osc.frequency)
-			delete this.oscillators[midiNoteKey]		
-
-			console.log("ended", this.oscillators[midiNoteKey])
-			
+		osc.onended = () => {
+			delete this.oscillators[midiNoteKey]			
 		}
 
 		osc.connect(this.oscillatorGains[midiNote])
 		this.frequencyGains[midiNote].connect(osc.frequency)
 
 		osc.start(this.context.currentTime)
-
-		//if(noteOnCB) {
-			noteOnCB(this.oscillatorGains[midiNote].gain)
-		//}
+		noteOnCB(this.oscillatorGains[midiNote].gain)
 
 		this.oscillators[midiNoteKey] = osc
-
-		console.log("on", this.oscillators[midiNoteKey])
 	}
 
 	setDetune = (detune) => {
