@@ -76,7 +76,7 @@ export default class Synth {
 			this.fmGains[i].gain.value = this.state.oscs.osc1.fmGain
 
 			//TODO : MOVE FM GAIN TO OSC CLASS
-			this.oscillator2.oscillatorGains[i].connect(this.fmGains[i])
+			this.oscillator2.voiceGains[i].connect(this.fmGains[i])
 			this.fmGains[i].connect(this.oscillator1.frequencyGains[i])
 		}
 	}
@@ -217,13 +217,13 @@ export default class Synth {
 
 	swapOsc2 = (osc, gainB) => {
 		const now = this.context.currentTime
-		for (const midiNote in this.oscillator2.oscillators) {
-			if (this.oscillator2.oscillators.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.oscillator2.voices) {
+			if (this.oscillator2.voices.hasOwnProperty(midiNote)) {
 				this.oscillator2.noteOff(now, midiNote)
 				osc.noteOn(midiNote)
 			}
 		}
-		this.oscillator2.oscillatorGains.forEach((oscGain, i) =>
+		this.oscillator2.voiceGains.forEach((oscGain, i) =>
 			oscGain.disconnect(this.fmGains[i])
 		)
 		this.oscillator2.disconnect(gainB)
@@ -234,7 +234,7 @@ export default class Synth {
 		this.oscillator2.setKbdTrack(this.state.oscs.osc2.kbdTrack)
 		this.oscillator2.setSemitone(this.state.oscs.osc2.semitone)
 
-		this.oscillator2.oscillatorGains.forEach((oscGain, i) =>
+		this.oscillator2.voiceGains.forEach((oscGain, i) =>
 			oscGain.connect(this.fmGains[i])
 		)
 		this.oscillator2.connect(gainB)

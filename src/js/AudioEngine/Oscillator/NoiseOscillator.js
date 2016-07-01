@@ -28,8 +28,8 @@ export default class NoiseOscillator extends BaseOscillator {
 		this.noiseOsc.buffer = myArrayBuffer
 		this.noiseOsc.loop = true
 
-		this.noiseOsc.connect(this.oscillatorGains[midiNoteKey])
+		this.noiseOsc.connect(this.voiceGains[midiNoteKey])
 		
-		this.oscillators[midiNoteKey] = this.noiseOsc
+		this.voices[midiNoteKey] = this.noiseOsc
 	}
 }

@@ -4,8 +4,8 @@ export default class BaseOscillator {
 		this.context = context
 		this.output = this.context.createGain()
 		this.output.gain.value = .5
-		this.oscillators = {}
-		this.oscillatorGains = []
+		this.voices = {}
+		this.voiceGains = []
 		this.frequencyGains = []
 		this.kbdTrack = true
 
@@ -14,15 +14,15 @@ export default class BaseOscillator {
 			//TODO: create FM osc and let it holdd the gains,
 			// instead of the modular like it is
 			this.frequencyGains[i] = this.context.createGain()
-			this.oscillatorGains[i] = this.context.createGain()
-			this.oscillatorGains[i].connect(this.output)
+			this.voiceGains[i] = this.context.createGain()
+			this.voiceGains[i].connect(this.output)
 		}
 	}
 
 	panic =	() => {
-		for (const midiNote in this.oscillators) {
-			if (this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].stop()
+		for (const midiNote in this.voices) {
+			if (this.voices.hasOwnProperty(midiNote)) {
+				this.voices[midiNote].stop()
 			}
 		}
 	}
@@ -36,37 +36,37 @@ export default class BaseOscillator {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
-		if (midiNoteKey in this.oscillators) {
-			this.oscillators[midiNoteKey]
+		if (midiNoteKey in this.voices) {
+			this.voices[midiNoteKey]
 				.stop(now)
 			this.frequencyGains[midiNote].disconnect()
-			this.oscillators[midiNoteKey].disconnect()
+			this.voices[midiNoteKey].disconnect()
 			
-			delete this.oscillators[midiNoteKey]
+			delete this.voices[midiNoteKey]
 		} 
 
 		this._noteOn(midiNote)
-		this.oscillators[midiNoteKey].onended = () => {
-			this._onended(this.oscillators[midiNoteKey])
-			this.oscillators[midiNoteKey].disconnect()
-			delete this.oscillators[midiNoteKey]
+		this.voices[midiNoteKey].onended = () => {
+			this._onended(this.voices[midiNoteKey])
+			this.voices[midiNoteKey].disconnect()
+			delete this.voices[midiNoteKey]
 		}
-		this.oscillators[midiNoteKey].start(now)
+		this.voices[midiNoteKey].start(now)
 		
 		if(noteOnCB) {
-			noteOnCB(this.oscillatorGains[midiNote].gain)
+			noteOnCB(this.voiceGains[midiNote].gain)
 		}
 	}
 
 	noteOff = (midiNote, noteOffCB) => {
 		const midiNoteKey = midiNote.toString()	
-		const osc = this.oscillators[midiNoteKey]
+		const osc = this.voices[midiNoteKey]
 
 		if(!osc) {
 			return
 		}
 
-		const oscGain = this.oscillatorGains[midiNote].gain		
+		const oscGain = this.voiceGains[midiNote].gain		
 		const releaseTime = noteOffCB(oscGain)
 
 		osc.stop(releaseTime)

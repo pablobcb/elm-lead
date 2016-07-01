@@ -49,9 +49,9 @@ export default class PulseOscillator extends FMOscillator {
 		sawNode.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		sawNode.detune.value = this.detune + this.semitone
 
-		this.pulseShaper.connect(this.oscillatorGains[midiNote])
+		this.pulseShaper.connect(this.voiceGains[midiNote])
 
-		this.oscillators[midiNoteKey] = sawNode
+		this.voices[midiNoteKey] = sawNode
 	}
 
 	_onended = () => {

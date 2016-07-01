@@ -19,17 +19,17 @@ export default class FMOscillator extends BaseOscillator {
 		osc.frequency.value = this.frequencyFromNoteNumber(midiNote)
 		osc.detune.value = this.detune + this.semitone
 
-		osc.connect(this.oscillatorGains[midiNote])
+		osc.connect(this.voiceGains[midiNote])
 		this.frequencyGains[midiNote].connect(osc.frequency)
 
-		this.oscillators[midiNoteKey] = osc
+		this.voices[midiNoteKey] = osc
 	}
 
 	setDetune = (detune) => {
 		this.detune = detune
-		for (const midiNote in this.oscillators) {
-			if (this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value = 
+		for (const midiNote in this.voices) {
+			if (this.voices.hasOwnProperty(midiNote)) {
+				this.voices[midiNote].detune.value = 
 					detune + this.semitone
 			}
 		}
@@ -37,9 +37,9 @@ export default class FMOscillator extends BaseOscillator {
 
 	setSemitone = (semitone) => {
 		this.semitone = semitone * 100
-		for (const midiNote in this.oscillators) {
-			if (this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].detune.value =
+		for (const midiNote in this.voices) {
+			if (this.voices.hasOwnProperty(midiNote)) {
+				this.voices[midiNote].detune.value =
 					this.detune + this.semitone
 			}
 		}
