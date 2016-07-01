@@ -62,7 +62,7 @@ export default class ADSR {
 			target.linearRampToValueAtTime(this.sustain, this.decayTo)
 		}
 
-	off = (target) => {		
+	off = target => {		
 		const now = this.context.currentTime
 		let valueAtTime = this.sustain
 

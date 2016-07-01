@@ -66,8 +66,8 @@ export default class BaseOscillator {
 			return
 		}
 
-		const oscGain = this.voiceGains[midiNote].gain		
-		const releaseTime = noteOffCB(oscGain)
+		const voiceGain = this.voiceGains[midiNote].gain
+		const releaseTime = noteOffCB(voiceGain)
 
 		osc.stop(releaseTime)
 	}

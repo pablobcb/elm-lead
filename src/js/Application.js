@@ -39,7 +39,7 @@ export default class Application {
 
 		window.onblur = () => {
 			this.app.ports.panic.send()
-			this.synth.panic()
+			this.synth.oscillators.panic()
 		}
 
 		window.oncontextmenu = () => false
@@ -63,28 +63,28 @@ export default class Application {
 		// OSCILLATORS
 
 		this.app.ports.oscsBalance
-			.subscribe(this.synth.setOscillatorsMix)
+			.subscribe(this.synth.oscillators.setMix)
 
 		this.app.ports.osc2Semitone
-			.subscribe(this.synth.setOscillator2Semitone)
+			.subscribe(this.synth.oscillators.setOscillator2Semitone)
 
 		this.app.ports.osc2Detune
-			.subscribe(this.synth.setOscillator2Detune)
+			.subscribe(this.synth.oscillators.setOscillator2Detune)
 
 		this.app.ports.fmAmount
-			.subscribe(this.synth.setFmAmount)
+			.subscribe(this.synth.oscillators.setFmAmount)
 
 		this.app.ports.pulseWidth
-			.subscribe(this.synth.setPulseWidth)
+			.subscribe(this.synth.oscillators.setPulseWidth)
 
 		this.app.ports.osc1Waveform
-			.subscribe(this.synth.setOscillator1Waveform)
+			.subscribe(this.synth.oscillators.setOscillator1Waveform)
 
 		this.app.ports.osc2Waveform
-			.subscribe(this.synth.setOscillator2Waveform)
+			.subscribe(this.synth.oscillators.setOscillator2Waveform)
 
 		this.app.ports.osc2KbdTrack
-			.subscribe(this.synth.toggleOsc2KbdTrack)
+			.subscribe(this.synth.oscillators.toggleOsc2KbdTrack)
 
 		// FILTER
 		this.app.ports.filterEnvelopeAmount

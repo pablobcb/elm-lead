@@ -10,8 +10,8 @@ export default class FMOscillator extends BaseOscillator {
 
 	//shutup visual studio
 	_ = () => {}
-	
-	_noteOn = (midiNote) => {
+
+	_noteOn = midiNote => {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.context.createOscillator()
 
@@ -25,17 +25,17 @@ export default class FMOscillator extends BaseOscillator {
 		this.voices[midiNoteKey] = osc
 	}
 
-	setDetune = (detune) => {
+	setDetune = detune => {
 		this.detune = detune
 		for (const midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
-				this.voices[midiNote].detune.value = 
+				this.voices[midiNote].detune.value =
 					detune + this.semitone
 			}
 		}
 	}
 
-	setSemitone = (semitone) => {
+	setSemitone = semitone => {
 		this.semitone = semitone * 100
 		for (const midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
@@ -45,16 +45,16 @@ export default class FMOscillator extends BaseOscillator {
 		}
 	}
 
-	setWaveform = (waveform) => {
-		for(const midiNote in this.oscillators) {
-			if(this.oscillators.hasOwnProperty(midiNote)) {
-				this.oscillators[midiNote].type = waveform
+	setWaveform = waveform => {
+		for(const midiNote in this.voices) {			
+			if(this.voices.hasOwnProperty(midiNote)) {
+				this.voices[midiNote].type = waveform
 			}
 		}
 		this.type = waveform
 	}
 
-	setFMGain = (fmGain) => {
+	setFMGain = fmGain => {
 		for(let i=0; i<128; i++) {
 			this.frequencyGains[i].gain.value = fmGain
 		}
