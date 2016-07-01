@@ -19,7 +19,14 @@ module.exports = {
 			}
 		],
 		loaders: [
-			{	test: /\.svg/, loader: 'svg-url-loader'},
+			{
+				test: /\.svg/,
+				loader: 'svg-url-loader'
+			},
+			{ 
+				test: /\.json$/, 
+				loader: 'json' 
+			},
 			{
 				test: /\.styl$/,
 				loader: 'style!css!postcss!stylus'

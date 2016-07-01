@@ -1,6 +1,7 @@
 port module Port exposing (..)
 
 import Midi exposing (..)
+import Preset exposing (..)
 
 
 port midiOut : MidiMessage -> Cmd msg
@@ -76,3 +77,6 @@ port filterDistortion : Bool -> Cmd msg
 
 
 port filterEnvelopeAmount : Int -> Cmd msg
+
+
+port presetChange : (Preset -> msg) -> Sub msg

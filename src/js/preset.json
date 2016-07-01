@@ -1,0 +1,37 @@
+{
+    "filter": {
+        "type_": "lowpass",
+        "distortion": false,
+        "frequency": 127,
+        "q": 0,
+        "envelopeAmount": 0,
+        "amp": {
+            "attack": 0,
+            "decay": 0,
+            "sustain": 0,
+            "release": 0
+        }
+    },
+    "amp": {
+        "attack": 0,
+        "decay": 0,
+        "sustain": 127,
+        "release": 0
+    },
+    "oscs": {
+        "osc1": {
+            "waveformType": "sawtooth",
+            "gain": 1,
+            "fmGain" : 0
+        },
+        "osc2": {
+            "waveformType": "triangle",
+            "gain": 0,
+            "semitone": 0,
+            "detune": 0,
+            "kbdTrack": true
+        },
+        "pw": 0
+    },
+    "masterVolume": 1
+}

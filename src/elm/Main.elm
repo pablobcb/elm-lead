@@ -6,6 +6,7 @@ import Html exposing (Html, button, div, text, li, ul)
 import Html.App
 import Html.Attributes exposing (..)
 import Port
+import Preset
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard.Model as KbdModel exposing (..)
@@ -16,15 +17,70 @@ import Container.Panel.Update as PanelUpdate exposing (..)
 import Container.Panel.View as PanelView exposing (..)
 import Component.Knob as Knob exposing (..)
 
+preset : Preset.Preset
+preset =
+    { filter =
+        { type_ = "highpass"
+        , distortion = False
+        , frequency = 0
+        , q = 0
+        , envelopeAmount = 0
+        , amp =
+            { attack = 0
+            , decay = 0
+            , sustain = 0
+            , release = 0
+            }
+        }
+    , amp =
+        { attack = 0
+        , decay = 0
+        , sustain = 127
+        , release = 0
+        }
+    , oscs =
+        { osc1 =
+            { waveformType = "sawtooth"
+            , gain = 1
+            , fmGain = 0
+            }
+        , osc2 =
+            { waveformType = "sine"
+            , gain = 0
+            , semitone = 0
+            , detune = 0
+            , kbdTrack = True
+            }
+        , pw = 0
+        }
+    , masterVolume = 1
+    }
+
 
 main : Program Never
 main =
     Html.App.program
-        { init = init
+        { init = init preset
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
+
+
+
+--main =
+--    Html.App.programWithFlags
+--        { init = init
+--        , view = view
+--        , update = update
+--        , subscriptions = subscriptions
+--        }
+--
+--         { init = \flags -> (flags, Cmd.none)
+--    , update = \_ model -> (model, Cmd.none)
+--    , subscriptions = \_ -> Sub.none
+--    , view = \model -> Html.text (shouldNeverHappen model)
+--    }
 
 
 type alias Model =
@@ -33,15 +89,15 @@ type alias Model =
     }
 
 
-init : ( Model, Cmd msg )
-init =
-    ( initModel, Cmd.none )
+init : Preset.Preset -> ( Model, Cmd b )
+init preset =
+    ( initModel preset, Cmd.none )
 
 
-initModel : Model
-initModel =
+initModel : Preset.Preset -> Model
+initModel preset =
     { onScreenKeyboard = KbdModel.init
-    , panel = PanelModel.init
+    , panel = PanelModel.init preset
     }
 
 
@@ -120,7 +176,14 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Port.midiIn (\midiMsg -> OnScreenKeyboardMsg <| MidiMessageIn midiMsg)
+        [ Port.midiIn
+            (\midiMsg ->
+                MidiMessageIn midiMsg |> OnScreenKeyboardMsg
+            )
+        , Port.presetChange
+            (\preset ->
+                PanelUpdate.PresetChange preset |> PanelMsg
+            )
         , Port.panic
             <| always
             <| OnScreenKeyboardMsg Panic

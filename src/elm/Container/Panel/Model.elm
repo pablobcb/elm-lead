@@ -6,6 +6,7 @@ import Component.Knob as Knob exposing (..)
 import Component.Switch as Switch exposing (..)
 import Component.OptionPicker as OptionPicker exposing (..)
 import Port
+import Preset
 
 
 type OscillatorWaveform
@@ -16,11 +17,52 @@ type OscillatorWaveform
     | WhiteNoise
 
 
+createOscillatorWaveform : String -> OscillatorWaveform
+createOscillatorWaveform name =
+    case name of
+        "sawtooth" ->
+            Sawtooth
+
+        "triangle" ->
+            Triangle
+
+        "sine" ->
+            Sine
+
+        "square" ->
+            Square
+
+        "whitenoise" ->
+            WhiteNoise
+
+        _ ->
+            Debug.crash <| "invalid waveform " ++ (toString name)
+
+
 type FilterType
     = Lowpass
     | Highpass
     | Bandpass
     | Notch
+
+
+createFilterType : String -> FilterType
+createFilterType name =
+    case name of
+        "lowpass" ->
+            Lowpass
+
+        "highpass" ->
+            Highpass
+
+        "bandpass" ->
+            Bandpass
+
+        "notch" ->
+            Notch
+
+        _ ->
+            Debug.crash <| "invalid filter type " ++ (toString name)
 
 
 type alias Model =
@@ -33,26 +75,122 @@ type alias Model =
     }
 
 
-knobs : List Knob.Model
-knobs =
-    [ Knob.init Knob.OscMix 0 -50 50 1 "OscMix" Port.oscsBalance
-    , Knob.init Knob.PW 0 0 127 1 "PW" Port.pulseWidth
-    , Knob.init Knob.Osc2Semitone 0 -60 60 1 "semitone" Port.osc2Semitone
-    , Knob.init Knob.Osc2Detune 0 -100 100 1 "detune" Port.osc2Detune
-    , Knob.init Knob.FM 0 0 127 1 "FM" Port.fmAmount
-    , Knob.init Knob.AmpGain 10 0 127 1 "gain" Port.ampVolume
-    , Knob.init Knob.AmpAttack 1 0 127 1 "attack" Port.ampAttack
-    , Knob.init Knob.AmpDecay 127 0 127 1 "decay" Port.ampDecay
-    , Knob.init Knob.AmpSustain 1 0 127 1 "sustain" Port.ampSustain
-    , Knob.init Knob.AmpRelease 127 0 127 1 "release" Port.ampRelease
-    , Knob.init Knob.FilterCutoff 127 0 127 1 "frequency" Port.filterCutoff
-    , Knob.init Knob.FilterQ 1 0 127 1 "resonance" Port.filterQ
-    , Knob.init Knob.FilterAttack 0 0 127 1 "attack" Port.filterAttack
-    , Knob.init Knob.FilterDecay 0 0 127 1 "decay" Port.filterDecay
-    , Knob.init Knob.FilterSustain 127 0 127 1 "sustain" Port.filterSustain
-    , Knob.init Knob.FilterRelease 0 0 127 1 "release" Port.filterRelease
-    , Knob.init Knob.FilterEnvelopeAmount
+knobs : Preset.Preset -> List Knob.Model
+knobs preset =
+    [ Knob.init Knob.OscMix
         0
+        -50
+        50
+        1
+        "OscMix"
+        Port.oscsBalance
+    , Knob.init Knob.PW
+        preset.oscs.pw
+        0
+        127
+        1
+        "PW"
+        Port.pulseWidth
+    , Knob.init Knob.Osc2Semitone
+        preset.oscs.osc2.semitone
+        -60
+        60
+        1
+        "semitone"
+        Port.osc2Semitone
+    , Knob.init Knob.Osc2Detune
+        preset.oscs.osc2.detune
+        -100
+        100
+        1
+        "detune"
+        Port.osc2Detune
+    , Knob.init Knob.FM
+        preset.oscs.osc1.fmGain
+        0
+        127
+        1
+        "FM"
+        Port.fmAmount
+    , Knob.init Knob.AmpGain
+        preset.masterVolume
+        0
+        127
+        1
+        "gain"
+        Port.ampVolume
+    , Knob.init Knob.AmpAttack
+        preset.amp.attack
+        0
+        127
+        1
+        "attack"
+        Port.ampAttack
+    , Knob.init Knob.AmpDecay
+        preset.amp.decay
+        0
+        127
+        1
+        "decay"
+        Port.ampDecay
+    , Knob.init Knob.AmpSustain
+        preset.amp.sustain
+        0
+        127
+        1
+        "sustain"
+        Port.ampSustain
+    , Knob.init Knob.AmpRelease
+        preset.amp.release
+        0
+        127
+        1
+        "release"
+        Port.ampRelease
+    , Knob.init Knob.FilterCutoff
+        preset.filter.frequency
+        0
+        127
+        1
+        "frequency"
+        Port.filterCutoff
+    , Knob.init Knob.FilterQ
+        preset.filter.q
+        0
+        127
+        1
+        "resonance"
+        Port.filterQ
+    , Knob.init Knob.FilterAttack
+        preset.filter.amp.attack
+        0
+        127
+        1
+        "attack"
+        Port.filterAttack
+    , Knob.init Knob.FilterDecay
+        preset.filter.amp.decay
+        0
+        127
+        1
+        "decay"
+        Port.filterDecay
+    , Knob.init Knob.FilterSustain
+        preset.filter.amp.sustain
+        0
+        127
+        1
+        "sustain"
+        Port.filterSustain
+    , Knob.init Knob.FilterRelease
+        preset.filter.amp.release
+        0
+        127
+        1
+        "release"
+        Port.filterRelease
+    , Knob.init Knob.FilterEnvelopeAmount
+        preset.filter.envelopeAmount
         0
         127
         1
@@ -61,13 +199,16 @@ knobs =
     ]
 
 
-init : Model
-init =
-    { knobs = knobs
-    , osc2KbdTrackSwitch = Switch.init True Port.osc2KbdTrack
-    , filterDistortionSwitch = Switch.init False Port.filterDistortion
+init : Preset.Preset -> Model
+init preset =
+    { knobs = knobs preset
+    , osc2KbdTrackSwitch =
+        Switch.init preset.oscs.osc2.kbdTrack Port.osc2KbdTrack
+    , filterDistortionSwitch =
+        Switch.init preset.filter.distortion Port.filterDistortion
     , filterTypeBtn =
         OptionPicker.init Port.filterType
+            (createFilterType preset.filter.type_)
             [ ( "LP", Lowpass )
             , ( "HP", Highpass )
             , ( "BP", Bandpass )
@@ -75,6 +216,7 @@ init =
             ]
     , osc1WaveformBtn =
         OptionPicker.init Port.osc1Waveform
+            (createOscillatorWaveform preset.oscs.osc1.waveformType)
             [ ( "sin", Sine )
             , ( "tri", Triangle )
             , ( "saw", Sawtooth )
@@ -82,6 +224,7 @@ init =
             ]
     , osc2WaveformBtn =
         OptionPicker.init Port.osc2Waveform
+            (createOscillatorWaveform preset.oscs.osc2.waveformType)
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "pulse", Square )
@@ -124,6 +267,7 @@ updateOsc2KbdTrack switch model =
 updateFilterTypeBtn : OptionPicker.Model FilterType -> Model -> Model
 updateFilterTypeBtn btn model =
     { model | filterTypeBtn = btn }
+
 
 updateFilterDistortionSwitch : Switch.Model -> Model -> Model
 updateFilterDistortionSwitch switch model =

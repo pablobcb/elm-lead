@@ -1,11 +1,12 @@
 import Elm from '../elm/Main.elm'
 
 import Synth from './AudioEngine/Synth'
-import MIDI from './AudioEngine/MIDI'
+import MIDI from './MIDI'
+import preset from './preset.json'
 
 export default class Application {
 
-	constructor () {
+	constructor() {
 		this.app = Elm.Main.fullscreen()
 		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
@@ -22,7 +23,7 @@ export default class Application {
 		this.midiAccess = midiAccess
 	}
 
-	onMIDIFailure = () => {
+	onMIDIpresetFailure = () => {
 		alert('Your browser doesnt support WebMIDI API. Use another browser or \
 			install the Jazz Midi Plugin http://jazz-soft.net/')
 	}
@@ -30,6 +31,8 @@ export default class Application {
 	initializeSynth = () => {
 
 		this.synth = new Synth()
+
+		setTimeout(() => this.app.ports.presetChange.send(preset), 1)
 		// MACRO
 
 		window.onblur = () => {
@@ -38,15 +41,20 @@ export default class Application {
 		}
 
 		// AMP
-		this.app.ports.ampVolume.subscribe(this.synth.setMasterVolumeGain)
+		this.app.ports.ampVolume
+			.subscribe(this.synth.setMasterVolumeGain)
 
-		this.app.ports.ampAttack.subscribe(this.synth.state.amp.setAttack)
+		this.app.ports.ampAttack
+			.subscribe(this.synth.setAmpAttack)
 
-		this.app.ports.ampDecay.subscribe(this.synth.state.amp.setDecay)
+		this.app.ports.ampDecay
+			.subscribe(this.synth.setAmpDecay)
 
-		this.app.ports.ampSustain.subscribe(this.synth.state.amp.setSustain)
-		
-		this.app.ports.ampRelease.subscribe(this.synth.state.amp.setRelease)
+		this.app.ports.ampSustain
+			.subscribe(this.synth.setAmpSustain)
+
+		this.app.ports.ampRelease
+			.subscribe(this.synth.setAmpRelease)
 
 		// OSCILLATORS
 
@@ -79,16 +87,16 @@ export default class Application {
 			.subscribe(this.synth.setFilterEnvelopeAmount)
 
 		this.app.ports.filterAttack
-			.subscribe(this.synth.state.filter.amp.setAttack)
+			.subscribe(this.synth.setFilterAttack)
 
 		this.app.ports.filterDecay
-			.subscribe(this.synth.state.filter.amp.setDecay)
+			.subscribe(this.synth.setFilterDecay)
 
 		this.app.ports.filterSustain
-			.subscribe(this.synth.state.filter.amp.setSustain)
-		
+			.subscribe(this.synth.setFilterSustain)
+
 		this.app.ports.filterRelease
-			.subscribe(this.synth.state.filter.amp.setRelease)
+			.subscribe(this.synth.setFilterRelease)
 
 		this.app.ports.filterCutoff
 			.subscribe(this.synth.setFilterCutoff)
@@ -98,16 +106,16 @@ export default class Application {
 
 		this.app.ports.filterType
 			.subscribe(this.synth.setFilterType)
-		
+
 		this.app.ports.filterDistortion
-			.subscribe(this.synth.toggleFilterDistortion)	
+			.subscribe(this.synth.toggleFilterDistortion)
 
 		this.app.ports.filterEnvelopeAmount
 			.subscribe(this.synth.state.filter.amp.setEnvelopeAmount)
-		
+
 		// MIDI
 		if (this.midiAccess) {
-			MIDI.manageMidiDevices(this.midiAccess, 
+			MIDI.manageMidiDevices(this.midiAccess,
 				this.app.ports.midiIn, this.synth.onMIDIMessage)
 		}
 

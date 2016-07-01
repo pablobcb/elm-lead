@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.App exposing (map)
 import Html.Attributes exposing (..)
-import Lazy.List exposing (..)
+import Lazy.List as Lazy exposing (..)
 
 
 type alias Model a =
@@ -15,22 +15,30 @@ type alias Model a =
     }
 
 
-init : (String -> Cmd Msg) -> List ( String, a ) -> Model a
-init cmdEmmiter elems =
+init : (String -> Cmd Msg) -> a -> List ( String, a ) -> Model a
+init cmdEmmiter selected elems =
     let
-        current =
+        orderedElems =
+            elems
+                |> Lazy.fromList
+                |> Lazy.cycle
+                |> Lazy.dropWhile (\( _, elem ) -> elem == selected)
+                |> Lazy.take (List.length elems)
+                |> Lazy.toList
+
+        selectedElem =
             snd
-                <| case List.head elems of
+                <| case List.head orderedElems of
                     Just elem ->
                         elem
 
                     Nothing ->
                         Debug.crash "empty list on button creation!"
     in
-        { elems = elems
-        , currentElem = current
+        { currentElem = selectedElem
         , options = elems
         , cmdEmmiter = cmdEmmiter
+        , elems = orderedElems 
         }
 
 
@@ -98,12 +106,12 @@ update message model =
         Click ->
             let
                 elems =
-                    Lazy.List.cycle <| Lazy.List.fromList model.elems
+                    Lazy.cycle <| Lazy.fromList model.elems
 
                 elems' =
-                    Lazy.List.toList
-                        <| Lazy.List.take (List.length model.elems)
-                        <| Lazy.List.drop 1 elems
+                    Lazy.toList
+                        <| Lazy.take (List.length model.elems)
+                        <| Lazy.drop 1 elems
 
                 nextElem =
                     snd <| getNextElem elems'
