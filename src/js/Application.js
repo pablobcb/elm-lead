@@ -6,8 +6,8 @@ import preset from './preset.json'
 
 export default class Application {
 
-	constructor() {
-		this.app = Elm.Main.fullscreen()
+	constructor () {
+		this.app = Elm.Main.fullscreen(preset)
 		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
 			navigator
@@ -19,7 +19,7 @@ export default class Application {
 		}
 	}
 
-	onMIDISuccess = (midiAccess) => {
+	onMIDISuccess = midiAccess => {
 		this.midiAccess = midiAccess
 	}
 
@@ -32,7 +32,9 @@ export default class Application {
 
 		this.synth = new Synth()
 
-		setTimeout(() => this.app.ports.presetChange.send(preset), 1)
+		// this pernicious hack is necessary, see 
+		// https://github.com/elm-lang/core/issues/595
+		// setTimeout(() => this.app.ports.presetChange.send(preset), 0)
 		// MACRO
 
 		window.onblur = () => {

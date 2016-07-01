@@ -47,7 +47,11 @@ update msg model =
     in
         case msg of
             PresetChange preset ->
-                ( Model.init preset, Cmd.none )
+                let
+                    _ =
+                        Debug.log "2" 2
+                in
+                    ( Model.init preset, Cmd.none )
 
             Osc1WaveformChange subMsg ->
                 updateMap OptionPicker.update

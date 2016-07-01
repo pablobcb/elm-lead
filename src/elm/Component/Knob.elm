@@ -112,7 +112,7 @@ view model =
             visualMinimum
                 + (value * visualRange)
                 + if model.min < 0 then
-                    150
+                    visualRange / 2
                   else
                     0
 
