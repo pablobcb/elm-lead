@@ -6,7 +6,7 @@ import Note as Note exposing (..)
 import Dict exposing (..)
 
 
-type alias MidiNote =
+type alias MidiValue =
     Int
 
 
@@ -24,22 +24,22 @@ noteOff =
     128
 
 
-makeMidiMessage : MidiNote -> Velocity -> Int -> MidiMessage
+makeMidiMessage : MidiValue -> Velocity -> Int -> MidiMessage
 makeMidiMessage note velocity type_ =
     List.map Just [ type_, note, velocity ]
 
 
-noteOnMessage : MidiNote -> Velocity -> MidiMessage
+noteOnMessage : MidiValue -> Velocity -> MidiMessage
 noteOnMessage note velocity =
     makeMidiMessage note velocity noteOn
 
 
-noteOffMessage : MidiNote -> Velocity -> MidiMessage
+noteOffMessage : MidiValue -> Velocity -> MidiMessage
 noteOffMessage note velocity =
     makeMidiMessage note velocity noteOff
 
 
-noteToMidiNumber : ( Note, Octave ) -> MidiNote
+noteToMidiNumber : ( Note, Octave ) -> MidiValue
 noteToMidiNumber note =
     case Dict.get (toString note) midiNotesDict of
         Just midiNoteNumber ->
@@ -61,7 +61,7 @@ midiNoteOctaves =
         ++ (List.repeat 8 8)
 
 
-midiNotesDict : Dict String MidiNote
+midiNotesDict : Dict String MidiValue
 midiNotesDict =
     let
         pianoNotes =

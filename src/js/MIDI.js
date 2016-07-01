@@ -26,16 +26,20 @@ export default {
 	// functions below scales midi values to synth parameters
 	toOscPitch : midiToFreq,
 
-	toFilterQAmount : (midiValue) => (
+	toFilterQAmount : midiValue => (
 		20 * (midiValue / MIDI_MAX_VALUE)
 	),
 
-	toFilterCutoffFrequency : (midiValue) => (
+	toFilterCutoffFrequency : midiValue => (
 		1.6 * midiToFreq(midiValue)
 	),
 
 	logScaleToMax : (midiValue, max) => (
 		(Math.pow(2, midiValue / MIDI_MAX_VALUE) - 1) * max
+	),
+
+	normalizeValue : midiValue => (
+		midiValue / MIDI_MAX_VALUE
 	),
 
 	manageMidiDevices : (midiAccess, midiPort, onMIDIMessage) => {

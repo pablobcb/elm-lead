@@ -78,9 +78,9 @@ type alias Model =
 knobs : Preset.Preset -> List Knob.Model
 knobs preset =
     [ Knob.init Knob.OscMix
+        preset.oscs.mix
         0
-        -50
-        50
+        127
         1
         "OscMix"
         Port.oscsBalance
@@ -201,39 +201,36 @@ knobs preset =
 
 init : Preset.Preset -> Model
 init preset =
-    --let
-    --    _ =          Debug.log "preset" preset
-    --in
-        { knobs = knobs preset
-        , osc2KbdTrackSwitch =
-            Switch.init preset.oscs.osc2.kbdTrack Port.osc2KbdTrack
-        , filterDistortionSwitch =
-            Switch.init preset.filter.distortion Port.filterDistortion
-        , filterTypeBtn =
-            OptionPicker.init Port.filterType
-                (createFilterType preset.filter.type_)
-                [ ( "LP", Lowpass )
-                , ( "HP", Highpass )
-                , ( "BP", Bandpass )
-                , ( "notch", Notch )
-                ]
-        , osc1WaveformBtn =
-            OptionPicker.init Port.osc1Waveform
-                (createOscillatorWaveform preset.oscs.osc1.waveformType)
-                [ ( "sin", Sine )
-                , ( "tri", Triangle )
-                , ( "saw", Sawtooth )
-                , ( "sqr", Square )
-                ]
-        , osc2WaveformBtn =
-            OptionPicker.init Port.osc2Waveform
-                (createOscillatorWaveform preset.oscs.osc2.waveformType)
-                [ ( "tri", Triangle )
-                , ( "saw", Sawtooth )
-                , ( "pulse", Square )
-                , ( "noise", WhiteNoise )
-                ]
-        }
+    { knobs = knobs preset
+    , osc2KbdTrackSwitch =
+        Switch.init preset.oscs.osc2.kbdTrack Port.osc2KbdTrack
+    , filterDistortionSwitch =
+        Switch.init preset.filter.distortion Port.filterDistortion
+    , filterTypeBtn =
+        OptionPicker.init Port.filterType
+            (createFilterType preset.filter.type_)
+            [ ( "LP", Lowpass )
+            , ( "HP", Highpass )
+            , ( "BP", Bandpass )
+            , ( "notch", Notch )
+            ]
+    , osc1WaveformBtn =
+        OptionPicker.init Port.osc1Waveform
+            (createOscillatorWaveform preset.oscs.osc1.waveformType)
+            [ ( "sin", Sine )
+            , ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "sqr", Square )
+            ]
+    , osc2WaveformBtn =
+        OptionPicker.init Port.osc2Waveform
+            (createOscillatorWaveform preset.oscs.osc2.waveformType)
+            [ ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "pulse", Square )
+            , ( "noise", WhiteNoise )
+            ]
+    }
 
 
 findKnob : Model -> KnobInstance -> Knob.Model

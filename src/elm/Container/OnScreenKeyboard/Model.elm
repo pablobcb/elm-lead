@@ -9,7 +9,7 @@ import Port
 
 
 type alias PressedKey =
-    ( Char, MidiNote )
+    ( Char, MidiValue )
 
 
 type alias Model =
@@ -17,9 +17,9 @@ type alias Model =
     , velocity : Velocity
     , pressedNotes : List PressedKey
     , clickedAndHovering : Bool
-    , mouseHoverNote : Maybe MidiNote
-    , mousePressedNote : Maybe MidiNote
-    , midiPressedNotes : List MidiNote
+    , mouseHoverNote : Maybe MidiValue
+    , mousePressedNote : Maybe MidiValue
+    , midiPressedNotes : List MidiValue
     }
 
 
@@ -66,7 +66,7 @@ unusedKeysOnLastOctave =
     [ 'h', 'u', 'j', 'k', 'o', 'l', 'p' ]
 
 
-keyToMidiNoteNumber : ( Char, Octave ) -> MidiNote
+keyToMidiNoteNumber : ( Char, Octave ) -> MidiValue
 keyToMidiNoteNumber ( symbol, octave ) =
     Midi.noteToMidiNumber
         <| case symbol of
@@ -197,12 +197,12 @@ mouseLeave model =
     { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
 
-addClickedNote : Model -> MidiNote -> Model
+addClickedNote : Model -> MidiValue -> Model
 addClickedNote model midiNote =
     { model | mousePressedNote = Just midiNote }
 
 
-removeClickedNote : Model -> MidiNote -> Model
+removeClickedNote : Model -> MidiValue -> Model
 removeClickedNote model midiNote =
     { model | mousePressedNote = Just midiNote }
 
@@ -225,7 +225,7 @@ removePressedNote model symbol =
     }
 
 
-addPressedMidiNote : Model -> MidiNote -> Model
+addPressedMidiNote : Model -> MidiValue -> Model
 addPressedMidiNote model midiNote =
     { model
         | midiPressedNotes =
@@ -234,7 +234,7 @@ addPressedMidiNote model midiNote =
     }
 
 
-removePressedMidiNote : Model -> MidiNote -> Model
+removePressedMidiNote : Model -> MidiValue -> Model
 removePressedMidiNote model midiNote =
     { model
         | midiPressedNotes =
@@ -248,17 +248,17 @@ findPressedKey model symbol =
     List.head <| List.filter (\( symbol', _ ) -> symbol == symbol') model.pressedNotes
 
 
-findPressedNote : Model -> MidiNote -> Maybe PressedKey
+findPressedNote : Model -> MidiValue -> Maybe PressedKey
 findPressedNote model midiNote =
     List.head <| List.filter (\( _, midiNote' ) -> midiNote == midiNote') model.pressedNotes
 
 
-noteOnCommand : Velocity -> MidiNote -> Cmd msg
+noteOnCommand : Velocity -> MidiValue -> Cmd msg
 noteOnCommand velocity midiNoteNumber =
     noteOnMessage midiNoteNumber velocity |> Port.midiOut
 
 
-noteOffCommand : Velocity -> MidiNote -> Cmd msg
+noteOffCommand : Velocity -> MidiValue -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
     noteOffMessage midiNoteNumber velocity |> Port.midiOut
 

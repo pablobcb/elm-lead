@@ -4,14 +4,14 @@ import NoiseOscillator from './Oscillator/NoiseOscillator'
 import ADSR from './ADSR'
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import PresetManager from '../PresetManager'
+
 
 
 export default class Synth {
-	constructor () {
+	constructor (preset) {
 		this.context = new AudioContext
 
-		this.state = PresetManager.loadPresets()
+		this.state = preset
 
 		this.ampADSR = new ADSR(this.context, 1)
 
@@ -38,6 +38,7 @@ export default class Synth {
 		this.masterVolume = this.context.createGain()
 
 		this.masterVolume.gain.value = this.state.masterVolume
+
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -53,13 +54,16 @@ export default class Synth {
 	}
 
 	initializeOscillatorsGain = () => {
+		const osc1GainValue = (this.state.oscs.mix - 1) / 200		
+		const osc2GainValue = Math.abs(osc1GainValue - .5)
+		
 		this.oscillator1Gain = this.context.createGain()
-		this.oscillator1Gain.gain.value = this.state.oscs.osc1.gain
+		this.oscillator1Gain.gain.value = osc1GainValue
 		this.oscillator1Gain.connect(this.filter)
 		this.oscillator1.connect(this.oscillator1Gain)
 
 		this.oscillator2Gain = this.context.createGain()
-		this.oscillator2Gain.gain.value = this.state.oscs.osc2.gain
+		this.oscillator2Gain.gain.value = osc2GainValue
 		this.oscillator2Gain.connect(this.filter)
 		this.oscillator2.connect(this.oscillator2Gain)
 	}
@@ -125,20 +129,14 @@ export default class Synth {
 		this.masterVolume.gain.value = vol
 	}
 
-	setOscillatorsBalance = oscillatorsBalance => {
-		const gainPercentage = Math.abs(oscillatorsBalance) / 100
-		this.oscillator1Gain.gain.value = .5
-		this.oscillator2Gain.gain.value = .5
+	setOscillatorsMix = oscsMix => {
+		this.state.oscs.mix = MIDI.normalizeValue(oscsMix)
 
-		if (oscillatorsBalance > 0) {
-			this.oscillator1Gain.gain.value -= gainPercentage
-			this.oscillator2Gain.gain.value += gainPercentage
-		} else if (oscillatorsBalance < 0) {
-			this.oscillator1Gain.gain.value += gainPercentage
-			this.oscillator2Gain.gain.value -= gainPercentage
-		}
-		this.state.oscs.osc1.gain = this.oscillator1Gain.gain.value
-		this.state.oscs.osc2.gain = this.oscillator2Gain.gain.value
+		const osc1GainValue = (1 - this.state.oscs.mix) / 2
+		this.oscillator1Gain.gain.value = osc1GainValue
+
+		const osc2GainValue = .5 - osc1GainValue
+		this.oscillator2Gain.gain.value = osc2GainValue
 	}
 
 	setOscillator2Semitone = oscillatorSemitone => {
@@ -284,7 +282,27 @@ export default class Synth {
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
-	setAmpFilterEnvelopeAmount = midiValue => {
-		this.maxAmount = MIDI.logScaleToMax(midiValue, 1)
+
+	setFilterAttack = midiValue => {
+		this.state.filter.amp.attack = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterDecay = midiValue => {
+		this.state.filter.amp.decay = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterSustain = midiValue => {
+		this.state.filter.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
+	}
+
+	setFilterRelease = midiValue => {
+		this.state.filter.amp.release = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setFilterEnvelopeAmount = midiValue => {
+		this.state.filter.evelopeAmount = MIDI.logScaleToMax(midiValue, 1)
 	}
 }

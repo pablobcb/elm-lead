@@ -1,40 +1,39 @@
 module Preset exposing (..)
-
+import Midi exposing (..)
 
 type alias Preset =
     { filter :
         { type_ : String
         , distortion : Bool
-        , frequency : Int
-        , q : Int
-        , envelopeAmount : Int
+        , frequency : MidiValue
+        , q : MidiValue
+        , envelopeAmount : MidiValue
         , amp :
-            { attack : Int
-            , decay : Int
-            , sustain : Int
-            , release : Int
+            { attack : MidiValue
+            , decay : MidiValue
+            , sustain : MidiValue
+            , release : MidiValue
             }
         }
     , amp :
-        { attack : Int
-        , decay : Int
-        , sustain : Int
-        , release : Int
+        { attack : MidiValue
+        , decay : MidiValue
+        , sustain : MidiValue
+        , release : MidiValue
         }
     , oscs :
         { osc1 :
             { waveformType : String
-            , gain : Int
-            , fmGain : Int
+            , fmGain : MidiValue
             }
         , osc2 :
             { waveformType : String
-            , gain : Int
-            , semitone : Int
-            , detune : Int
+            , semitone : MidiValue
+            , detune : MidiValue
             , kbdTrack : Bool
             }
-        , pw : Int
+        , pw : MidiValue
+        , mix : MidiValue
         }
-    , masterVolume : Int
+    , masterVolume : MidiValue
     }

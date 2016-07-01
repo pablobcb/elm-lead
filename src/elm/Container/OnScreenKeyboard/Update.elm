@@ -13,8 +13,8 @@ type Msg
     | OctaveDown
     | VelocityUp
     | VelocityDown
-    | MouseEnter MidiNote
-    | MouseLeave MidiNote
+    | MouseEnter MidiValue
+    | MouseLeave MidiValue
     | KeyOn Char
     | KeyOff Char
     | MouseUp

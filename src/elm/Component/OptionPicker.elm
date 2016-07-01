@@ -34,14 +34,11 @@ init cmdEmmiter selected elems =
 
                     Nothing ->
                         Debug.crash "empty list on button creation!"
-        
-        _ = Debug.log "orderedElems" (toString orderedElems)
-        a = Debug.log "selected" (toString selected)
     in
         { currentElem = selectedElem
         , options = elems
         , cmdEmmiter = cmdEmmiter
-        , elems = orderedElems 
+        , elems = orderedElems
         }
 
 

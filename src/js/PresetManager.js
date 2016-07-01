@@ -6,7 +6,9 @@ const scaleMidiValue = midiValue =>
 	MIDI.logScaleToMax(midiValue, 1)
 
 export default {
-	loadPresets: () => {
+	loadPreset: () => preset,
+
+	midiSettingsToSynthSettings: () => {
 		const state = {
 			filter: {
 				amp: {}
@@ -31,7 +33,7 @@ export default {
 			scaleMidiValue(preset.amp.release)
 
 		state.masterVolume = 
-			preset.masterVolume
+			scaleMidiValue(preset.masterVolume)
 
 		//FILTER
 		state.filter.type_ =
@@ -49,7 +51,6 @@ export default {
 		state.filter.frequency =
 			MIDI.toFilterCutoffFrequency(preset.filter.frequency)
 
-
 		state.filter.amp.attack =
 			scaleMidiValue(preset.filter.amp.attack)
 
@@ -64,28 +65,22 @@ export default {
 
 		//OSC
 		state.oscs.pw =
-			preset.oscs.pw
+			scaleMidiValue(preset.oscs.pw)
+		
+		state.oscs.mix =
+			MIDI.normalizeValue(preset.oscs.mix)
 
 		state.oscs.osc1.waveformType =
 			preset.oscs.osc1.waveformType
 
-		state.oscs.osc1.gain =
-			preset.oscs.osc1.gain
-
 		state.oscs.osc1.fmGain =
-			preset.oscs.osc1.fmGain
+			scaleMidiValue(preset.oscs.osc1.fmGain)
 
 		state.oscs.osc2.waveformType =
 			preset.oscs.osc2.waveformType
 
-		state.oscs.osc2.gain =
-			preset.oscs.osc2.gain
-
 		state.oscs.osc2.semitone =
 			preset.oscs.osc2.semitone
-
-		state.oscs.osc2.detune =
-			preset.oscs.osc2.detune
 
 		state.oscs.osc2.detune =
 			preset.oscs.osc2.detune

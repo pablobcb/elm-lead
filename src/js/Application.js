@@ -2,12 +2,12 @@ import Elm from '../elm/Main.elm'
 
 import Synth from './AudioEngine/Synth'
 import MIDI from './MIDI'
-import preset from './preset.json'
+import PresetManager from './PresetManager'
 
 export default class Application {
 
 	constructor () {
-		this.app = Elm.Main.fullscreen(preset)
+		this.app = Elm.Main.fullscreen(PresetManager.loadPreset())
 		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
 			navigator
@@ -30,7 +30,7 @@ export default class Application {
 
 	initializeSynth = () => {
 
-		this.synth = new Synth()
+		this.synth = new Synth(PresetManager.midiSettingsToSynthSettings())
 
 		// this pernicious hack is necessary, see 
 		// https://github.com/elm-lang/core/issues/595
@@ -61,7 +61,7 @@ export default class Application {
 		// OSCILLATORS
 
 		this.app.ports.oscsBalance
-			.subscribe(this.synth.setOscillatorsBalance)
+			.subscribe(this.synth.setOscillatorsMix)
 
 		this.app.ports.osc2Semitone
 			.subscribe(this.synth.setOscillator2Semitone)
@@ -113,7 +113,7 @@ export default class Application {
 			.subscribe(this.synth.toggleFilterDistortion)
 
 		this.app.ports.filterEnvelopeAmount
-			.subscribe(this.synth.state.filter.amp.setEnvelopeAmount)
+			.subscribe(this.synth.setFilterEnvelopeAmount)
 
 		// MIDI
 		if (this.midiAccess) {

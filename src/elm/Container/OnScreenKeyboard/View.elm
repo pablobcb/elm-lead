@@ -22,17 +22,17 @@ onScreenKeyboardKeys =
     (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
 
 
-onMouseEnter : MidiNote -> Html.Attribute Msg
+onMouseEnter : MidiValue -> Html.Attribute Msg
 onMouseEnter midiNote =
     midiNote |> MouseEnter |> Html.Events.onMouseEnter
 
 
-onMouseLeave : MidiNote -> Html.Attribute Msg
+onMouseLeave : MidiValue -> Html.Attribute Msg
 onMouseLeave midiNote =
     midiNote |> MouseLeave |> Html.Events.onMouseLeave
 
 
-key : Model -> String -> MidiNote -> Int -> Html Msg
+key : Model -> String -> MidiValue -> Int -> Html Msg
 key model noteName midiNote octave =
     let
         isCurrentOctave =
