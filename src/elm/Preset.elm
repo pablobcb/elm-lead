@@ -15,7 +15,6 @@ type alias Preset =
             , decay : MidiValue
             , sustain : MidiValue
             , release : MidiValue
-            , masterVolume : MidiValue
             }
         }
     , amp :
@@ -23,6 +22,7 @@ type alias Preset =
         , decay : MidiValue
         , sustain : MidiValue
         , release : MidiValue
+        , masterVolume : MidiValue
         }
     , oscs :
         { osc1 :
