@@ -1,8 +1,8 @@
 export default class ADSR {
 	//TODO: use 0.000001 for attack and release
-	constructor (context, maxAmount) {
+	constructor (context, envelopeAmount) {
 		this.startAmount = 0
-		this.maxAmount = maxAmount
+		this.envelopeAmount = envelopeAmount
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
@@ -58,7 +58,7 @@ export default class ADSR {
 			target.cancelScheduledValues(now)
 			target.setValueAtTime(this.startAmount, now)
 			target.linearRampToValueAtTime(this.startAmount + 
-				this.maxAmount, this.decayFrom)
+				this.envelopeAmount, this.decayFrom)
 			target.linearRampToValueAtTime(this.sustain, this.decayTo)
 		}
 
@@ -69,12 +69,12 @@ export default class ADSR {
 		target.cancelScheduledValues(now)
 
 		if(this.attack && now < this.decayFrom) {
-			valueAtTime = this.getValue(this.startAmount, this.maxAmount, 
+			valueAtTime = this.getValue(this.startAmount, this.envelopeAmount,
 				this.startedAt, this.decayFrom, now)
 		}
-		else if(now >= this.decayFrom && now < this.decayTo) {			
-			valueAtTime = this.getValue(this.startAmount + 
-				this.maxAmount, this.sustain, this.decayFrom, this.decayTo, now)
+		else if(now >= this.decayFrom && now < this.decayTo) {
+			valueAtTime = this.getValue(this.startAmount + this.envelopeAmount,
+				this.sustain, this.decayFrom, this.decayTo, now)
 		}
 
 		target.setValueAtTime(valueAtTime, now)

@@ -88,34 +88,32 @@ export default class Application {
 
 		// FILTER
 		this.app.ports.filterEnvelopeAmount
-			.subscribe(this.synth.setFilterEnvelopeAmount)
+			.subscribe(this.synth.filter.setEnvelopeAmount)
 
 		this.app.ports.filterAttack
-			.subscribe(this.synth.setFilterAttack)
+			.subscribe(this.synth.filter.setAttack)
 
 		this.app.ports.filterDecay
-			.subscribe(this.synth.setFilterDecay)
+			.subscribe(this.synth.filter.setDecay)
 
 		this.app.ports.filterSustain
-			.subscribe(this.synth.setFilterSustain)
+			.subscribe(this.synth.filter.setSustain)
 
 		this.app.ports.filterRelease
-			.subscribe(this.synth.setFilterRelease)
+			.subscribe(this.synth.filter.setRelease)
 
 		this.app.ports.filterCutoff
-			.subscribe(this.synth.setFilterCutoff)
+			.subscribe(this.synth.filter.setCutoff)
 
 		this.app.ports.filterQ
-			.subscribe(this.synth.setFilterQ)
+			.subscribe(this.synth.filter.setQ)
 
 		this.app.ports.filterType
-			.subscribe(this.synth.setFilterType)
+			.subscribe(this.synth.filter.setType)
 
 		this.app.ports.filterDistortion
-			.subscribe(this.synth.toggleFilterDistortion)
+			.subscribe(this.synth.filter.toggleDistortion)
 
-		this.app.ports.filterEnvelopeAmount
-			.subscribe(this.synth.setFilterEnvelopeAmount)
 
 		// MIDI
 		if (this.midiAccess) {
