@@ -31,7 +31,6 @@ export default class Oscillators {
 				this.oscillator2Gain)
 		}
 		else{
-			debugger
 			this.oscillator2 = new FMOscillator(this.context,
 				state.osc2.waveformType)
 		}

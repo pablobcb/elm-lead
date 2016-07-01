@@ -1,7 +1,8 @@
-import ADSR from './ADSR'
+
 import Oscillators from './Oscillators'
 import Filter from './Filter'
-import MIDI from '../MIDI'
+import Amplifier from './Filter'
+
 import CONSTANTS from '../Constants'
 
 export default class Synth {
@@ -10,17 +11,13 @@ export default class Synth {
 
 		this.state = preset
 
-		this.ampADSR = new ADSR(this.context, 1)
-		this.masterVolume = this.context.createGain()
-		this.masterVolume.gain.value = this.state.masterVolume
-		this.masterVolume.connect(this.context.destination)
-
+		this.amplifier = new Amplifier(this.context, this.state.amp)	
+			
 		this.filter = new Filter(this.context, this.state.filter)
-		this.filter.connect(this.masterVolume)	
+		this.filter.connect(this.amplifier.output)	
 
 		this.oscillators = new Oscillators(this.context, this.state.oscs)
 		this.oscillators.connect(this.filter.node)
-
 	}
 
 	_ = () => {}
@@ -36,36 +33,13 @@ export default class Synth {
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
-				this.oscillators.noteOn(note, this.ampADSR.on(this.state.amp))
+				this.oscillators.noteOn(note, 
+					this.amplifier.adsr.on(this.state.amp))
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
-				this.oscillators.noteOff(note, this.ampADSR.off)
+				this.oscillators.noteOff(note, 
+					this.amplifier.adsr.off)
 				break
 		}
-	}	
-
-	setMasterVolumeGain = midiValue => {
-		const vol = MIDI.logScaleToMax(midiValue, 1)
-		this.state.masterVolume = vol
-		this.masterVolume.gain.value = vol
-	}
-
-	setAmpAttack = midiValue => {
-		this.state.amp.attack = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setAmpDecay = midiValue => {
-		this.state.amp.decay = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setAmpSustain = midiValue => {
-		this.state.amp.sustain = MIDI.logScaleToMax(midiValue, 1)
-	}
-
-	setAmpRelease = midiValue => {
-		this.state.amp.release = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
 	}	
 }

@@ -32,8 +32,8 @@ export default {
 		state.amp.release =
 			scaleMidiValue(preset.amp.release)
 
-		state.masterVolume = 
-			scaleMidiValue(preset.masterVolume)
+		state.amp.masterVolume = 
+			scaleMidiValue(preset.amp.masterVolume)
 
 		//FILTER
 		state.filter.type_ =

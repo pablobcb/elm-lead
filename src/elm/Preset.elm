@@ -1,5 +1,7 @@
 module Preset exposing (..)
+
 import Midi exposing (..)
+
 
 type alias Preset =
     { filter :
@@ -13,6 +15,7 @@ type alias Preset =
             , decay : MidiValue
             , sustain : MidiValue
             , release : MidiValue
+            , masterVolume : MidiValue
             }
         }
     , amp :
@@ -35,5 +38,4 @@ type alias Preset =
         , pw : MidiValue
         , mix : MidiValue
         }
-    , masterVolume : MidiValue
     }

@@ -20,5 +20,5 @@ export default {
 		NOTE_ON: 144,
 		NOTE_OFF: 128
 	},
-	MAX_ENVELOPE_TIME: 5 // in seconds
+	MAX_ENVELOPE_TIME: 4 // in seconds
 }

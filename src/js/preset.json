@@ -16,21 +16,21 @@
         "attack": 0,
         "decay": 0,
         "sustain": 127,
-        "release": 0
+        "release": 0,
+        "masterVolume": 20
     },
     "oscs": {
         "osc1": {
             "waveformType": "sawtooth",
-            "fmGain" : 0
+            "fmGain": 0
         },
         "osc2": {
-            "waveformType": "square",
+            "waveformType": "sawtooth",
             "semitone": 0,
             "detune": 0,
             "kbdTrack": false
         },
         "pw": 0,
         "mix": 63
-    },
-    "masterVolume": 20
+    }
 }

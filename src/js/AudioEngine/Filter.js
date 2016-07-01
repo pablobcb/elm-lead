@@ -6,7 +6,6 @@ import ADSR from './ADSR'
 export default class Filter {
 	constructor (context, state) {
 		this.context = context
-
 		
 		this.distortion = state.distortion
 
@@ -20,6 +19,8 @@ export default class Filter {
 		this.filterEnvelopeGain = this.context.createGain()
 		this.node.connect(this.filterEnvelopeGain)
 	}
+
+	_ = () => {}
 
 	get type () {
 		return this.node.type
