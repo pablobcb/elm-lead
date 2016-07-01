@@ -58,9 +58,8 @@ export default class PulseOscillator extends FMOscillator {
 		this.pulseShaper.disconnect()
 	}
 
-	setPulseWidth = (width) => {
+	setPulseWidth = width => {
 		this.pulseWidth = width
-
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = width
 		})

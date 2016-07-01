@@ -22,8 +22,20 @@ export default class Oscillators {
 		const osc2GainValue = Math.abs(osc1GainValue - .5)
 		this.oscillator2Gain.gain.value = osc2GainValue
 
-		this.oscillator2 = new FMOscillator(this.context,
-			state.osc2.waveformType)
+		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
+			this.oscillator2 = new PulseOscillator((this.context),
+				this.oscillator2Gain)
+		}
+		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
+			this.oscillator2 = new NoiseOscillator((this.context),
+				this.oscillator2Gain)
+		}
+		else{
+			debugger
+			this.oscillator2 = new FMOscillator(this.context,
+				state.osc2.waveformType)
+		}
+		
 		this.oscillator2.connect(this.oscillator2Gain)
 
 		//TODO : IMPLEMENT OSC CLASS WHICH HOLDS FMGAIN
@@ -73,6 +85,7 @@ export default class Oscillators {
 		const pw = MIDI.logScaleToMax(midiValue, .9)
 
 		this.state.pw = pw
+		debugger
 		this.oscillator2.setPulseWidth(pw)
 	}
 
