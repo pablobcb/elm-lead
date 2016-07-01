@@ -36,9 +36,7 @@ export default class Synth {
 
 	initializeMasterOutput = () => {
 		this.masterVolume = this.context.createGain()
-
 		this.masterVolume.gain.value = this.state.masterVolume
-
 		this.masterVolume.connect(this.context.destination)
 	}
 
@@ -166,13 +164,12 @@ export default class Synth {
 	}
 
 	setOscillator1Waveform = waveform => {
-		const nextWaveform = waveform.toLowerCase()
-
-		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(nextWaveform) == -1) {
-			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
+		if (CONSTANTS.OSC1_WAVEFORM_TYPES.contains(waveform.toLowerCase())) {
+			this.oscillator1.setWaveform(waveform.toLowerCase())
 		}
-
-		this.oscillator1.setWaveform(nextWaveform)
+		else {
+			throw new Error(`Invalid Waveform Type ${waveform.toLowerCase()}`)
+		}		
 	}
 
 	toggleOsc2KbdTrack = state => {
@@ -184,7 +181,7 @@ export default class Synth {
 
 		const nextWaveform = waveform.toLowerCase()
 
-		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(nextWaveform) == -1) {
+		if (! CONSTANTS.OSC2_WAVEFORM_TYPES.contains(nextWaveform)) {
 			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
 		}
 
@@ -249,13 +246,12 @@ export default class Synth {
 	}
 
 	setFilterType = filterType => {
-		const filterType_ = filterType.toLowerCase()
-
-		if (CONSTANTS.FILTER_TYPES.indexOf(filterType_) == -1) {
+		if(CONSTANTS.FILTER_TYPES.contains(filterType.toLowerCase())) {
+			this.filter.type = filterType.toLowerCase()
+		}
+		else{
 			throw new Error('Invalid Filter Type')
 		}
-
-		this.filter.type = filterType_
 	}
 
 

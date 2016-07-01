@@ -65,7 +65,7 @@ export default {
 
 		//OSC
 		state.oscs.pw =
-			scaleMidiValue(preset.oscs.pw)
+			MIDI.logScaleToMax(preset.oscs.pw, .9)
 		
 		state.oscs.mix =
 			MIDI.normalizeValue(preset.oscs.mix)
