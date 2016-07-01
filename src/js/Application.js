@@ -42,6 +42,8 @@ export default class Application {
 			this.synth.panic()
 		}
 
+		window.oncontextmenu = () => false
+
 		// AMP
 		this.app.ports.ampVolume
 			.subscribe(this.synth.setMasterVolumeGain)
