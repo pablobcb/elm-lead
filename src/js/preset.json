@@ -1,6 +1,6 @@
 {
     "filter": {
-        "type_": "lowpass",
+        "type_": "highpass",
         "distortion": true,
         "frequency": 127,
         "q": 0,

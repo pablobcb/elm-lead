@@ -22,7 +22,7 @@ init cmdEmmiter selected elems =
             elems
                 |> Lazy.fromList
                 |> Lazy.cycle
-                |> Lazy.dropWhile (\( _, elem ) -> elem == selected)
+                |> Lazy.dropWhile (\( _, elem ) -> elem /= selected)
                 |> Lazy.take (List.length elems)
                 |> Lazy.toList
 
@@ -34,6 +34,9 @@ init cmdEmmiter selected elems =
 
                     Nothing ->
                         Debug.crash "empty list on button creation!"
+        
+        _ = Debug.log "orderedElems" (toString orderedElems)
+        a = Debug.log "selected" (toString selected)
     in
         { currentElem = selectedElem
         , options = elems
