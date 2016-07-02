@@ -31,6 +31,8 @@ main =
 type alias Model =
     { onScreenKeyboard : KbdModel.Model
     , panel : PanelModel.Model
+    , midiConnected : Bool
+    , searchingMidi : Bool
     }
 
 
@@ -38,6 +40,8 @@ initModel : Preset.Preset -> Model
 initModel preset =
     { onScreenKeyboard = KbdModel.init
     , panel = PanelModel.init preset
+    , midiConnected = False
+    , searchingMidi = True
     }
 
 
@@ -55,6 +59,7 @@ type Msg
     = PanelMsg PanelUpdate.Msg
     | OnScreenKeyboardMsg KbdUpdate.Msg
     | MouseUp
+    | OnMidiStateChange Bool
 
 
 
@@ -102,6 +107,9 @@ update msg model =
                 , Cmd.map OnScreenKeyboardMsg kbdCmd
                 )
 
+        OnMidiStateChange state ->
+            ( { model | midiConnected = state }, Cmd.none )
+
 
 view : Model -> Html Msg
 view model =
@@ -136,7 +144,15 @@ informationBar model =
             , div [ class "midi-indicator" ]
                 [ div [] [ text "MIDI" ]
                 , div
-                    [ class "midi-indicator__status midi-indicator__status--inactive"
+                    [ class
+                        <| "midi-indicator__status midi-indicator__status--"
+                        ++ (if model.searchingMidi then
+                                "searching"
+                            else if model.midiConnected then
+                                "active"
+                            else
+                                "inactive"
+                           )
                     ]
                     []
                 ]
