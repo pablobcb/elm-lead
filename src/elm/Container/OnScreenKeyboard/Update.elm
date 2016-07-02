@@ -42,7 +42,7 @@ update msg model =
                     ( model, Cmd.none )
 
         NoOp ->
-            ( model, Cmd.none )
+                 ( model, Cmd.none )
 
         MouseDown ->
             let

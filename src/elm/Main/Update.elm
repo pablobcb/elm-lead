@@ -5,6 +5,8 @@ import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
 import Container.Panel.Update as PanelUpdate exposing (..)
 import Component.Knob as Knob exposing (..)
 import Main.Model as Model exposing (..)
+import Process exposing (..)
+import Task exposing (..)
 
 
 type Msg
@@ -21,10 +23,6 @@ type Msg
 update : Msg -> Model.Model -> ( Model.Model, Cmd Msg )
 update msg model =
     case msg of
-        --NoOp ->
-        --    Debug.log "NoOp" <|
-        --    ( model, Cmd.none )
-        --
         MouseUp ->
             let
                 ( updatedPanel, panelCmd ) =
@@ -60,17 +58,22 @@ update msg model =
                     KbdUpdate.update subMsg model.onScreenKeyboard
             in
                 let
-                    midiMsgInLedOn =
+                    ( midiMsgInLedOn, blinkOffCmd ) =
                         case subMsg of
                             MidiMessageIn _ ->
-                                True
+                                ( True
+                                , Process.sleep (50)
+                                    |> Task.perform (\_ -> KbdUpdate.NoOp)
+                                        (\_ -> KbdUpdate.NoOp)
+                                )
 
                             _ ->
-                                False
+                                ( False, Cmd.none )
                 in
                     ( updateOnScreenKeyboard updatedKbd
                         { model | midiMsgInLedOn = midiMsgInLedOn }
-                    , Cmd.map OnScreenKeyboardMsg kbdCmd
+                    , Cmd.map OnScreenKeyboardMsg
+                        <| Cmd.batch [ blinkOffCmd, kbdCmd ]
                     )
 
         OnMidiStateChange state ->

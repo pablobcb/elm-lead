@@ -6,7 +6,6 @@ import Html exposing (..)
 import Container.OnScreenKeyboard.View as KbdView exposing (..)
 import Container.Panel.View as PanelView exposing (..)
 import Main.Update as Update exposing (..)
-import Process exposing (..)
 
 
 view : Model -> Html Update.Msg
@@ -52,8 +51,6 @@ informationBar model =
                     else
                         "inactive"
                    )
-
-        --midiMsgInLedOn
     in
         div [ class "information-bar" ]
             [ span [ class "information-bar__item" ]
