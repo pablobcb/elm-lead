@@ -9,6 +9,7 @@ type alias Model =
     , panel : PanelModel.Model
     , midiConnected : Bool
     , searchingMidi : Bool
+    , midiMsgInLedOn : Bool
     }
 
 
@@ -18,6 +19,7 @@ initModel preset =
     , panel = PanelModel.init preset
     , midiConnected = False
     , searchingMidi = True
+    , midiMsgInLedOn = False
     }
 
 

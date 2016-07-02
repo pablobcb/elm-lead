@@ -12,7 +12,10 @@ type Msg
     | OnScreenKeyboardMsg KbdUpdate.Msg
     | MouseUp
     | OnMidiStateChange Bool
-    --| NoOp
+
+
+
+--| NoOp
 
 
 update : Msg -> Model.Model -> ( Model.Model, Cmd Msg )
@@ -21,7 +24,7 @@ update msg model =
         --NoOp ->
         --    Debug.log "NoOp" <|
         --    ( model, Cmd.none )
---
+        --
         MouseUp ->
             let
                 ( updatedPanel, panelCmd ) =
@@ -56,9 +59,19 @@ update msg model =
                 ( updatedKbd, kbdCmd ) =
                     KbdUpdate.update subMsg model.onScreenKeyboard
             in
-                ( updateOnScreenKeyboard updatedKbd model
-                , Cmd.map OnScreenKeyboardMsg kbdCmd
-                )
+                let
+                    midiMsgInLedOn =
+                        case subMsg of
+                            MidiMessageIn _ ->
+                                True
+
+                            _ ->
+                                False
+                in
+                    ( updateOnScreenKeyboard updatedKbd
+                        { model | midiMsgInLedOn = midiMsgInLedOn }
+                    , Cmd.map OnScreenKeyboardMsg kbdCmd
+                    )
 
         OnMidiStateChange state ->
             ( { model

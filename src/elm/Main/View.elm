@@ -34,25 +34,34 @@ informationBar model =
 
         velocityText =
             "Velocity is " ++ (toString model.onScreenKeyboard.velocity)
+
+        midiIndicatorClass =
+            "midi-indicator__status midi-indicator__status--"
+                ++ (if model.searchingMidi then
+                        "scanning"
+                    else if model.midiConnected then
+                        "active"
+                    else
+                        "inactive"
+                   )
+
+        blinkerClass =
+            "midi-indicator__blinker midi-indicator__blinker--"
+                ++ (if model.midiMsgInLedOn then
+                        "active"
+                    else
+                        "inactive"
+                   )
+
+        --midiMsgInLedOn
     in
         div [ class "information-bar" ]
             [ span [ class "information-bar__item" ]
                 [ octaveText |> text ]
             , span [ class "information-bar__item" ] [ text velocityText ]
             , div [ class "midi-indicator" ]
-                [ div [] [ text "MIDI" ]
-                , div
-                    [ class
-                        <| "midi-indicator__status midi-indicator__status--"
-                        ++ (if model.searchingMidi then
-                                "scanning"
-                            else if model.midiConnected then
-                                "active"
-                            else
-                                "inactive"
-                           )
-                    ]
-                    []
+                [ div [ class blinkerClass ] []
+                , div [ class midiIndicatorClass ] []
                 ]
             , a [ href "https://github.com/pablobcb/elm-lead" ]
                 [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]

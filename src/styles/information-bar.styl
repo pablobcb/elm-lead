@@ -35,6 +35,13 @@ $midi-indicator-inactive = #ff4f4f
 	text-align center
 
 
+.midi-indicator__blinker
+	&::before
+		content "MIDI"
+
+.midi-indicator__blinker--active
+	color $midi-indicator-active
+
 .midi-indicator__status
 	padding-left ($unit / 2)
 
