@@ -1,5 +1,6 @@
 export default {
 	MAX_NOTES: 128,
+	ONE_MILLISECOND: 0.001,
 	FILTER_TYPE: {
 		HIGHPASS: 'highpass',
 		LOWPASS: 'lowpass',
@@ -10,9 +11,9 @@ export default {
 	WAVEFORM_TYPE: {
 		SAWTOOTH: 'sawtooth',
 		TRIANGLE: 'triangle',
-		SINE : 'sine',
-		SQUARE : 'square',
-		NOISE : 'whitenoise'
+		SINE: 'sine',
+		SQUARE: 'square',
+		NOISE: 'whitenoise'
 	},
 	OSC1_WAVEFORM_TYPES: ['sine', 'triangle', 'sawtooth', 'square'],
 	OSC2_WAVEFORM_TYPES: ['triangle', 'sawtooth', 'square', 'whitenoise'],

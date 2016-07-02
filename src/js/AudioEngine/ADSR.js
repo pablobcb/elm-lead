@@ -1,16 +1,20 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 
+
 export default class ADSR {
 	//TODO: use 0.000001 for attack and release
 	constructor (context, state) {
 		this.state = state
+		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
+		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
+		
 		this.startAmount = 0
 		this.state.envelopeAmount = state.envelopeAmount || 1
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
-		this.decayTo = 0
+		this.decayTo = 0		
 	}
 
 	_  = () => {}
@@ -64,7 +68,8 @@ export default class ADSR {
 		target.cancelScheduledValues(now)
 
 		if(this.attack && now < this.decayFrom) {
-			valueAtTime = this.getValue(this.startAmount, this.state.envelopeAmount, this.startedAt, this.decayFrom, now)
+			valueAtTime = this.getValue(this.startAmount,
+				this.state.envelopeAmount, this.startedAt, this.decayFrom, now)
 		}
 		else if(now >= this.decayFrom && now < this.decayTo) {
 			valueAtTime = this.getValue(this.startAmount 
@@ -79,8 +84,9 @@ export default class ADSR {
 	}
 
 	setAttack = midiValue => {
-		this.state.attack = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
+		this.state.attack = midiValue != 0 ? 
+			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) : 
+			CONSTANTS.ONE_MILLISECOND
 	}
 
 	setDecay = midiValue => {
@@ -93,7 +99,9 @@ export default class ADSR {
 	}
 
 	setRelease = midiValue => {
-		this.state.release = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
+		this.state.release = midiValue != 0 ? 
+			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) : 
+			CONSTANTS.ONE_MILLISECOND
 	}
 }
+			

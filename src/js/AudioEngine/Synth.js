@@ -11,7 +11,6 @@ export default class Synth {
 
 		this.state = preset
 		
-		console.log(this.state.amp)
 		this.amplifier = new Amplifier(this.context, this.state.amp)	
 		
 		this.filter = new Filter(this.context, this.state.filter)
@@ -30,7 +29,7 @@ export default class Synth {
 		// channel agnostic message type
 		const type = data[0] & 0xf0
 		const note = data[1]
-		const velocity = data[2]
+		//const velocity = data[2]
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
