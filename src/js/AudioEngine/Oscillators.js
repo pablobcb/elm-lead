@@ -11,7 +11,7 @@ export default class Oscillators {
 		this.state = state
 
 		this.oscillator1Gain = this.context.createGain()
-		const osc1GainValue = (1 - state.mix ) / 2
+		const osc1GainValue = (1 - state.mix) / 2
 		this.oscillator1Gain.gain.value = osc1GainValue
 
 		this.oscillator1 = new FMOscillator(this.context,
@@ -84,7 +84,6 @@ export default class Oscillators {
 		const pw = MIDI.logScaleToMax(midiValue, .9)
 
 		this.state.pw = pw
-		debugger
 		this.oscillator2.setPulseWidth(pw)
 	}
 

@@ -1,8 +1,12 @@
+import MIDI from '../MIDI'
+import CONSTANTS from '../Constants'
+
 export default class ADSR {
 	//TODO: use 0.000001 for attack and release
-	constructor (context, envelopeAmount) {
+	constructor (context, state) {
+		this.state = state
 		this.startAmount = 0
-		this.envelopeAmount = envelopeAmount
+		this.state.envelopeAmount = state.envelopeAmount || 1
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
@@ -18,8 +22,7 @@ export default class ADSR {
 		const phase = truncateTime / time
 		let value = start + phase * difference
 
-		if(difference >= 0)
-		{
+		if(difference >= 0)	{
 			if (value <= start) {
 				value = start
 			}
@@ -27,8 +30,7 @@ export default class ADSR {
 				value = end
 			}
 		}
-		else
-		{
+		else {
 			if (value >= start) {
 				value = start
 			}
@@ -40,46 +42,58 @@ export default class ADSR {
 		return value
 	}
 
-	on = adsr => 
-		(target, startAmount) => {
-			this.attack = adsr.attack
-			this.decay = adsr.decay
-			this.sustain = adsr.sustain
-			this.release = adsr.release
-			const now = this.context.currentTime
-			this.startedAt = now
-			this.decayFrom = this.startedAt + this.attack
-			this.decayTo = this.decayFrom + this.decay
-
-			if(startAmount) {
-				this.startAmount = startAmount
-			}
-
-			target.cancelScheduledValues(now)
-			target.setValueAtTime(this.startAmount, now)
-			target.linearRampToValueAtTime(this.startAmount + 
-				this.envelopeAmount, this.decayFrom)
-			target.linearRampToValueAtTime(this.sustain, this.decayTo)
+	on = (target, startAmount) => {
+		const now = this.context.currentTime
+		this.startedAt = now
+		this.decayFrom = this.startedAt + this.state.attack
+		this.decayTo = this.decayFrom + this.state.decay
+		if(startAmount) {
+			this.startAmount = startAmount
 		}
+		target.cancelScheduledValues(now)
+		target.setValueAtTime(this.startAmount, now)
+		target.linearRampToValueAtTime(this.startAmount + 
+			this.state.envelopeAmount, this.decayFrom)
+		target.linearRampToValueAtTime(this.state.sustain, this.decayTo)
+	}
 
 	off = target => {		
 		const now = this.context.currentTime
-		let valueAtTime = this.sustain
+		let valueAtTime = this.state.sustain
 
 		target.cancelScheduledValues(now)
 
 		if(this.attack && now < this.decayFrom) {
-			valueAtTime = this.getValue(this.startAmount, this.envelopeAmount,
-				this.startedAt, this.decayFrom, now)
+			valueAtTime = this.getValue(this.startAmount, this.state.envelopeAmount, this.startedAt, this.decayFrom, now)
 		}
 		else if(now >= this.decayFrom && now < this.decayTo) {
-			valueAtTime = this.getValue(this.startAmount + this.envelopeAmount,
-				this.sustain, this.decayFrom, this.decayTo, now)
+			valueAtTime = this.getValue(this.startAmount 
+				+ this.state.envelopeAmount,
+					this.state.sustain, this.decayFrom, this.decayTo, now)
 		}
 
 		target.setValueAtTime(valueAtTime, now)
-		target.linearRampToValueAtTime(0, now + this.release)
+		target.linearRampToValueAtTime(0, now + this.state.release)
 		
-		return now + this.release
-	}	
+		return now + this.state.release
+	}
+
+	setAttack = midiValue => {
+		this.state.attack = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setDecay = midiValue => {
+		this.state.decay = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
+
+	setSustain = midiValue => {
+		this.state.sustain = MIDI.logScaleToMax(midiValue, 1)
+	}
+
+	setRelease = midiValue => {
+		this.state.release = MIDI.logScaleToMax(midiValue,
+			CONSTANTS.MAX_ENVELOPE_TIME)
+	}
 }

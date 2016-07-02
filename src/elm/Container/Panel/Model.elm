@@ -113,7 +113,7 @@ knobs preset =
         "FM"
         Port.fmAmount
     , Knob.init Knob.AmpGain
-        preset.masterVolume
+        preset.amp.masterVolume
         0
         127
         1

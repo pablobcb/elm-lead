@@ -1,7 +1,7 @@
 
 import Oscillators from './Oscillators'
 import Filter from './Filter'
-import Amplifier from './Filter'
+import Amplifier from './Amplifier'
 
 import CONSTANTS from '../Constants'
 
@@ -10,9 +10,10 @@ export default class Synth {
 		this.context = new AudioContext
 
 		this.state = preset
-
+		
+		console.log(this.state.amp)
 		this.amplifier = new Amplifier(this.context, this.state.amp)	
-			
+		
 		this.filter = new Filter(this.context, this.state.filter)
 		this.filter.connect(this.amplifier.output)	
 
@@ -34,7 +35,7 @@ export default class Synth {
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
 				this.oscillators.noteOn(note, 
-					this.amplifier.adsr.on(this.state.amp))
+					this.amplifier.adsr.on)
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
 				this.oscillators.noteOff(note, 

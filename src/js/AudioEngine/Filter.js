@@ -10,11 +10,12 @@ export default class Filter {
 		this.distortion = state.distortion
 
 		this.node = this.context.createBiquadFilter()
+
 		this.node.type = state.type_
 		this.node.frequency.value = state.frequency
 		this.node.Q.value = state.q
 
-		this.adsr = new ADSR(this.context, state.envelopeAmount)
+		this.adsr = new ADSR(this.context, state.amp)
 
 		this.filterEnvelopeGain = this.context.createGain()
 		this.node.connect(this.filterEnvelopeGain)
@@ -62,21 +63,4 @@ export default class Filter {
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
-	setDecay = midiValue => {
-		this.adsr.decay = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setSustain = midiValue => {
-		this.adsr.sustain = MIDI.logScaleToMax(midiValue, 1)
-	}
-
-	setRelease = midiValue => {
-		this.adsr.release = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
-	}
-
-	setEnvelopeAmount = midiValue => {
-		this.adsr.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
-	}
 }
