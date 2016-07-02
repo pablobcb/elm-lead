@@ -1,3 +1,8 @@
+$midi-indicator-active = #34c945
+$midi-indicator-inactive = #ff4f4f
+
+
+
 .information-bar
 	display flex
 	height $information-bar-height
@@ -6,17 +11,39 @@
 	color $text-color
 	justify-content space-around
 	font-family monospace
+	position fixed
+	bottom 0
+	//letter-spacing -1px
 
-
+.information-bar__item,
+.information-bar__gh-link,
+.midi-indicator
+	padding-right $unit
+	padding-left $unit
 
 .information-bar__item
 	line-height $information-bar-height
-	padding-right $unit
-	padding-left $unit
+
 
 .information-bar__gh-link
 	height ($information-bar-height * .8)
-	padding-right $unit
-	padding-left $unit
 	padding-top 7px
 
+.midi-indicator
+	display flex
+	line-height $information-bar-height
+	text-align center
+
+
+.midi-indicator__status
+	padding-left ($unit / 2)
+
+.midi-indicator__status--active
+	color $midi-indicator-active
+	&::before
+		content "connected"
+
+.midi-indicator__status--inactive
+	color $midi-indicator-inactive
+	&::before
+		content "not connected"

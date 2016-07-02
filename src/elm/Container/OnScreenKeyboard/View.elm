@@ -104,7 +104,7 @@ getKeyClass model noteName midiNote highlight =
                 "keyboard__key--full"
             else if midiNote < 24 || midiNote > 108 then
                 "keyboard__key--big"
-            else if midiNote < 48 || midiNote > 96 then 
+            else if midiNote < 48 || midiNote > 96 then
                 "keyboard__key--medium"
             else if midiNote < 72 then
                 "keyboard__key--small"
@@ -126,35 +126,10 @@ view model =
                 Midi.midiNoteOctaves
     in
         div [ class "virtual-keyboard" ]
-            [ ul [ class "keyboard", Html.Events.onMouseDown MouseDown ] keys
-            , informationBar model
-            ]
+            [ ul [ class "keyboard", Html.Events.onMouseDown MouseDown ] keys ]
 
 
 keyboard : (Msg -> a) -> Model -> Html a
 keyboard keyboardMsg model =
     Html.App.map keyboardMsg
         <| view model
-
-
-informationBar : Model -> Html Msg
-informationBar model =
-    let
-        startOctave =
-            model |> .octave |> toString
-
-        endOctave =
-            model |> .octave |> (+) 1 |> toString
-
-        octaveText =
-            "Octave is C" ++ startOctave ++ " to C" ++ endOctave
-
-        velocityText =
-            ("Velocity is " ++ (model |> .velocity |> toString))
-    in
-        div [ class "information-bar" ]
-            [ span [ class "information-bar__item" ]
-                [ octaveText |> text ]
-            , a [ href "https://github.com/pablobcb/elm-lead" ] [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
-            , span [ class "information-bar__item" ] [ velocityText |> text ]
-            ]

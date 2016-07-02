@@ -2,7 +2,7 @@ module Main exposing (..)
 
 -- where
 
-import Html exposing (Html, button, div, text, li, ul)
+import Html exposing (..)
 import Html.App
 import Html.Attributes exposing (..)
 import Port
@@ -110,7 +110,39 @@ view model =
             model.panel
         , KbdView.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
+        , informationBar model
         ]
+
+
+informationBar : Model -> Html Msg
+informationBar model =
+    let
+        startOctave =
+            toString model.onScreenKeyboard.octave
+
+        endOctave =
+            model.onScreenKeyboard.octave + 1 |> toString
+
+        octaveText =
+            "Octave is C" ++ startOctave ++ " to C" ++ endOctave
+
+        velocityText =
+            "Velocity is " ++ (toString model.onScreenKeyboard.velocity)
+    in
+        div [ class "information-bar" ]
+            [ span [ class "information-bar__item" ]
+                [ octaveText |> text ]
+            , span [ class "information-bar__item" ] [ text velocityText ]
+            , div [ class "midi-indicator" ]
+                [ div [] [ text "MIDI" ]
+                , div
+                    [ class "midi-indicator__status midi-indicator__status--inactive"
+                    ]
+                    []
+                ]
+            , a [ href "https://github.com/pablobcb/elm-lead" ]
+                [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
+            ]
 
 
 subscriptions : Model -> Sub Msg
