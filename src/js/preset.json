@@ -28,7 +28,7 @@
             "waveformType": "sawtooth",
             "semitone": 0,
             "detune": 0,
-            "kbdTrack": false
+            "kbdTrack": true
         },
         "pw": 0,
         "mix": 63
