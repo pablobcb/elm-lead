@@ -108,7 +108,12 @@ update msg model =
                 )
 
         OnMidiStateChange state ->
-            ( { model | midiConnected = state }, Cmd.none )
+            ( { model
+                | midiConnected = state
+                , searchingMidi = False
+              }
+            , Cmd.none
+            )
 
 
 view : Model -> Html Msg
@@ -147,7 +152,7 @@ informationBar model =
                     [ class
                         <| "midi-indicator__status midi-indicator__status--"
                         ++ (if model.searchingMidi then
-                                "searching"
+                                "scanning"
                             else if model.midiConnected then
                                 "active"
                             else
@@ -164,26 +169,15 @@ informationBar model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Port.midiIn
-            (\midiMsg ->
-                MidiMessageIn midiMsg |> OnScreenKeyboardMsg
-            )
-        , Port.presetChange
-            (\preset ->
-                PanelUpdate.PresetChange preset |> PanelMsg
-            )
-        , Port.panic
-            <| always
-            <| OnScreenKeyboardMsg Panic
+        [ Port.midiIn <| OnScreenKeyboardMsg << MidiMessageIn
+        , Port.midiStateChange OnMidiStateChange
+        , Port.presetChange <| PanelMsg << PanelUpdate.PresetChange
+        , Port.panic <| always <| OnScreenKeyboardMsg Panic
+        , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
         , Keyboard.downs
-            <| handleKeyDown OnScreenKeyboardMsg
-                model.onScreenKeyboard
-        , Keyboard.ups
-            <| handleKeyUp OnScreenKeyboardMsg
-        , Mouse.ups
-            <| always MouseUp
+            <| handleKeyDown OnScreenKeyboardMsg model.onScreenKeyboard
+        , Mouse.ups <| always MouseUp
         , Mouse.moves
-            (\{ y } ->
+            <| \{ y } ->
                 y |> Knob.MouseMove |> PanelUpdate.KnobMsg |> PanelMsg
-            )
         ]

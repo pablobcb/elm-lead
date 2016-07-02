@@ -6,11 +6,19 @@ const midiToFreq = (midiValue) => (
 	440 * Math.pow(2, (midiValue - 69) / 12)
 )
 
-const manageMidiDevices = (midiAccess, midiPort, onMIDIMessage) => {
+const manageMidiDevices = (
+	onMIDIMessage, 
+	midiAccess,
+	midiPort,
+	midiStateChangePort
+	) => 
+{
+	let midiConnection = false	
 	// loop over all available inputs and listen for any MIDI input
 	for (const input of midiAccess.inputs.values()) {
 		input.onmidimessage = (midiMessage) => {
 			const data = midiMessage.data
+
 			onMIDIMessage(data)
 			midiPort.send([
 				data[0],
@@ -18,7 +26,16 @@ const manageMidiDevices = (midiAccess, midiPort, onMIDIMessage) => {
 				data[2] || null
 			])
 		}
+		if(input.manufacturer !== '') {
+			midiConnection = true
+		}
 	}
+
+	// this pernicious hack is necessary, see 
+	// https://github.com/elm-lang/core/issues/595
+	setTimeout(() => midiStateChangePort.send(midiConnection), 0)
+	
+	//console.log("mandei", midiConnection)
 }
 
 export default {
@@ -42,10 +59,24 @@ export default {
 		midiValue / MIDI_MAX_VALUE
 	),
 
-	manageMidiDevices : (midiAccess, midiPort, onMIDIMessage) => {
+	manageMidiDevices : (
+		onMIDIMessage, 
+		midiAccess, 
+		midiPort, 
+		midiStateChange) => 
+	{
 		midiAccess.onstatechange = () => {
-			manageMidiDevices(midiAccess, midiPort, onMIDIMessage)
+			manageMidiDevices(onMIDIMessage, 
+				midiAccess, 
+				midiPort,
+				midiStateChange
+			)
 		}
-		manageMidiDevices(midiAccess, midiPort, onMIDIMessage)
+		
+		manageMidiDevices(onMIDIMessage, 
+			midiAccess, 
+			midiPort, 
+			midiStateChange
+		)
 	}
 }

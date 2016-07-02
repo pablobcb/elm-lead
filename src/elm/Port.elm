@@ -10,6 +10,9 @@ port midiOut : MidiMessage -> Cmd msg
 port midiIn : (MidiMessage -> msg) -> Sub msg
 
 
+port midiStateChange : (Bool -> msg) -> Sub msg
+
+
 port panic : ({} -> msg) -> Sub msg
 
 

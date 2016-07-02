@@ -117,8 +117,12 @@ export default class Application {
 
 		// MIDI
 		if (this.midiAccess) {
-			MIDI.manageMidiDevices(this.midiAccess,
-				this.app.ports.midiIn, this.synth.onMIDIMessage)
+			MIDI.manageMidiDevices(
+				this.synth.onMIDIMessage,
+				this.midiAccess,
+				this.app.ports.midiIn,
+				this.app.ports.midiStateChange
+			)
 		}
 
 		this.app.ports.midiOut
