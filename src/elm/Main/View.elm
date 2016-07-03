@@ -65,6 +65,7 @@ informationBar model =
                 [ div [ class blinkerClass ] []
                 , div [ class midiIndicatorClass ] []
                 ]
-            , a [ href "https://github.com/pablobcb/elm-lead" ]
-                [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
+            , a [ class "information-bar__gh-link"
+                , href "https://github.com/pablobcb/elm-lead"
+                ] []
             ]
