@@ -8,6 +8,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="95"
@@ -15,7 +16,7 @@
    viewBox="0 0 95.000001 95.000001"
    id="svg2"
    version="1.1"
-   sodipodi:docname="knob-bg.svg"
+   sodipodi:docname="bg.svg"
    inkscape:version="0.91 r13725">
   <defs
      id="defs4">
@@ -115,6 +116,23 @@
          k1="1"
          k4="0" />
     </filter>
+    <pattern
+       xlink:href="#Strips1_1"
+       id="pattern6806"
+       patternTransform="matrix(30,0,0,10,-770,-710)" />
+    <pattern
+       id="Strips1_1"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="1"
+       width="2"
+       patternUnits="userSpaceOnUse">
+      <rect
+         id="rect5384"
+         height="2"
+         width="1"
+         y="-0.5"
+         x="0" />
+    </pattern>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -124,8 +142,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="-14.794083"
-     inkscape:cy="96.566707"
+     inkscape:cx="41.258451"
+     inkscape:cy="54.1403"
      inkscape:document-units="px"
      inkscape:current-layer="g6790"
      showgrid="false"
@@ -135,10 +153,10 @@
      inkscape:snap-nodes="true"
      inkscape:snap-grids="true"
      inkscape:snap-global="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1001"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1366"
+     inkscape:window-height="716"
+     inkscape:window-x="316"
+     inkscape:window-y="1080"
      inkscape:window-maximized="1"
      showborder="true"
      borderlayer="false"
@@ -188,7 +206,8 @@
          id="path3338"
          style="fill:#787e9f;fill-opacity:1;fill-rule:evenodd;stroke:#787e9f;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
       <g
-         id="g6625">
+         id="g6625"
+         transform="translate(0.01992661,3.5135256)">
         <rect
            style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.42098767;stroke-linejoin:round;stroke-opacity:0"
            id="rect4144"
