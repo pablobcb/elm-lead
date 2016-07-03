@@ -16,6 +16,7 @@ export default class Filter {
 		this.node.Q.value = state.q
 
 		this.adsr = new ADSR(this.context, state.amp)
+		this.envelopeAmount = 0
 
 		this.filterEnvelopeGain = this.context.createGain()
 		this.node.connect(this.filterEnvelopeGain)
@@ -58,8 +59,8 @@ export default class Filter {
 		this.distortion = state
 	}
 
-	setAttack = midiValue => {
-		this.adsr.attack = MIDI.logScaleToMax(midiValue,
+	setEnvelopeAmount = midiValue => {
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
