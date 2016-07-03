@@ -50,17 +50,16 @@ Overdrive.prototype = Object.create(null, {
 		}
 	},
 
-	on: {
-		value: () => {
+	toggle: {
+		value: function (on) {
+			debugger
 			this.input.disconnect()
-			this.input.connect(this._bandpass)
-		}
-	},
-
-	off: {
-		value: () => {
-			this.input.disconnect()
-			this.input.connect(this.output)
+			if (on) {
+				this.input.connect(this._bandpass)
+			}
+			else {
+				this.input.connect(this.output)
+			}
 		}
 	},
 

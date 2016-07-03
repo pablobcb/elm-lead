@@ -111,8 +111,8 @@ export default class Application {
 		this.app.ports.filterType
 			.subscribe(this.synth.filter.setType)
 
-		this.app.ports.filterDistortion
-			.subscribe(this.synth.filter.toggleDistortion)
+		this.app.ports.overdrive
+			.subscribe(this.synth.overdrive.toggle)
 
 
 		// MIDI

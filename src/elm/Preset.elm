@@ -36,6 +36,6 @@ type alias Preset =
             }
         , pw : MidiValue
         , mix : MidiValue
-        , distortion : Bool
         }
+    , overdrive : Bool
     }

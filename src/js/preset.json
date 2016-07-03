@@ -30,7 +30,7 @@
             "kbdTrack": true
         },
         "pw": 0,
-        "mix": 0,
-        "distortion": true
-    }
+        "mix": 0
+    },
+    "overdrive": true
 }

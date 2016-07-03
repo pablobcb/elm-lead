@@ -13,7 +13,7 @@ type Msg
     = Osc1WaveformChange OptionPicker.Msg
     | Osc2WaveformChange OptionPicker.Msg
     | Osc2KbdTrackToggle Switch.Msg
-    | FilterDistortionToggle Switch.Msg
+    | OverdriveToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
     | PresetChange Preset.Preset
@@ -77,12 +77,12 @@ update msg model =
                     updateOsc2KbdTrack
                     Osc2KbdTrackToggle
 
-            FilterDistortionToggle subMsg ->
+            OverdriveToggle subMsg ->
                 updateMap Switch.update
                     subMsg
-                    .filterDistortionSwitch
-                    updateFilterDistortionSwitch
-                    FilterDistortionToggle
+                    .overdriveSwitch
+                    updateOverdriveSwitch
+                    OverdriveToggle
 
             KnobMsg subMsg ->
                 updateKnobs subMsg (KnobMsg subMsg)

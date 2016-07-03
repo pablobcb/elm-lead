@@ -82,8 +82,8 @@ filter model =
             FilterTypeChange
             model.filterTypeBtn
         , Switch.switch "distortion"
-            FilterDistortionToggle
-            model.filterDistortionSwitch
+            OverdriveToggle
+            model.overdriveSwitch
         , nordKnob model Knob.FilterEnvelopeAmount
         ]
 

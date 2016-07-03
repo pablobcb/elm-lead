@@ -15,7 +15,6 @@ export default class Synth {
 		this.amplifier = new Amplifier(this.context, this.state.amp)
 
 		this.overdrive = new Overdrive(this.context, CONSTANTS.OVERDRIVE_PARAMS)
-
 		this.overdrive.connect(this.amplifier.output)
 
 		this.filter = new Filter(this.context, this.state.filter)

@@ -76,10 +76,10 @@ port filterSustain : Int -> Cmd msg
 port filterRelease : Int -> Cmd msg
 
 
-port filterDistortion : Bool -> Cmd msg
-
-
 port filterEnvelopeAmount : Int -> Cmd msg
+
+
+port overdrive : Bool -> Cmd msg
 
 
 port presetChange : (Preset -> msg) -> Sub msg

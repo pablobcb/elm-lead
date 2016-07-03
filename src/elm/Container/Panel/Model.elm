@@ -71,7 +71,7 @@ type alias Model =
     , osc2WaveformBtn : OptionPicker.Model OscillatorWaveform
     , osc1WaveformBtn : OptionPicker.Model OscillatorWaveform
     , osc2KbdTrackSwitch : Switch.Model
-    , filterDistortionSwitch : Switch.Model
+    , overdriveSwitch : Switch.Model
     }
 
 
@@ -204,8 +204,8 @@ init preset =
     { knobs = knobs preset
     , osc2KbdTrackSwitch =
         Switch.init preset.oscs.osc2.kbdTrack Port.osc2KbdTrack
-    , filterDistortionSwitch =
-        Switch.init preset.filter.distortion Port.filterDistortion
+    , overdriveSwitch =
+        Switch.init preset.overdrive Port.overdrive
     , filterTypeBtn =
         OptionPicker.init Port.filterType
             (createFilterType preset.filter.type_)
@@ -269,6 +269,6 @@ updateFilterTypeBtn btn model =
     { model | filterTypeBtn = btn }
 
 
-updateFilterDistortionSwitch : Switch.Model -> Model -> Model
-updateFilterDistortionSwitch switch model =
-    { model | filterDistortionSwitch = switch }
+updateOverdriveSwitch : Switch.Model -> Model -> Model
+updateOverdriveSwitch switch model =
+    { model | overdriveSwitch = switch }
