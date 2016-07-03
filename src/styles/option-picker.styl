@@ -20,9 +20,63 @@
 .option-picker__sin-wave,
 .option-picker__saw-wave,
 .option-picker__sqr-wave,
-.option-picker__tri-wave
+.option-picker__tri-wave,
+.option-picker__pulse-wave,
+.option-picker__noise-wave
+	user-select none
 	margin-left 5px
 	font-size 10px
+
+.option-picker__noise-wave
+	&::before
+		content 'noise'
+
+.option-picker__pulse-wave
+	background  url('../images/pulse.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+
+	width 15px
+	height 20px
+
+.option-picker__tri-wave
+	background  url('../images/triangle.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+
+	width 15px
+	height 20px
+
+.option-picker__sin-wave
+	background  url('../images/sine.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+
+	width 15px
+	height 20px
+
+
+.option-picker__saw-wave
+	background  url('../images/sine.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+
+	width 15px
+	height 20px
+
+.option-picker__sqr-wave
+	background  url('../images/square.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+
+	width 15px
+	height 20px
+
 
 .option-picker__item
 	display flex
