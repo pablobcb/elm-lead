@@ -76,7 +76,7 @@ option model elem label =
     in
         li [ class "option-picker__item" ]
             [ div [ class state ] []
-            , div [ class "option-picker__item-id" ]
+            , div [ class <| "option-picker__" ++ label ++ "-wave" ]
                 [ text label ]
             ]
 
