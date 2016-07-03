@@ -1,154 +1,130 @@
-/**
- * Overdrive effect module for the Web Audio API.
- *
- * @param {AudioContext} context
- * @param {object} opts
- * @param {number} opts.preBand
- * @param {number} opts.color
- * @param {number} opts.drive
- * @param {number} opts.postCut
- */
+export default class Overdrive {
+	constructor (context, opts) {
+		this.input = context.createGain()
+		this.output = context.createGain()
 
-function Overdrive(context, opts) {
-	this.input = context.createGain()
-	this.output = context.createGain()
+		// Internal AudioNodes
+		this._bandpass = context.createBiquadFilter()
+		this._bpWet = context.createGain()
+		this._bpDry = context.createGain()
+		this._ws = context.createWaveShaper()
+		this._lowpass = context.createBiquadFilter()
 
-	// Internal AudioNodes
-	this._bandpass = context.createBiquadFilter()
-	this._bpWet = context.createGain()
-	this._bpDry = context.createGain()
-	this._ws = context.createWaveShaper()
-	this._lowpass = context.createBiquadFilter()
+		// AudioNode graph routing
+		this.input.connect(this._bandpass)
+		this._bandpass.connect(this._bpWet)
+		this._bandpass.connect(this._bpDry)
+		this._bpWet.connect(this._ws)
+		this._bpDry.connect(this._ws)
+		this._ws.connect(this._lowpass)
+		this._lowpass.connect(this.output)
 
-	// AudioNode graph routing
-	this.input.connect(this._bandpass)
-	this._bandpass.connect(this._bpWet)
-	this._bandpass.connect(this._bpDry)
-	this._bpWet.connect(this._ws)
-	this._bpDry.connect(this._ws)
-	this._ws.connect(this._lowpass)
-	this._lowpass.connect(this.output)
-
-	// Defaults
-	const p = this.meta.params
-	opts = opts || {}
-	this._bandpass.frequency.value = opts.color || p.color.defaultValue
-	this._bpWet.gain.value = opts.preBand || p.preBand.defaultValue
-	this._lowpass.frequency.value = opts.postCut || p.postCut.defaultValue
-	this.drive = opts.drive || p.drive.defaultValue
-
-	// Inverted preBand value
-	this._bpDry.gain.value = opts.preBand
-		? 1 - opts.preBand
-		: 1 - p.preBand.defaultValue
-}
-
-Overdrive.prototype = Object.create(null, {
-	connect: {
-		value: function (node) {
-			this.output.connect(node.input ? node.input : node)
-		}
-	},
-
-	toggle: {
-		value: function (on) {
-			debugger
-			this.input.disconnect()
-			if (on) {
-				this.input.connect(this._bandpass)
-			}
-			else {
-				this.input.connect(this.output)
+		// params
+		this.params = {
+			preBand: {
+				min: 0,
+				max: 1.0,
+				defaultValue: 0.5,
+				type: 'float'
+			},
+			color: {
+				min: 0,
+				max: 22050,
+				defaultValue: 800,
+				type: 'float'
+			},
+			drive: {
+				min: 0.0,
+				max: 1.0,
+				defaultValue: 0.5,
+				type: 'float'
+			},
+			postCut: {
+				min: 0,
+				max: 22050,
+				defaultValue: 3000,
+				type: 'float'
 			}
 		}
-	},
 
-	disconnect: {
-		value: function () {
-			this.output.disconnect()
+		opts = opts || {}
+		this._bandpass.frequency.value = 
+			opts.color || this.params.color.defaultValue
+
+		this._bpWet.gain.value =
+			opts.preBand || this.params.preBand.defaultValue
+
+		this._lowpass.frequency.value =
+			opts.postCut || this.postCut.defaultValue
+
+		this.drive = 
+			opts.drive || this.drive.defaultValue
+
+		// Inverted preBand value
+		this._bpDry.gain.value = opts.preBand
+			? 1 - opts.preBand
+			: 1 - this.params.preBand.defaultValue
+	}
+
+	connect = node => {
+		this.output.connect(node.input ? node.input : node)
+	}
+
+	disconnect = () => {
+		this.output.disconnect()
+	}
+
+	toggle = on => {
+		this.input.disconnect()
+		if (on) {
+			this.input.connect(this._bandpass)
 		}
-	},
-
-
-	meta: {
-		value: {
-			name: 'Overdrive',
-			params: {
-				preBand: {
-					min: 0,
-					max: 1.0,
-					defaultValue: 0.5,
-					type: 'float'
-				},
-				color: {
-					min: 0,
-					max: 22050,
-					defaultValue: 800,
-					type: 'float'
-				},
-				drive: {
-					min: 0.0,
-					max: 1.0,
-					defaultValue: 0.5,
-					type: 'float'
-				},
-				postCut: {
-					min: 0,
-					max: 22050,
-					defaultValue: 3000,
-					type: 'float'
-				}
-			}
-		}
-	},
-
-	/**
-	 * Public parameters
-	 */
-
-	preBand: {
-		enumerable: true,
-		get: function () { return this._bpWet.gain.value },
-		set: function (value) {
-			this._bpWet.gain.setValueAtTime(value, 0)
-			this._bpDry.gain.setValueAtTime(1 - value, 0)
-		}
-	},
-
-	color: {
-		enumerable: true,
-		get: function () { return this._bandpass.frequency.value },
-		set: function (value) {
-			this._bandpass.frequency.setValueAtTime(value, 0)
-		}
-	},
-
-	drive: {
-		enumerable: true,
-		get: function () { return this._drive },
-		set: function (value) {
-			const k = value * 100
-				, n = 22050
-				, curve = new Float32Array(n)
-				, deg = Math.PI / 180
-
-			this._drive = value
-			for (let i = 0; i < n; i++) {
-				const x = i * 2 / n - 1
-				curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x))
-			}
-			this._ws.curve = curve
-		}
-	},
-
-	postCut: {
-		enumerable: true,
-		get: function () { return this._lowpass.frequency.value },
-		set: function (value) {
-			this._lowpass.frequency.setValueAtTime(value, 0)
+		else {
+			this.input.connect(this.output)
 		}
 	}
 
-})
+	get preBand () {
+		return this._bpWet.gain.value
+	}
 
-module.exports = Overdrive
+	set preBand (value) {
+		this._bpWet.gain.setValueAtTime(value, 0)
+		this._bpDry.gain.setValueAtTime(1 - value, 0)
+	}
+
+	get color () {
+		return this._bandpass.frequency.value
+	}
+
+	set color (value) {
+		this._bandpass.frequency.setValueAtTime(value, 0)
+	}
+
+	get drive () {
+		return this._drive
+	}
+
+	set drive (value) {
+		const k = value * 100
+			, n = 22050
+			, curve = new Float32Array(n)
+			, deg = Math.PI / 180
+
+		this._drive = value
+		for (let i = 0; i < n; i++) {
+			const x = i * 2 / n - 1
+			curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x))
+		}
+		this._ws.curve = curve
+	}
+
+	get postCut () {
+		return this._lowpass.frequency.value
+	}
+
+	set postCut (value) {
+		this._lowpass.frequency.setValueAtTime(value, 0)
+	}
+
+}
