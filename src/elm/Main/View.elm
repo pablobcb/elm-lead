@@ -13,6 +13,7 @@ view model =
     div [ class "dashboard" ]
         [ PanelView.panel PanelMsg
             model.panel
+        , span [ class "dashboard__brand" ] []
         , KbdView.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
         , informationBar model
