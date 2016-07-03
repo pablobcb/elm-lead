@@ -6,7 +6,6 @@ import Midi exposing (..)
 type alias Preset =
     { filter :
         { type_ : String
-        , distortion : Bool
         , frequency : MidiValue
         , q : MidiValue
         , envelopeAmount : MidiValue
@@ -37,5 +36,6 @@ type alias Preset =
             }
         , pw : MidiValue
         , mix : MidiValue
+        , distortion : Bool
         }
     }

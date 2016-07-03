@@ -7,8 +7,6 @@ export default class Filter {
 	constructor (context, state) {
 		this.context = context
 		
-		this.distortion = state.distortion
-
 		this.node = this.context.createBiquadFilter()
 
 		this.node.type = state.type_
@@ -17,6 +15,7 @@ export default class Filter {
 
 		this.adsr = new ADSR(this.context, state.amp)
 
+		// is this gain really necessary?
 		this.filterEnvelopeGain = this.context.createGain()
 		this.node.connect(this.filterEnvelopeGain)
 	}

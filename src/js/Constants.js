@@ -21,5 +21,11 @@ export default {
 		NOTE_ON: 144,
 		NOTE_OFF: 128
 	},
-	MAX_ENVELOPE_TIME: 4 // in seconds
+	MAX_ENVELOPE_TIME: 4, // in seconds
+	OVERDRIVE_PARAMS : {
+		preBand: 1.0,
+		color: 4000,
+		drive: 10,
+		postCut: 8000
+	}
 }
