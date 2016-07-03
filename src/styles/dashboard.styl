@@ -12,6 +12,7 @@ $rack-border-shadow = #450202
 	.virtual-keyboard
 		margin-top auto
 
+
 .dashboard__brand
 	margin $unit
 	margin-top 0
@@ -22,13 +23,26 @@ $rack-border-shadow = #450202
 	font-size 4rem
 	line-height 2.6rem
 	overflow auto
+	text-align justify
 
-	&::before
+	:nth-of-type(1)
 		font-family 'Poiret One', cursive
-		content "web lead"
 		font-size 1.5em
 		font-weight bold
-	&::after
+	
+	:nth-of-type(2)
 		font-family 'Audiowide', cursive
-		content "2X"
 		color $brand-dark-color
+	
+	:nth-of-type(3)
+		font-family 'Maven Pro', sans-serif
+		display block
+		font-size 30px
+		letter-spacing 22px
+		margin-right -20px
+
+		&::after
+			display inline-block
+			width 100%
+			content ''
+
