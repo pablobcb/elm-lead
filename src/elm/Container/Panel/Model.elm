@@ -194,7 +194,7 @@ knobs preset =
         0
         127
         1
-        "Envelope amount"
+        "env amnt"
         Port.filterEnvelopeAmount
     ]
 
