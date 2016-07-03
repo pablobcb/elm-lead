@@ -127,7 +127,7 @@ view model =
     in
         div [ class "knob" ]
             [ div [ class "knob__scale" ]
-                [ img
+                [ div
                     [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
                     , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
                     , Html.Events.onWithOptions "dragstart"
@@ -137,8 +137,6 @@ view model =
                     , class "knob__dial"
                     , Html.Attributes.attribute "draggable" "false"
                     , style knobStyle
-                    , alt <| toString model.value
-                    , src "knob-fg.svg"
                     ]
                     []
                 ]

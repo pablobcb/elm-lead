@@ -18,17 +18,19 @@ $knob-indicator = white
 	margin-right auto
 	margin-bottom 2px
 
-	background  url('../../images/knob-bg.svg')
+	background  url('../images/knob-bg.svg')
 	background-size $knob-size
 	background-repeat no-repeat
 	background-position center
 
 .knob__dial
-	//margin 5px
-	width (.7 * $knob-size)
-	height (.7 * $knob-size)
+	background  url('../images/knob-fg.svg')
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
 	user-select none
-	margin-top (.15 * $knob-size)
+	width 100%
+	height 100%
 
 .knob__label
 	panel-label($knob-label-background-color)
