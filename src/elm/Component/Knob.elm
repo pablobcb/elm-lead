@@ -79,18 +79,8 @@ type KnobInstance
 -- VIEW
 
 
-knobStyle : List ( String, String )
-knobStyle =
-    [ ( "-webkit-user-select", "none" )
-    , ( "-moz-user-select", "-moz-none" )
-    , ( "-khtml-user-select", "none" )
-    , ( "-ms-user-select", "none" )
-    , ( "user-select", "none" )
-    ]
-
-
-view : Model -> Html Msg
-view model =
+knobDirection : Model -> List ( String, String )
+knobDirection model =
     let
         -- These are defined in terms of degrees, with 0 pointing straight up
         visualMinimum =
@@ -118,12 +108,19 @@ view model =
 
         direction' =
             (toString direction) ++ "deg"
+    in
+        [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
 
-        knobStyle =
-            [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
 
+view : Model -> Html Msg
+view model =
+    let
         mapPosition msg =
             Json.map (\posY -> msg posY) ("layerY" := int)
+
+        knobLabelHtml =
+            div [ class "knob__label" ]
+                [ text model.label ]
     in
         div [ class "knob" ]
             [ div [ class "knob__scale" ]
@@ -136,12 +133,11 @@ view model =
                         <| NoOp
                     , class "knob__dial"
                     , Html.Attributes.attribute "draggable" "false"
-                    , style knobStyle
+                    , style <| knobDirection model
                     ]
                     []
                 ]
-            , div [ class "knob__label" ]
-                [ text model.label ]
+            , knobLabelHtml
             ]
 
 
