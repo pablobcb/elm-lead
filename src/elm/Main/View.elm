@@ -13,11 +13,11 @@ view model =
     div [ class "dashboard" ]
         [ PanelView.panel PanelMsg
             model.panel
-        --, div [ class "dashboard__brand" ]
-        --    [ span [] [ text "web lead" ]
-        --    , span [] [ text "2X" ]
-        --    , span [] [ text "virtual analog" ]
-        --    ]
+        --, div [ class "panel__brand" ]
+            --[ span [] [ text "web lead" ]
+            --, span [] [ text "2X" ]
+            --, span [] [ text "virtual analog" ]
+            --]
         , KbdView.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
         , informationBar model

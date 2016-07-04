@@ -28,3 +28,38 @@
 
 		&:last-of-type
 			margin-bottom 0
+
+.panel__brand
+	display flex
+	justify-content space-around
+	margin $unit
+	margin-top 0
+	padding $unit
+	padding-top 0
+	color $text-color
+	margin-left auto
+	font-size 3rem
+	line-height 2.6rem
+	overflow auto
+	//text-align justify
+
+	:nth-of-type(1)
+		font-family 'Poiret One', cursive
+		font-size 1.5em
+		font-weight bold
+
+	:nth-of-type(2)
+		font-family 'Audiowide', cursive
+		color $brand-dark-color
+
+	:nth-of-type(3)
+		font-family 'Maven Pro', sans-serif
+		display block
+		font-size 30px
+		letter-spacing 22px
+		margin-right -20px
+
+		&::after
+			display inline-block
+			width 100%
+			content ''
