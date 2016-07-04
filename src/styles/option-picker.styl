@@ -17,66 +17,41 @@
 	margin-left auto
 	margin-right auto
 
-.option-picker__sin-wave,
-.option-picker__saw-wave,
-.option-picker__sqr-wave,
-.option-picker__tri-wave,
-.option-picker__pulse-wave,
-.option-picker__noise-wave
-	user-select none
-	margin-left 5px
-	font-size 10px
-
-.option-picker__noise-wave
+.option-picker__id--noise
 	&::before
 		content 'noise'
-
-.option-picker__pulse-wave
+		font-size 10px
+		user-select none
+		margin-left 5px
+		
+.option-picker__id--pulse
 	background  url('../images/pulse.svg')
-	background-position center center
-	background-repeat no-repeat
-	background-size 100%
 
-	width 15px
-	height 20px
-
-.option-picker__tri-wave
+.option-picker__id--tri
 	background  url('../images/triangle.svg')
-	background-position center center
-	background-repeat no-repeat
-	background-size 100%
 
-	width 15px
-	height 20px
-
-.option-picker__sin-wave
+.option-picker__id--sin
 	background  url('../images/sine.svg')
-	background-position center center
-	background-repeat no-repeat
-	background-size 100%
 
-	width 15px
-	height 20px
-
-
-.option-picker__saw-wave
+.option-picker__id--saw
 	background  url('../images/sine.svg')
-	background-position center center
-	background-repeat no-repeat
-	background-size 100%
 
-	width 15px
-	height 20px
-
-.option-picker__sqr-wave
+.option-picker__id--sqr
 	background  url('../images/square.svg')
+
+.option-picker__id--sin,
+.option-picker__id--saw,
+.option-picker__id--sqr,
+.option-picker__id--tri,
+.option-picker__id--pulse,
+	user-select none
+	margin-left 5px
+	background-position center center
 	background-position center center
 	background-repeat no-repeat
 	background-size 100%
-
 	width 15px
 	height 20px
-
 
 .option-picker__item
 	display flex
@@ -95,3 +70,37 @@
 
 .option-picker__btn
 	nord-btn()
+
+//.option-picker__item--LP,
+//.option-picker__item--HP,
+//.option-picker__item--BP,
+//.option-picker__item--notch,
+//	&::before
+//		content 'noise'
+//		font-size 10px
+//		user-select none
+//		margin-left 5px
+
+.option-picker__id--LP,
+.option-picker__id--HP,
+.option-picker__id--BP,
+.option-picker__id--notch
+	font-size 10px
+	user-select none
+	margin-left 5px
+	
+.option-picker__id--HP	
+	&::before
+		content 'HP'
+
+.option-picker__id--BP	
+	&::before
+		content 'BP'
+
+.option-picker__id--LP	
+	&::before
+		content 'LP'
+
+.option-picker__id--notch
+	&::before
+		content 'notch'

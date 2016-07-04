@@ -76,7 +76,7 @@ option model elem name =
     in
         li [ class "option-picker__item" ]
             [ div [ class state ] []
-            , div [ class <| "option-picker__" ++ name ++ "-wave" ] []
+            , div [ class <| "option-picker__id--" ++ name ] []
             ]
 
 
