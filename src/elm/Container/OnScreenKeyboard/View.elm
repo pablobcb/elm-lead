@@ -106,8 +106,6 @@ getKeyClass model noteName midiNote highlight =
                 "keyboard__key--big"
             else if midiNote < 48 || midiNote > 96 then
                 "keyboard__key--medium"
-            else if midiNote < 72 then
-                "keyboard__key--small"
             else
                 ""
     in

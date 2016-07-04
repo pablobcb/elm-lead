@@ -32,7 +32,7 @@ export default class Application {
 
 		this.synth = new Synth(PresetManager.midiSettingsToSynthSettings())
 
-		// this pernicious hack is necessary, see 
+		// this pernicious hack is necessary, see
 		// https://github.com/elm-lang/core/issues/595
 		// setTimeout(() => this.app.ports.presetChange.send(preset), 0)
 		// MACRO

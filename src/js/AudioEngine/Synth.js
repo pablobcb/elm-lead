@@ -7,14 +7,16 @@ import Overdrive from './Overdrive'
 import CONSTANTS from '../Constants'
 
 export default class Synth {
-	constructor(preset) {
+	constructor (preset) {
 		this.context = new AudioContext
 
 		this.state = preset
 
 		this.amplifier = new Amplifier(this.context, this.state.amp)
 
-		this.overdrive = new Overdrive(this.context, CONSTANTS.OVERDRIVE_PARAMS)
+		const overdriveState = CONSTANTS.OVERDRIVE_PARAMS
+		overdriveState.on = this.state.overdrive
+		this.overdrive = new Overdrive(this.context, overdriveState)
 		this.overdrive.connect(this.amplifier.output)
 
 		this.filter = new Filter(this.context, this.state.filter)

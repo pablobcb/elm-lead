@@ -14,6 +14,7 @@ type OscillatorWaveform
     | Triangle
     | Sine
     | Square
+    | Pulse
     | WhiteNoise
 
 
@@ -194,7 +195,7 @@ knobs preset =
         0
         127
         1
-        "Envelope amount"
+        "env amnt"
         Port.filterEnvelopeAmount
     ]
 
@@ -227,7 +228,7 @@ init preset =
             (createOscillatorWaveform preset.oscs.osc2.waveformType)
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
-            , ( "pulse", Square )
+            , ( "pulse", Pulse )
             , ( "noise", WhiteNoise )
             ]
     }

@@ -22,7 +22,7 @@ export default class Oscillators {
 		const osc2GainValue = Math.abs(osc1GainValue - .5)
 		this.oscillator2Gain.gain.value = osc2GainValue
 
-		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.SQUARE) {
+		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
 			this.oscillator2 = new PulseOscillator((this.context),
 				this.oscillator2Gain)
 		}
@@ -112,7 +112,7 @@ export default class Oscillators {
 		if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
-			if (nextWaveform === CONSTANTS.WAVEFORM_TYPE.SQUARE) {
+			if (nextWaveform === CONSTANTS.WAVEFORM_TYPE.PULSE) {
 				this.swapOsc2(new PulseOscillator(this.context),
 					this.oscillator2Gain)
 			}

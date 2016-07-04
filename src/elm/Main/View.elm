@@ -13,7 +13,11 @@ view model =
     div [ class "dashboard" ]
         [ PanelView.panel PanelMsg
             model.panel
-        , span [ class "dashboard__brand" ] []
+        --, div [ class "dashboard__brand" ]
+        --    [ span [] [ text "web lead" ]
+        --    , span [] [ text "2X" ]
+        --    , span [] [ text "virtual analog" ]
+        --    ]
         , KbdView.keyboard OnScreenKeyboardMsg
             model.onScreenKeyboard
         , informationBar model
@@ -33,7 +37,7 @@ informationBar model =
             "Octave is C" ++ startOctave ++ " to C" ++ endOctave
 
         velocityText =
-            "Velocity is " ++ (toString model.onScreenKeyboard.velocity)
+            "velocity " ++ (toString model.onScreenKeyboard.velocity)
 
         midiIndicatorClass =
             "midi-indicator__status midi-indicator__status--"
@@ -61,6 +65,7 @@ informationBar model =
                 [ div [ class blinkerClass ] []
                 , div [ class midiIndicatorClass ] []
                 ]
-            , a [ href "https://github.com/pablobcb/elm-lead" ]
-                [ img [ src "gh.png", class "information-bar__gh-link" ] [] ]
+            , a [ class "information-bar__gh-link"
+                , href "https://github.com/pablobcb/elm-lead"
+                ] []
             ]

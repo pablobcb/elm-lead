@@ -1,5 +1,5 @@
 export default class Overdrive {
-	constructor (context, opts) {
+	constructor (context, state) {
 		this.input = context.createGain()
 		this.output = context.createGain()
 
@@ -47,23 +47,28 @@ export default class Overdrive {
 			}
 		}
 
-		opts = opts || {}
-		this._bandpass.frequency.value = 
-			opts.color || this.params.color.defaultValue
+		state = state || {}
+		this._bandpass.frequency.value =
+			state.color || this.params.color.defaultValue
 
 		this._bpWet.gain.value =
-			opts.preBand || this.params.preBand.defaultValue
+			state.preBand || this.params.preBand.defaultValue
 
 		this._lowpass.frequency.value =
-			opts.postCut || this.postCut.defaultValue
+			state.postCut || this.postCut.defaultValue
 
-		this.drive = 
-			opts.drive || this.drive.defaultValue
+		this.drive =
+			state.drive || this.drive.defaultValue
 
 		// Inverted preBand value
-		this._bpDry.gain.value = opts.preBand
-			? 1 - opts.preBand
+		this._bpDry.gain.value = state.preBand
+			? 1 - state.preBand
 			: 1 - this.params.preBand.defaultValue
+
+		if (! state.on) {
+			this.input.disconnect()
+			this.input.connect(this.output)
+		}
 	}
 
 	connect = node => {

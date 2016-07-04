@@ -2,9 +2,11 @@
 
 .option-picker
 	margin 0 auto
+	text-align center
 
 .option-picker__label
 	panel-label($knob-label-background-color)
+	white-space nowrap
 
 .option-picker__list
 	list-style-type none
@@ -12,10 +14,50 @@
 	margin-top 0
 	margin-bottom 4px
 	user-select none
+	width (3 * $unit)
+	margin-left auto
+	margin-right auto
+
+.option-picker__id--noise
+	&::before
+		content 'noise'
+		font-size 10px
+		user-select none
+		margin-left 5px
+		
+.option-picker__id--pulse
+	background  url('../images/pulse.svg')
+
+.option-picker__id--tri
+	background  url('../images/triangle.svg')
+
+.option-picker__id--sin
+	background  url('../images/sine.svg')
+
+.option-picker__id--saw
+	background  url('../images/saw.svg')
+
+.option-picker__id--sqr
+	background  url('../images/square.svg')
+
+.option-picker__id--sin,
+.option-picker__id--saw,
+.option-picker__id--sqr,
+.option-picker__id--tri,
+.option-picker__id--pulse,
+	user-select none
+	margin-left 5px
+	background-position center center
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%
+	width 20px
+	height 20px
 
 .option-picker__item
 	display flex
 	align-items center
+
 
 .option-picker__item--active
 	led(6px, $active-led-color)
@@ -29,3 +71,27 @@
 
 .option-picker__btn
 	nord-btn()
+
+.option-picker__id--LP,
+.option-picker__id--HP,
+.option-picker__id--BP,
+.option-picker__id--notch
+	font-size 10px
+	user-select none
+	margin-left 5px
+	
+.option-picker__id--HP	
+	&::before
+		content 'HP'
+
+.option-picker__id--BP	
+	&::before
+		content 'BP'
+
+.option-picker__id--LP	
+	&::before
+		content 'LP'
+
+.option-picker__id--notch
+	&::before
+		content 'notch'

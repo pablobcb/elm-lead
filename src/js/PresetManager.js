@@ -32,15 +32,16 @@ export default {
 		state.amp.release =
 			scaleMidiValue(preset.amp.release)
 
-		state.amp.masterVolume = 
+		state.amp.masterVolume =
 			scaleMidiValue(preset.amp.masterVolume)
+
+		// OVERDRIVE
+		state.overdrive =
+			preset.overdrive
 
 		//FILTER
 		state.filter.type_ =
 			preset.filter.type_
-
-		state.filter.distortion =
-			preset.filter.distortion
 
 		state.filter.envelopeAmount =
 			scaleMidiValue(preset.filter.envelopeAmount)
@@ -66,7 +67,7 @@ export default {
 		//OSC
 		state.oscs.pw =
 			MIDI.logScaleToMax(preset.oscs.pw, .9)
-		
+
 		state.oscs.mix =
 			MIDI.normalizeValue(preset.oscs.mix)
 

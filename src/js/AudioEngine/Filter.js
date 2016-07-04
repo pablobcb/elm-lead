@@ -6,7 +6,7 @@ import ADSR from './ADSR'
 export default class Filter {
 	constructor (context, state) {
 		this.context = context
-		
+
 		this.node = this.context.createBiquadFilter()
 
 		this.node.type = state.type_
@@ -14,6 +14,7 @@ export default class Filter {
 		this.node.Q.value = state.q
 
 		this.adsr = new ADSR(this.context, state.amp)
+		this.envelopeAmount = 0
 
 		// is this gain really necessary?
 		this.filterEnvelopeGain = this.context.createGain()
@@ -53,12 +54,8 @@ export default class Filter {
 		}
 	}
 
-	toggleDistortion = state => {
-		this.distortion = state
-	}
-
-	setAttack = midiValue => {
-		this.adsr.attack = MIDI.logScaleToMax(midiValue,
+	setEnvelopeAmount = midiValue => {
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 

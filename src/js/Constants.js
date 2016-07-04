@@ -13,10 +13,11 @@ export default {
 		TRIANGLE: 'triangle',
 		SINE: 'sine',
 		SQUARE: 'square',
-		NOISE: 'whitenoise'
+		NOISE: 'whitenoise',
+		PULSE: 'pulse'
 	},
 	OSC1_WAVEFORM_TYPES: ['sine', 'triangle', 'sawtooth', 'square'],
-	OSC2_WAVEFORM_TYPES: ['triangle', 'sawtooth', 'square', 'whitenoise'],
+	OSC2_WAVEFORM_TYPES: ['triangle', 'sawtooth', 'pulse', 'whitenoise'],
 	MIDI_EVENT: {
 		NOTE_ON: 144,
 		NOTE_OFF: 128
@@ -25,7 +26,7 @@ export default {
 	OVERDRIVE_PARAMS : {
 		preBand: 1.0,
 		color: 4000,
-		drive: 10,
+		drive: .8,
 		postCut: 8000
 	}
 }

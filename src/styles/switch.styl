@@ -2,6 +2,7 @@
 
 .switch
 	margin 0 auto
+	text-align center
 	
 .switch__list
 	list-style-type none
@@ -15,8 +16,11 @@
 .switch__item
 	padding-left 4.5px
 	margin-bottom 4px
-	display flex
-	align-items center
+
+.switch__label,
+.switch__item--active,
+.switch__item--inactive
+	display inline-block
 
 .switch__item--active
 	led(6px, $active-led-color)

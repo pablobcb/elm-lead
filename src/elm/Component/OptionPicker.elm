@@ -66,7 +66,7 @@ options model =
 
 
 option : Model a -> a -> String -> Html b
-option model elem label =
+option model elem name =
     let
         state =
             if elem == model.currentElem then
@@ -76,8 +76,7 @@ option model elem label =
     in
         li [ class "option-picker__item" ]
             [ div [ class state ] []
-            , div [ class "option-picker__item-id" ]
-                [ text label ]
+            , div [ class <| "option-picker__id--" ++ name ] []
             ]
 
 

@@ -14,7 +14,6 @@ $full-kbd-width = 75 * $lower-key-width
 	align-items flex-end
 	justify-content center
 
-
 	.keyboard__key
 		margin 0
 		padding 0
@@ -30,17 +29,13 @@ $full-kbd-width = 75 * $lower-key-width
 			border-bottom $hair-space solid $border-bottom-color
 			background linear-gradient(to bottom, $key-gradient-from-color 0,  $key-gradient-to-color 100%)
 
-			
-
-
 		&.keyboard__key--current-octave
 			background $octave-highlight-color
 
 		&.keyboard__key--pressed
 			background  linear-gradient(to bottom, $active-key-from-color 0, $active-key-to-color 100%)
 			box-shadow 2px 0 3px rgba(0,0,0, .1) inset, -5px 5px 20px rgba(0,0,0, .4) inset,0 0 3px rgba(0,0,0, .4)
-			background $octave-highlight-color
-			
+			background $octave-highlight-color			
 
 		&.keyboard__key--higher
 			height $higher-key-height
@@ -76,8 +71,4 @@ $full-kbd-width = 75 * $lower-key-width
 
 		&.keyboard__key--medium
 			@media only screen and (max-width : 898px)
-				display none
-
-		&.keyboard__key--small
-			@media only screen and (max-width : 480px)
 				display none
