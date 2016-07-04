@@ -1,7 +1,8 @@
+@import './mixins'
+
 $midi-indicator-ok = #34c945
 $midi-indicator-error = #ff4f4f
 $midi-indicator-neutral = #a8a8a8
-
 
 .information-bar
 	display flex
@@ -22,11 +23,33 @@ $midi-indicator-neutral = #a8a8a8
 	padding-right $unit
 	padding-left $unit
 
-.information-bar__item
+.incrementer
+	height 80%
+	display flex
 	line-height $information-bar-height
+	text-align center
+
+.incrementer__display
+	margin-left ($unit / 2)
+	//margin-top ($unit / 2)
+	padding-left ($unit / 2)
+	padding-right ($unit / 2)
 	font-family 'Digital-7 Mono', monospace
-	font-size 1.5em
-		font-weight bold
+	background #510b0b
+	color #bc2121
+	border-radius 6px
+	font-size 1.3em
+
+.incrementer__btn
+	nord-btn()
+	margin-top ($unit / 4)
+	margin-left ($unit / 2)
+
+.incrementer__label
+	margin-left ($unit / 2)
+//	display flex
+//	line-height $information-bar-height
+
 
 
 .information-bar__gh-link
