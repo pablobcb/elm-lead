@@ -53,7 +53,7 @@ section bevelType title content =
 
 column : List (Html a) -> Html a
 column content =
-    div [ class "panel__column" ] content
+    div [ class "panel-controls__column" ] content
 
 
 amplifier : Model -> Html Msg
@@ -129,7 +129,7 @@ oscillatorSection model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "panel" ]
+    div [ class "panel-controls" ]
         [ column [ oscillatorSection model ]
         , column
             [ amplifier model
