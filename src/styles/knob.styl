@@ -10,6 +10,7 @@ $knob-indicator = white
 
 .knob
 	text-align center
+	height 30px
 
 .knob__scale
 	height $knob-size
@@ -37,3 +38,27 @@ $knob-indicator = white
 	margin-left auto
 	margin-right auto
 	white-space nowrap
+
+.knob__adsr-label--attack
+	background url('../images/attack.svg')
+
+
+.knob__adsr-label--decay
+	background url('../images/decay.svg')
+
+.knob__adsr-label--sustain
+	background url('../images/sustain.svg')
+
+
+.knob__adsr-label--release
+	background url('../images/release.svg')
+
+.knob__adsr-label--attack,
+.knob__adsr-label--decay,
+.knob__adsr-label--sustain,
+.knob__adsr-label--release
+	width 100%
+	height 100%
+	background-position center center
+	background-repeat no-repeat
+	background-size 100%

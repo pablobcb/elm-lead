@@ -79,8 +79,10 @@ filter model =
         , OptionPicker.optionPicker "Filter Type"
             FilterTypeChange
             model.filterTypeBtn
-        , nordKnob model Knob.FilterCutoff -- frequency
-        , nordKnob model Knob.FilterQ      -- resonance
+        , nordKnob model Knob.FilterCutoff
+          -- frequency
+        , nordKnob model Knob.FilterQ
+          -- resonance
         , nordKnob model Knob.FilterEnvelopeAmount
         , Switch.switch "distortion"
             OverdriveToggle

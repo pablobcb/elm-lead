@@ -55,6 +55,13 @@ type Msg
     | NoOp
 
 
+type ADSR
+    = Attack
+    | Decay
+    | Sustain
+    | Release
+
+
 type KnobInstance
     = OscMix
     | PW
@@ -112,33 +119,79 @@ knobDirection model =
         [ ( "transform", "rotate(" ++ direction' ++ ")" ) ]
 
 
+adsrLabel : Model -> List (Html b)
+adsrLabel knobModel =
+    let
+        knob className =
+            [ div [ class <| "knob__adsr-label--" ++ className ] [] ]
+    in
+        case knobModel.idKey of
+            AmpAttack ->
+                knob "attack"
+
+            FilterAttack ->
+                knob "attack"
+
+            AmpDecay ->
+                knob "decay"
+
+            FilterDecay ->
+                knob "decay"
+
+            AmpSustain ->
+                knob "sustain"
+
+            FilterSustain ->
+                knob "sustain"
+
+            AmpRelease ->
+                knob "release"
+
+            FilterRelease ->
+                knob "release"
+
+            _ ->
+                []
+
+
 view : Model -> Html Msg
 view model =
     let
-        mapPosition msg =
-            Json.map (\posY -> msg posY) ("layerY" := int)
-
         knobLabelHtml =
             div [ class "knob__label" ]
                 [ text model.label ]
-    in
-        div [ class "knob" ]
-            [ div [ class "knob__scale" ]
-                [ div
-                    [ Html.Events.on "mousedown" <| mapPosition (MouseDown model.idKey)
-                    , Html.Events.on "dblclick" <| succeed <| Reset model.idKey
-                    , Html.Events.onWithOptions "dragstart"
-                        { stopPropagation = True, preventDefault = True }
-                        <| succeed
-                        <| NoOp
-                    , class "knob__dial"
-                    , Html.Attributes.attribute "draggable" "false"
-                    , style <| knobDirection model
-                    ]
-                    []
+
+        knobDial =
+            div
+                [ Html.Events.on "mousedown"
+                    <| Json.map
+                        (\posY ->
+                            (MouseDown model.idKey) posY
+                        )
+                        ("layerY" := int)
+                , Html.Events.on "dblclick"
+                    <| succeed
+                    <| Reset model.idKey
+                , Html.Events.onWithOptions "dragstart"
+                    { stopPropagation = True, preventDefault = True }
+                    <| succeed
+                    <| NoOp
+                , class "knob__dial"
+                , Html.Attributes.attribute "draggable" "false"
+                , style <| knobDirection model
                 ]
-            , knobLabelHtml
-            ]
+                []
+
+        adsrLabel' =
+            adsrLabel model
+
+        knob =
+            adsrLabel'
+                ++ [ div [ class "knob__scale" ] [ knobDial ]
+                   , knobLabelHtml
+                   ]
+    in
+        div [ class "knob" ] knob
 
 
 knob : (Msg -> a) -> Model -> Html a
