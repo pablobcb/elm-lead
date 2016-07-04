@@ -63,8 +63,8 @@ update msg model =
                             MidiMessageIn _ ->
                                 ( True
                                 , Process.sleep (50)
-                                    |> Task.perform (\_ -> KbdUpdate.NoOp)
-                                        (\_ -> KbdUpdate.NoOp)
+                                    |> Task.perform (always KbdUpdate.NoOp)
+                                        (always KbdUpdate.NoOp)
                                 )
 
                             _ ->
