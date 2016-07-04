@@ -8,13 +8,14 @@ export default class ADSR {
 		this.state = state
 		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
 		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
-		
+
 		this.startAmount = 0
-		this.state.envelopeAmount = state.envelopeAmount || 1
+		this.sustainAmount = 0
+		this.endAmount = 1
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
-		this.decayTo = 0		
+		this.decayTo = 0
 	}
 
 	_  = () => {}
@@ -46,46 +47,47 @@ export default class ADSR {
 		return value
 	}
 
-	on = (target, startAmount) => {
+	on = (startAmount, endAmount) => target => {
 		const now = this.context.currentTime
 		this.startedAt = now
 		this.decayFrom = this.startedAt + this.state.attack
 		this.decayTo = this.decayFrom + this.state.decay
-		if(startAmount) {
-			this.startAmount = startAmount
-		}
+		this.startAmount = startAmount
+		this.endAmount = endAmount
+		this.sustainAmount = this.state.sustain *
+			(this.endAmount - this.startAmount) + this.startAmount
+
 		target.cancelScheduledValues(now)
 		target.setValueAtTime(this.startAmount, now)
-		target.linearRampToValueAtTime(this.startAmount + 
-			this.state.envelopeAmount, this.decayFrom)
-		target.linearRampToValueAtTime(this.state.sustain, this.decayTo)
+		target.linearRampToValueAtTime(this.endAmount, this.decayFrom)
+		target.linearRampToValueAtTime(this.sustainAmount, this.decayTo)
 	}
 
-	off = target => {		
+	off = target => {
 		const now = this.context.currentTime
-		let valueAtTime = this.state.sustain
+		let valueAtTime = this.sustainAmount
 
 		target.cancelScheduledValues(now)
 
-		if(this.attack && now < this.decayFrom) {
-			valueAtTime = this.getValue(this.startAmount,
-				this.state.envelopeAmount, this.startedAt, this.decayFrom, now)
+		if(now >= this.state.attack && now < this.decayFrom) {
+			valueAtTime = this.getValue(this.startAmount, this.endAmount,
+				this.startedAt, this.decayFrom, now)
 		}
 		else if(now >= this.decayFrom && now < this.decayTo) {
-			valueAtTime = this.getValue(this.startAmount 
-				+ this.state.envelopeAmount,
-					this.state.sustain, this.decayFrom, this.decayTo, now)
+			valueAtTime = this.getValue(this.endAmount,	this.sustainAmount,
+				this.decayFrom, this.decayTo, now)
 		}
 
 		target.setValueAtTime(valueAtTime, now)
-		target.linearRampToValueAtTime(0, now + this.state.release)
-		
+		target.linearRampToValueAtTime(this.startAmount,
+			now + this.state.release)
+
 		return now + this.state.release
 	}
 
 	setAttack = midiValue => {
-		this.state.attack = midiValue != 0 ? 
-			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) : 
+		this.state.attack = midiValue != 0 ?
+			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
 
@@ -99,9 +101,8 @@ export default class ADSR {
 	}
 
 	setRelease = midiValue => {
-		this.state.release = midiValue != 0 ? 
-			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) : 
+		this.state.release = midiValue != 0 ?
+			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
 }
-			

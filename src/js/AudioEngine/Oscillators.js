@@ -34,7 +34,7 @@ export default class Oscillators {
 			this.oscillator2 = new FMOscillator(this.context,
 				state.osc2.waveformType)
 		}
-		
+
 		this.oscillator2.connect(this.oscillator2Gain)
 
 		//TODO : IMPLEMENT OSC CLASS WHICH HOLDS FMGAIN
@@ -93,7 +93,7 @@ export default class Oscillators {
 		}
 		else {
 			throw new Error(`Invalid Waveform Type ${waveform.toLowerCase()}`)
-		}		
+		}
 	}
 
 	toggleOsc2KbdTrack = isActive => {
@@ -159,7 +159,7 @@ export default class Oscillators {
 			oscGain.connect(this.fmGains[i])
 		)
 		this.oscillator2.connect(gainB)
-	}	
+	}
 
 	connect = node => {
 		this.oscillator2Gain.connect(node)
@@ -179,14 +179,10 @@ export default class Oscillators {
 	noteOn = (midiNote, noteOnCb /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, noteOnCb)
 		this.oscillator2.noteOn(midiNote, noteOnCb)
-		//this.state.filter.amp.on(this.filter.frequency,
-		//	this.filter.frequency.value)
-
 	}
 
 	noteOff = (midiNote, noteOffCb /*, velocity*/) => {
 		this.oscillator1.noteOff(midiNote, noteOffCb)
 		this.oscillator2.noteOff(midiNote, noteOffCb)
-		//this.state.filter.off(this.filter.frequency)
 	}
 }

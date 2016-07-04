@@ -28,5 +28,7 @@ export default {
 		color: 4000,
 		drive: .8,
 		postCut: 8000
-	}
+	},
+	MIN_FILTER_FREQUENCY: 0,
+	MAX_FILTER_FREQUENCY: 22050
 }

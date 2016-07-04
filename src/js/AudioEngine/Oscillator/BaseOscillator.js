@@ -32,7 +32,7 @@ export default class BaseOscillator {
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
-	noteOn = (midiNote, noteOnCB) => {
+	noteOn = (midiNote, noteOnAmpCB, noteOnFilterCB) => {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
@@ -41,9 +41,9 @@ export default class BaseOscillator {
 				.stop(now)
 			this.frequencyGains[midiNote].disconnect()
 			this.voices[midiNoteKey].disconnect()
-			
+
 			delete this.voices[midiNoteKey]
-		} 
+		}
 
 		this._noteOn(midiNote)
 		this.voices[midiNoteKey].onended = () => {
@@ -52,14 +52,18 @@ export default class BaseOscillator {
 			delete this.voices[midiNoteKey]
 		}
 		this.voices[midiNoteKey].start(now)
-		
-		if(noteOnCB) {
-			noteOnCB(this.voiceGains[midiNote].gain)
+
+		if(noteOnAmpCB) {
+			noteOnAmpCB(this.voiceGains[midiNote].gain)
+		}
+
+		if(noteOnFilterCB) {
+			noteOnFilterCB(this.voiceGains[midiNote].gain)
 		}
 	}
 
-	noteOff = (midiNote, noteOffCB) => {
-		const midiNoteKey = midiNote.toString()	
+	noteOff = (midiNote, noteOffAmpCB) => {
+		const midiNoteKey = midiNote.toString()
 		const osc = this.voices[midiNoteKey]
 
 		if(!osc) {
@@ -67,7 +71,7 @@ export default class BaseOscillator {
 		}
 
 		const voiceGain = this.voiceGains[midiNote].gain
-		const releaseTime = noteOffCB(voiceGain)
+		const releaseTime = noteOffAmpCB(voiceGain)
 
 		osc.stop(releaseTime)
 	}

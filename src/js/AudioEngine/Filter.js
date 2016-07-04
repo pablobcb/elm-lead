@@ -14,7 +14,7 @@ export default class Filter {
 		this.node.Q.value = state.q
 
 		this.adsr = new ADSR(this.context, state.amp)
-		this.envelopeAmount = 0
+		this.envelopeAmount = state.envelopeAmount
 
 		// is this gain really necessary?
 		this.filterEnvelopeGain = this.context.createGain()
@@ -55,8 +55,7 @@ export default class Filter {
 	}
 
 	setEnvelopeAmount = midiValue => {
-		this.envelopeAmount = MIDI.logScaleToMax(midiValue,
-			CONSTANTS.MAX_ENVELOPE_TIME)
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue,	1)
 	}
 
 }
