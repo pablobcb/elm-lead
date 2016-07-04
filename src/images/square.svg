@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="9.0331354mm"
-   height="4.7997875mm"
-   viewBox="0 0 32.007173 17.007121"
+   width="31.215384"
+   height="15.024919"
+   viewBox="0 0 31.215383 15.024917"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -25,31 +25,33 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16.000001"
-     inkscape:cx="24.497872"
-     inkscape:cy="11.922831"
+     inkscape:zoom="8.0000003"
+     inkscape:cx="37.200259"
+     inkscape:cy="-1.2929871"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      borderlayer="true"
      inkscape:showpageshadow="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="716"
-     inkscape:window-x="316"
-     inkscape:window-y="1080"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:snap-grids="true"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     units="px">
     <inkscape:grid
        type="xygrid"
        id="grid3336"
        color="#b4bc45"
        opacity="0.1254902"
-       originx="-18.499951"
-       originy="-1998.4928" />
+       originx="-49.282932"
+       originy="-999.98744"
+       dotted="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -59,7 +61,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,21 +69,16 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-8.9999996,-36.355048)">
+     transform="translate(-49.282933,-37.34986)">
     <path
        style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:0.50431865;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.19444448"
        d=""
        id="path3348"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-       d="m 9.5000496,52.855048 0,-16 16.0000004,0 0,16 15,0"
-       id="path4698"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-       d="m 40.50005,52.855091 0,-16"
-       id="path4150"
+       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 50.283033,51.360536 0,-12.996434 15.111302,0 0,12.996434 14.103882,0 0,-12.996434"
+       id="path6229"
        inkscape:connector-curvature="0" />
   </g>
 </svg>
