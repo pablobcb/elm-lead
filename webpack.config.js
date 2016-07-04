@@ -23,9 +23,9 @@ module.exports = {
 				test: /\.svg/,
 				loader: 'svg-url-loader'
 			},
-			{ 
-				test: /\.json$/, 
-				loader: 'json' 
+			{
+				test: /\.json$/,
+				loader: 'json'
 			},
 			{
 				test: /\.styl$/,
@@ -39,6 +39,9 @@ module.exports = {
 				test: /\.elm$/,
 				loader: 'elm-webpack',
 				exclude: [/elm-stuff/, /node_modules/]
+			}, {
+				test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+				loader: 'file-loader'
 			},
 			{
 				test: /\.js$/,
