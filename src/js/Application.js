@@ -5,14 +5,12 @@ import MIDI from './MIDI'
 import PresetManager from './PresetManager'
 
 const noMidiMsg = `Your browser doesnt support WebMIDI API. Use another
-			browser or install the Jazz Midi Plugin http://jazz-soft.net/`
+	browser or install the Jazz Midi Plugin http://jazz-soft.net/`
 
 export default class Application {
 
 	constructor () {
-		const preset = PresetManager.loadPreset()
 
-		this.app = Elm.Main.fullscreen(preset)
 		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
 			navigator
@@ -29,9 +27,16 @@ export default class Application {
 	}
 
 	initializeSynth = () => {
+		const preset = PresetManager.loadPreset()
+		const midiSupport = this.midiAccess ? true : false
+
+		this.app = Elm.Main.fullscreen({
+			preset : preset,
+			midiSupport : midiSupport
+		})
+
+
 		const synthSettings = PresetManager.midiSettingsToSynthSettings()
-
-
 		this.synth = new Synth(synthSettings)
 
 		// this pernicious hack is necessary, see

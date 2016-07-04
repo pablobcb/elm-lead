@@ -60,6 +60,11 @@ $midi-indicator-inactive = #ff4f4f
 	&::before
 		content "not connected"
 
+.midi-indicator__status--not-supported
+	color $midi-indicator-inactive
+	&::before
+		content "not supported"
+
 .midi-indicator__status--scanning
 	color #a8a8a8
 	&::before

@@ -2,7 +2,6 @@ module Main exposing (..)
 
 import Html.App
 import Port
-import Preset
 import Keyboard exposing (..)
 import Mouse exposing (..)
 import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
@@ -13,10 +12,10 @@ import Main.Update as Update exposing (..)
 import Main.View as View exposing (..)
 
 
-main : Program Preset.Preset
+main : Program InitialFlags
 main =
     Html.App.programWithFlags
-        { init = \preset -> ( initModel preset, Cmd.none )
+        { init = \flags -> ( initModel flags, Cmd.none )
         , view = View.view
         , update = Update.update
         , subscriptions = subscriptions

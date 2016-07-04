@@ -41,7 +41,9 @@ informationBar model =
 
         midiIndicatorClass =
             "midi-indicator__status midi-indicator__status--"
-                ++ (if model.searchingMidi then
+                ++ (if not model.midiSupport then
+                        "not-supported"
+                    else if model.searchingMidi then
                         "scanning"
                     else if model.midiConnected then
                         "active"
