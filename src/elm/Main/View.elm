@@ -37,7 +37,7 @@ informationBar model =
             "Octave is C" ++ startOctave ++ " to C" ++ endOctave
 
         velocityText =
-            "Velocity is " ++ (toString model.onScreenKeyboard.velocity)
+            "velocity " ++ (toString model.onScreenKeyboard.velocity)
 
         midiIndicatorClass =
             "midi-indicator__status midi-indicator__status--"

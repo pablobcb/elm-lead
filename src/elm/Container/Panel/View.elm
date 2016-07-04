@@ -76,7 +76,7 @@ filter model =
         , nordKnob model Knob.FilterDecay
         , nordKnob model Knob.FilterSustain
         , nordKnob model Knob.FilterRelease
-        , OptionPicker.optionPicker "FilterType"
+        , OptionPicker.optionPicker "Filter Type"
             FilterTypeChange
             model.filterTypeBtn
         , nordKnob model Knob.FilterCutoff -- frequency
