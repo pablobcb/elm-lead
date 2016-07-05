@@ -6,16 +6,13 @@ $midi-indicator-neutral = #a8a8a8
 
 .information-bar
 	display flex
-	height $information-bar-height
+	justify-content space-around
+	align-items center
 	width 100vw
 	background-color rgba(0, 0, 0, .2)
 	color $text-color
-	justify-content space-around
 	font-family monospace
-	white-space nowrap
-	//position fixed
-	//bottom 0
-	//letter-spacing -1px
+	padding ($unit / 2)
 
 .information-bar__item,
 .information-bar__gh-link,

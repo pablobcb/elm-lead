@@ -6,21 +6,14 @@ import Html exposing (..)
 
 
 incrementer : String -> String -> a -> a -> Html a
-incrementer label value up down =
+incrementer label' value up down =
     div [ class "incrementer" ]
-        [ div [ class "incrementer__label" ] [ text label ]
-        , button
-            [ class "incrementer__btn"
-            , onClick down
+        [ div [ class "incrementer__info" ]
+            [ label [ class "incrementer__label" ] [ text label' ]
+            , div [ class "incrementer__display" ] [ text value ]
             ]
-            []
-        , span [ class "incrementer__label" ] [ text "-" ]
-        , div [ class "incrementer__display" ] [ text ("." ++ value) ]
-        , span [ class "incrementer__label" ]
-            [ text "+" ]
-        , button
-            [ class "incrementer__btn"
-            , onClick up
+        , div [ class "incrementer__buttons" ]
+            [ button [ class "incrementer__button", onClick down ] []
+            , button [ class "incrementer__button", onClick up ] []
             ]
-            []
         ]
