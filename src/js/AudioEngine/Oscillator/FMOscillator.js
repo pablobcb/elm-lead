@@ -46,8 +46,8 @@ export default class FMOscillator extends BaseOscillator {
 	}
 
 	setWaveform = waveform => {
-		for(const midiNote in this.voices) {			
-			if(this.voices.hasOwnProperty(midiNote)) {
+		for (const midiNote in this.voices) {			
+			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].type = waveform
 			}
 		}
@@ -55,7 +55,7 @@ export default class FMOscillator extends BaseOscillator {
 	}
 
 	setFMGain = fmGain => {
-		for(let i=0; i<128; i++) {
+		for (let i=0; i<128; i++) {
 			this.frequencyGains[i].gain.value = fmGain
 		}
 	}

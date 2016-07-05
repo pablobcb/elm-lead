@@ -83,8 +83,7 @@ export default class Overdrive {
 		this.input.disconnect()
 		if (on) {
 			this.input.connect(this._bandpass)
-		}
-		else {
+		} else {
 			this.input.connect(this.output)
 		}
 	}
