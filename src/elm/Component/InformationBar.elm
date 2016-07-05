@@ -44,11 +44,11 @@ informationBar model =
                 model.presetName
                 (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
-            , a
-                [ class "information-bar__gh-link"
-                , href "https://github.com/pablobcb/elm-lead"
-                ]
-                []
+              --, a
+              --    [ class "information-bar__gh-link"
+              --    , href "https://github.com/pablobcb/elm-lead"
+              --    ]
+              --    []
             , incrementer "Velocity"
                 ((toString model.onScreenKeyboard.velocity))
                 (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
