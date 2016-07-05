@@ -20,14 +20,27 @@
 		.option-picker
 			width 20%
 
+		.knob:last-of-type
+			margin-top 1rem // kinda similar to adsr knob image height FIXME
+
 		.switch
 			width 40%
+
+		.section__content
+			padding-top 0
 
 	.section
 		margin-bottom $unit
 
 		&:last-of-type
 			margin-bottom 0
+
+@media only screen and (max-width : 930px)
+	.panel-controls__column:last-of-class
+		margin-right 0
+
+	.panel-controls__instructions
+		display none
 
 .panel__brand
 	display flex
