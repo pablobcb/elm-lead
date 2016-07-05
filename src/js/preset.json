@@ -20,7 +20,7 @@
     },
     "oscs": {
         "osc1": {
-            "waveformType": "sine",
+            "waveformType": "sawtooth",
             "fmGain": 0
         },
         "osc2": {
@@ -32,5 +32,5 @@
         "pw": 0,
         "mix": 0
     },
-    "overdrive": true
+    "overdrive": false
 }

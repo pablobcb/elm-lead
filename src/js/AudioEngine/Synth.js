@@ -23,7 +23,7 @@ export default class Synth {
 		this.filter.connect(this.overdrive.input)
 
 		this.oscillators = new Oscillators(this.context, this.state.oscs)
-		this.oscillators.connect(this.filter.node)
+		this.oscillators.connect(this.filter.input)
 	}
 
 	_ = () => { }
@@ -36,21 +36,18 @@ export default class Synth {
 		const type = data[0] & 0xf0
 		const note = data[1]
 		//const velocity = data[2]
-		const filterMinAmmount = this.filter.node.frequency
-		const filterMaxAmmount = this.filter.envelopeAmount *
-			(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
-			CONSTANTS.MIN_FILTER_FREQUENCY
+
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
 				this.oscillators.noteOn(note,
-					this.amplifier.adsr.on(0, 1),
-					this.filter.adsr.on(filterMinAmmount, filterMaxAmmount))
+					this.amplifier.adsr.on(0, 1))
+				this.filter.noteOn(note)
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
 				this.oscillators.noteOff(note,
-					this.amplifier.adsr.off,
-					this.filter.adsr.off)
+					this.amplifier.adsr.off)
+				this.filter.noteOff(note)
 				break
 		}
 	}

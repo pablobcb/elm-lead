@@ -65,8 +65,17 @@ export default class ADSR {
 
 	off = target => {
 		const now = this.context.currentTime
-		let valueAtTime = this.sustainAmount
+		const valueAtTime = this.cancelScheduledValues(target, now)
 
+		target.setValueAtTime(valueAtTime, now)
+		target.linearRampToValueAtTime(this.startAmount,
+			now + this.state.release)
+
+		return now + this.state.release
+	}
+
+	cancelScheduledValues = (target, now) => {
+		let valueAtTime = this.sustainAmount
 		target.cancelScheduledValues(now)
 
 		if(now >= this.state.attack && now < this.decayFrom) {
@@ -78,11 +87,7 @@ export default class ADSR {
 				this.decayFrom, this.decayTo, now)
 		}
 
-		target.setValueAtTime(valueAtTime, now)
-		target.linearRampToValueAtTime(this.startAmount,
-			now + this.state.release)
-
-		return now + this.state.release
+		return valueAtTime
 	}
 
 	setAttack = midiValue => {

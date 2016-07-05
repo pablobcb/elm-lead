@@ -32,7 +32,7 @@ export default class BaseOscillator {
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
-	noteOn = (midiNote, noteOnAmpCB, noteOnFilterCB) => {
+	noteOn = (midiNote, noteOnAmpCB) => {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
@@ -55,10 +55,6 @@ export default class BaseOscillator {
 
 		if(noteOnAmpCB) {
 			noteOnAmpCB(this.voiceGains[midiNote].gain)
-		}
-
-		if(noteOnFilterCB) {
-			noteOnFilterCB(this.voiceGains[midiNote].gain)
 		}
 	}
 
