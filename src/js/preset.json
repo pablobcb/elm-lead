@@ -1,4 +1,5 @@
 {
+    "name" : "initial",
     "filter": {
         "type_": "lowpass",
         "frequency": 127,

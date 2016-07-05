@@ -4,7 +4,7 @@ import ADSR from './ADSR'
 
 
 export default class Filter {
-	constructor (context, state) {
+	constructor(context, state) {
 		this.context = context
 		this.input = this.context.createGain()
 		this.output = this.context.createGain()
@@ -21,14 +21,14 @@ export default class Filter {
 		this.filter.connect(this.output)
 	}
 
-	_ = () => {}
+	_ = () => { }
 
 	noteOn = (midiNote) => {
 		const filterMinFreq = this.filter.frequency.value
 		let filterMaxFreq =
 			this.envelopeAmount * MIDI.toFilterCutoffFrequency(127)
 
-		if(filterMaxFreq < filterMinFreq) {
+		if (filterMaxFreq < filterMinFreq) {
 			filterMaxFreq = filterMinFreq
 		}
 
@@ -41,7 +41,7 @@ export default class Filter {
 		this.adsr.off(this.filter.detune)
 	}
 
-	get type () {
+	get type() {
 		return this.filter.type
 	}
 
@@ -56,13 +56,9 @@ export default class Filter {
 	}
 
 	setCutoff = midiValue => {
-		const value = MIDI.toFilterCutoffFrequency(midiValue)
-		const now = this.context.currentTime
+		this.filter.frequency.value =
+			MIDI.toFilterCutoffFrequency(midiValue)
 
-		//this.filter.detune.cancelScheduledValues(now)
-		this.filter.frequency.value = value
-
-		//debugger
 	}
 
 	setQ = midiValue => {
@@ -70,16 +66,16 @@ export default class Filter {
 	}
 
 	setType = filterType => {
-		if(CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
+		if (CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
 			this.filter.type = filterType.toLowerCase()
 		}
-		else{
+		else {
 			throw new Error('Invalid Filter Type')
 		}
 	}
 
 	setEnvelopeAmount = midiValue => {
-		this.envelopeAmount = MIDI.logScaleToMax(midiValue,	1)
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 }

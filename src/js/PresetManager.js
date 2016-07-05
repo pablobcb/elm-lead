@@ -19,6 +19,9 @@ export default {
 				osc2: {}
 			}
 		}
+
+		state.name = preset.name
+
 		// AMP
 		state.amp.attack =
 			scaleMidiValue(preset.amp.attack)
