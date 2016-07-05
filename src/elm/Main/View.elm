@@ -79,6 +79,10 @@ informationBar model =
                 [ div [ class blinkerClass ] []
                 , div [ class midiIndicatorClass ] []
                 ]
+            , incrementer "Patch"
+                model.presetName
+                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
+                (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
             , a
                 [ class "information-bar__gh-link"
                 , href "https://github.com/pablobcb/elm-lead"

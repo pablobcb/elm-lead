@@ -16,6 +16,7 @@ type alias Model =
     , searchingMidi : Bool
     , midiMsgInLedOn : Bool
     , midiSupport : Bool
+    , presetName : String
     }
 
 
@@ -27,6 +28,7 @@ initModel flags =
     , searchingMidi = True
     , midiMsgInLedOn = False
     , midiSupport = flags.midiSupport
+    , presetName = flags.preset.name
     }
 
 

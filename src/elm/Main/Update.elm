@@ -14,6 +14,8 @@ type Msg
     | OnScreenKeyboardMsg KbdUpdate.Msg
     | MouseUp
     | OnMidiStateChange Bool
+  --  | NextPreset
+  --  | PreviousPreset
 
 
 
