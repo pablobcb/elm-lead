@@ -4,7 +4,7 @@ import ADSR from './ADSR'
 
 
 export default class Filter {
-	constructor(context, state) {
+	constructor (context, state) {
 		this.context = context
 		this.input = this.context.createGain()
 		this.output = this.context.createGain()
@@ -41,7 +41,7 @@ export default class Filter {
 		this.adsr.off(this.filter.detune)
 	}
 
-	get type() {
+	get type () {
 		return this.filter.type
 	}
 
