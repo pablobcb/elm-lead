@@ -1,0 +1,36 @@
+.midi-indicator
+	display flex
+	flex-direction column
+	text-align center
+	padding-right $unit
+	padding-left $unit
+
+.midi-indicator__blinker
+	&::before
+		content "MIDI"
+
+.midi-indicator__blinker--active
+	color $midi-indicator-ok
+
+.midi-indicator__status
+	padding-left ($unit / 2)
+
+.midi-indicator__status--active
+	color $midi-indicator-ok
+	&::before
+		content "connected"
+
+.midi-indicator__status--inactive
+	color $midi-indicator-neutral
+	&::before
+		content "not connected"
+
+.midi-indicator__status--not-supported
+	color $midi-indicator-error
+	&::before
+		content "not supported"
+
+.midi-indicator__status--scanning
+	color $midi-indicator-neutral
+	&::before
+		content "scanning devices"
