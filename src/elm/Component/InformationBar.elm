@@ -5,7 +5,7 @@ import Html exposing (..)
 import Main.Model as Model exposing (..)
 import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
 import Main.Update as Update exposing (..)
-import Component.Incrementer exposing (incrementer)
+import Component.Incrementer as Incrementer
 
 
 informationBar : Model -> Html Update.Msg
@@ -32,7 +32,7 @@ informationBar model =
                    )
     in
         div [ class "information-bar" ]
-            [ incrementer "Octave"
+            [ Incrementer.incrementer Incrementer.Octave
                 (" C" ++ (toString model.onScreenKeyboard.octave))
                 (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
@@ -40,7 +40,7 @@ informationBar model =
                 [ div [ class blinkerClass ] []
                 , div [ class midiIndicatorClass ] []
                 ]
-            , incrementer "Patch"
+            , Incrementer.incrementer Incrementer.Patch
                 model.presetName
                 (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
@@ -49,7 +49,7 @@ informationBar model =
               --    , href "https://github.com/pablobcb/elm-lead"
               --    ]
               --    []
-            , incrementer "Velocity"
+            , Incrementer.incrementer Incrementer.Velocity
                 ((toString model.onScreenKeyboard.velocity))
                 (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
                 (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
