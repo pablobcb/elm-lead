@@ -32,7 +32,7 @@ incrementer label value up down =
         [ div [ class "incrementer__label" ] [ text label ]
         , button
             [ class "incrementer__btn"
-            , onClick <| down
+            , onClick down
             ]
             []
         , span [ class "incrementer__label" ] [ text "-" ]
@@ -41,7 +41,7 @@ incrementer label value up down =
             [ text "+" ]
         , button
             [ class "incrementer__btn"
-            , onClick <| up
+            , onClick up
             ]
             []
         ]

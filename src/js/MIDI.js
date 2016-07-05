@@ -1,5 +1,6 @@
-// all midi values are integers between 0 and 127
+import CONSTANTS from './Constants'
 
+// all midi values are integers between 0 and 127
 const MIDI_MAX_VALUE = 127
 
 const midiToFreq = (midiValue) => (
@@ -7,13 +8,13 @@ const midiToFreq = (midiValue) => (
 )
 
 const manageMidiDevices = (
-	onMIDIMessage, 
+	onMIDIMessage,
 	midiAccess,
 	midiPort,
 	midiStateChangePort
-	) => 
+	) =>
 {
-	let midiConnection = false	
+	let midiConnection = false
 	// loop over all available inputs and listen for any MIDI input
 	for (const input of midiAccess.inputs.values()) {
 		input.onmidimessage = (midiMessage) => {
@@ -31,10 +32,10 @@ const manageMidiDevices = (
 		}
 	}
 
-	// this pernicious hack is necessary, see 
+	// this pernicious hack is necessary, see
 	// https://github.com/elm-lang/core/issues/595
 	setTimeout(() => midiStateChangePort.send(midiConnection), 0)
-	
+
 	//console.log("mandei", midiConnection)
 }
 
@@ -49,6 +50,9 @@ export default {
 
 	toFilterCutoffFrequency : midiValue => (
 		1.6 * midiToFreq(midiValue)
+		//midiValue / 127 *
+		//	(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
+		//	CONSTANTS.MIN_FILTER_FREQUENCY
 	),
 
 	logScaleToMax : (midiValue, max) => (
@@ -60,22 +64,22 @@ export default {
 	),
 
 	manageMidiDevices : (
-		onMIDIMessage, 
-		midiAccess, 
-		midiPort, 
-		midiStateChange) => 
+		onMIDIMessage,
+		midiAccess,
+		midiPort,
+		midiStateChange) =>
 	{
 		midiAccess.onstatechange = () => {
-			manageMidiDevices(onMIDIMessage, 
-				midiAccess, 
+			manageMidiDevices(onMIDIMessage,
+				midiAccess,
 				midiPort,
 				midiStateChange
 			)
 		}
-		
-		manageMidiDevices(onMIDIMessage, 
-			midiAccess, 
-			midiPort, 
+
+		manageMidiDevices(onMIDIMessage,
+			midiAccess,
+			midiPort,
 			midiStateChange
 		)
 	}
