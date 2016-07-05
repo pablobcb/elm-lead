@@ -57,26 +57,12 @@ export default class Filter {
 
 	setCutoff = midiValue => {
 		const value = MIDI.toFilterCutoffFrequency(midiValue)
-
-		console.log(value)
-		//	(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
-		//	CONSTANTS.MIN_FILTER_FREQUENCY
-
 		const now = this.context.currentTime
-		const valueAtTime = this.adsr.getValueAtTime(now)
-		//if(false) {
-			//this.filter.frequency.cancelScheduledValues(now)
-		//}
 
+		//this.filter.detune.cancelScheduledValues(now)
 		this.filter.frequency.value = value
 
 		//debugger
-
-		//MIDI.toFilterCutoffFrequency(midiValue)
-		//const value = MIDI.toFilterCutoffFrequency(midiValue)
-		//this.filter.frequency.setValueAtTime(valueAtTime, now)
-		//this.filter.frequency.
-		//	linearRampToValueAtTime(value, now)
 	}
 
 	setQ = midiValue => {
