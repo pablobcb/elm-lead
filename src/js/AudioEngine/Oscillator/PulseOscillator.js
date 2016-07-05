@@ -2,7 +2,7 @@ import FMOscillator from './FMOscillator'
 import CONSTANTS from '../../Constants'
 
 const pulseCurve = new Float32Array(256)
-for(let i=0;i<128;i++) {
+for (let i=0;i<128;i++) {
 	pulseCurve[i] = -1
 	pulseCurve[i+128] =1
 }
@@ -18,7 +18,7 @@ export default class PulseOscillator extends FMOscillator {
 		this.widthGains = []
 
 
-		for(let i = 0; i < 128; i++) {
+		for (let i = 0; i < 128; i++) {
 			this.widthGains[i] = this.context.createGain()
 		}
 	}

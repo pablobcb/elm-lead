@@ -1,0 +1,38 @@
+.incrementer
+	display flex
+	flex-direction row
+	text-align center
+	align-items center
+
+.incrementer__info
+	display flex
+	flex-direction column
+	margin-right ($unit / 2)
+
+.incrementer__label
+	height $btn-height
+	line-height $btn-height
+	margin-bottom ($unit / 4)
+
+.incrementer__display
+	padding-left ($unit / 2)
+	padding-right ($unit / 2)
+	font-family 'Digital-7 Mono', monospace
+	background #510b0b
+	color #bc2121
+	border-radius 6px
+	font-size 1.3em
+
+.incrementer__display--patch
+	width 200px
+
+.incrementer__buttons
+	width $btn-width
+
+.incrementer__button
+	nord-btn()
+
+	margin-bottom ($unit / 4)
+
+	&:last-of-type
+		margin-bottom 0

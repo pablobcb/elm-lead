@@ -10,7 +10,7 @@ export default class BaseOscillator {
 		this.kbdTrack = true
 
 
-		for(let i = 0; i <128; i++) {
+		for (let i = 0; i <128; i++) {
 			//TODO: create FM osc and let it holdd the gains,
 			// instead of the modular like it is
 			this.frequencyGains[i] = this.context.createGain()
@@ -53,7 +53,7 @@ export default class BaseOscillator {
 		}
 		this.voices[midiNoteKey].start(now)
 
-		if(noteOnAmpCB) {
+		if (noteOnAmpCB) {
 			noteOnAmpCB(this.voiceGains[midiNote].gain)
 		}
 	}
@@ -62,7 +62,7 @@ export default class BaseOscillator {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.voices[midiNoteKey]
 
-		if(!osc) {
+		if (!osc) {
 			return
 		}
 

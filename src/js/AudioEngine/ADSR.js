@@ -27,15 +27,14 @@ export default class ADSR {
 		const phase = truncateTime / time
 		let value = start + phase * difference
 
-		if(difference >= 0)	{
+		if (difference >= 0)	{
 			if (value <= start) {
 				value = start
 			}
 			if (value >= end) {
 				value = end
 			}
-		}
-		else {
+		} else {
 			if (value >= start) {
 				value = start
 			}
@@ -78,11 +77,10 @@ export default class ADSR {
 	getValueAtTime = now => {
 		let valueAtTime = this.sustainAmount
 
-		if(now >= this.state.attack && now < this.decayFrom) {
+		if (now >= this.state.attack && now < this.decayFrom) {
 			valueAtTime = this.getValue(this.startAmount, this.endAmount,
 				this.startedAt, this.decayFrom, now)
-		}
-		else if(now >= this.decayFrom && now < this.decayTo) {
+		} else if (now >= this.decayFrom && now < this.decayTo) {
 			valueAtTime = this.getValue(this.endAmount,	this.sustainAmount,
 				this.decayFrom, this.decayTo, now)
 		}

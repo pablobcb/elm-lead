@@ -21,14 +21,14 @@ export default class Filter {
 		this.filter.connect(this.output)
 	}
 
-	_ = () => {}
+	_ = () => { }
 
-	noteOn = (midiNote) => {
+	noteOn = () => {
 		const filterMinFreq = this.filter.frequency.value
 		let filterMaxFreq =
 			this.envelopeAmount * MIDI.toFilterCutoffFrequency(127)
 
-		if(filterMaxFreq < filterMinFreq) {
+		if (filterMaxFreq < filterMinFreq) {
 			filterMaxFreq = filterMinFreq
 		}
 
@@ -37,7 +37,7 @@ export default class Filter {
 		this.adsr.on(0, filterMaxInCents)(this.filter.detune)
 	}
 
-	noteOff = (midiNote) => {
+	noteOff = () => {
 		this.adsr.off(this.filter.detune)
 	}
 
@@ -56,13 +56,8 @@ export default class Filter {
 	}
 
 	setCutoff = midiValue => {
-		const value = MIDI.toFilterCutoffFrequency(midiValue)
-		const now = this.context.currentTime
-
-		//this.filter.detune.cancelScheduledValues(now)
-		this.filter.frequency.value = value
-
-		//debugger
+		this.filter.frequency.value =
+			MIDI.toFilterCutoffFrequency(midiValue)
 	}
 
 	setQ = midiValue => {
@@ -70,16 +65,15 @@ export default class Filter {
 	}
 
 	setType = filterType => {
-		if(CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
+		if (CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
 			this.filter.type = filterType.toLowerCase()
-		}
-		else{
+		} else {
 			throw new Error('Invalid Filter Type')
 		}
 	}
 
 	setEnvelopeAmount = midiValue => {
-		this.envelopeAmount = MIDI.logScaleToMax(midiValue,	1)
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 }

@@ -22,15 +22,15 @@ export default class Oscillators {
 		const osc2GainValue = Math.abs(osc1GainValue - .5)
 		this.oscillator2Gain.gain.value = osc2GainValue
 
-		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
+		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
 			this.oscillator2 = new PulseOscillator((this.context),
 				this.oscillator2Gain)
 		}
-		if(state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
+
+		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
 			this.oscillator2 = new NoiseOscillator((this.context),
 				this.oscillator2Gain)
-		}
-		else{
+		} else {
 			this.oscillator2 = new FMOscillator(this.context,
 				state.osc2.waveformType)
 		}
@@ -90,8 +90,7 @@ export default class Oscillators {
 	setOscillator1Waveform = waveform => {
 		if (CONSTANTS.OSC1_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
 			this.oscillator1.setWaveform(waveform.toLowerCase())
-		}
-		else {
+		} else {
 			throw new Error(`Invalid Waveform Type ${waveform.toLowerCase()}`)
 		}
 	}
@@ -115,18 +114,15 @@ export default class Oscillators {
 			if (nextWaveform === CONSTANTS.WAVEFORM_TYPE.PULSE) {
 				this.swapOsc2(new PulseOscillator(this.context),
 					this.oscillator2Gain)
-			}
-			else {
+			} else {
 				this.oscillator2.setWaveform(nextWaveform)
 			}
-		}
-		else if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
+		} else if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
 			this.swapOsc2(new NoiseOscillator(this.context),
 				this.oscillator2Gain)
-		}
-		else if (this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
+		} else if (this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 			this.swapOsc2(
 				new FMOscillator(this.context, nextWaveform),

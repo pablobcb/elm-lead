@@ -6,51 +6,19 @@ $midi-indicator-neutral = #a8a8a8
 
 .information-bar
 	display flex
-	height $information-bar-height
+	justify-content space-around
+	align-items center
 	width 100vw
 	background-color rgba(0, 0, 0, .2)
 	color $text-color
-	justify-content space-around
 	font-family monospace
-	white-space nowrap
-	//position fixed
-	//bottom 0
-	//letter-spacing -1px
+	padding ($unit / 2)
 
 .information-bar__item,
 .information-bar__gh-link,
 .midi-indicator
 	padding-right $unit
 	padding-left $unit
-
-.incrementer
-	height 80%
-	display flex
-	line-height $information-bar-height
-	text-align center
-
-.incrementer__display
-	margin-left ($unit / 2)
-	//margin-top ($unit / 2)
-	padding-left ($unit / 2)
-	padding-right ($unit / 2)
-	font-family 'Digital-7 Mono', monospace
-	background #510b0b
-	color #bc2121
-	border-radius 6px
-	font-size 1.3em
-
-.incrementer__btn
-	nord-btn()
-	margin-top ($unit / 4)
-	margin-left ($unit / 2)
-
-.incrementer__label
-	margin-left ($unit / 2)
-//	display flex
-//	line-height $information-bar-height
-
-
 
 .information-bar__gh-link
 	height ($information-bar-height * .8)
@@ -60,39 +28,3 @@ $midi-indicator-neutral = #a8a8a8
 	margin-top 3px
 	background-size 20px
 	background-position center center
-
-.midi-indicator
-	display flex
-	line-height $information-bar-height
-	text-align center
-
-
-.midi-indicator__blinker
-	&::before
-		content "MIDI"
-
-.midi-indicator__blinker--active
-	color $midi-indicator-ok
-
-.midi-indicator__status
-	padding-left ($unit / 2)
-
-.midi-indicator__status--active
-	color $midi-indicator-ok
-	&::before
-		content "connected"
-
-.midi-indicator__status--inactive
-	color $midi-indicator-neutral
-	&::before
-		content "not connected"
-
-.midi-indicator__status--not-supported
-	color $midi-indicator-error
-	&::before
-		content "not supported"
-
-.midi-indicator__status--scanning
-	color $midi-indicator-neutral
-	&::before
-		content "scanning devices"
