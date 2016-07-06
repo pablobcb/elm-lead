@@ -3,7 +3,6 @@ import CONSTANTS from '../Constants'
 
 
 export default class ADSR {
-	//TODO: use 0.000001 for attack and release
 	constructor (context, state) {
 		this.state = state
 		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
@@ -27,7 +26,7 @@ export default class ADSR {
 		const phase = truncateTime / time
 		let value = start + phase * difference
 
-		if (difference >= 0)	{
+		if (difference >= 0) {
 			if (value <= start) {
 				value = start
 			}
