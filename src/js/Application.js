@@ -127,7 +127,7 @@ export default class Application {
 			.subscribe(this.synth.filter.setType)
 
 		this.app.ports.overdrive
-			.subscribe(this.synth.overdrive.toggle)
+			.subscribe(this.synth.overdrive.setState)
 
 
 		// MIDI

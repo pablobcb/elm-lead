@@ -50,7 +50,7 @@ export default class Overdrive {
 		this.output.disconnect()
 	}
 
-	toggle = isOn => {
+	setState = isOn => {
 		this.state.on = isOn
 		this.input.disconnect()
 		if (isOn) {
