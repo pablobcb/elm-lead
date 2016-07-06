@@ -41,7 +41,7 @@
     {
         "name": "snd",
         "filter": {
-            "type_": "lowpass",
+            "type_": "bandpass",
             "frequency": 127,
             "q": 10,
             "envelopeAmount": 0,
@@ -63,8 +63,8 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "sawtooth",
-                "fmGain": 0
+                "waveformType": "sine",
+                "fmGain": 60
             },
             "osc2": {
                 "waveformType": "sawtooth",
@@ -74,6 +74,45 @@
             },
             "pw": 0,
             "mix": 0
+        },
+        "overdrive": false
+    },
+     {
+        "name": "snd",
+        "filter": {
+            "type_": "bandpass",
+            "frequency": 127,
+            "q": 10,
+            "envelopeAmount": 0,
+            "adsr": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 0,
+                "release": 0
+            }
+        },
+        "amp": {
+            "adsr": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 127,
+                "release": 0
+            },
+            "masterVolume": 20
+        },
+        "oscs": {
+            "osc1": {
+                "waveformType": "sine",
+                "fmGain": 0
+            },
+            "osc2": {
+                "waveformType": "whitenoise",
+                "semitone": 0,
+                "detune": 0,
+                "kbdTrack": true
+            },
+            "pw": 0,
+            "mix": 1
         },
         "overdrive": false
     }
