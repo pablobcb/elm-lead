@@ -45,7 +45,7 @@ export default class PresetManager {
 	midiSettingsToSynthSettings = (preset) => {
 		const state = {
 			filter: {
-				amp: {}
+				adsr: {}
 			},
 			amp: {
 				adsr: {}
@@ -93,17 +93,17 @@ export default class PresetManager {
 		state.filter.frequency =
 			MIDI.toFilterCutoffFrequency(preset.filter.frequency)
 
-		state.filter.amp.attack =
-			scaleMidiValue(preset.filter.amp.attack)
+		state.filter.adsr.attack =
+			scaleMidiValue(preset.filter.adsr.attack)
 
-		state.filter.amp.decay =
-			scaleMidiValue(preset.filter.amp.decay)
+		state.filter.adsr.decay =
+			scaleMidiValue(preset.filter.adsr.decay)
 
-		state.filter.amp.sustain =
-			scaleMidiValue(preset.filter.amp.sustain)
+		state.filter.adsr.sustain =
+			scaleMidiValue(preset.filter.adsr.sustain)
 
-		state.filter.amp.release =
-			scaleMidiValue(preset.filter.amp.release)
+		state.filter.adsr.release =
+			scaleMidiValue(preset.filter.adsr.release)
 
 		/* OSC */
 		state.oscs.pw =

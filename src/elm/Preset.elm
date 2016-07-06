@@ -11,7 +11,7 @@ type alias Preset =
         , frequency : MidiValue
         , q : MidiValue
         , envelopeAmount : MidiValue
-        , amp :
+        , adsr :
             { attack : MidiValue
             , decay : MidiValue
             , sustain : MidiValue

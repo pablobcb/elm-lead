@@ -163,28 +163,28 @@ knobs preset =
         "resonance"
         Port.filterQ
     , Knob.init Knob.FilterAttack
-        preset.filter.amp.attack
+        preset.filter.adsr.attack
         0
         127
         1
         "attack"
         Port.filterAttack
     , Knob.init Knob.FilterDecay
-        preset.filter.amp.decay
+        preset.filter.adsr.decay
         0
         127
         1
         "decay"
         Port.filterDecay
     , Knob.init Knob.FilterSustain
-        preset.filter.amp.sustain
+        preset.filter.adsr.sustain
         0
         127
         1
         "sustain"
         Port.filterSustain
     , Knob.init Knob.FilterRelease
-        preset.filter.amp.release
+        preset.filter.adsr.release
         0
         127
         1
