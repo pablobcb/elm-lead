@@ -1,0 +1,113 @@
+[
+    {
+        "name": "fst",
+        "filter": {
+            "type_": "lowpass",
+            "frequency": 127,
+            "q": 10,
+            "envelopeAmount": 0,
+            "amp": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 0,
+                "release": 0
+            }
+        },
+        "amp": {
+            "attack": 30,
+            "decay": 0,
+            "sustain": 127,
+            "release": 0,
+            "masterVolume": 20
+        },
+        "oscs": {
+            "osc1": {
+                "waveformType": "triangle",
+                "fmGain": 0
+            },
+            "osc2": {
+                "waveformType": "sine",
+                "semitone": 0,
+                "detune": 0,
+                "kbdTrack": true
+            },
+            "pw": 0,
+            "mix": 0
+        },
+        "overdrive": true
+    },
+    {
+        "name": "snd",
+        "filter": {
+            "type_": "lowpass",
+            "frequency": 127,
+            "q": 10,
+            "envelopeAmount": 0,
+            "amp": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 0,
+                "release": 0
+            }
+        },
+        "amp": {
+            "attack": 30,
+            "decay": 0,
+            "sustain": 127,
+            "release": 0,
+            "masterVolume": 20
+        },
+        "oscs": {
+            "osc1": {
+                "waveformType": "triangle",
+                "fmGain": 0
+            },
+            "osc2": {
+                "waveformType": "sine",
+                "semitone": 0,
+                "detune": 0,
+                "kbdTrack": true
+            },
+            "pw": 0,
+            "mix": 0
+        },
+        "overdrive": true
+    },
+    {
+        "name": "thrd",
+        "filter": {
+            "type_": "lowpass",
+            "frequency": 127,
+            "q": 10,
+            "envelopeAmount": 0,
+            "amp": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 0,
+                "release": 0
+            }
+        },
+        "amp": {
+            "attack": 0,
+            "decay": 0,
+            "sustain": 127,
+            "release": 0,
+            "masterVolume": 20
+        },
+        "oscs": {
+            "osc1": {
+                "waveformType": "sawtooth",
+                "fmGain": 0
+            },
+            "osc2": {
+                "waveformType": "sawtooth",
+                "semitone": 0,
+                "detune": 0,
+                "kbdTrack": true
+            },
+            "pw": 0,
+            "mix": 0
+        },
+        "overdrive": false
+    }
+]
