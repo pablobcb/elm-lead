@@ -19,10 +19,12 @@ type alias Preset =
             }
         }
     , amp :
-        { attack : MidiValue
-        , decay : MidiValue
-        , sustain : MidiValue
-        , release : MidiValue
+        { adsr :
+            { attack : MidiValue
+            , decay : MidiValue
+            , sustain : MidiValue
+            , release : MidiValue
+            }
         , masterVolume : MidiValue
         }
     , oscs :

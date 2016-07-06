@@ -10,9 +10,7 @@ export default class Amplifier {
 		this.state.masterVolume = state.masterVolume
 
 		/* adsr state */
-		const { attack, decay, sustain, release} = state
-		this.adsr = new ADSR(this.context,
-			{ attack, decay, sustain, release })
+		this.adsr = new ADSR(this.context, state.adsr)
 
 		/* AudioNode graph routing */
 		this.output = this.context.createGain()

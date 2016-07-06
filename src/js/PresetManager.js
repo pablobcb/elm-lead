@@ -47,7 +47,9 @@ export default class PresetManager {
 			filter: {
 				amp: {}
 			},
-			amp: {},
+			amp: {
+				adsr: {}
+			},
 			oscs: {
 				osc1: {},
 				osc2: {}
@@ -59,17 +61,17 @@ export default class PresetManager {
 		state.name = preset.name
 
 		/* AMP */
-		state.amp.attack =
-			scaleMidiValue(preset.amp.attack)
+		state.amp.adsr.attack =
+			scaleMidiValue(preset.amp.adsr.attack)
 
-		state.amp.decay =
-			scaleMidiValue(preset.amp.decay)
+		state.amp.adsr.decay =
+			scaleMidiValue(preset.amp.adsr.decay)
 
-		state.amp.sustain =
-			scaleMidiValue(preset.amp.sustain)
+		state.amp.adsr.sustain =
+			scaleMidiValue(preset.amp.adsr.sustain)
 
-		state.amp.release =
-			scaleMidiValue(preset.amp.release)
+		state.amp.adsr.release =
+			scaleMidiValue(preset.amp.adsr.release)
 
 		state.amp.masterVolume =
 			scaleMidiValue(preset.amp.masterVolume)

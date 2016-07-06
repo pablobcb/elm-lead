@@ -5,8 +5,8 @@ import CONSTANTS from '../Constants'
 export default class ADSR {
 	constructor (context, state) {
 		this.state = state
-		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
-		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
+		this.state.attack = state.attack || CONSTANTS.ONE_MILLISECOND
+		this.state.release = state.release || CONSTANTS.ONE_MILLISECOND
 
 		this.startAmount = 0
 		this.sustainAmount = 0

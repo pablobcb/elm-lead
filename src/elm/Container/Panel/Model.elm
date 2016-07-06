@@ -121,28 +121,28 @@ knobs preset =
         "gain"
         Port.ampVolume
     , Knob.init Knob.AmpAttack
-        preset.amp.attack
+        preset.amp.adsr.attack
         0
         127
         1
         "attack"
         Port.ampAttack
     , Knob.init Knob.AmpDecay
-        preset.amp.decay
+        preset.amp.adsr.decay
         0
         127
         1
         "decay"
         Port.ampDecay
     , Knob.init Knob.AmpSustain
-        preset.amp.sustain
+        preset.amp.adsr.sustain
         0
         127
         1
         "sustain"
         Port.ampSustain
     , Knob.init Knob.AmpRelease
-        preset.amp.release
+        preset.amp.adsr.release
         0
         127
         1
