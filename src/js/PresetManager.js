@@ -1,14 +1,48 @@
-import preset from './preset.json'
+import presets from './presets.json'
 
 import MIDI from './MIDI'
 
 const scaleMidiValue = midiValue =>
 	MIDI.logScaleToMax(midiValue, 1)
 
-export default {
-	loadPreset: () => preset,
+export default class PresetManager {
+	_ = () => { }
 
-	midiSettingsToSynthSettings: () => {
+	constructor() {
+		this.currentPresetIndex = -1
+	}
+
+	next = () => {
+		// cycle through bank
+		if (this.currentPreset == presets.length) {
+			this.currentPresetIndex = - 1
+		}
+
+		this.currentPresetIndex += 1
+		const currentPreset = presets[this.currentPresetIndex]
+
+		// preset indexing in a bank starts from 1 instead of 0
+		currentPreset.number = this.currentPresetIndex + 1
+
+		return currentPreset
+	}
+
+	previous = () => {
+		// cycle through bank
+		if (this.currentPreset == presets.length) {
+			this.currentPresetIndex = -1
+		}
+
+		this.currentPresetIndex += 1
+		const currentPreset = presets[this.currentPresetIndex]
+
+		// preset indexing in a bank starts from 1 instead of 0
+		currentPreset.number = this.currentPresetIndex + 1
+
+		return currentPreset
+	}
+
+	midiSettingsToSynthSettings = (preset) => {
 		const state = {
 			filter: {
 				amp: {}
@@ -20,9 +54,11 @@ export default {
 			}
 		}
 
+		/* META */
+		//displayed name
 		state.name = preset.name
 
-		// AMP
+		/* AMP */
 		state.amp.attack =
 			scaleMidiValue(preset.amp.attack)
 
@@ -38,11 +74,11 @@ export default {
 		state.amp.masterVolume =
 			scaleMidiValue(preset.amp.masterVolume)
 
-		// OVERDRIVE
+		/* OVERDRIVE */
 		state.overdrive =
 			preset.overdrive
 
-		//FILTER
+		/* FILTER */
 		state.filter.type_ =
 			preset.filter.type_
 
@@ -67,7 +103,7 @@ export default {
 		state.filter.amp.release =
 			scaleMidiValue(preset.filter.amp.release)
 
-		//OSC
+		/* OSC */
 		state.oscs.pw =
 			MIDI.logScaleToMax(preset.oscs.pw, .9)
 

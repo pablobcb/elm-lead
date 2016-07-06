@@ -9,8 +9,7 @@ const noMidiMsg = `Your browser doesnt support WebMIDI API. Use another
 
 export default class Application {
 
-	constructor () {
-
+	constructor() {
 		this.midiAcess = null
 		if (navigator.requestMIDIAccess) {
 			navigator
@@ -27,17 +26,20 @@ export default class Application {
 	}
 
 	initializeSynth = () => {
-		const preset = PresetManager.loadPreset()
+		this.presetManager = new PresetManager
+
+		const preset = this.presetManager.next()
 		const midiSupport = this.midiAccess ? true : false
 
 		this.app = Elm.Main.fullscreen({
-			preset : preset,
-			midiSupport : midiSupport
+			preset: preset,
+			midiSupport: midiSupport
 		})
 
-
-		const synthSettings = PresetManager.midiSettingsToSynthSettings()
+		const synthSettings = this.presetManager
+			.midiSettingsToSynthSettings(preset)
 		this.synth = new Synth(synthSettings)
+		//debugger
 
 		// this pernicious hack is necessary, see
 		// https://github.com/elm-lang/core/issues/595
@@ -51,11 +53,11 @@ export default class Application {
 
 		window.oncontextmenu = () => false
 
-		this.app.ports.previousPreset
-			.subscribe(()=>{})
+		//this.app.ports.previousPreset
+		//	.subscribe(() => { })
 
-		this.app.ports.nextPreset
-			.subscribe(()=>{})
+		//this.app.ports.nextPreset
+		//	.subscribe(() => { })
 
 		// AMP
 		this.app.ports.ampVolume
