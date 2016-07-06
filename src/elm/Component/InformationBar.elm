@@ -34,16 +34,16 @@ informationBar model =
         div [ class "information-bar" ]
             [ Incrementer.incrementer Incrementer.Octave
                 (" C" ++ (toString model.onScreenKeyboard.octave))
-                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
+                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
             , Incrementer.incrementer Incrementer.Velocity
                 ((toString model.onScreenKeyboard.velocity))
-                (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
                 (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
+                (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
             , Incrementer.incrementer Incrementer.Patch
                 model.presetName
-                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
+                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
               --, a
               --    [ class "information-bar__gh-link"
               --    , href "https://github.com/pablobcb/elm-lead"
