@@ -42,8 +42,8 @@ informationBar model =
                 (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
             , Incrementer.incrementer Incrementer.Patch
                 model.presetName
-                NextPreset
                 PreviousPreset
+                NextPreset
               --, a
               --    [ class "information-bar__gh-link"
               --    , href "https://github.com/pablobcb/elm-lead"
