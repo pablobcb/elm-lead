@@ -7,6 +7,7 @@ import Component.Knob as Knob exposing (..)
 import Main.Model as Model exposing (..)
 import Process exposing (..)
 import Task exposing (..)
+import Port
 
 
 type Msg
@@ -14,8 +15,8 @@ type Msg
     | OnScreenKeyboardMsg KbdUpdate.Msg
     | MouseUp
     | OnMidiStateChange Bool
-  --  | NextPreset
-  --  | PreviousPreset
+    | NextPreset
+    | PreviousPreset
 
 
 
@@ -25,6 +26,12 @@ type Msg
 update : Msg -> Model.Model -> ( Model.Model, Cmd Msg )
 update msg model =
     case msg of
+        NextPreset ->
+            ( model, {} |> Port.nextPreset )
+
+        PreviousPreset ->
+            ( model, {} |> Port.previousPreset )
+
         MouseUp ->
             let
                 ( updatedPanel, panelCmd ) =

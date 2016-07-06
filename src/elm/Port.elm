@@ -83,3 +83,9 @@ port overdrive : Bool -> Cmd msg
 
 
 port presetChange : (Preset -> msg) -> Sub msg
+
+
+port nextPreset : {} -> Cmd msg
+
+
+port previousPreset : {} -> Cmd msg

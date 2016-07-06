@@ -42,14 +42,20 @@ export default class Application {
 		// this pernicious hack is necessary, see
 		// https://github.com/elm-lang/core/issues/595
 		// setTimeout(() => this.app.ports.presetChange.send(preset), 0)
-		// MACRO
 
+		// MACRO
 		window.onblur = () => {
 			this.app.ports.panic.send()
 			this.synth.oscillators.panic()
 		}
 
 		window.oncontextmenu = () => false
+
+		this.app.ports.previousPreset
+			.subscribe(()=>{})
+
+		this.app.ports.nextPreset
+			.subscribe(()=>{})
 
 		// AMP
 		this.app.ports.ampVolume
