@@ -3,11 +3,7 @@ import CONSTANTS from '../Constants'
 
 
 export default class ADSR {
-	constructor (context, state) {
-		this.state = state
-		this.state.attack = state.attack || CONSTANTS.ONE_MILLISECOND
-		this.state.release = state.release || CONSTANTS.ONE_MILLISECOND
-
+	constructor (context) {
 		this.startAmount = 0
 		this.sustainAmount = 0
 		this.endAmount = 1
@@ -17,7 +13,11 @@ export default class ADSR {
 		this.decayTo = 0
 	}
 
-	_  = () => {}
+	setState = (state) => {
+		this.state = state
+		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
+		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
+	}
 
 	getValue = (start, end, fromTime, toTime, at) => {
 		const difference = end - start
