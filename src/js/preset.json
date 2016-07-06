@@ -1,4 +1,4 @@
-{
+[{
     "name" : "initial",
     "filter": {
         "type_": "lowpass",
@@ -34,4 +34,4 @@
         "mix": 0
     },
     "overdrive": false
-}
+}]
