@@ -15,7 +15,8 @@ export default class Filter {
 		this.envelopeAmount = state.envelopeAmount
 
 		/* adsr state */
-		this.adsr = new ADSR(this.context, state.adsr)
+		this.adsr = new ADSR(this.context)
+		this.adsr.setState(state.adsr)
 
 		/* AudioNode graph routing */
 		this.input = this.context.createGain()
