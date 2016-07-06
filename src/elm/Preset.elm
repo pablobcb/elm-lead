@@ -4,8 +4,7 @@ import Midi exposing (..)
 
 
 type alias Preset =
-    { number : Int
-    , name : String
+    { name : String
     , filter :
         { type_ : String
         , frequency : MidiValue
