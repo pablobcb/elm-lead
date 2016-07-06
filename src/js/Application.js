@@ -25,6 +25,23 @@ export default class Application {
 		this.midiAccess = midiAccess
 	}
 
+	nextPreset = () => {
+		const nextPreset = this.presetManager.next()
+		const synthState = this.presetManager
+			.midiSettingsToSynthSettings(nextPreset)
+		this.synth.setState(synthState)
+		this.app.ports.presetChange.send(nextPreset)
+	}
+
+	previousPreset = () => {
+		const previousPreset = this.presetManager.previous()
+		const synthState = this.presetManager
+			.midiSettingsToSynthSettings(previousPreset)
+		this.synth.setState(synthState)
+		this.app.ports.presetChange.send(previousPreset)
+	}
+
+
 	initializeSynth = () => {
 		this.presetManager = new PresetManager
 
