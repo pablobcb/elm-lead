@@ -1,4 +1,4 @@
-import Elm from '../elm/Main.elm'
+const Elm = require('../elm/Main.elm')
 
 import Synth from './AudioEngine/Synth'
 import MIDI from './MIDI'
@@ -9,20 +9,24 @@ const noMidiMsg = `Your browser doesnt support WebMIDI API. Use another
 
 export default class Application {
 
-	constructor() {
-		this.midiAcess = null
+	protected app: ElmComponent<any>
+
+	protected midiAccess: MIDIAccess
+	protected synth: Synth
+
+	constructor () {
+		const onMIDISuccess = midiAccess => {
+			this.midiAccess = midiAccess
+		}
+
 		if (navigator.requestMIDIAccess) {
 			navigator
 				.requestMIDIAccess({ sysex: false })
-				.then(this.onMIDISuccess, () => alert(noMidiMsg))
+				.then(onMIDISuccess, () => alert(noMidiMsg))
 				.then(this.initializeSynth)
 		} else {
-			this.onMIDIFailure()
+			 alert(noMidiMsg)
 		}
-	}
-
-	onMIDISuccess = midiAccess => {
-		this.midiAccess = midiAccess
 	}
 
 	nextPreset = () => {
@@ -40,7 +44,6 @@ export default class Application {
 		this.synth.setState(synthState)
 		this.app.ports.presetChange.send(previousPreset)
 	}
-
 
 	initializeSynth = () => {
 		this.presetManager = new PresetManager

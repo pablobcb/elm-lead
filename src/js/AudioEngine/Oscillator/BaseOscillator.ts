@@ -1,6 +1,15 @@
 export default class BaseOscillator {
 
-	constructor (context) {
+	public context : AudioContext
+	public output : GainNode
+	public voiceGains : Array<GainNode>
+	public frequencyGains : Array<GainNode>
+	public kbdTrack : boolean
+	public voices : any
+
+	protected context: AudioContext
+
+	constructor (context: AudioContext) {
 		this.context = context
 		this.output = this.context.createGain()
 		this.output.gain.value = .5
@@ -27,18 +36,17 @@ export default class BaseOscillator {
 		}
 	}
 
-	frequencyFromNoteNumber = (note) => {
-		const note_ = this.kbdTrack ? note : 60
+	frequencyFromNoteNumber = (note: number) => {
+		const note_: number = this.kbdTrack ? note : 60
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
-	noteOn = (midiNote, noteOnAmpCB) => {
+	noteOn = (midiNote: any, noteOnAmpCB: any) => {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
 		if (midiNoteKey in this.voices) {
-			this.voices[midiNoteKey]
-				.stop(now)
+			this.voices[midiNoteKey].stop(now)
 			this.frequencyGains[midiNote].disconnect()
 			this.voices[midiNoteKey].disconnect()
 
@@ -58,7 +66,7 @@ export default class BaseOscillator {
 		}
 	}
 
-	noteOff = (midiNote, noteOffAmpCB) => {
+	noteOff = (midiNote: any, noteOffAmpCB: any) => {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.voices[midiNoteKey]
 
@@ -80,18 +88,18 @@ export default class BaseOscillator {
 
 	setWaveform = () => {}
 
-	setKbdTrack = (state) => {
+	setKbdTrack = (state: boolean) => {
 		this.kbdTrack = state
 	}
 
 	_onended = () => {}
 
-	connect = function (node) {
+	connect = function (node: any) {
 		this.output.connect(node)
 		return this
 	}
 
-	disconnect = function (node) {
+	disconnect = function (node: any) {
 		this.output.disconnect(node)
 		return this
 	}

@@ -1,9 +1,18 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 
-
 export default class ADSR {
-	constructor (context, state) {
+
+	public state: any
+	public startAmount: number
+	public sustainAmount: number
+	public endAmount: number
+	public context: AudioContext
+	public startedAt: number
+	public decayFrom: number
+	public decayTo: number
+
+	constructor (context: AudioContext, state: any) {
 		this.startAmount = 0
 		this.sustainAmount = 0
 		this.endAmount = 1
@@ -21,7 +30,7 @@ export default class ADSR {
 		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
 	}
 
-	getValue = (start, end, fromTime, toTime, at) => {
+	getValue = (start: number, end: number, fromTime: number, toTime: number, at: number) => {
 		const difference = end - start
 		const time = toTime - fromTime
 		const truncateTime = at - fromTime
@@ -47,7 +56,7 @@ export default class ADSR {
 		return value
 	}
 
-	on = (startAmount, endAmount) => target => {
+	on = (startAmount: number, endAmount: number) => (target: AudioParam) => {
 		const now = this.context.currentTime
 		this.startedAt = now
 		this.decayFrom = this.startedAt + this.state.attack
@@ -63,7 +72,7 @@ export default class ADSR {
 		target.linearRampToValueAtTime(this.sustainAmount, this.decayTo)
 	}
 
-	off = target => {
+	off = (target: AudioParam) => {
 		const now = this.context.currentTime
 		const valueAtTime = this.getValueAtTime(now)
 
@@ -75,38 +84,38 @@ export default class ADSR {
 		return now + this.state.release
 	}
 
-	getValueAtTime = now => {
+	getValueAtTime = (now: number) => {
 		let valueAtTime = this.sustainAmount
 
 		if (now >= this.state.attack && now < this.decayFrom) {
 			valueAtTime = this.getValue(this.startAmount, this.endAmount,
 				this.startedAt, this.decayFrom, now)
 		} else if (now >= this.decayFrom && now < this.decayTo) {
-			valueAtTime = this.getValue(this.endAmount,	this.sustainAmount,
+			valueAtTime = this.getValue(this.endAmount, this.sustainAmount,
 				this.decayFrom, this.decayTo, now)
 		}
 
 		return valueAtTime
 	}
 
-	setAttack = midiValue => {
+	setAttack = (midiValue: number) => {
 		this.state.attack = midiValue != 0 ?
-			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) :
+			MIDI.logScaleToMax(midiValue, CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
 
-	setDecay = midiValue => {
+	setDecay = (midiValue: number) => {
 		this.state.decay = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
-	setSustain = midiValue => {
+	setSustain = (midiValue: number) => {
 		this.state.sustain = MIDI.logScaleToMax(midiValue, 1)
 	}
 
-	setRelease = midiValue => {
+	setRelease = (midiValue: number) => {
 		this.state.release = midiValue != 0 ?
-			MIDI.logScaleToMax(midiValue,CONSTANTS.MAX_ENVELOPE_TIME) :
+			MIDI.logScaleToMax(midiValue, CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
 }

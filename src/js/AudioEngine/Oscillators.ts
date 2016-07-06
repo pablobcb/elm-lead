@@ -7,7 +7,16 @@ import NoiseOscillator from './Oscillator/NoiseOscillator'
 
 // TODO: move set state to Oscillator.js
 export default class Oscillators {
-	constructor (context, state) {
+
+	public context: AudioContext
+	public state: any
+	public oscillator1Gain: GainNode
+	public oscillator1: FMOscillator
+	public oscillator2Gain: GainNode
+	public oscillator2: PulseOscillator
+	public fmGains: Array<GainNode>
+
+	constructor (context: AudioContext, state: any) {
 		this.context = context
 		this.state = state
 
@@ -17,7 +26,6 @@ export default class Oscillators {
 		/* create oscillators gains */
 		this.oscillator1Gain = this.context.createGain()
 		this.oscillator2Gain = this.context.createGain()
-
 
 		/* create oscillator nodes */
 		this.oscillator1 = new FMOscillator(this.context,
@@ -41,8 +49,6 @@ export default class Oscillators {
 
 		this._setState(state)
 	}
-
-	_ = () => {}
 
 /***************************/
 /*     private methods     */
@@ -113,7 +119,7 @@ export default class Oscillators {
 		this.state.osc2.waveformType = waveform
 	}
 
-	_swapOsc2 = (osc, gainB) => {
+	_swapOsc2 = (osc: any, gainB: any) => {
 		const now = this.context.currentTime
 		for (const midiNote in this.oscillator2.voices) {
 			if (this.oscillator2.voices.hasOwnProperty(midiNote)) {
@@ -197,12 +203,12 @@ export default class Oscillators {
 		}
 	}
 
-	connect = node => {
+	connect = (node: any) => {
 		this.oscillator2Gain.connect(node)
 		this.oscillator1Gain.connect(node)
 	}
 
-	disconnect = node => {
+	disconnect = (node: any) => {
 		this.oscillator2Gain.disconnect(node)
 		this.oscillator1Gain.disconnect(node)
 	}
@@ -212,12 +218,12 @@ export default class Oscillators {
 		this.oscillator2.panic()
 	}
 
-	noteOn = (midiNote, noteOnCb /*, velocity*/) => {
+	noteOn = (midiNote: any, noteOnCb: any /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, noteOnCb)
 		this.oscillator2.noteOn(midiNote, noteOnCb)
 	}
 
-	noteOff = (midiNote, noteOffCb /*, velocity*/) => {
+	noteOff = (midiNote: any, noteOffCb: any /*, velocity*/) => {
 		this.oscillator1.noteOff(midiNote, noteOffCb)
 		this.oscillator2.noteOff(midiNote, noteOffCb)
 	}

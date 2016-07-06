@@ -4,7 +4,15 @@ import ADSR from './ADSR'
 
 
 export default class Filter {
-	constructor (context, state) {
+
+	public context : AudioContext
+	public input : GainNode
+	public output : GainNode
+	public filter : BiquadFilterNode
+	public adsr : ADSR
+	public envelopeAmount : number
+
+	constructor (context: AudioContext, state: any) {
 		this.context = context
 
 		this.biquadFilter = this.context.createBiquadFilter()
@@ -60,26 +68,26 @@ export default class Filter {
 		return this.biquadFilter.type
 	}
 
-	connect = node => {
+	connect = (node: any) => {
 		this.output.connect(node)
 		return this
 	}
 
-	disconnect = node => {
+	disconnect = (node: any) => {
 		this.output.disconnect(node)
 		return this
 	}
 
-	setCutoff = midiValue => {
+	setCutoff = (midiValue: number) => {
 		this.biquadFilter.frequency.value =
 			MIDI.toFilterCutoffFrequency(midiValue)
 	}
 
-	setQ = midiValue => {
+	setQ = (midiValue: number) => {
 		this.biquadFilter.Q.value = MIDI.toFilterQAmount(midiValue)
 	}
 
-	setType = filterType => {
+	setType = (filterType: string) => {
 		if (CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
 			this.biquadFilter.type = filterType.toLowerCase()
 		} else {
@@ -87,7 +95,7 @@ export default class Filter {
 		}
 	}
 
-	setEnvelopeAmount = midiValue => {
+	setEnvelopeAmount = (midiValue: number) => {
 		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
 	}
 

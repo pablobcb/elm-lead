@@ -2,7 +2,14 @@ import ADSR from './ADSR'
 import MIDI from '../MIDI'
 
 export default class Amplifier {
-	constructor(context, state) {
+
+	public state : any
+	public context : AudioContext
+	public adsr : ADSR
+	public output : GainNode
+
+
+	constructor (context: AudioContext, state: any) {
 		this.context = context
 
 		/* amp adsr state */
@@ -15,7 +22,7 @@ export default class Amplifier {
 		this._setState(state)
 	}
 
-	setMasterVolumeGain = midiValue => {
+	setMasterVolumeGain = (midiValue: number) => {
 		const vol = MIDI.logScaleToMax(midiValue, 1)
 		this.state.masterVolume = vol
 		this.output.gain.value = vol
@@ -31,4 +38,5 @@ export default class Amplifier {
 		this.adsr.setState(state.adsr)
 		this._setState(state)
 	}
+
 }

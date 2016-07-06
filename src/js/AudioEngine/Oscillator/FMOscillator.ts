@@ -1,17 +1,21 @@
 import BaseOscillator from './BaseOscillator'
 
+interface Waveform {} // FIXME
+
 export default class FMOscillator extends BaseOscillator {
-	constructor (context, waveform) {
+
+	public detune : number
+	public semitone : number
+	public type : string
+
+	constructor (context: AudioContext, waveform: string) {
 		super(context)
 		this.type = waveform
 		this.detune = 0
 		this.semitone = 0
 	}
 
-	//shutup visual studio
-	_ = () => {}
-
-	_noteOn = midiNote => {
+	_noteOn = (midiNote: any) => {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.context.createOscillator()
 

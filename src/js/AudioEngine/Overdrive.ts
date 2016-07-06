@@ -2,7 +2,20 @@ import CONSTANTS from '../Constants'
 
 /* code copied from https://github.com/web-audio-components/overdrive */
 export default class Overdrive {
-	constructor (context, state) {
+
+	public input: GainNode
+	public output: GainNode
+
+	protected _bandpass: BiquadFilterNode
+	protected _bpWet: GainNode
+	protected _bpDry: GainNode
+	protected _ws: WaveShaperNode
+	protected _lowpass: BiquadFilterNode
+	protected _drive: any
+
+	public params: any
+
+	constructor (context: AudioContext, state: any) {
 		this.context = context
 
 		/* overdrive state */
@@ -36,9 +49,23 @@ export default class Overdrive {
 		this._bpDry.gain.value = 1 - params.preBand
 
 		this.setState(state)
+
+		this._bpWet.gain.value = params.preBand
+		this._lowpass.frequency.value = params.postCut
+		this.drive = params.drive
+
+		// Inverted preBand value
+		this._bpDry.gain.value = params.preBand
+			? 1 - params.preBand
+			: 1 - params.preBand.defaultValue
+
+		if (!state.on) {
+			this.input.disconnect()
+			this.input.connect(this.output)
+		}
 	}
 
-	connect = node => {
+	connect = (node: any) => {
 		this.output.connect(node.input ? node.input : node)
 	}
 
@@ -46,7 +73,7 @@ export default class Overdrive {
 		this.output.disconnect()
 	}
 
-	setState = isOn => {
+	setState = (isOn: boolean) => {
 		this.state.on = isOn
 		this.input.disconnect()
 		if (isOn) {
@@ -56,28 +83,28 @@ export default class Overdrive {
 		}
 	}
 
-	get preBand () {
+	get preBand() {
 		return this._bpWet.gain.value
 	}
 
-	set preBand (value) {
+	set preBand(value: number) {
 		this._bpWet.gain.setValueAtTime(value, 0)
 		this._bpDry.gain.setValueAtTime(1 - value, 0)
 	}
 
-	get color () {
+	get color() {
 		return this._bandpass.frequency.value
 	}
 
-	set color (value) {
+	set color(value: number) {
 		this._bandpass.frequency.setValueAtTime(value, 0)
 	}
 
-	get drive () {
+	get drive() {
 		return this._drive
 	}
 
-	set drive (value) {
+	set drive(value: number) {
 		const k = value * 100
 			, n = 22050
 			, curve = new Float32Array(n)
@@ -91,11 +118,11 @@ export default class Overdrive {
 		this._ws.curve = curve
 	}
 
-	get postCut () {
+	get postCut() {
 		return this._lowpass.frequency.value
 	}
 
-	set postCut (value) {
+	set postCut(value: number) {
 		this._lowpass.frequency.setValueAtTime(value, 0)
 	}
 

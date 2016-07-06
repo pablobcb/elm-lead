@@ -7,7 +7,15 @@ import CONSTANTS from '../Constants'
 
 
 export default class Synth {
-	constructor(state) {
+
+	public context : AudioContext
+	public state : any
+	public amplifier : Amplifier
+	public overdrive : Overdrive
+	public filter : Filter
+	public oscillators : Oscillators
+
+	constructor(state: any) {
 		this.context = new AudioContext
 
 		this.amplifier = new Amplifier(this.context, state.amp)
@@ -22,9 +30,6 @@ export default class Synth {
 		this.oscillators.connect(this.filter.input)
 	}
 
-	_ = () => { }
-
-
 	setState = (state) => {
 		this.amplifier.setState(state.amp)
 		this.overdrive.setState(state.overdrive)
@@ -32,7 +37,7 @@ export default class Synth {
 		this.oscillators.setState(state.oscs)
 	}
 
-	onMIDIMessage = data => {
+	onMIDIMessage = (data: any) => {
 		//console.log(data)
 		// var cmd = data[0] >> 4
 		// var channel = data[0] & 0xf

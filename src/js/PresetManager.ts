@@ -1,12 +1,19 @@
-import presets from './presets.json'
+const presets = require('../presets.json') as IPreset
 
 import MIDI from './MIDI'
 
-const scaleMidiValue = midiValue =>
+const scaleMidiValue = (midiValue: number) =>
 	MIDI.logScaleToMax(midiValue, 1)
 
+interface IPreset {
+	name? : string
+	filter : { amp : Object }
+	amp: any
+	oscs: { osc1: Object, osc2: Object }
+	overdrive: any
+}
+
 export default class PresetManager {
-	_ = () => { }
 
 	constructor() {
 		this.currentPresetIndex = -1
@@ -54,7 +61,7 @@ export default class PresetManager {
 				osc1: {},
 				osc2: {}
 			}
-		}
+		} as IPreset
 
 		/* META */
 		//displayed name
