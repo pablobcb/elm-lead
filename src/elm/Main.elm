@@ -15,7 +15,8 @@ import Main.View as View exposing (..)
 main : Program InitialFlags
 main =
     Html.App.programWithFlags
-        { init = \flags -> ( initModel flags, Cmd.none )
+        { init = \flags ->
+            ( Model.init flags.preset flags.midiSupport, Cmd.none )
         , view = View.view
         , update = Update.update
         , subscriptions = subscriptions
@@ -27,7 +28,7 @@ subscriptions model =
     Sub.batch
         [ Port.midiIn <| OnScreenKeyboardMsg << MidiMessageIn
         , Port.midiStateChange OnMidiStateChange
-        , Port.presetChange <| PanelMsg << PanelUpdate.PresetChange
+        , Port.presetChange <| PresetChange
         , Port.panic <| always <| OnScreenKeyboardMsg Panic
         , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
         , Keyboard.downs

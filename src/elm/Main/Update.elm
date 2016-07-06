@@ -8,6 +8,7 @@ import Main.Model as Model exposing (..)
 import Process exposing (..)
 import Task exposing (..)
 import Port
+import Preset
 
 
 type Msg
@@ -17,6 +18,7 @@ type Msg
     | OnMidiStateChange Bool
     | NextPreset
     | PreviousPreset
+    | PresetChange Preset.Preset
 
 
 
@@ -31,6 +33,19 @@ update msg model =
 
         PreviousPreset ->
             ( model, {} |> Port.previousPreset )
+
+        PresetChange preset ->
+            let
+                initModel =
+                    Model.init preset model.midiSupport
+
+                model' =
+                    { initModel
+                        | midiConnected = model.midiConnected
+                        , onScreenKeyboard = model.onScreenKeyboard
+                    }
+            in
+                ( model', Cmd.none )
 
         MouseUp ->
             let
@@ -65,30 +80,24 @@ update msg model =
             let
                 ( updatedKbd, kbdCmd ) =
                     KbdUpdate.update subMsg model.onScreenKeyboard
-            in
-                let
-                    ( midiMsgInLedOn, blinkOffCmd ) =
-                        case subMsg of
-                            MidiMessageIn _ ->
-                                ( True
-                                , Process.sleep (50)
-                                    |> Task.perform (always KbdUpdate.NoOp)
-                                        (always KbdUpdate.NoOp)
-                                )
 
-                            _ ->
-                                ( False, Cmd.none )
-                in
-                    ( updateOnScreenKeyboard updatedKbd
-                        { model | midiMsgInLedOn = midiMsgInLedOn }
-                    , Cmd.map OnScreenKeyboardMsg
-                        <| Cmd.batch [ blinkOffCmd, kbdCmd ]
-                    )
+                ( midiMsgInLedOn, blinkOffCmd ) =
+                    case subMsg of
+                        MidiMessageIn _ ->
+                            ( True
+                            , Process.sleep (50)
+                                |> Task.perform (always KbdUpdate.NoOp)
+                                    (always KbdUpdate.NoOp)
+                            )
+
+                        _ ->
+                            ( False, Cmd.none )
+            in
+                ( updateOnScreenKeyboard updatedKbd
+                    { model | midiMsgInLedOn = midiMsgInLedOn }
+                , Cmd.map OnScreenKeyboardMsg
+                    <| Cmd.batch [ blinkOffCmd, kbdCmd ]
+                )
 
         OnMidiStateChange state ->
-            ( { model
-                | midiConnected = state
-                , searchingMidi = False
-              }
-            , Cmd.none
-            )
+            ( { model | midiConnected = state }, Cmd.none )

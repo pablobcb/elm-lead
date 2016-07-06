@@ -6,7 +6,6 @@ import Container.Panel.Model as Model exposing (..)
 import Component.Knob as Knob
 import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
-import Preset
 
 
 type Msg
@@ -16,8 +15,6 @@ type Msg
     | OverdriveToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
     | KnobMsg Knob.Msg
-    | PresetChange Preset.Preset
-
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -46,9 +43,6 @@ update msg model =
                 )
     in
         case msg of
-            PresetChange preset ->
-                ( Model.init preset, Cmd.none )
-
             Osc1WaveformChange subMsg ->
                 updateMap OptionPicker.update
                     subMsg

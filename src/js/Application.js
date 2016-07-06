@@ -70,11 +70,15 @@ export default class Application {
 
 		window.oncontextmenu = () => false
 
-		//this.app.ports.previousPreset
-		//	.subscribe(() => { })
+		this.app.ports.previousPreset
+			.subscribe(() => {
+				this.previousPreset()
+			})
 
-		//this.app.ports.nextPreset
-		//	.subscribe(() => { })
+		this.app.ports.nextPreset
+			.subscribe(() => {
+				this.nextPreset()
+			})
 
 		// AMP
 		this.app.ports.ampVolume
