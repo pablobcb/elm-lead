@@ -11,11 +11,6 @@ module.exports = {
 			{
 				test: /\.styl$/,
 				loader: 'stylint'
-			},
-			{
-				test: /\.js$/,
-				loader: 'eslint',
-				exclude: /node_modules/
 			}
 		],
 		loaders: [
