@@ -5,16 +5,12 @@ export default class Amplifier {
 	constructor(context, state) {
 		this.context = context
 
-		/* amp state */
-		this.state = {}
-		this.state.masterVolume = state.masterVolume
-
-		/* adsr state */
-		this.adsr = new ADSR(this.context, state.adsr)
+		/* amp adsr state */
+		this.adsr = new ADSR(this.context)
+		this.adsr.setState(state.adsr)
 
 		/* AudioNode graph routing */
 		this.output = this.context.createGain()
-		this.output.gain.value = this.state.masterVolume
 		this.output.connect(this.context.destination)
 	}
 
@@ -22,5 +18,12 @@ export default class Amplifier {
 		const vol = MIDI.logScaleToMax(midiValue, 1)
 		this.state.masterVolume = vol
 		this.output.gain.value = vol
+	}
+
+	setState = state => {
+		this.state = {}
+		this.output.gain.value = state.masterVolume
+		this.state.masterVolume = state.masterVolume
+		this.adsr.setState(state.adsr)
 	}
 }
