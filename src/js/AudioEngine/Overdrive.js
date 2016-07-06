@@ -1,16 +1,25 @@
+import CONSTANTS from '../Constants'
+
 export default class Overdrive {
-	constructor (context, state) {
-		this.input = context.createGain()
-		this.output = context.createGain()
+	constructor (context, isOn) {
+		this.context = context
 
-		// Internal AudioNodes
-		this._bandpass = context.createBiquadFilter()
-		this._bpWet = context.createGain()
-		this._bpDry = context.createGain()
-		this._ws = context.createWaveShaper()
-		this._lowpass = context.createBiquadFilter()
+		/* overdrive state */
+		this.state = {}
+		this.state.on = isOn
+		const params = CONSTANTS.OVERDRIVE_PARAMS
 
-		// AudioNode graph routing
+		/* internal AudioNodes */
+		this._bandpass = this.context.createBiquadFilter()
+		this._bpWet = this.context.createGain()
+		this._bpDry = this.context.createGain()
+		this._ws = this.context.createWaveShaper()
+		this._lowpass = this.context.createBiquadFilter()
+
+		/* AudioNode graph routing */
+		this.input = this.context.createGain()
+		this.output = this.context.createGain()
+
 		this.input.connect(this._bandpass)
 		this._bandpass.connect(this._bpWet)
 		this._bandpass.connect(this._bpDry)
@@ -19,56 +28,18 @@ export default class Overdrive {
 		this._ws.connect(this._lowpass)
 		this._lowpass.connect(this.output)
 
-		// params
-		this.params = {
-			preBand: {
-				min: 0,
-				max: 1.0,
-				defaultValue: 0.5,
-				type: 'float'
-			},
-			color: {
-				min: 0,
-				max: 22050,
-				defaultValue: 800,
-				type: 'float'
-			},
-			drive: {
-				min: 0.0,
-				max: 1.0,
-				defaultValue: 0.5,
-				type: 'float'
-			},
-			postCut: {
-				min: 0,
-				max: 22050,
-				defaultValue: 3000,
-				type: 'float'
-			}
-		}
-
-		state = state || {}
-		this._bandpass.frequency.value =
-			state.color || this.params.color.defaultValue
-
-		this._bpWet.gain.value =
-			state.preBand || this.params.preBand.defaultValue
-
-		this._lowpass.frequency.value =
-			state.postCut || this.postCut.defaultValue
-
-		this.drive =
-			state.drive || this.drive.defaultValue
-
-		// Inverted preBand value
-		this._bpDry.gain.value = state.preBand
-			? 1 - state.preBand
-			: 1 - this.params.preBand.defaultValue
-
-		if (! state.on) {
+		/* bybass AudioNode graph if distortion is Off */
+		if (! isOn) {
 			this.input.disconnect()
 			this.input.connect(this.output)
 		}
+
+		/* assign overdrive default values */
+		this._bandpass.frequency.value = params.color
+		this._bpWet.gain.value = params.preBand
+		this._lowpass.frequency.value = params.postCut
+		this.drive = params.drive
+		this._bpDry.gain.value = 1 - params.preBand
 	}
 
 	connect = node => {
@@ -79,9 +50,10 @@ export default class Overdrive {
 		this.output.disconnect()
 	}
 
-	toggle = on => {
+	toggle = isOn => {
+		this.state.on = isOn
 		this.input.disconnect()
-		if (on) {
+		if (isOn) {
 			this.input.connect(this._bandpass)
 		} else {
 			this.input.connect(this.output)
