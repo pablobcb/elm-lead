@@ -8,36 +8,50 @@ import NoiseOscillator from './Oscillator/NoiseOscillator'
 export default class Oscillators {
 	constructor (context, state) {
 		this.context = context
+
+		/* oscillators state */
 		this.state = state
 
+
+		/***************************/
+		/* AudioNode graph routing */
+		/***************************/
+
+		/* create oscillators gains */
 		this.oscillator1Gain = this.context.createGain()
+		this.oscillator2Gain = this.context.createGain()
+
+		/* calculate and set volume mix between oscillators */
 		const osc1GainValue = (1 - state.mix) / 2
 		this.oscillator1Gain.gain.value = osc1GainValue
-
-		this.oscillator1 = new FMOscillator(this.context,
-			state.osc1.waveformType)
-		this.oscillator1.connect(this.oscillator1Gain)
-
-		this.oscillator2Gain = this.context.createGain()
 		const osc2GainValue = Math.abs(osc1GainValue - .5)
 		this.oscillator2Gain.gain.value = osc2GainValue
 
+		/* create oscillator nodes */
+		this.oscillator1 =
+			new FMOscillator(this.context, state.osc1.waveformType)
+
 		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
-			this.oscillator2 = new PulseOscillator((this.context),
-				this.oscillator2Gain)
-		}
 
+			this.oscillator2 =
+				new PulseOscillator(this.context, this.oscillator2Gain)
+		}
 		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
-			this.oscillator2 = new NoiseOscillator((this.context),
-				this.oscillator2Gain)
-		} else {
-			this.oscillator2 = new FMOscillator(this.context,
-				state.osc2.waveformType)
+
+			this.oscillator2 =
+				new NoiseOscillator(this.context, this.oscillator2Gain)
+		}
+		else {
+
+			this.oscillator2 =
+				new FMOscillator(this.context, state.osc2.waveformType)
 		}
 
+		/* connect oscs with the previously mixed gains */
+		this.oscillator1.connect(this.oscillator1Gain)
 		this.oscillator2.connect(this.oscillator2Gain)
 
-		//TODO : IMPLEMENT OSC CLASS WHICH HOLDS FMGAIN
+		/* create Frequency Modulation gains */
 		this.fmGains = []
 		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
