@@ -15,8 +15,6 @@ informationBar model =
             "midi-indicator__status midi-indicator__status--"
                 ++ (if not model.midiSupport then
                         "not-supported"
-                    else if model.searchingMidi then
-                        "scanning"
                     else if model.midiConnected then
                         "active"
                     else
@@ -41,7 +39,7 @@ informationBar model =
                 (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
                 (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
             , Incrementer.incrementer Incrementer.Patch
-                model.presetName
+                ((toString model.presetId) ++ "  " ++ model.presetName)
                 PreviousPreset
                 NextPreset
               --, a

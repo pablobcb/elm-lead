@@ -13,22 +13,22 @@ type alias Model =
     { onScreenKeyboard : KbdModel.Model
     , panel : PanelModel.Model
     , midiConnected : Bool
-    , searchingMidi : Bool
     , midiMsgInLedOn : Bool
     , midiSupport : Bool
     , presetName : String
+    , presetId : Int
     }
 
 
-initModel : InitialFlags -> Model
-initModel flags =
+init : Preset.Preset -> Bool -> Model
+init preset midiSupport =
     { onScreenKeyboard = KbdModel.init
-    , panel = PanelModel.init flags.preset
+    , panel = PanelModel.init preset
     , midiConnected = False
-    , searchingMidi = True
     , midiMsgInLedOn = False
-    , midiSupport = flags.midiSupport
-    , presetName = flags.preset.name
+    , midiSupport = midiSupport
+    , presetName = preset.name
+    , presetId = preset.presetId
     }
 
 
