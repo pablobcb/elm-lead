@@ -14,13 +14,13 @@ export default class PresetManager {
 
 	next = () => {
 		// cycle through bank
-		if (this.currentPreset == presets.length) {
+		if (this.currentPresetIndex == presets.length -1) {
 			this.currentPresetIndex = - 1
 		}
 
 		this.currentPresetIndex += 1
-		const currentPreset = presets[this.currentPresetIndex]
 
+		const currentPreset = presets[this.currentPresetIndex]
 		// preset indexing in a bank starts from 1 instead of 0
 		currentPreset.presetId = this.currentPresetIndex + 1
 
@@ -29,16 +29,16 @@ export default class PresetManager {
 
 	previous = () => {
 		// cycle through bank
-		if (this.currentPreset == presets.length) {
-			this.currentPresetIndex = -1
-		}
+		this.currentPresetIndex -= 1
 
-		this.currentPresetIndex += 1
+		if (this.currentPresetIndex  == - 1) {
+			this.currentPresetIndex = presets.length - 1
+		}
 		const currentPreset = presets[this.currentPresetIndex]
 
 		// preset indexing in a bank starts from 1 instead of 0
 		currentPreset.presetId = this.currentPresetIndex + 1
-
+		// preset indexing in a bank starts from 1 instead of 0
 		return currentPreset
 	}
 
