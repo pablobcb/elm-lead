@@ -36,10 +36,10 @@ informationBar model =
                 (" C" ++ (toString model.onScreenKeyboard.octave))
                 (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
                 (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
-            , div [ class "midi-indicator" ]
-                [ div [ class blinkerClass ] []
-                , div [ class midiIndicatorClass ] []
-                ]
+            , Incrementer.incrementer Incrementer.Velocity
+                ((toString model.onScreenKeyboard.velocity))
+                (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
+                (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
             , Incrementer.incrementer Incrementer.Patch
                 model.presetName
                 (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
@@ -49,8 +49,9 @@ informationBar model =
               --    , href "https://github.com/pablobcb/elm-lead"
               --    ]
               --    []
-            , Incrementer.incrementer Incrementer.Velocity
-                ((toString model.onScreenKeyboard.velocity))
-                (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
-                (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
+
+            , div [ class "midi-indicator" ]
+                [ div [ class blinkerClass ] []
+                , div [ class midiIndicatorClass ] []
+                ]
             ]
