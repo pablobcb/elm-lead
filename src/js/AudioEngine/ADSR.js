@@ -3,7 +3,7 @@ import CONSTANTS from '../Constants'
 
 
 export default class ADSR {
-	constructor (context) {
+	constructor (context, state) {
 		this.startAmount = 0
 		this.sustainAmount = 0
 		this.endAmount = 1
@@ -11,6 +11,8 @@ export default class ADSR {
 		this.startedAt = 0
 		this.decayFrom = 0
 		this.decayTo = 0
+
+		this.setState(state)
 	}
 
 	setState = (state) => {

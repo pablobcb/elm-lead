@@ -1,12 +1,11 @@
 import CONSTANTS from '../Constants'
 
 export default class Overdrive {
-	constructor (context, isOn) {
+	constructor (context, state) {
 		this.context = context
 
 		/* overdrive state */
 		this.state = {}
-		this.state.on = isOn
 		const params = CONSTANTS.OVERDRIVE_PARAMS
 
 		/* internal AudioNodes */
@@ -28,18 +27,14 @@ export default class Overdrive {
 		this._ws.connect(this._lowpass)
 		this._lowpass.connect(this.output)
 
-		/* bybass AudioNode graph if distortion is Off */
-		if (! isOn) {
-			this.input.disconnect()
-			this.input.connect(this.output)
-		}
-
 		/* assign overdrive default values */
 		this._bandpass.frequency.value = params.color
 		this._bpWet.gain.value = params.preBand
 		this._lowpass.frequency.value = params.postCut
 		this.drive = params.drive
 		this._bpDry.gain.value = 1 - params.preBand
+
+		this.setState(state)
 	}
 
 	connect = node => {

@@ -41,12 +41,12 @@ export default {
 		20 * (midiValue / MIDI_MAX_VALUE)
 	),
 
-	toFilterCutoffFrequency : midiValue => (
-		1.6 * midiToFreq(midiValue)
+	toFilterCutoffFrequency : midiValue => {
+		return 1.6 * midiToFreq(midiValue)
 		//midiValue / 127 *
 		//	(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
 		//	CONSTANTS.MIN_FILTER_FREQUENCY
-	),
+	},
 
 	logScaleToMax : (midiValue, max) => (
 		(Math.pow(2, midiValue / MIDI_MAX_VALUE) - 1) * max

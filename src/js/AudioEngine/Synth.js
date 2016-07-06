@@ -3,30 +3,34 @@ import Oscillators from './Oscillators'
 import Filter from './Filter'
 import Amplifier from './Amplifier'
 import Overdrive from './Overdrive'
-
 import CONSTANTS from '../Constants'
 
+
 export default class Synth {
-	constructor (preset) {
+	constructor(state) {
 		this.context = new AudioContext
 
-		this.state = preset
+		this.amplifier = new Amplifier(this.context, state.amp)
 
-		this.amplifier = new Amplifier(this.context, this.state.amp)
-
-		const overdriveState = CONSTANTS.OVERDRIVE_PARAMS
-		overdriveState.on = this.state.overdrive
-		this.overdrive = new Overdrive(this.context, overdriveState)
+		this.overdrive = new Overdrive(this.context, state.overdrive)
 		this.overdrive.connect(this.amplifier.output)
 
-		this.filter = new Filter(this.context, this.state.filter)
+		this.filter = new Filter(this.context, state.filter)
 		this.filter.connect(this.overdrive.input)
 
-		this.oscillators = new Oscillators(this.context, this.state.oscs)
+		this.oscillators = new Oscillators(this.context, state.oscs)
 		this.oscillators.connect(this.filter.input)
 	}
 
 	_ = () => { }
+
+
+	setState = (state) => {
+		this.amplifier.setState(state.amp)
+		this.overdrive.setState(state.overdrive)
+		this.filter.setState(state.filter)
+		this.oscillators.setState(state.oscs)
+	}
 
 	onMIDIMessage = data => {
 		//console.log(data)

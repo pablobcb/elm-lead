@@ -7,25 +7,34 @@ export default class Filter {
 	constructor (context, state) {
 		this.context = context
 
-		/* filter state */
 		this.biquadFilter = this.context.createBiquadFilter()
-		this.biquadFilter.type = state.type_
-		this.biquadFilter.frequency.value = state.frequency
-		this.biquadFilter.Q.value = state.q
-		this.envelopeAmount = state.envelopeAmount
-
-		/* adsr state */
-		this.adsr = new ADSR(this.context)
-		this.adsr.setState(state.adsr)
 
 		/* AudioNode graph routing */
 		this.input = this.context.createGain()
 		this.output = this.context.createGain()
 		this.input.connect(this.biquadFilter)
 		this.biquadFilter.connect(this.output)
+		this.adsr = new ADSR(this.context, state.adsr)
+
+		this._setState(state)
 	}
 
 	_ = () => { }
+
+	_setState = state => {
+		/* filter state */
+		this.biquadFilter.type = state.type_
+		this.biquadFilter.frequency.value = state.frequency
+		this.biquadFilter.Q.value = state.q
+		this.envelopeAmount = state.envelopeAmount
+
+	}
+
+	setState = state => {
+		this._setState = state
+		this.adsr.setState(state.adsr)
+	}
+
 
 	/* triggers filter's attack, decay, and sustain envelope  */
 	noteOn = () => {

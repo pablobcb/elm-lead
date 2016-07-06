@@ -5,47 +5,25 @@ import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 
 
+// TODO: move set state to Oscillator.js
 export default class Oscillators {
 	constructor (context, state) {
 		this.context = context
-
-		/* oscillators state */
 		this.state = state
 
-
-		/***************************/
-		/* AudioNode graph routing */
-		/***************************/
-
+/***************************/
+/* AudioNode graph routing */
+/***************************/
 		/* create oscillators gains */
 		this.oscillator1Gain = this.context.createGain()
 		this.oscillator2Gain = this.context.createGain()
 
-		/* calculate and set volume mix between oscillators */
-		const osc1GainValue = (1 - state.mix) / 2
-		this.oscillator1Gain.gain.value = osc1GainValue
-		const osc2GainValue = Math.abs(osc1GainValue - .5)
-		this.oscillator2Gain.gain.value = osc2GainValue
 
 		/* create oscillator nodes */
-		this.oscillator1 =
-			new FMOscillator(this.context, state.osc1.waveformType)
+		this.oscillator1 = new FMOscillator(this.context,
+												state.osc1.waveformType)
 
-		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
-
-			this.oscillator2 =
-				new PulseOscillator(this.context, this.oscillator2Gain)
-		}
-		if (state.osc2.waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
-
-			this.oscillator2 =
-				new NoiseOscillator(this.context, this.oscillator2Gain)
-		}
-		else {
-
-			this.oscillator2 =
-				new FMOscillator(this.context, state.osc2.waveformType)
-		}
+		this.oscillator2 = this._newOscillator(state.osc2.waveformType)
 
 		/* connect oscs with the previously mixed gains */
 		this.oscillator1.connect(this.oscillator1Gain)
@@ -60,13 +38,29 @@ export default class Oscillators {
 			this.oscillator2.voiceGains[i].connect(this.fmGains[i])
 			this.fmGains[i].connect(this.oscillator1.frequencyGains[i])
 		}
+
+		this._setState(state)
 	}
 
 	_ = () => {}
 
+/***************************/
+/*     private methods     */
+/***************************/
 
-	setMix = mix => {
-		this.state.mix = MIDI.normalizeValue(mix)
+	_setState = state => {
+		this._setMix(state.mix)
+		this.setFmAmount(state.osc1.fmGain)
+
+		this._setPulseWidth(state.pw)
+		this.setOscillator2Semitone(state.osc2.semitone)
+		this.setOscillator2Detune(state.osc2.detune)
+		this.toggleOsc2KbdTrack(state.osc2.kbdTrack)
+	}
+
+	_setMix = mix => {
+		/* calculate and set volume mix between oscillators */
+		this.state.mix = mix
 
 		const osc1GainValue = (1 - this.state.mix) / 2
 		this.oscillator1Gain.gain.value = osc1GainValue
@@ -75,78 +69,51 @@ export default class Oscillators {
 		this.oscillator2Gain.gain.value = osc2GainValue
 	}
 
-	setOscillator2Semitone = oscillatorSemitone => {
-		this.state.osc2.semitone = oscillatorSemitone
-		this.oscillator2.setSemitone(oscillatorSemitone)
-	}
-
-	setOscillator2Detune = oscillatorDetune => {
-		this.state.osc2.detune = oscillatorDetune
-		this.oscillator2.setDetune(oscillatorDetune)
-	}
-
-	setFmAmount = fmAmount => {
-		const amount = 10 * fmAmount
-
-		this.state.osc1.fmGain = amount
-		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
-			this.fmGains[i].gain.value = amount
-		}
-	}
-
-	setPulseWidth = midiValue => {
-		const pw = MIDI.logScaleToMax(midiValue, .9)
-
+	_setPulseWidth = pw => {
 		this.state.pw = pw
 		this.oscillator2.setPulseWidth(pw)
 	}
 
-	setOscillator1Waveform = waveform => {
-		if (CONSTANTS.OSC1_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
-			this.oscillator1.setWaveform(waveform.toLowerCase())
-		} else {
-			throw new Error(`Invalid Waveform Type ${waveform.toLowerCase()}`)
+	_newOscillator = waveformType => {
+		let newOsc
+		if (waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
+			newOsc = new PulseOscillator(this.context, this.oscillator2Gain)
 		}
+		if (waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
+			newOsc = new NoiseOscillator(this.context, this.oscillator2Gain)
+		}
+		else {
+			newOsc = new FMOscillator(this.context, waveformType)
+		}
+		return newOsc
 	}
 
-	toggleOsc2KbdTrack = isActive => {
-		this.state.osc2.kbdTrack = isActive
-		this.oscillator2.setKbdTrack(isActive)
-	}
-
-	setOscillator2Waveform = waveform => {
-
-		const nextWaveform = waveform.toLowerCase()
-
-		if (! CONSTANTS.OSC2_WAVEFORM_TYPES.includes(nextWaveform)) {
-			throw new Error(`Invalid Waveform Type ${nextWaveform}`)
-		}
-
+	_setOscillator2Waveform = waveform => {
 		if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
+			&& waveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
-			if (nextWaveform === CONSTANTS.WAVEFORM_TYPE.PULSE) {
-				this.swapOsc2(new PulseOscillator(this.context),
+			if (waveform === CONSTANTS.WAVEFORM_TYPE.PULSE) {
+				this._swapOsc2(new PulseOscillator(this.context),
 					this.oscillator2Gain)
 			} else {
-				this.oscillator2.setWaveform(nextWaveform)
+				this.oscillator2.setWaveform(waveform)
 			}
 		} else if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform === CONSTANTS.WAVEFORM_TYPE.NOISE) {
+			&& waveform === CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
-			this.swapOsc2(new NoiseOscillator(this.context),
+			this._swapOsc2(new NoiseOscillator(this.context),
 				this.oscillator2Gain)
 		} else if (this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
-			&& nextWaveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
-			this.swapOsc2(
-				new FMOscillator(this.context, nextWaveform),
+			&& waveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
+			this._swapOsc2(
+				new FMOscillator(this.context, waveform),
 				this.oscillator2Gain
 			)
 		}
-		this.state.osc2.waveformType = nextWaveform
+		this.state.osc2.waveformType = waveform
 	}
 
-	swapOsc2 = (osc, gainB) => {
+	_swapOsc2 = (osc, gainB) => {
 		const now = this.context.currentTime
 		for (const midiNote in this.oscillator2.voices) {
 			if (this.oscillator2.voices.hasOwnProperty(midiNote)) {
@@ -169,6 +136,65 @@ export default class Oscillators {
 			oscGain.connect(this.fmGains[i])
 		)
 		this.oscillator2.connect(gainB)
+	}
+
+/***************************/
+/*     public  methods     */
+/***************************/
+	setState = state => {
+		this._setState(state)
+		this.oscillator1.setWaveform(state.osc1.waveformType)
+		this._setOscillator2Waveform(state.osc2.waveformType)
+	}
+
+	setMix = mix => {
+		this._setMix(MIDI.normalizeValue(mix))
+	}
+
+	setOscillator2Semitone = oscillatorSemitone => {
+		this.state.osc2.semitone = oscillatorSemitone
+		this.oscillator2.setSemitone(oscillatorSemitone)
+	}
+
+	setOscillator2Detune = oscillatorDetune => {
+		this.state.osc2.detune = oscillatorDetune
+		this.oscillator2.setDetune(oscillatorDetune)
+	}
+
+	setFmAmount = fmAmount => {
+		const amount = 10 * fmAmount
+
+		this.state.osc1.fmGain = amount
+		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
+			this.fmGains[i].gain.value = amount
+		}
+	}
+
+	setPulseWidth = midiValue => {
+		this._setPulseWidth(MIDI.logScaleToMax(midiValue, .9))
+	}
+
+
+	setOscillator1Waveform = waveform => {
+		if (CONSTANTS.OSC1_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
+			this.oscillator1.setWaveform(waveform.toLowerCase())
+		} else {
+			throw new Error(`Invalid Waveform Type ${waveform.toLowerCase()}`)
+		}
+	}
+
+	toggleOsc2KbdTrack = isActive => {
+		this.state.osc2.kbdTrack = isActive
+		this.oscillator2.setKbdTrack(isActive)
+	}
+
+
+	setOscillator2Waveform = waveform => {
+		if (CONSTANTS.OSC2_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
+			this._setOscillator2Waveform(waveform.toLowerCase())
+		} else {
+			throw new Error(`Invalid Waveform Type ${waveform}`)
+		}
 	}
 
 	connect = node => {
