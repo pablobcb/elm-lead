@@ -22,7 +22,7 @@ export default class PresetManager {
 		const currentPreset = presets[this.currentPresetIndex]
 
 		// preset indexing in a bank starts from 1 instead of 0
-		currentPreset.number = this.currentPresetIndex + 1
+		currentPreset.presetId = this.currentPresetIndex + 1
 
 		return currentPreset
 	}
@@ -37,7 +37,7 @@ export default class PresetManager {
 		const currentPreset = presets[this.currentPresetIndex]
 
 		// preset indexing in a bank starts from 1 instead of 0
-		currentPreset.number = this.currentPresetIndex + 1
+		currentPreset.presetId = this.currentPresetIndex + 1
 
 		return currentPreset
 	}

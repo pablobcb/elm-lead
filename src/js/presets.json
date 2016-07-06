@@ -14,7 +14,7 @@
             }
         },
         "amp": {
-            "attack": 30,
+            "attack": 0,
             "decay": 0,
             "sustain": 127,
             "release": 0,
@@ -22,11 +22,11 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "triangle",
+                "waveformType": "sawtooth",
                 "fmGain": 0
             },
             "osc2": {
-                "waveformType": "sine",
+                "waveformType": "sawtooth",
                 "semitone": 0,
                 "detune": 0,
                 "kbdTrack": true
@@ -34,7 +34,7 @@
             "pw": 0,
             "mix": 0
         },
-        "overdrive": true
+        "overdrive": false
     },
     {
         "name": "snd",
@@ -51,7 +51,7 @@
             }
         },
         "amp": {
-            "attack": 30,
+            "attack": 0,
             "decay": 0,
             "sustain": 127,
             "release": 0,
@@ -59,11 +59,11 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "triangle",
+                "waveformType": "sawtooth",
                 "fmGain": 0
             },
             "osc2": {
-                "waveformType": "sine",
+                "waveformType": "sawtooth",
                 "semitone": 0,
                 "detune": 0,
                 "kbdTrack": true
@@ -71,7 +71,7 @@
             "pw": 0,
             "mix": 0
         },
-        "overdrive": true
+        "overdrive": false
     },
     {
         "name": "thrd",
