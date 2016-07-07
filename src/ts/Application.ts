@@ -59,11 +59,6 @@ export default class Application {
 		const synthSettings = this.presetManager
 			.midiSettingsToSynthSettings(preset)
 		this.synth = new Synth(synthSettings)
-		//debugger
-
-		// this pernicious hack is necessary, see
-		// https://github.com/elm-lang/core/issues/595
-		// setTimeout(() => this.app.ports.presetChange.send(preset), 0)
 
 		// MACRO
 		window.onblur = () => {
