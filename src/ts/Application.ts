@@ -10,12 +10,12 @@ const noMidiMsg = `Your browser doesnt support WebMIDI API. Use another
 export default class Application {
 
 	private app: ElmComponent<any>
-	private midiAccess: MIDIAccess
+	private midiAccess: WebMidi.MIDIAccess
 	private synth: Synth
 	private presetManager: PresetManager
 
 	constructor() {
-		const onMIDISuccess = (midiAccess: MIDIAccess) => {
+		const onMIDISuccess = (midiAccess: WebMidi.MIDIAccess) => {
 			this.midiAccess = midiAccess
 		}
 
