@@ -1,24 +1,26 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 
+type Seconds = number
+
 export interface ADSRState {
-	attack :number,
-	decay :number,
-	sustain :number,
-	release :number
+	attack: Seconds
+	decay: Seconds
+	sustain: number
+	release: Seconds
 }
 
 export class ADSR {
-	private state: ADSRState
-	private startAmount: number
-	private sustainAmount: number
-	private endAmount: number
-	private context: AudioContext
-	private startedAt: number
-	private decayFrom: number
-	private decayTo: number
+	public state: ADSRState
+	public startAmount: number
+	public sustainAmount: number
+	public endAmount: number
+	public context: AudioContext
+	public startedAt: number
+	public decayFrom: number
+	public decayTo: number
 
-	constructor (context: AudioContext, state: ADSRState) {
+	constructor(context: AudioContext, state: ADSRState) {
 		this.startAmount = 0
 		this.sustainAmount = 0
 		this.endAmount = 1
@@ -77,21 +79,21 @@ export class ADSR {
 	}
 
 	public on = (startAmount: number, endAmount: number) =>
-	(target: AudioParam) => {
-		const now = this.context.currentTime
-		this.startedAt = now
-		this.decayFrom = this.startedAt + this.state.attack
-		this.decayTo = this.decayFrom + this.state.decay
-		this.startAmount = startAmount
-		this.endAmount = endAmount
-		this.sustainAmount = this.state.sustain *
-			(this.endAmount - this.startAmount) + this.startAmount
-		//debugger
-		target.cancelScheduledValues(now)
-		target.setValueAtTime(this.startAmount, now)
-		target.linearRampToValueAtTime(this.endAmount, this.decayFrom)
-		target.linearRampToValueAtTime(this.sustainAmount, this.decayTo)
-	}
+		(target: AudioParam) => {
+			const now = this.context.currentTime
+			this.startedAt = now
+			this.decayFrom = this.startedAt + this.state.attack
+			this.decayTo = this.decayFrom + this.state.decay
+			this.startAmount = startAmount
+			this.endAmount = endAmount
+			this.sustainAmount = this.state.sustain *
+				(this.endAmount - this.startAmount) + this.startAmount
+			//debugger
+			target.cancelScheduledValues(now)
+			target.setValueAtTime(this.startAmount, now)
+			target.linearRampToValueAtTime(this.endAmount, this.decayFrom)
+			target.linearRampToValueAtTime(this.sustainAmount, this.decayTo)
+		}
 
 	public off = (target: AudioParam) => {
 		const now = this.context.currentTime

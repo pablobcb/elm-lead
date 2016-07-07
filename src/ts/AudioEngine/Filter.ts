@@ -1,8 +1,18 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import { ADSR } from './ADSR'
+import {ADSR, ADSRState} from './ADSR'
 
-export default class Filter {
+type FilterType = string
+
+export interface FilterState {
+	type_ : string
+	frequency: number
+	q: number
+	envelopeAmout: number
+	adsr: ADSRState
+}
+
+export class Filter {
 
 	public context : AudioContext
 	public input : GainNode
