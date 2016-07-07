@@ -1,5 +1,6 @@
 import CONSTANTS from '../Constants'
 
+/* code copied from https://github.com/web-audio-components/overdrive */
 export default class Overdrive {
 	constructor (context, state) {
 		this.context = context
