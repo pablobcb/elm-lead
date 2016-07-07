@@ -1,10 +1,10 @@
 module Component.InformationBar exposing (informationBar)
 
-import Html.Attributes exposing (..)
-import Html exposing (..)
-import Main.Model as Model exposing (..)
-import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
-import Main.Update as Update exposing (..)
+import Html exposing (Html, div)
+import Html.Attributes exposing (class)
+import Main.Model as Model exposing (Model)
+import Container.OnScreenKeyboard.Update as KbdUpdate
+import Main.Update as Update exposing (Msg)
 import Component.Incrementer as Incrementer
 
 
@@ -32,16 +32,16 @@ informationBar model =
         div [ class "information-bar" ]
             [ Incrementer.incrementer Incrementer.Octave
                 (" C" ++ (toString model.onScreenKeyboard.octave))
-                (OnScreenKeyboardMsg KbdUpdate.OctaveDown)
-                (OnScreenKeyboardMsg KbdUpdate.OctaveUp)
+                (Update.OnScreenKeyboardMsg KbdUpdate.OctaveDown)
+                (Update.OnScreenKeyboardMsg KbdUpdate.OctaveUp)
             , Incrementer.incrementer Incrementer.Velocity
                 ((toString model.onScreenKeyboard.velocity))
-                (OnScreenKeyboardMsg KbdUpdate.VelocityDown)
-                (OnScreenKeyboardMsg KbdUpdate.VelocityUp)
+                (Update.OnScreenKeyboardMsg KbdUpdate.VelocityDown)
+                (Update.OnScreenKeyboardMsg KbdUpdate.VelocityUp)
             , Incrementer.incrementer Incrementer.Patch
                 ((toString model.presetId) ++ "  " ++ model.presetName)
-                PreviousPreset
-                NextPreset
+                Update.PreviousPreset
+                Update.NextPreset
               --, a
               --    [ class "information-bar__gh-link"
               --    , href "https://github.com/pablobcb/elm-lead"

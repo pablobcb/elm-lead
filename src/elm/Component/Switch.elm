@@ -2,10 +2,10 @@ module Component.Switch exposing (..)
 
 -- where
 
-import Html exposing (..)
-import Html.Events exposing (..)
+import Html exposing (Html, div, button, text)
+import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
 import Html.App exposing (map)
-import Html.Attributes exposing (..)
 
 
 type alias Model =

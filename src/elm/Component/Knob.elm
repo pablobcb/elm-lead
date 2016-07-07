@@ -1,11 +1,19 @@
-module Component.Knob exposing (..)
+module Component.Knob
+    exposing
+        ( init
+        , Msg(..)
+        , knob
+        , Model
+        , KnobInstance(..)
+        , update
+        )
 
 --where
 
 import Html exposing (Html, button, div, text, img)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, on, onWithOptions)
 import Html.App exposing (map)
-import Html.Attributes exposing (draggable, style, class, alt, src)
+import Html.Attributes exposing (draggable, style, class, alt, src, attribute)
 import Json.Decode as Json exposing (succeed, int, (:=))
 
 
@@ -163,21 +171,21 @@ view model =
 
         knobDial =
             div
-                [ Html.Events.on "mousedown"
+                [ on "mousedown"
                     <| Json.map
                         (\posY ->
                             (MouseDown model.idKey) posY
                         )
                         ("layerY" := int)
-                , Html.Events.on "dblclick"
+                , on "dblclick"
                     <| succeed
                     <| Reset model.idKey
-                , Html.Events.onWithOptions "dragstart"
+                , onWithOptions "dragstart"
                     { stopPropagation = True, preventDefault = True }
                     <| succeed
                     <| NoOp
                 , class "knob__dial"
-                , Html.Attributes.attribute "draggable" "false"
+                , attribute "draggable" "false"
                 , style <| knobDirection model
                 ]
                 []

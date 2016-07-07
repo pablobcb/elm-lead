@@ -1,10 +1,17 @@
-module Component.OptionPicker exposing (..)
+module Component.OptionPicker
+    exposing
+        ( optionPicker
+        , update
+        , Model
+        , init
+        , Msg(..)
+        )
 
-import Html exposing (..)
-import Html.Events exposing (..)
-import Html.App exposing (map)
-import Html.Attributes exposing (..)
-import Lazy.List as Lazy exposing (..)
+import Html exposing (Html, div, span, ul, li, button, text)
+import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
+import Html.App
+import Lazy.List as Lazy
 
 
 type alias Model a =
