@@ -95,8 +95,9 @@ export class Filter {
 	}
 
 	setType = (filterType: string) => {
-		if (CONSTANTS.FILTER_TYPES.includes(filterType.toLowerCase())) {
-			this.biquadFilter.type = filterType.toLowerCase()
+		const ft = filterType.toLowerCase()
+		if (CONSTANTS.FILTER_TYPES.indexOf(ft) !== -1) {
+			this.biquadFilter.type = ft
 		} else {
 			throw new Error('Invalid Filter Type')
 		}
