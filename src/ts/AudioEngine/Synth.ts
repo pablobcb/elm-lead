@@ -30,7 +30,7 @@ export default class Synth {
 		this.oscillators.connect(this.filter.input)
 	}
 
-	setState = (state) => {
+	setState = (state: any) => {
 		this.amplifier.setState(state.amp)
 		this.overdrive.setState(state.overdrive)
 		this.filter.setState(state.filter)
@@ -51,12 +51,12 @@ export default class Synth {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
 				this.oscillators.noteOn(note,
 					this.amplifier.adsr.on(0, 1))
-				this.filter.noteOn(note)
+				this.filter.noteOn()
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
 				this.oscillators.noteOff(note,
 					this.amplifier.adsr.off)
-				this.filter.noteOff(note)
+				this.filter.noteOff()
 				break
 		}
 	}
