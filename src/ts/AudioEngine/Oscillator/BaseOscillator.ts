@@ -79,16 +79,18 @@ export abstract class BaseOscillator {
 		osc.stop(releaseTime)
 	}
 
-	abstract setSemitone () : void
-	abstract setDetune () : void
-	abstract setPulseWidth () : void
-	abstract setWaveform () : void
+	protected setSemitone () : void {}
+	protected setDetune () : void {}
+	protected setPulseWidth () : void {}
+	protected setWaveform () : void {}
+
+	abstract _noteOn (midiNote: number) : void
+	abstract _onended (voice: number) : void
+
 
 	setKbdTrack = (state: boolean) => {
 		this.kbdTrack = state
 	}
-
-	_onended = () => {}
 
 	connect (node: any) {
 		this.output.connect(node)
