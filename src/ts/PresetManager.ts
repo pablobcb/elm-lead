@@ -1,4 +1,5 @@
 export default class PresetManager<T> {
+	
 	private currentPresetIndex: number
 	private presets: Array<T>
 
@@ -29,6 +30,5 @@ export default class PresetManager<T> {
 		}
 		return this.current()
 	}
-
 
 }

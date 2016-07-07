@@ -7,7 +7,7 @@ import { OscillatorsState } from './AudioEngine/Oscillators'
 
 const Elm: any = require('../elm/Main.elm')
 
-const presets: Array<Preset> = require('../presets.json')
+const presets = require('../presets.json') as Array<Preset>
 
 const scaleMidiValue = (midiValue: number) =>
 	MIDI.logScaleToMax(midiValue, 1)

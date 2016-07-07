@@ -1,3 +1,5 @@
+export type WaveformType = string
+
 export abstract class BaseOscillator {
 
 	public output : GainNode
@@ -6,10 +8,11 @@ export abstract class BaseOscillator {
 	public kbdTrack : boolean
 	public voices : any
 	public fmGain : GainNode
+	public type : string
 
 	protected context : AudioContext
 
-	constructor (context: AudioContext) {
+	constructor (context: AudioContext, waveformType: WaveformType) {
 		this.context = context
 		this.output = this.context.createGain()
 		this.output.gain.value = .5
@@ -17,6 +20,7 @@ export abstract class BaseOscillator {
 		this.voiceGains = []
 		this.frequencyGains = []
 		this.kbdTrack = true
+		this.type = waveformType
 
 		for (let i = 0; i <128; i++) {
 			//TODO: create FM osc and let it holdd the gains,
@@ -79,10 +83,10 @@ export abstract class BaseOscillator {
 		osc.stop(releaseTime)
 	}
 
-	protected setSemitone () : void {}
-	protected setDetune () : void {}
-	protected setPulseWidth () : void {}
-	protected setWaveform () : void {}
+	public setSemitone (semitone: number) : void {}
+	public setDetune (detune: number) : void {}
+	public setPulseWidth (pw: number) : void {}
+	public setWaveform (waveform: string) : void {}
 
 	abstract _noteOn (midiNote: number) : void
 	abstract _onended (voice: number) : void

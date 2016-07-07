@@ -2,7 +2,6 @@ import { BaseOscillator } from './BaseOscillator'
 
 export default class NoiseOscillator extends BaseOscillator {
 
-	public type : string
 	public noiseOsc : AudioBufferSourceNode
 
 	constructor (context: AudioContext) {

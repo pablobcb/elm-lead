@@ -1,16 +1,12 @@
-import { BaseOscillator } from './BaseOscillator'
-
-interface Waveform {} // FIXME
+import { BaseOscillator, WaveformType } from './BaseOscillator'
 
 export default class FMOscillator extends BaseOscillator {
 
 	public detune : number
 	public semitone : number
-	public type : string
 
-	constructor (context: AudioContext, waveform: string) {
-		super(context)
-		this.type = waveform
+	constructor (context: AudioContext, waveformType: WaveformType) {
+		super(context, waveformType)
 		this.detune = 0
 		this.semitone = 0
 	}
