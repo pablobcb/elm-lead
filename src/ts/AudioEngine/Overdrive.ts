@@ -17,7 +17,7 @@ export default class Overdrive {
 	private _bpDry: GainNode
 	private _ws: WaveShaperNode
 	private _lowpass: BiquadFilterNode
-	private _drive: any
+	private _drive: number
 	private context: AudioContext
 
 	public params: any
@@ -61,10 +61,8 @@ export default class Overdrive {
 
 		// Inverted preBand value
 		this._bpDry.gain.value = params.preBand
-			? 1 - params.preBand
-			: 1 - params.preBand.defaultValue
 
-		if (!state.on) {
+		if (!state.enabled) {
 			this.input.disconnect()
 			this.input.connect(this.output)
 		}
