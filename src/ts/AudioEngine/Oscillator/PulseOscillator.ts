@@ -12,21 +12,22 @@ constantOneCurve[0] = 1
 constantOneCurve[1] = 1
 
 export default class PulseOscillator extends FMOscillator {
-	constructor (context) {
+
+	public pulseWidth : number
+	public pulseShaper : WaveShaperNode
+	public widthGains : Array<GainNode>
+
+	constructor (context: AudioContext) {
 		super(context, 'pulse')
 		this.pulseWidth = 0
 		this.widthGains = []
-
 
 		for (let i = 0; i < 128; i++) {
 			this.widthGains[i] = this.context.createGain()
 		}
 	}
 
-	//shutup visual studio
-	_ = () => {}
-
-	_noteOn = (midiNote) => {
+	_noteOn (midiNote: number) {
 		const midiNoteKey = midiNote.toString()
 
 		const sawNode = this.context.createOscillator()
@@ -54,11 +55,11 @@ export default class PulseOscillator extends FMOscillator {
 		this.voices[midiNoteKey] = sawNode
 	}
 
-	_onended = () => {
+	_onended () {
 		this.pulseShaper.disconnect()
 	}
 
-	setPulseWidth = width => {
+	setPulseWidth (width: any) {
 		this.pulseWidth = width
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = width

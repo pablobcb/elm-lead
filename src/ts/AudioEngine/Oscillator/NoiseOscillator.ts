@@ -1,15 +1,14 @@
-import BaseOscillator from './BaseOscillator'
+import { BaseOscillator } from './BaseOscillator'
 
 export default class NoiseOscillator extends BaseOscillator {
 
-	constructor (context) {
-		super(context)
+	public noiseOsc : AudioBufferSourceNode
 
-		this.type = 'whitenoise'
+	constructor (context: AudioContext) {
+		super(context, 'whitenoise')
 	}
 
-	_  = () => {}
-	_noteOn = (midiNote) => {
+	_noteOn (midiNote: any) {
 		const midiNoteKey = midiNote.toString()
 		const channels = 2
 		const frameCount = this.context.sampleRate * 2.0

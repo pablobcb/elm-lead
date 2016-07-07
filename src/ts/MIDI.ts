@@ -1,16 +1,17 @@
 // all midi values are integers between 0 and 127
 const MIDI_MAX_VALUE = 127
 
-const midiToFreq = (midiValue) => (
+const midiToFreq = (midiValue: number) => (
 	440 * Math.pow(2, (midiValue - 69) / 12)
 )
 
 const manageMidiDevices =
-	(onMIDIMessage, midiAccess, midiPort, midiStateChangePort) => {
+	// FIXME: type that shit
+	(onMIDIMessage: any, midiAccess: any, midiPort: any, midiStateChangePort: any) => {
 		let midiConnection = false
 		// loop over all available inputs and listen for any MIDI input
 		for (const input of midiAccess.inputs.values()) {
-			input.onmidimessage = (midiMessage) => {
+			input.onmidimessage = (midiMessage: any) => {
 				const data = midiMessage.data
 
 				onMIDIMessage(data)
@@ -37,27 +38,27 @@ export default {
 	// functions below scales midi values to synth parameters
 	toOscPitch : midiToFreq,
 
-	toFilterQAmount : midiValue => (
+	toFilterQAmount : (midiValue: number) => (
 		20 * (midiValue / MIDI_MAX_VALUE)
 	),
 
-	toFilterCutoffFrequency : midiValue => {
+	toFilterCutoffFrequency : (midiValue: number) => {
 		return 1.6 * midiToFreq(midiValue)
 		//midiValue / 127 *
 		//	(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
 		//	CONSTANTS.MIN_FILTER_FREQUENCY
 	},
 
-	logScaleToMax : (midiValue, max) => (
+	logScaleToMax : (midiValue: number, max: number) => (
 		(Math.pow(2, midiValue / MIDI_MAX_VALUE) - 1) * max
 	),
 
-	normalizeValue : midiValue => (
+	normalizeValue : (midiValue: number) => (
 		midiValue / MIDI_MAX_VALUE
 	),
 
 	manageMidiDevices :
-		(onMIDIMessage, midiAccess, midiPort, midiStateChange) => {
+		(onMIDIMessage: any, midiAccess: any, midiPort: any, midiStateChange: any) => {
 
 			midiAccess.onstatechange = () => {
 				manageMidiDevices(onMIDIMessage,

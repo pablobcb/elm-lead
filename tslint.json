@@ -1,25 +1,23 @@
-module.exports = {
-	parser: "babel-eslint",
-	env: {
-		browser: true,
-		es6: true,
-		node: true
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
 	},
-	extends: "eslint:recommended",
-	parserOptions: {
-		sourceType: "module"
+	"parserOptions": {
+		"sourceType": "module"
 	},
-	plugins: [
+	"plugins": [
 	],
-	rules: {
+	"rules": {
 		"brace-style": [ "warn", "1tbs" ],
-		"curly": [ "warn", "all" ],
-		"indent": [ "warn", "tab", { "SwitchCase": 1 } ],
+		"curly": true,
+		"indent": [ "warn", "tab" ],
 		"keyword-spacing": [ "warn" ],
 		"linebreak-style": [ "warn", "unix" ],
 		"max-len": [ "warn", 80 ],
-		"no-console": [ "off" ],
-		"no-debugger": [ "warn" ],
+		"no-console": [ true ], 
+		"no-debugger": true,
 		"no-mixed-spaces-and-tabs": [ "warn" ],
 		"no-redeclare": [ "warn" ],
 		"no-undef": [ "warn" ],
@@ -31,6 +29,6 @@ module.exports = {
 		"semi": [ "warn", "never" ],
 		"space-before-blocks": ["warn", "always"],
 		"space-before-function-paren": [ "warn" ],
-		"space-in-parens": ["warn", "never"],
+		"space-in-parens": ["warn", "never"]
 	}
 }

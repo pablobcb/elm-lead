@@ -1,7 +1,7 @@
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
-	entry: './src/js/index.js',
+	entry: './src/ts/index.ts',
 	output: {
 		path: `${__dirname}/dist`,
 		filename: 'bundle.js'
@@ -11,11 +11,6 @@ module.exports = {
 			{
 				test: /\.styl$/,
 				loader: 'stylint'
-			},
-			{
-				test: /\.js$/,
-				loader: 'eslint',
-				exclude: /node_modules/
 			}
 		],
 		loaders: [
@@ -39,7 +34,8 @@ module.exports = {
 				test: /\.elm$/,
 				loader: 'elm-webpack',
 				exclude: [/elm-stuff/, /node_modules/]
-			}, {
+			},
+			{
 				test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
 				loader: 'file-loader'
 			},
@@ -54,11 +50,15 @@ module.exports = {
 						'transform-class-properties'
 					]
 				}
+			},
+			{
+				test: /\.ts$/,
+				loader: 'ts-loader'
 			}
 		]
 	},
 	resolve: {
-		extensions: ['', '.js', '.styl', '.elm', '.css']
+		extensions: ['', '.js', '.ts', '.styl', '.elm', '.css']
 	},
 	stylint: {
 		config: `${__dirname}/.stylintrc`
