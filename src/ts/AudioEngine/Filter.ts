@@ -1,6 +1,6 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import ADSR from './ADSR'
+import { ADSR } from './ADSR'
 
 export default class Filter {
 

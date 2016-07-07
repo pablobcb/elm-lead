@@ -1,14 +1,14 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 
-interface ADSRState {
+export interface ADSRState {
 	attack :number,
 	decay :number,
 	sustain :number,
 	release :number
 }
 
-export default class ADSR {
+export class ADSR {
 	private state: ADSRState
 	private startAmount: number
 	private sustainAmount: number

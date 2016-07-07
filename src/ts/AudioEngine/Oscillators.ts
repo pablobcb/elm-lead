@@ -3,7 +3,28 @@ import CONSTANTS from '../Constants'
 import FMOscillator from './Oscillator/FMOscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
+import BaseOscillator from './Oscillator/BaseOscillator'
 
+type WaveformType = string
+
+interface Oscillator1State {
+	waveformType: WaveformType
+	fmGain: number
+}
+
+interface Oscillator2State {
+	waveformType: WaveformType
+	semitone: number
+	detune: number
+	kbdTrack: boolean
+}
+
+interface OscillatorState {
+	mix: number
+	pw: number
+	osc1: Oscillator1State
+	osc2: Oscillator2State
+}
 
 // TODO: move set state to Oscillator.js
 export default class Oscillators {
@@ -13,10 +34,10 @@ export default class Oscillators {
 	public oscillator1Gain: GainNode
 	public oscillator1: FMOscillator
 	public oscillator2Gain: GainNode
-	public oscillator2: PulseOscillator
+	public oscillator2: BaseOscillator
 	public fmGains: Array<GainNode>
 
-	constructor (context: AudioContext, state: any) {
+	constructor (context: AudioContext, state: OscillatorState) {
 		this.context = context
 		this.state = state
 
@@ -28,8 +49,8 @@ export default class Oscillators {
 		this.oscillator2Gain = this.context.createGain()
 
 		/* create oscillator nodes */
-		this.oscillator1 = new FMOscillator(this.context,
-												state.osc1.waveformType)
+		this.oscillator1 =
+			new FMOscillator(this.context, state.osc1.waveformType)
 
 		this.oscillator2 = this._newOscillator(state.osc2.waveformType)
 
@@ -54,7 +75,7 @@ export default class Oscillators {
 /*     private methods     */
 /***************************/
 
-	_setState = state => {
+	_setState = (state: OscillatorState) => {
 		this._setMix(state.mix)
 		this.setFmAmount(state.osc1.fmGain)
 
@@ -64,7 +85,7 @@ export default class Oscillators {
 		this.toggleOsc2KbdTrack(state.osc2.kbdTrack)
 	}
 
-	_setMix = mix => {
+	_setMix = (mix: number) => {
 		/* calculate and set volume mix between oscillators */
 		this.state.mix = mix
 
@@ -75,18 +96,18 @@ export default class Oscillators {
 		this.oscillator2Gain.gain.value = osc2GainValue
 	}
 
-	_setPulseWidth = pw => {
+	_setPulseWidth = (pw: any) => {
 		this.state.pw = pw
 		this.oscillator2.setPulseWidth(pw)
 	}
 
-	_newOscillator = waveformType => {
-		let newOsc
+	_newOscillator = (waveformType: WaveformType) => {
+		let newOsc : 
 		if (waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
-			newOsc = new PulseOscillator(this.context, this.oscillator2Gain)
+			newOsc = new PulseOscillator(this.context)
 		}
 		if (waveformType == CONSTANTS.WAVEFORM_TYPE.NOISE) {
-			newOsc = new NoiseOscillator(this.context, this.oscillator2Gain)
+			newOsc = new NoiseOscillator(this.context)
 		}
 		else {
 			newOsc = new FMOscillator(this.context, waveformType)

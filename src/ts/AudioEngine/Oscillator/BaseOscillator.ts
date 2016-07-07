@@ -1,13 +1,13 @@
-export default class BaseOscillator {
+export abstract class BaseOscillator {
 
-	public context : AudioContext
 	public output : GainNode
 	public voiceGains : Array<GainNode>
 	public frequencyGains : Array<GainNode>
 	public kbdTrack : boolean
 	public voices : any
+	public fmGain : GainNode
 
-	protected context: AudioContext
+	protected context : AudioContext
 
 	constructor (context: AudioContext) {
 		this.context = context
@@ -17,7 +17,6 @@ export default class BaseOscillator {
 		this.voiceGains = []
 		this.frequencyGains = []
 		this.kbdTrack = true
-
 
 		for (let i = 0; i <128; i++) {
 			//TODO: create FM osc and let it holdd the gains,
@@ -80,13 +79,10 @@ export default class BaseOscillator {
 		osc.stop(releaseTime)
 	}
 
-	setSemitone = () => {}
-
-	setDetune = () => {}
-
-	setPulseWidth = () => {}
-
-	setWaveform = () => {}
+	abstract setSemitone () : void
+	abstract setDetune () : void
+	abstract setPulseWidth () : void
+	abstract setWaveform () : void
 
 	setKbdTrack = (state: boolean) => {
 		this.kbdTrack = state
@@ -94,12 +90,12 @@ export default class BaseOscillator {
 
 	_onended = () => {}
 
-	connect = function (node: any) {
+	connect (node: any) {
 		this.output.connect(node)
 		return this
 	}
 
-	disconnect = function (node: any) {
+	disconnect (node: any) {
 		this.output.disconnect(node)
 		return this
 	}
