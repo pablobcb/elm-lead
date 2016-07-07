@@ -9,7 +9,6 @@ import CONSTANTS from '../Constants'
 export default class Synth {
 
 	public context : AudioContext
-	public state : any
 	public amplifier : Amplifier
 	public overdrive : Overdrive
 	public filter : Filter
