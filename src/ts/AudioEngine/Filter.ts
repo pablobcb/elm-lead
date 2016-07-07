@@ -2,13 +2,12 @@ import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import ADSR from './ADSR'
 
-
 export default class Filter {
 
 	public context : AudioContext
 	public input : GainNode
 	public output : GainNode
-	public filter : BiquadFilterNode
+	public biquadFilter : BiquadFilterNode
 	public adsr : ADSR
 	public envelopeAmount : number
 
@@ -27,9 +26,7 @@ export default class Filter {
 		this._setState(state)
 	}
 
-	_ = () => { }
-
-	_setState = state => {
+	_setState = (state: any) => {
 		/* filter state */
 		this.biquadFilter.type = state.type_
 		this.biquadFilter.frequency.value = state.frequency
@@ -38,7 +35,7 @@ export default class Filter {
 
 	}
 
-	setState = state => {
+	setState = (state: any) => {
 		this._setState = state
 		this.adsr.setState(state.adsr)
 	}
