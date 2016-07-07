@@ -1,4 +1,4 @@
-import BaseOscillator from './BaseOscillator'
+import { BaseOscillator } from './BaseOscillator'
 
 export default class NoiseOscillator extends BaseOscillator {
 
