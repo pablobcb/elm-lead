@@ -1,19 +1,23 @@
-const presets = require('../presets.json') as IPreset
+const presets: Array<Preset> = require('../presets.json')
 
 import MIDI from './MIDI'
+import { FilterState } from './AudioEngine/Filter'
+import { AmplifierState } from './AudioEngine/Amplifier'
 
 const scaleMidiValue = (midiValue: number) =>
 	MIDI.logScaleToMax(midiValue, 1)
 
-interface IPreset {
-	name? : string
-	filter : { amp : Object }
+interface Preset {
+	name: string
+	presetId: number
+	filter: FilterState
 	amp: any
 	oscs: { osc1: Object, osc2: Object }
-	overdrive: any
+	overdrive: boolean
 }
 
 export default class PresetManager {
+	private currentPresetIndex: number
 
 	constructor() {
 		this.currentPresetIndex = -1
@@ -21,7 +25,7 @@ export default class PresetManager {
 
 	next = () => {
 		// cycle through bank
-		if (this.currentPresetIndex == presets.length -1) {
+		if (this.currentPresetIndex == presets.length - 1) {
 			this.currentPresetIndex = - 1
 		}
 
@@ -38,7 +42,7 @@ export default class PresetManager {
 		// cycle through bank
 		this.currentPresetIndex -= 1
 
-		if (this.currentPresetIndex  == - 1) {
+		if (this.currentPresetIndex == - 1) {
 			this.currentPresetIndex = presets.length - 1
 		}
 		const currentPreset = presets[this.currentPresetIndex]
@@ -49,20 +53,8 @@ export default class PresetManager {
 		return currentPreset
 	}
 
-	midiSettingsToSynthSettings = (preset) => {
-		const state = {
-			filter: {
-				adsr: {}
-			},
-			amp: {
-				adsr: {}
-			},
-			oscs: {
-				osc1: {},
-				osc2: {}
-			}
-		} as IPreset
-
+	midiSettingsToSynthSettings = (preset: Preset) => {
+		let state: Preset
 		/* META */
 		//displayed name
 		state.name = preset.name
