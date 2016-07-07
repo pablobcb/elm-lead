@@ -164,8 +164,7 @@ export default class Application {
 			)
 		}
 
-		this.app.ports.midiOut
-			.subscribe(this.synth.onMIDIMessage)
+		this.app.ports.midiOut.subscribe(this.synth.onMIDIMessage)
 
 	}
 }
