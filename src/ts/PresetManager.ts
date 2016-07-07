@@ -7,29 +7,27 @@ export default class PresetManager<T> {
 		this.currentPresetIndex = -1
 	}
 
+	public current(): T {
+		return this.presets[this.currentPresetIndex]
+	}
+
 	public next(): T {
 		// cycle through bank
 		if (this.currentPresetIndex == this.presets.length - 1) {
 			this.currentPresetIndex = - 1
 		}
-
 		this.currentPresetIndex += 1
-
-		const currentPreset: T = this.presets[this.currentPresetIndex]
-
-		return currentPreset
+		return this.current()
 	}
 
-	previous = (): T => {
+	public previous = (): T => {
 		// cycle through bank
 		this.currentPresetIndex -= 1
 
 		if (this.currentPresetIndex == - 1) {
 			this.currentPresetIndex = this.presets.length - 1
 		}
-		const currentPreset = this.presets[this.currentPresetIndex]
-
-		return currentPreset
+		return this.current()
 	}
 
 
