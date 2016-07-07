@@ -1,16 +1,13 @@
 import CONSTANTS from '../Constants'
 
-interface OverdriveState {
-	enabled: boolean
-}
 
 /* code copied from https://github.com/web-audio-components/overdrive */
-export default class Overdrive {
+export class Overdrive {
 
 	public input: GainNode
 	public output: GainNode
 
-	public state: OverdriveState
+	public enabled: boolean
 
 	private _bandpass: BiquadFilterNode
 	private _bpWet: GainNode
@@ -22,7 +19,7 @@ export default class Overdrive {
 
 	public params: any
 
-	constructor (context: AudioContext, state: OverdriveState) {
+	constructor (context: AudioContext, enabled: boolean) {
 		this.context = context
 
 		const params = CONSTANTS.OVERDRIVE_PARAMS
@@ -53,8 +50,6 @@ export default class Overdrive {
 		this.drive = params.drive
 		this._bpDry.gain.value = 1 - params.preBand
 
-		this.setState(state)
-
 		this._bpWet.gain.value = params.preBand
 		this._lowpass.frequency.value = params.postCut
 		this.drive = params.drive
@@ -62,10 +57,7 @@ export default class Overdrive {
 		// Inverted preBand value
 		this._bpDry.gain.value = params.preBand
 
-		if (!state.enabled) {
-			this.input.disconnect()
-			this.input.connect(this.output)
-		}
+		this.setState(enabled)
 	}
 
 	connect = (node: any) => {
@@ -76,10 +68,10 @@ export default class Overdrive {
 		this.output.disconnect()
 	}
 
-	setState = (state: OverdriveState) => {
-		this.state = state
+	setState = (enabled: boolean) => {
+		this.enabled = enabled
 		this.input.disconnect()
-		if (state.enabled) {
+		if (enabled) {
 			this.input.connect(this._bandpass)
 		} else {
 			this.input.connect(this.output)

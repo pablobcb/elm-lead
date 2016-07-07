@@ -19,7 +19,7 @@ interface Oscillator2State {
 	kbdTrack: boolean
 }
 
-interface OscillatorState {
+export interface OscillatorsState {
 	mix: number
 	pw: number
 	osc1: Oscillator1State
@@ -37,7 +37,7 @@ export default class Oscillators {
 	public oscillator2: BaseOscillator
 	public fmGains: Array<GainNode>
 
-	constructor (context: AudioContext, state: OscillatorState) {
+	constructor (context: AudioContext, state: OscillatorsState) {
 		this.context = context
 		this.state = state
 
@@ -75,7 +75,7 @@ export default class Oscillators {
 /*     private methods     */
 /***************************/
 
-	_setState = (state: OscillatorState) => {
+	_setState = (state: OscillatorsState) => {
 		this._setMix(state.mix)
 		this.setFmAmount(state.osc1.fmGain)
 
@@ -102,7 +102,7 @@ export default class Oscillators {
 	}
 
 	_newOscillator = (waveformType: WaveformType) => {
-		let newOsc : 
+		let newOsc :
 		if (waveformType == CONSTANTS.WAVEFORM_TYPE.PULSE) {
 			newOsc = new PulseOscillator(this.context)
 		}
@@ -115,7 +115,7 @@ export default class Oscillators {
 		return newOsc
 	}
 
-	_setOscillator2Waveform = waveform => {
+	_setOscillator2Waveform = (waveform: WaveformType) => {
 		if (this.oscillator2.type !== CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& waveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
@@ -148,7 +148,7 @@ export default class Oscillators {
 				osc.noteOn(midiNote)
 			}
 		}
-		this.oscillator2.voiceGains.forEach((oscGain, i) =>
+		this.oscillator2.voiceGains.forEach((oscGain, i:number) =>
 			oscGain.disconnect(this.fmGains[i])
 		)
 		this.oscillator2.disconnect(gainB)
@@ -159,7 +159,7 @@ export default class Oscillators {
 		this.oscillator2.setKbdTrack(this.state.osc2.kbdTrack)
 		this.oscillator2.setSemitone(this.state.osc2.semitone)
 
-		this.oscillator2.voiceGains.forEach((oscGain, i) =>
+		this.oscillator2.voiceGains.forEach((oscGain, i:number) =>
 			oscGain.connect(this.fmGains[i])
 		)
 		this.oscillator2.connect(gainB)
@@ -168,27 +168,27 @@ export default class Oscillators {
 /***************************/
 /*     public  methods     */
 /***************************/
-	setState = state => {
+	setState = (state: OscillatorsState) => {
 		this._setState(state)
 		this.oscillator1.setWaveform(state.osc1.waveformType)
 		this._setOscillator2Waveform(state.osc2.waveformType)
 	}
 
-	setMix = mix => {
+	setMix = (mix: number) => {
 		this._setMix(MIDI.normalizeValue(mix))
 	}
 
-	setOscillator2Semitone = oscillatorSemitone => {
+	setOscillator2Semitone = (oscillatorSemitone: number) => {
 		this.state.osc2.semitone = oscillatorSemitone
 		this.oscillator2.setSemitone(oscillatorSemitone)
 	}
 
-	setOscillator2Detune = oscillatorDetune => {
+	setOscillator2Detune = (oscillatorDetune: number) => {
 		this.state.osc2.detune = oscillatorDetune
 		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
-	setFmAmount = fmAmount => {
+	setFmAmount = (fmAmount: number) => {
 		const amount = 10 * fmAmount
 
 		this.state.osc1.fmGain = amount
@@ -197,12 +197,12 @@ export default class Oscillators {
 		}
 	}
 
-	setPulseWidth = midiValue => {
+	setPulseWidth = (midiValue: number) => {
 		this._setPulseWidth(MIDI.logScaleToMax(midiValue, .9))
 	}
 
 
-	setOscillator1Waveform = waveform => {
+	setOscillator1Waveform = (waveform: WaveformType) => {
 		if (CONSTANTS.OSC1_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
 			this.oscillator1.setWaveform(waveform.toLowerCase())
 		} else {
@@ -210,13 +210,13 @@ export default class Oscillators {
 		}
 	}
 
-	toggleOsc2KbdTrack = isActive => {
+	toggleOsc2KbdTrack = (isActive: number) => {
 		this.state.osc2.kbdTrack = isActive
 		this.oscillator2.setKbdTrack(isActive)
 	}
 
 
-	setOscillator2Waveform = waveform => {
+	setOscillator2Waveform =  (waveform: WaveformType) => {
 		if (CONSTANTS.OSC2_WAVEFORM_TYPES.includes(waveform.toLowerCase())) {
 			this._setOscillator2Waveform(waveform.toLowerCase())
 		} else {
@@ -239,12 +239,12 @@ export default class Oscillators {
 		this.oscillator2.panic()
 	}
 
-	noteOn = (midiNote: any, noteOnCb: any /*, velocity*/) => {
+	noteOn = (midiNote: number, noteOnCb: any /*, velocity*/) => {
 		this.oscillator1.noteOn(midiNote, noteOnCb)
 		this.oscillator2.noteOn(midiNote, noteOnCb)
 	}
 
-	noteOff = (midiNote: any, noteOffCb: any /*, velocity*/) => {
+	noteOff = (midiNote: number, noteOffCb: any /*, velocity*/) => {
 		this.oscillator1.noteOff(midiNote, noteOffCb)
 		this.oscillator2.noteOff(midiNote, noteOffCb)
 	}

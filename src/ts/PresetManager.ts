@@ -3,6 +3,8 @@ const presets: Array<Preset> = require('../presets.json')
 import MIDI from './MIDI'
 import { FilterState } from './AudioEngine/Filter'
 import { AmplifierState } from './AudioEngine/Amplifier'
+import { OscillatorsState } from './AudioEngine/Oscillators'
+
 
 const scaleMidiValue = (midiValue: number) =>
 	MIDI.logScaleToMax(midiValue, 1)
@@ -11,8 +13,8 @@ interface Preset {
 	name: string
 	presetId: number
 	filter: FilterState
-	amp: any
-	oscs: { osc1: Object, osc2: Object }
+	amp: AmplifierState
+	oscs: OscillatorsState
 	overdrive: boolean
 }
 

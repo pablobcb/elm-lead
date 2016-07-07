@@ -1,8 +1,8 @@
 
 import Oscillators from './Oscillators'
-import Filter from './Filter'
-import Amplifier from './Amplifier'
-import Overdrive from './Overdrive'
+import {Filter} from './Filter'
+import {Amplifier} from './Amplifier'
+import {Overdrive} from './Overdrive'
 import CONSTANTS from '../Constants'
 
 

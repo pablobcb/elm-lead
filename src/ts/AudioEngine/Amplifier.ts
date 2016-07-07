@@ -1,14 +1,13 @@
 import { ADSR,  ADSRState } from './ADSR'
 import MIDI from '../MIDI'
 
-interface AmplifierState {
+export interface AmplifierState {
 	adsr : ADSRState
 	masterVolume: number
 }
 
-export default class Amplifier {
-
-	public state : any
+export class Amplifier {
+	public state : AmplifierState
 	public context : AudioContext
 	public adsr : ADSR
 	public output : GainNode
@@ -33,7 +32,6 @@ export default class Amplifier {
 	}
 
 	_setState = (state: AmplifierState) => {
-		this.state = {}
 		this.output.gain.value = state.masterVolume
 		this.state.masterVolume = state.masterVolume
 	}
