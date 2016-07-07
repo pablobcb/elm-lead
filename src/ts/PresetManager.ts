@@ -12,11 +12,11 @@ export default class PresetManager<T> {
 	}
 
 	public next(): T {
-		// cycle through bank
-		if (this.currentPresetIndex == this.presets.length - 1) {
-			this.currentPresetIndex = - 1
-		}
 		this.currentPresetIndex += 1
+		// cycle through bank
+		if (this.currentPresetIndex == this.presets.length) {
+			this.currentPresetIndex = 0
+		}
 		return this.current()
 	}
 
@@ -24,7 +24,7 @@ export default class PresetManager<T> {
 		// cycle through bank
 		this.currentPresetIndex -= 1
 
-		if (this.currentPresetIndex == - 1) {
+		if (this.currentPresetIndex == -1) {
 			this.currentPresetIndex = this.presets.length - 1
 		}
 		return this.current()
