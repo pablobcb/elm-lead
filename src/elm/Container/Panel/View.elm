@@ -1,15 +1,15 @@
-module Container.Panel.View exposing (..)
+module Container.Panel.View exposing (panel)
 
 -- where
 
 import Component.Knob as Knob
 import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.App exposing (map)
-import Container.Panel.Model as Model exposing (..)
-import Container.Panel.Update as Update exposing (..)
+import Html exposing (Html, div, span, text, table, tr, td)
+import Html.Attributes exposing (class)
+import Html.App
+import Container.Panel.Model as Model exposing (Model)
+import Container.Panel.Update as Update exposing (Msg)
 
 
 type Bevel
@@ -30,7 +30,7 @@ nordKnob model knobInstance =
                 Debug.crash "inexistent knob identifier"
 
             Just knobModel ->
-                Knob.knob KnobMsg knobModel
+                Knob.knob Update.KnobMsg knobModel
 
 
 section : Bevel -> String -> List (Html a) -> Html a
@@ -77,7 +77,7 @@ filter model =
         , nordKnob model Knob.FilterSustain
         , nordKnob model Knob.FilterRelease
         , OptionPicker.optionPicker "Filter Type"
-            FilterTypeChange
+            Update.FilterTypeChange
             model.filterTypeBtn
         , nordKnob model Knob.FilterCutoff
           -- frequency
@@ -85,7 +85,7 @@ filter model =
           -- resonance
         , nordKnob model Knob.FilterEnvelopeAmount
         , Switch.switch "distortion"
-            OverdriveToggle
+            Update.OverdriveToggle
             model.overdriveSwitch
         ]
 
@@ -94,7 +94,7 @@ osc1 : Model -> Html Msg
 osc1 model =
     div [ class "oscillators__osc1" ]
         [ OptionPicker.optionPicker "Waveform"
-            Osc1WaveformChange
+            Update.Osc1WaveformChange
             model.osc1WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 1" ]
         , nordKnob model Knob.FM
@@ -106,12 +106,12 @@ osc2 model =
     div [ class "oscillators__osc2" ]
         [ nordKnob model Knob.Osc2Semitone
         , OptionPicker.optionPicker "Waveform"
-            Osc2WaveformChange
+            Update.Osc2WaveformChange
             model.osc2WaveformBtn
         , span [ class "oscillators__label" ] [ text "OSC 2" ]
         , nordKnob model Knob.Osc2Detune
         , Switch.switch "kbd track"
-            Osc2KbdTrackToggle
+            Update.Osc2KbdTrackToggle
             model.osc2KbdTrackSwitch
         ]
 

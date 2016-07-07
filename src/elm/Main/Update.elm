@@ -1,12 +1,12 @@
-module Main.Update exposing (..)
+module Main.Update exposing (Msg(..), update)
 
-import Container.Panel.Update as PanelUpdate exposing (..)
-import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
-import Container.Panel.Update as PanelUpdate exposing (..)
-import Component.Knob as Knob exposing (..)
-import Main.Model as Model exposing (..)
-import Process exposing (..)
-import Task exposing (..)
+import Container.Panel.Update as PanelUpdate
+import Container.OnScreenKeyboard.Update as KbdUpdate
+import Container.Panel.Update as PanelUpdate
+import Component.Knob as Knob
+import Main.Model as Model
+import Process
+import Task
 import Port
 import Preset
 
@@ -19,10 +19,6 @@ type Msg
     | NextPreset
     | PreviousPreset
     | PresetChange Preset.Preset
-
-
-
---| NoOp
 
 
 update : Msg -> Model.Model -> ( Model.Model, Cmd Msg )
@@ -54,13 +50,13 @@ update msg model =
                         model.panel
 
                 model' =
-                    updatePanel updatedPanel model
+                    Model.updatePanel updatedPanel model
 
                 ( updatedKbd, kbdCmd ) =
                     KbdUpdate.update KbdUpdate.MouseUp model'.onScreenKeyboard
 
                 model'' =
-                    updateOnScreenKeyboard updatedKbd model'
+                    Model.updateOnScreenKeyboard updatedKbd model'
             in
                 ( model''
                 , Cmd.map (always MouseUp)
@@ -72,7 +68,7 @@ update msg model =
                 ( updatedPanel, panelCmd ) =
                     PanelUpdate.update subMsg model.panel
             in
-                ( updatePanel updatedPanel model
+                ( Model.updatePanel updatedPanel model
                 , Cmd.map PanelMsg panelCmd
                 )
 
@@ -83,7 +79,7 @@ update msg model =
 
                 ( midiMsgInLedOn, blinkOffCmd ) =
                     case subMsg of
-                        MidiMessageIn _ ->
+                        KbdUpdate.MidiMessageIn _ ->
                             ( True
                             , Process.sleep (50)
                                 |> Task.perform (always KbdUpdate.NoOp)
@@ -93,7 +89,7 @@ update msg model =
                         _ ->
                             ( False, Cmd.none )
             in
-                ( updateOnScreenKeyboard updatedKbd
+                ( Model.updateOnScreenKeyboard updatedKbd
                     { model | midiMsgInLedOn = midiMsgInLedOn }
                 , Cmd.map OnScreenKeyboardMsg
                     <| Cmd.batch [ blinkOffCmd, kbdCmd ]

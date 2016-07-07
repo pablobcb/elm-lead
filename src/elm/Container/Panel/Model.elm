@@ -1,10 +1,21 @@
-module Container.Panel.Model exposing (..)
+module Container.Panel.Model
+    exposing
+        ( FilterType(..)
+        , Model
+        , OscillatorWaveform(..)
+        , init
+        , updateOverdriveSwitch
+        , updateOsc2KbdTrack
+        , updateFilterTypeBtn
+        , updateOsc2WaveformBtn
+        , updateOsc1WaveformBtn
+        )
 
 -- where
 
-import Component.Knob as Knob exposing (..)
-import Component.Switch as Switch exposing (..)
-import Component.OptionPicker as OptionPicker exposing (..)
+import Component.Knob as Knob
+import Component.Switch as Switch
+import Component.OptionPicker as OptionPicker
 import Port
 import Preset
 
@@ -234,7 +245,7 @@ init preset =
     }
 
 
-findKnob : Model -> KnobInstance -> Knob.Model
+findKnob : Model -> Knob.KnobInstance -> Knob.Model
 findKnob model knobInstance =
     let
         knob =

@@ -1,4 +1,4 @@
-module Component.Switch exposing (..)
+module Component.Switch exposing (init, Model, Msg(..), update, switch)
 
 -- where
 

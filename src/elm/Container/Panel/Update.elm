@@ -1,8 +1,8 @@
-module Container.Panel.Update exposing (..)
+module Container.Panel.Update exposing (Msg(..), update)
 
 --where
 
-import Container.Panel.Model as Model exposing (..)
+import Container.Panel.Model as Model exposing (Model)
 import Component.Knob as Knob
 import Component.Switch as Switch
 import Component.OptionPicker as OptionPicker
@@ -47,35 +47,35 @@ update msg model =
                 updateMap OptionPicker.update
                     subMsg
                     .osc1WaveformBtn
-                    updateOsc1WaveformBtn
+                    Model.updateOsc1WaveformBtn
                     Osc1WaveformChange
 
             Osc2WaveformChange subMsg ->
                 updateMap OptionPicker.update
                     subMsg
                     .osc2WaveformBtn
-                    updateOsc2WaveformBtn
+                    Model.updateOsc2WaveformBtn
                     Osc2WaveformChange
 
             FilterTypeChange subMsg ->
                 updateMap OptionPicker.update
                     subMsg
                     .filterTypeBtn
-                    updateFilterTypeBtn
+                    Model.updateFilterTypeBtn
                     FilterTypeChange
 
             Osc2KbdTrackToggle subMsg ->
                 updateMap Switch.update
                     subMsg
                     .osc2KbdTrackSwitch
-                    updateOsc2KbdTrack
+                    Model.updateOsc2KbdTrack
                     Osc2KbdTrackToggle
 
             OverdriveToggle subMsg ->
                 updateMap Switch.update
                     subMsg
                     .overdriveSwitch
-                    updateOverdriveSwitch
+                    Model.updateOverdriveSwitch
                     OverdriveToggle
 
             KnobMsg subMsg ->

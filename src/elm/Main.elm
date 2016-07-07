@@ -1,22 +1,23 @@
-module Main exposing (..)
+module Main exposing (main, subscriptions)
 
 import Html.App
 import Port
-import Keyboard exposing (..)
-import Mouse exposing (..)
-import Container.OnScreenKeyboard.Update as KbdUpdate exposing (..)
-import Container.Panel.Update as PanelUpdate exposing (..)
-import Component.Knob as Knob exposing (..)
-import Main.Model as Model exposing (..)
-import Main.Update as Update exposing (..)
-import Main.View as View exposing (..)
+import Keyboard
+import Mouse
+import Container.OnScreenKeyboard.Update as KbdUpdate
+import Container.Panel.Update as PanelUpdate
+import Component.Knob as Knob
+import Main.Model as Model
+import Main.Update as Update
+import Main.View as View
 
 
-main : Program InitialFlags
+main : Program Model.InitialFlags
 main =
     Html.App.programWithFlags
-        { init = \flags ->
-            ( Model.init flags.preset flags.midiSupport, Cmd.none )
+        { init =
+            \flags ->
+                ( Model.init flags.preset flags.midiSupport, Cmd.none )
         , view = View.view
         , update = Update.update
         , subscriptions = subscriptions
@@ -26,15 +27,16 @@ main =
 subscriptions : Model.Model -> Sub Update.Msg
 subscriptions model =
     Sub.batch
-        [ Port.midiIn <| OnScreenKeyboardMsg << MidiMessageIn
-        , Port.midiStateChange OnMidiStateChange
-        , Port.presetChange <| PresetChange
-        , Port.panic <| always <| OnScreenKeyboardMsg Panic
-        , Keyboard.ups <| handleKeyUp OnScreenKeyboardMsg
+        [ Port.midiIn <| Update.OnScreenKeyboardMsg << KbdUpdate.MidiMessageIn
+        , Port.midiStateChange Update.OnMidiStateChange
+        , Port.presetChange <| Update.PresetChange
+        , Port.panic <| always <| Update.OnScreenKeyboardMsg KbdUpdate.Panic
+        , Keyboard.ups <| KbdUpdate.handleKeyUp Update.OnScreenKeyboardMsg
         , Keyboard.downs
-            <| handleKeyDown OnScreenKeyboardMsg model.onScreenKeyboard
+            <| KbdUpdate.handleKeyDown Update.OnScreenKeyboardMsg
+                model.onScreenKeyboard
         , Mouse.ups <| always Update.MouseUp
         , Mouse.moves
             <| \{ y } ->
-                y |> Knob.MouseMove |> PanelUpdate.KnobMsg |> PanelMsg
+                y |> Knob.MouseMove |> PanelUpdate.KnobMsg |> Update.PanelMsg
         ]
