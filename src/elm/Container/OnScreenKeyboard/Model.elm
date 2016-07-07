@@ -2,24 +2,23 @@ module Container.OnScreenKeyboard.Model exposing (..)
 
 -- where
 
-import List exposing (..)
-import Note exposing (..)
-import Midi exposing (..)
+import Note
+import Midi
 import Port
 
 
 type alias PressedKey =
-    ( Char, MidiValue )
+    ( Char, Midi.MidiValue )
 
 
 type alias Model =
-    { octave : Octave
-    , velocity : Velocity
+    { octave : Note.Octave
+    , velocity : Note.Velocity
     , pressedNotes : List PressedKey
     , clickedAndHovering : Bool
-    , mouseHoverNote : Maybe MidiValue
-    , mousePressedNote : Maybe MidiValue
-    , midiPressedNotes : List MidiValue
+    , mouseHoverNote : Maybe Midi.MidiValue
+    , mousePressedNote : Maybe Midi.MidiValue
+    , midiPressedNotes : List Midi.MidiValue
     }
 
 
@@ -37,23 +36,9 @@ init =
 
 pianoKeys : List Char
 pianoKeys =
-    [ 'a'
-    , 'w'
-    , 's'
-    , 'e'
-    , 'd'
-    , 'f'
-    , 't'
-    , 'g'
-    , 'y'
-    , 'h'
-    , 'u'
-    , 'j'
-    , 'k'
-    , 'o'
-    , 'l'
-    , 'p'
-    ]
+    [ 'a' , 'w' , 's' , 'e' , 'd' , 'f'
+    , 't' , 'g' , 'y' , 'h' , 'u' , 'j'
+    , 'k' , 'o' , 'l' , 'p' ]
 
 
 allowedInputKeys : List Char
@@ -66,57 +51,57 @@ unusedKeysOnLastOctave =
     [ 'h', 'u', 'j', 'k', 'o', 'l', 'p' ]
 
 
-keyToMidiNoteNumber : ( Char, Octave ) -> MidiValue
+keyToMidiNoteNumber : ( Char, Note.Octave ) -> Midi.MidiValue
 keyToMidiNoteNumber ( symbol, octave ) =
     Midi.noteToMidiNumber
         <| case symbol of
             'a' ->
-                ( C, octave )
+                ( Note.C, octave )
 
             'w' ->
-                ( Db, octave )
+                ( Note.Db, octave )
 
             's' ->
-                ( D, octave )
+                ( Note.D, octave )
 
             'e' ->
-                ( Eb, octave )
+                ( Note.Eb, octave )
 
             'd' ->
-                ( E, octave )
+                ( Note.E, octave )
 
             'f' ->
-                ( F, octave )
+                ( Note.F, octave )
 
             't' ->
-                ( Gb, octave )
+                ( Note.Gb, octave )
 
             'g' ->
-                ( G, octave )
+                ( Note.G, octave )
 
             'y' ->
-                ( Ab, octave )
+                ( Note.Ab, octave )
 
             'h' ->
-                ( A, octave )
+                ( Note.A, octave )
 
             'u' ->
-                ( Bb, octave )
+                ( Note.Bb, octave )
 
             'j' ->
-                ( B, octave )
+                ( Note.B, octave )
 
             'k' ->
-                ( C, octave + 1 )
+                ( Note.C, octave + 1 )
 
             'o' ->
-                ( Db, octave + 1 )
+                ( Note.Db, octave + 1 )
 
             'l' ->
-                ( D, octave + 1 )
+                ( Note.D, octave + 1 )
 
             'p' ->
-                ( Eb, octave + 1 )
+                ( Note.Eb, octave + 1 )
 
             _ ->
                 Debug.crash ("Note and octave outside MIDI bounds: " ++ toString symbol ++ " " ++ toString octave)
@@ -197,12 +182,12 @@ mouseLeave model =
     { model | mouseHoverNote = Nothing, mousePressedNote = Nothing }
 
 
-addClickedNote : Model -> MidiValue -> Model
+addClickedNote : Model -> Midi.MidiValue -> Model
 addClickedNote model midiNote =
     { model | mousePressedNote = Just midiNote }
 
 
-removeClickedNote : Model -> MidiValue -> Model
+removeClickedNote : Model -> Midi.MidiValue -> Model
 removeClickedNote model midiNote =
     { model | mousePressedNote = Just midiNote }
 
@@ -225,7 +210,7 @@ removePressedNote model symbol =
     }
 
 
-addPressedMidiNote : Model -> MidiValue -> Model
+addPressedMidiNote : Model -> Midi.MidiValue -> Model
 addPressedMidiNote model midiNote =
     { model
         | midiPressedNotes =
@@ -234,7 +219,7 @@ addPressedMidiNote model midiNote =
     }
 
 
-removePressedMidiNote : Model -> MidiValue -> Model
+removePressedMidiNote : Model -> Midi.MidiValue -> Model
 removePressedMidiNote model midiNote =
     { model
         | midiPressedNotes =
@@ -248,19 +233,19 @@ findPressedKey model symbol =
     List.head <| List.filter (\( symbol', _ ) -> symbol == symbol') model.pressedNotes
 
 
-findPressedNote : Model -> MidiValue -> Maybe PressedKey
+findPressedNote : Model -> Midi.MidiValue -> Maybe PressedKey
 findPressedNote model midiNote =
     List.head <| List.filter (\( _, midiNote' ) -> midiNote == midiNote') model.pressedNotes
 
 
-noteOnCommand : Velocity -> MidiValue -> Cmd msg
+noteOnCommand : Note.Velocity -> Midi.MidiValue -> Cmd msg
 noteOnCommand velocity midiNoteNumber =
-    noteOnMessage midiNoteNumber velocity |> Port.midiOut
+    Midi.noteOnMessage midiNoteNumber velocity |> Port.midiOut
 
 
-noteOffCommand : Velocity -> MidiValue -> Cmd msg
+noteOffCommand : Note.Velocity -> Midi.MidiValue -> Cmd msg
 noteOffCommand velocity midiNoteNumber =
-    noteOffMessage midiNoteNumber velocity |> Port.midiOut
+    Midi.noteOffMessage midiNoteNumber velocity |> Port.midiOut
 
 
 panic : Model -> Model
