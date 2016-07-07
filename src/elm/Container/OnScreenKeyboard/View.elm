@@ -6,10 +6,10 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Html.App exposing (map)
-import Container.OnScreenKeyboard.Model as Model exposing (..)
-import Container.OnScreenKeyboard.Update as Update exposing (..)
-import String exposing (..)
-import Midi exposing (..)
+import Container.OnScreenKeyboard.Model as Model exposing (Model)
+import Container.OnScreenKeyboard.Update as Update exposing (Msg)
+import String
+import Midi
 
 
 octaveKeys : List String
@@ -22,17 +22,17 @@ onScreenKeyboardKeys =
     (List.concat <| List.repeat 10 octaveKeys) ++ (List.take 8 octaveKeys)
 
 
-onMouseEnter : MidiValue -> Html.Attribute Msg
+onMouseEnter : Midi.MidiValue -> Html.Attribute Msg
 onMouseEnter midiNote =
-    midiNote |> MouseEnter |> Html.Events.onMouseEnter
+    midiNote |> Update.MouseEnter |> Html.Events.onMouseEnter
 
 
-onMouseLeave : MidiValue -> Html.Attribute Msg
+onMouseLeave : Midi.MidiValue -> Html.Attribute Update.Msg
 onMouseLeave midiNote =
-    midiNote |> MouseLeave |> Html.Events.onMouseLeave
+    midiNote |> Update.MouseLeave |> Html.Events.onMouseLeave
 
 
-key : Model -> String -> MidiValue -> Int -> Html Msg
+key : Model -> String -> Midi.MidiValue -> Int -> Html Msg
 key model noteName midiNote octave =
     let
         isCurrentOctave =
@@ -124,7 +124,12 @@ view model =
                 Midi.midiNoteOctaves
     in
         div [ class "virtual-keyboard" ]
-            [ ul [ class "keyboard", Html.Events.onMouseDown MouseDown ] keys ]
+            [ ul
+                [ class "keyboard"
+                , Html.Events.onMouseDown Update.MouseDown
+                ]
+                keys
+            ]
 
 
 keyboard : (Msg -> a) -> Model -> Html a

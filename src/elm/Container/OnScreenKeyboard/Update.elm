@@ -2,7 +2,7 @@ module Container.OnScreenKeyboard.Update exposing (..)
 
 --where
 
-import Container.OnScreenKeyboard.Model as KbdModel
+import Container.OnScreenKeyboard.Model as Model exposing (Model)
 import Midi
 import Char
 import Maybe.Extra
@@ -24,20 +24,20 @@ type Msg
     | Panic
 
 
-update : Msg -> KbdModel.Model -> ( KbdModel.Model, Cmd a )
+update : Msg -> Model -> ( Model, Cmd a )
 update msg model =
     case msg of
         Panic ->
-            ( KbdModel.panic model, Cmd.none )
+            ( Model.panic model, Cmd.none )
 
         MidiMessageIn midiMsg ->
             -- TODO MOVE CODE TO SPECIFIC MODULE
             case midiMsg of
                 (Just 144) :: (Just midiNote) :: _ ->
-                    ( KbdModel.addPressedMidiNote model midiNote, Cmd.none )
+                    ( Model.addPressedMidiNote model midiNote, Cmd.none )
 
                 (Just 128) :: (Just midiNote) :: _ ->
-                    ( KbdModel.removePressedMidiNote model midiNote, Cmd.none )
+                    ( Model.removePressedMidiNote model midiNote, Cmd.none )
 
                 _ ->
                     ( model, Cmd.none )
@@ -48,11 +48,11 @@ update msg model =
         MouseDown ->
             let
                 model' =
-                    KbdModel.mouseDown model
+                    Model.mouseDown model
 
                 isKeyPressed midiNoteNumber =
                     Maybe.Extra.isJust
-                        <| KbdModel.findPressedNote model' midiNoteNumber
+                        <| Model.findPressedNote model' midiNoteNumber
 
                 hoveringAndClickingKey =
                     model'.mousePressedNote
@@ -62,7 +62,7 @@ update msg model =
                         if isKeyPressed midiNoteNumber then
                             ( model', Cmd.none )
                         else
-                            ( model', KbdModel.noteOnCommand (.velocity model') midiNoteNumber )
+                            ( model', Model.noteOnCommand (.velocity model') midiNoteNumber )
 
                     Nothing ->
                         ( model', Cmd.none )
@@ -71,20 +71,20 @@ update msg model =
             let
                 isKeyPressed midiNoteNumber =
                     Maybe.Extra.isJust
-                        <| KbdModel.findPressedNote model midiNoteNumber
+                        <| Model.findPressedNote model midiNoteNumber
 
                 hoveringAndClickingKey =
                     model.mousePressedNote
 
                 model' =
-                    KbdModel.mouseUp model
+                    Model.mouseUp model
             in
                 case hoveringAndClickingKey of
                     Just midiNoteNumber ->
                         if isKeyPressed midiNoteNumber then
                             ( model', Cmd.none )
                         else
-                            ( model', KbdModel.noteOffCommand (.velocity model') midiNoteNumber )
+                            ( model', Model.noteOffCommand (.velocity model') midiNoteNumber )
 
                     Nothing ->
                         ( model', Cmd.none )
@@ -92,11 +92,11 @@ update msg model =
         MouseEnter midiNoteNumber ->
             let
                 model' =
-                    KbdModel.mouseEnter model midiNoteNumber
+                    Model.mouseEnter model midiNoteNumber
 
                 isKeyPressed midiNoteNumber =
                     Maybe.Extra.isJust
-                        <| KbdModel.findPressedNote model' midiNoteNumber
+                        <| Model.findPressedNote model' midiNoteNumber
 
                 hoveringAndClickingKey =
                     model'.mousePressedNote
@@ -106,7 +106,7 @@ update msg model =
                         if isKeyPressed midiNoteNumber then
                             ( model', Cmd.none )
                         else
-                            ( model', KbdModel.noteOnCommand (.velocity model') midiNoteNumber )
+                            ( model', Model.noteOnCommand (.velocity model') midiNoteNumber )
 
                     Nothing ->
                         ( model', Cmd.none )
@@ -115,43 +115,43 @@ update msg model =
             let
                 isKeyPressed midiNoteNumber =
                     Maybe.Extra.isJust
-                        <| KbdModel.findPressedNote model midiNoteNumber
+                        <| Model.findPressedNote model midiNoteNumber
 
                 hoveringAndClickingKey =
                     model.mousePressedNote
 
                 model' =
-                    KbdModel.mouseLeave model
+                    Model.mouseLeave model
             in
                 case hoveringAndClickingKey of
                     Just midiNoteNumber ->
                         if isKeyPressed midiNoteNumber then
                             ( model', Cmd.none )
                         else
-                            ( model', KbdModel.noteOffCommand (.velocity model') midiNoteNumber )
+                            ( model', Model.noteOffCommand (.velocity model') midiNoteNumber )
 
                     Nothing ->
                         ( model', Cmd.none )
 
         OctaveDown ->
-            ( KbdModel.octaveDown model, Cmd.none )
+            ( Model.octaveDown model, Cmd.none )
 
         OctaveUp ->
-            ( KbdModel.octaveUp model, Cmd.none )
+            ( Model.octaveUp model, Cmd.none )
 
         VelocityDown ->
-            ( KbdModel.velocityDown model, Cmd.none )
+            ( Model.velocityDown model, Cmd.none )
 
         VelocityUp ->
-            ( KbdModel.velocityUp model, Cmd.none )
+            ( Model.velocityUp model, Cmd.none )
 
         KeyOn symbol ->
             let
                 model' =
-                    KbdModel.addPressedNote model symbol
+                    Model.addPressedNote model symbol
 
                 midiNoteNumber =
-                    KbdModel.keyToMidiNoteNumber ( symbol, model.octave )
+                    Model.keyToMidiNoteNumber ( symbol, model.octave )
 
                 hoveringAndClickingKey =
                     model.mousePressedNote
@@ -161,21 +161,21 @@ update msg model =
                         if midiNoteNumber == midiNoteNumber' then
                             ( model', Cmd.none )
                         else
-                            ( model', KbdModel.noteOnCommand (.velocity model) midiNoteNumber )
+                            ( model', Model.noteOnCommand (.velocity model) midiNoteNumber )
 
                     Nothing ->
-                        ( model', KbdModel.noteOnCommand (.velocity model) midiNoteNumber )
+                        ( model', Model.noteOnCommand (.velocity model) midiNoteNumber )
 
         KeyOff symbol ->
             let
                 releasedKey =
-                    KbdModel.findPressedKey model symbol
+                    Model.findPressedKey model symbol
 
                 hoveringAndClickingKey =
                     model.mousePressedNote
 
                 model' =
-                    KbdModel.removePressedNote model symbol
+                    Model.removePressedNote model symbol
             in
                 case releasedKey of
                     Just ( symbol', midiNoteNumber ) ->
@@ -185,13 +185,13 @@ update msg model =
                                     ( model', Cmd.none )
                                 else
                                     ( model'
-                                    , KbdModel.noteOffCommand model.velocity
+                                    , Model.noteOffCommand model.velocity
                                         midiNoteNumber
                                     )
 
                             Nothing ->
                                 ( model'
-                                , KbdModel.noteOffCommand model.velocity
+                                , Model.noteOffCommand model.velocity
                                     midiNoteNumber
                                 )
 
@@ -199,23 +199,23 @@ update msg model =
                         ( model', Cmd.none )
 
 
-handleKeyDown : (Msg -> a) -> KbdModel.Model -> Char.KeyCode -> a
+handleKeyDown : (Msg -> a) -> Model -> Char.KeyCode -> a
 handleKeyDown msg model keyCode =
     let
         symbol =
             keyCode |> Char.fromCode |> Char.toLower
 
         allowedInput =
-            List.member symbol KbdModel.allowedInputKeys
+            List.member symbol Model.allowedInputKeys
 
         isLastOctave =
             (.octave model) == 8
 
         unusedKeys =
-            List.member symbol KbdModel.unusedKeysOnLastOctave
+            List.member symbol Model.unusedKeysOnLastOctave
 
         symbolAlreadyPressed =
-            Maybe.Extra.isJust <| KbdModel.findPressedKey model symbol
+            Maybe.Extra.isJust <| Model.findPressedKey model symbol
     in
         if
             (not allowedInput)
@@ -248,7 +248,7 @@ handleKeyUp msg keyCode =
             keyCode |> Char.fromCode |> Char.toLower
 
         invalidKey =
-            not <| List.member symbol KbdModel.pianoKeys
+            not <| List.member symbol Model.pianoKeys
 
         --isMousePressingSameKey =
         --  case findPressedKey model symbol of
