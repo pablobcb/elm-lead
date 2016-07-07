@@ -24,7 +24,11 @@ interface Preset {
 }
 
 const midiSettingsToSynthSettings = (preset: Preset) => {
-		let state: Preset
+		let state = {
+			amp: { adsr: {} },
+			filter: { adsr: {} },
+			oscs: { osc1: {}, osc2: {} }
+		} as Preset
 		/* META */
 		//displayed name
 		state.name = preset.name
