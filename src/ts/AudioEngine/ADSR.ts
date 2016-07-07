@@ -9,14 +9,14 @@ interface ADSRState {
 }
 
 export default class ADSR {
-	public state: ADSRState
-	public startAmount: number
-	public sustainAmount: number
-	public endAmount: number
-	public context: AudioContext
-	public startedAt: number
-	public decayFrom: number
-	public decayTo: number
+	private state: ADSRState
+	private startAmount: number
+	private sustainAmount: number
+	private endAmount: number
+	private context: AudioContext
+	private startedAt: number
+	private decayFrom: number
+	private decayTo: number
 
 	constructor (context: AudioContext, state: ADSRState) {
 		this.startAmount = 0
