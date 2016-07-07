@@ -89,7 +89,7 @@ export abstract class BaseOscillator {
 	public setWaveform (waveform: string) : void {}
 
 	abstract _noteOn (midiNote: number) : void
-	abstract _onended (voice: number) : void
+	protected _onended (voice: number) : void { }
 
 
 	setKbdTrack = (state: boolean) => {

@@ -22,13 +22,12 @@ export default class PulseOscillator extends FMOscillator {
 		this.pulseWidth = 0
 		this.widthGains = []
 
-
 		for (let i = 0; i < 128; i++) {
 			this.widthGains[i] = this.context.createGain()
 		}
 	}
 
-	_noteOn = (midiNote: number) => {
+	_noteOn (midiNote: number) {
 		const midiNoteKey = midiNote.toString()
 
 		const sawNode = this.context.createOscillator()
@@ -56,11 +55,11 @@ export default class PulseOscillator extends FMOscillator {
 		this.voices[midiNoteKey] = sawNode
 	}
 
-	_onended = () => {
+	_onended () {
 		this.pulseShaper.disconnect()
 	}
 
-	setPulseWidth = (width: any) => {
+	setPulseWidth (width: any) {
 		this.pulseWidth = width
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = width

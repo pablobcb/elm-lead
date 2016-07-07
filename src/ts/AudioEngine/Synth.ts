@@ -45,16 +45,13 @@ export default class Synth {
 		const note = data[1]
 		//const velocity = data[2]
 
-
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
-				this.oscillators.noteOn(note,
-					this.amplifier.adsr.on(0, 1))
+				this.oscillators.noteOn(note, this.amplifier.adsr.on(0, 1))
 				this.filter.noteOn()
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
-				this.oscillators.noteOff(note,
-					this.amplifier.adsr.off)
+				this.oscillators.noteOff(note, this.amplifier.adsr.off)
 				this.filter.noteOff()
 				break
 		}

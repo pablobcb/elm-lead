@@ -11,7 +11,7 @@ export default class FMOscillator extends BaseOscillator {
 		this.semitone = 0
 	}
 
-	_noteOn = (midiNote: any) => {
+	_noteOn (midiNote: any) {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.context.createOscillator()
 
@@ -25,7 +25,7 @@ export default class FMOscillator extends BaseOscillator {
 		this.voices[midiNoteKey] = osc
 	}
 
-	setDetune = detune => {
+	setDetune (detune: number) {
 		this.detune = detune
 		for (const midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
@@ -35,7 +35,7 @@ export default class FMOscillator extends BaseOscillator {
 		}
 	}
 
-	setSemitone = semitone => {
+	setSemitone (semitone: number) {
 		this.semitone = semitone * 100
 		for (const midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
@@ -45,7 +45,7 @@ export default class FMOscillator extends BaseOscillator {
 		}
 	}
 
-	setWaveform = waveform => {
+	setWaveform (waveform: WaveformType) {
 		for (const midiNote in this.voices) {			
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].type = waveform
@@ -54,7 +54,7 @@ export default class FMOscillator extends BaseOscillator {
 		this.type = waveform
 	}
 
-	setFMGain = fmGain => {
+	setFMGain = (fmGain: number) => {
 		for (let i=0; i<128; i++) {
 			this.frequencyGains[i].gain.value = fmGain
 		}
