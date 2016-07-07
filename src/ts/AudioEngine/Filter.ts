@@ -8,7 +8,7 @@ export interface FilterState {
 	type_ : string
 	frequency: number
 	q: number
-	envelopeAmout: number
+	envelopeAmount: number
 	adsr: ADSRState
 }
 
@@ -21,7 +21,7 @@ export class Filter {
 	public adsr : ADSR
 	public envelopeAmount : number
 
-	constructor (context: AudioContext, state: any) {
+	constructor (context: AudioContext, state: FilterState) {
 		this.context = context
 
 		this.biquadFilter = this.context.createBiquadFilter()
@@ -36,7 +36,7 @@ export class Filter {
 		this._setState(state)
 	}
 
-	_setState = (state: any) => {
+	private _setState = (state: FilterState) => {
 		/* filter state */
 		this.biquadFilter.type = state.type_
 		this.biquadFilter.frequency.value = state.frequency
@@ -45,14 +45,14 @@ export class Filter {
 
 	}
 
-	setState = (state: any) => {
-		this._setState = state
+	public setState = (state: FilterState) => {
+		this._setState(state)
 		this.adsr.setState(state.adsr)
 	}
 
 
 	/* triggers filter's attack, decay, and sustain envelope  */
-	noteOn = () => {
+	public noteOn = () => {
 		const filterMinFreq = this.biquadFilter.frequency.value
 		let filterMaxFreq =
 			this.envelopeAmount * MIDI.toFilterCutoffFrequency(127)
@@ -67,25 +67,25 @@ export class Filter {
 	}
 
 	/* triggers filter's release envelope  */
-	noteOff = () => {
+	public noteOff = () => {
 		this.adsr.off(this.biquadFilter.detune)
 	}
 
-	get type () {
+	public get type () {
 		return this.biquadFilter.type
 	}
 
-	connect = (node: any) => {
+	public connect = (node: any) => {
 		this.output.connect(node)
 		return this
 	}
 
-	disconnect = (node: any) => {
+	public disconnect = (node: any) => {
 		this.output.disconnect(node)
 		return this
 	}
 
-	setCutoff = (midiValue: number) => {
+	public setCutoff = (midiValue: number) => {
 		this.biquadFilter.frequency.value =
 			MIDI.toFilterCutoffFrequency(midiValue)
 	}
