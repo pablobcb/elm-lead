@@ -1,4 +1,4 @@
-const Elm = require('../elm/Main.elm')
+const Elm: any = require('../elm/Main.elm')
 
 import Synth from './AudioEngine/Synth'
 import MIDI from './MIDI'
@@ -9,13 +9,13 @@ const noMidiMsg = `Your browser doesnt support WebMIDI API. Use another
 
 export default class Application {
 
-	protected app: ElmComponent<any>
+	private app: ElmComponent<any>
+	private midiAccess: MIDIAccess
+	private synth: Synth
+	private presetManager: PresetManager
 
-	protected midiAccess: MIDIAccess
-	protected synth: Synth
-
-	constructor () {
-		const onMIDISuccess = midiAccess => {
+	constructor() {
+		const onMIDISuccess = (midiAccess: MIDIAccess) => {
 			this.midiAccess = midiAccess
 		}
 
@@ -25,7 +25,7 @@ export default class Application {
 				.then(onMIDISuccess, () => alert(noMidiMsg))
 				.then(this.initializeSynth)
 		} else {
-			 alert(noMidiMsg)
+			alert(noMidiMsg)
 		}
 	}
 
