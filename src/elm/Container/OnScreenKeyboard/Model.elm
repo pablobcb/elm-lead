@@ -1,4 +1,30 @@
-module Container.OnScreenKeyboard.Model exposing (..)
+module Container.OnScreenKeyboard.Model
+    exposing
+        ( PressedKey
+        , Model
+        , init
+        , panic
+        , mouseEnter
+        , mouseLeave
+        , mouseDown
+        , mouseUp
+        , velocityUp
+        , velocityDown
+        , octaveUp
+        , octaveDown
+        , findPressedKey
+        , allowedInputKeys
+        , pianoKeys
+        , unusedKeysOnLastOctave
+        , noteOnCommand
+        , noteOffCommand
+        , keyToMidiNoteNumber
+        , findPressedNote
+        , addPressedNote
+        , removePressedNote
+        , addPressedMidiNote
+        , removePressedMidiNote
+        )
 
 -- where
 
@@ -36,9 +62,23 @@ init =
 
 pianoKeys : List Char
 pianoKeys =
-    [ 'a' , 'w' , 's' , 'e' , 'd' , 'f'
-    , 't' , 'g' , 'y' , 'h' , 'u' , 'j'
-    , 'k' , 'o' , 'l' , 'p' ]
+    [ 'a'
+    , 'w'
+    , 's'
+    , 'e'
+    , 'd'
+    , 'f'
+    , 't'
+    , 'g'
+    , 'y'
+    , 'h'
+    , 'u'
+    , 'j'
+    , 'k'
+    , 'o'
+    , 'l'
+    , 'p'
+    ]
 
 
 allowedInputKeys : List Char

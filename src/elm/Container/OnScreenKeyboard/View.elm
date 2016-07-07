@@ -1,11 +1,11 @@
-module Container.OnScreenKeyboard.View exposing (..)
+module Container.OnScreenKeyboard.View exposing (keyboard)
 
 -- where
 
-import Html exposing (..)
-import Html.Events exposing (..)
-import Html.Attributes exposing (..)
-import Html.App exposing (map)
+import Html exposing (Html, div, ul, li)
+import Html.Events
+import Html.Attributes exposing (class)
+import Html.App
 import Container.OnScreenKeyboard.Model as Model exposing (Model)
 import Container.OnScreenKeyboard.Update as Update exposing (Msg)
 import String

@@ -1,8 +1,8 @@
-module Component.Incrementer exposing (..)
+module Component.Incrementer exposing (Incrementer(..), incrementer)
 
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Html exposing (..)
+import Html exposing (Html, div, label, text, button)
 
 
 type Incrementer

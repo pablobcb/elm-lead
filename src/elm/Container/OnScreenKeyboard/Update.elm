@@ -1,4 +1,10 @@
-module Container.OnScreenKeyboard.Update exposing (..)
+module Container.OnScreenKeyboard.Update
+    exposing
+        ( Msg(..)
+        , update
+        , handleKeyDown
+        , handleKeyUp
+        )
 
 --where
 
