@@ -115,13 +115,13 @@ export default class Application {
 			.subscribe(this.synth.oscillators.setOscillator2Detune)
 
 		this.app.ports.fmAmount
-			.subscribe(this.synth.oscillators.setFmAmount)
+			.subscribe(this.synth.oscillators.oscillator1.setFmAmount)
 
 		this.app.ports.pulseWidth
 			.subscribe(this.synth.oscillators.setPulseWidth)
 
 		this.app.ports.osc1Waveform
-			.subscribe(this.synth.oscillators.setOscillator1Waveform)
+			.subscribe(this.synth.oscillators.oscillator1.setWaveform)
 
 		this.app.ports.osc2Waveform
 			.subscribe(this.synth.oscillators.setOscillator2Waveform)

@@ -96,16 +96,30 @@ export default class Osc1 {
 	}
 
 	public setWaveform(waveform: string) {
-		for (let i = 0; i < 128; i++) {
-			if (this.vcos[i] !== null) {
-				this.vcos[i].type = waveform
+		const wf = waveform.toLowerCase()
+		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(wf) !== -1) {
+			this.state.waveformType = waveform
+			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
+				if (this.vcos[i] !== null) {
+					this.vcos[i].type = waveform
+				}
 			}
+		} else {
+			throw new Error(`Invalid Waveform Type ${wf}`)
 		}
 	}
 
-	public setFmAmount = (fmGain: number) => {
-		for (let i = 0; i < 128; i++) {
-			this.fmInputs[i].gain.value = fmGain
+	public setFmAmount = (fmAmount: number) => {
+		const amount = 10 * MIDI.logScaleToMax(fmAmount, 100)
+		this.state.fmAmount = amount
+
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
+			this.fmInputs[i].gain.value = amount
 		}
+	}
+
+	public setState(state: Osc1State) {
+		this.setFmAmount(state.fmAmount)
+		this.setWaveform(state.waveformType)
 	}
 }

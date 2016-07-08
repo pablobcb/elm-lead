@@ -7,7 +7,7 @@ export abstract class BaseOscillator {
 	public frequencyGains: Array<GainNode>
 	public kbdTrack: boolean
 	public voices: any
-	public fmGain: GainNode
+	public fmAmount: GainNode
 	public type: string
 
 	protected context: AudioContext
