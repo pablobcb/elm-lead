@@ -1,6 +1,6 @@
 [
     {
-        "name": "fst",
+        "name": "Test 1",
         "presetId": 1,
         "filter": {
             "type_": "lowpass",
@@ -40,10 +40,11 @@
         "overdrive": false
     },
     {
-        "name": "snd",
+        "name": "Test 2",
+        "presetId": 2,
         "filter": {
             "type_": "bandpass",
-            "frequency": 127,
+            "frequency": 70,
             "q": 10,
             "envelopeAmount": 0,
             "adsr": {
@@ -64,7 +65,7 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "sine",
+                "waveformType": "square",
                 "fmGain": 60
             },
             "osc2": {
@@ -80,10 +81,11 @@
     },
      {
         "name": "snd",
+        "presetId": 3,
         "filter": {
             "type_": "bandpass",
-            "frequency": 127,
-            "q": 10,
+            "frequency": 70,
+            "q": 30,
             "envelopeAmount": 0,
             "adsr": {
                 "attack": 0,
@@ -103,7 +105,7 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "sine",
+                "waveformType": "triangle",
                 "fmGain": 0
             },
             "osc2": {
@@ -113,7 +115,7 @@
                 "kbdTrack": true
             },
             "pw": 0,
-            "mix": 1
+            "mix": 0
         },
         "overdrive": false
     }

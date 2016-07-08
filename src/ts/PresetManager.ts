@@ -1,11 +1,11 @@
 export default class PresetManager<T> {
-	
+
 	private currentPresetIndex: number
 	private presets: Array<T>
 
 	constructor(presets: Array<T>) {
 		this.presets = presets
-		this.currentPresetIndex = -1
+		this.currentPresetIndex = 0
 	}
 
 	public current(): T {

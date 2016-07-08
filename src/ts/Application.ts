@@ -31,7 +31,6 @@ const midiSettingsToSynthSettings = (preset: Preset) => {
 		} as Preset
 		/* META */
 		//displayed name
-		state.name = preset.name
 
 		/* AMP */
 		state.amp.adsr.attack =
@@ -144,8 +143,7 @@ export default class Application {
 
 	initializeSynth = () => {
 		this.presetManager = new PresetManager<Preset>(presets)
-
-		const preset = this.presetManager.next()
+		const preset = this.presetManager.current()
 		const midiSupport = this.midiAccess ? true : false
 
 		this.app = Elm.Main.fullscreen({
