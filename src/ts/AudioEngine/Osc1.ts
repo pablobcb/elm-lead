@@ -91,7 +91,13 @@ export default class Osc1 {
 		}
 	}
 
-	public disconnect(node: AudioParam) {
+	public connectToFm = (nodes: Array<AudioNode>) => {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
+			nodes[i].connect(this.fmInputs[i])
+		}
+	}
+
+	public disconnect = (node: AudioParam) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].disconnect(node)

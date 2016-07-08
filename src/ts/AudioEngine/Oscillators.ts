@@ -35,7 +35,6 @@ export default class Oscillators {
 
 	public oscillator1: Osc1
 	public oscillator2: BaseOscillator
-	public fmAmount: Array<GainNode>
 
 	public mixer:DualMixer
 
@@ -56,13 +55,9 @@ export default class Oscillators {
 		this.oscillator1.connect(this.mixer.channel1)
 		this.oscillator2.connect(this.mixer.channel2)
 
-		/* create Frequency Modulation gains */
-		this.fmAmount = []
-		for (let i = 0; i < 128; i++) {
-			this.fmAmount[i] = this.context.createGain()
-			this.oscillator2.voiceGains[i].connect(this.fmAmount[i])
-			this.fmAmount[i].connect(this.oscillator1.fmInputs[i])
-		}
+		/* connect Osc2 to Osc1 FM Input */
+		/* Osc1 is the Carrier and Osc 2 the Modulator */
+		this.oscillator1.connectToFm(this.oscillator2.voiceGains)
 	}
 
 	public setState = (state: OscillatorsState) => {
