@@ -21,35 +21,19 @@ export class Filter {
 	public adsr : ADSR
 	public envelopeAmount : number
 
-	constructor (context: AudioContext, state: FilterState) {
+	constructor (context: AudioContext) {
 		this.context = context
 
-		this.biquadFilter = this.context.createBiquadFilter()
+		/* filter adsr */
+		this.adsr = new ADSR(this.context)
 
 		/* AudioNode graph routing */
 		this.input = this.context.createGain()
 		this.output = this.context.createGain()
+		this.biquadFilter = this.context.createBiquadFilter()
 		this.input.connect(this.biquadFilter)
 		this.biquadFilter.connect(this.output)
-		this.adsr = new ADSR(this.context, state.adsr)
-
-		this._setState(state)
 	}
-
-	private _setState = (state: FilterState) => {
-		/* filter state */
-		this.biquadFilter.type = state.type_
-		this.biquadFilter.frequency.value = state.frequency
-		this.biquadFilter.Q.value = state.q
-		this.envelopeAmount = state.envelopeAmount
-
-	}
-
-	public setState = (state: FilterState) => {
-		this._setState(state)
-		this.adsr.setState(state.adsr)
-	}
-
 
 	/* triggers filter's attack, decay, and sustain envelope  */
 	public noteOn = () => {
@@ -71,8 +55,35 @@ export class Filter {
 		this.adsr.off(this.biquadFilter.detune)
 	}
 
-	public get type () {
-		return this.biquadFilter.type
+	public setCutoff = (midiValue: number) => {
+		this.biquadFilter.frequency.value =
+			MIDI.toFilterCutoffFrequency(midiValue)
+	}
+
+	public setQ = (midiValue: number) => {
+		this.biquadFilter.Q.value = MIDI.toFilterQAmount(midiValue)
+	}
+
+	public setType = (filterType: string) => {
+		const ft = filterType.toLowerCase()
+		if (CONSTANTS.FILTER_TYPES.indexOf(ft) !== -1) {
+			this.biquadFilter.type = ft
+		} else {
+			throw new Error('Invalid Filter Type')
+		}
+	}
+
+	public setEnvelopeAmount = (midiValue: number) => {
+		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
+	}
+
+	public setState = (state: FilterState) => {
+		this.adsr.setState(state.adsr)
+
+		this.setType(state.type_)
+		this.setCutoff(state.frequency)
+		this.setQ(state.q)
+		this.setEnvelopeAmount(state.envelopeAmount)
 	}
 
 	public connect = (node: any) => {
@@ -83,28 +94,6 @@ export class Filter {
 	public disconnect = (node: any) => {
 		this.output.disconnect(node)
 		return this
-	}
-
-	public setCutoff = (midiValue: number) => {
-		this.biquadFilter.frequency.value =
-			MIDI.toFilterCutoffFrequency(midiValue)
-	}
-
-	setQ = (midiValue: number) => {
-		this.biquadFilter.Q.value = MIDI.toFilterQAmount(midiValue)
-	}
-
-	setType = (filterType: string) => {
-		const ft = filterType.toLowerCase()
-		if (CONSTANTS.FILTER_TYPES.indexOf(ft) !== -1) {
-			this.biquadFilter.type = ft
-		} else {
-			throw new Error('Invalid Filter Type')
-		}
-	}
-
-	setEnvelopeAmount = (midiValue: number) => {
-		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 }

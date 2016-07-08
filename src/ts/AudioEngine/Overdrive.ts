@@ -19,7 +19,7 @@ export class Overdrive {
 
 	public params: any
 
-	constructor (context: AudioContext, enabled: boolean) {
+	constructor (context: AudioContext) {
 		this.context = context
 
 		const params = CONSTANTS.OVERDRIVE_PARAMS
@@ -56,26 +56,6 @@ export class Overdrive {
 
 		// Inverted preBand value
 		this._bpDry.gain.value = params.preBand
-
-		this.setState(enabled)
-	}
-
-	connect = (node: any) => {
-		this.output.connect(node.input ? node.input : node)
-	}
-
-	disconnect = () => {
-		this.output.disconnect()
-	}
-
-	setState = (enabled: boolean) => {
-		this.enabled = enabled
-		this.input.disconnect()
-		if (enabled) {
-			this.input.connect(this._bandpass)
-		} else {
-			this.input.connect(this.output)
-		}
 	}
 
 	get preBand() {
@@ -121,4 +101,21 @@ export class Overdrive {
 		this._lowpass.frequency.setValueAtTime(value, 0)
 	}
 
+	connect = (node: any) => {
+		this.output.connect(node.input ? node.input : node)
+	}
+
+	disconnect = () => {
+		this.output.disconnect()
+	}
+
+	setState = (enabled: boolean) => {
+		this.enabled = enabled
+		this.input.disconnect()
+		if (enabled) {
+			this.input.connect(this._bandpass)
+		} else {
+			this.input.connect(this.output)
+		}
+	}
 }

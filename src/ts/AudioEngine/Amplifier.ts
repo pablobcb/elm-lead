@@ -15,14 +15,14 @@ export class Amplifier {
 	constructor (context: AudioContext, state: AmplifierState) {
 		this.context = context
 
-		/* amp adsr state */
-		this.adsr = new ADSR(this.context, state.adsr)
+		/* amp adsr */
+		this.adsr = new ADSR(this.context)
 
 		/* AudioNode graph routing */
 		this.output = this.context.createGain()
 		this.output.connect(this.context.destination)
 
-		this._setState(state)
+		this.setState(state)
 	}
 
 	setMasterVolumeGain = (midiValue: number) => {
@@ -31,14 +31,11 @@ export class Amplifier {
 		this.output.gain.value = vol
 	}
 
-	_setState = (state: AmplifierState) => {
-		this.output.gain.value = state.masterVolume
-		this.state.masterVolume = state.masterVolume
-	}
 
 	setState = (state: AmplifierState) => {
 		this.adsr.setState(state.adsr)
-		this._setState(state)
+
+		this.setMasterVolumeGain(state.masterVolume)
 	}
 
 }

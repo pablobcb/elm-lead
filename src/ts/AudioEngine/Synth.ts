@@ -19,12 +19,13 @@ export default class Synth {
 
 		this.amplifier = new Amplifier(this.context, state.amp)
 
-		this.overdrive = new Overdrive(this.context, state.overdrive)
+		this.overdrive = new Overdrive(this.context)
+		this.overdrive.setState(state.overdrive)
 		this.overdrive.connect(this.amplifier.output)
 
-		this.filter = new Filter(this.context, state.filter)
+		this.filter = new Filter(this.context)
+		this.filter.setState(state.filter)
 		this.filter.connect(this.overdrive.input)
-
 		this.oscillators = new Oscillators(this.context, state.oscs)
 		this.oscillators.connect(this.filter.input)
 	}

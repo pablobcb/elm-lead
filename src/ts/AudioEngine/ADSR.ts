@@ -20,7 +20,7 @@ export class ADSR {
 	public decayFrom: number
 	public decayTo: number
 
-	constructor(context: AudioContext, state: ADSRState) {
+	constructor(context: AudioContext) {
 		this.startAmount = 0
 		this.sustainAmount = 0
 		this.endAmount = 1
@@ -28,14 +28,6 @@ export class ADSR {
 		this.startedAt = 0
 		this.decayFrom = 0
 		this.decayTo = 0
-
-		this.setState(state)
-	}
-
-	public setState = (state: ADSRState) => {
-		this.state = state
-		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
-		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
 	}
 
 	private getValue = (start: number, end: number, fromTime: number, toTime: number, at: number) => {
@@ -128,4 +120,11 @@ export class ADSR {
 			MIDI.logScaleToMax(midiValue, CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
+
+	public setState = (state: ADSRState) => {
+		this.state = state
+		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
+		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
+	}
+
 }
