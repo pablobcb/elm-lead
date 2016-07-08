@@ -44,7 +44,7 @@ export abstract class BaseOscillator {
 		return 440 * Math.pow(2, (note_ - 69) / 12)
 	}
 
-	noteOn = (midiNote: any, noteOnAmpCB: any) => {
+	noteOn = (midiNote: number, noteOnAmpCB: any) => {
 		const midiNoteKey = midiNote.toString()
 		const now = this.context.currentTime
 
@@ -69,7 +69,7 @@ export abstract class BaseOscillator {
 		}
 	}
 
-	noteOff = (midiNote: any, noteOffAmpCB: any) => {
+	noteOff = (midiNote: number, noteOffAmpCB: any) => {
 		const midiNoteKey = midiNote.toString()
 		const osc = this.voices[midiNoteKey]
 

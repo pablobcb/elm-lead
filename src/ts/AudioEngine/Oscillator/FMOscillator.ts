@@ -59,9 +59,4 @@ export default class FMOscillator extends BaseOscillator {
 		this.type = waveform
 	}
 
-	setFMGain = (fmGain: number) => {
-		for (let i=0; i<128; i++) {
-			this.frequencyGains[i].gain.value = fmGain
-		}
-	}
 }
