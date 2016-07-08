@@ -24,7 +24,7 @@ interface Oscillator2State {
 export interface OscillatorsState {
 	mix: number
 	pw: number
-	osc1: Oscillator1State
+	osc1: any
 	osc2: Oscillator2State
 }
 
@@ -140,11 +140,10 @@ export default class Oscillators {
 		this.oscillator2.setSemitone(this.state.osc2.semitone)
 
 		this.oscillator2.voiceGains.forEach((oscGain: GainNode, i: number) =>
-			oscGain.connect(this.fmGains[i])
+			oscGain.connect(this.fmAmount[i])
 		)
 		this.oscillator2.connect(gainB)
 	}
-
 
 	setOscillator2Semitone = (oscillatorSemitone: number) => {
 		this.state.osc2.semitone = oscillatorSemitone
