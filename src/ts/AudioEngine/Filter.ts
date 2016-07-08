@@ -13,7 +13,6 @@ export interface FilterState {
 }
 
 export class Filter {
-
 	public context : AudioContext
 	public input : GainNode
 	public output : GainNode
