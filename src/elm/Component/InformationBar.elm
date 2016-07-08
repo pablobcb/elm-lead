@@ -1,7 +1,7 @@
 module Component.InformationBar exposing (informationBar)
 
-import Html exposing (Html, div)
-import Html.Attributes exposing (class)
+import Html exposing (Html, div, a)
+import Html.Attributes exposing (class, href)
 import Main.Model as Model exposing (Model)
 import Container.OnScreenKeyboard.Update as KbdUpdate
 import Main.Update as Update exposing (Msg)
@@ -42,14 +42,13 @@ informationBar model =
                 ((toString model.presetId) ++ "  " ++ model.presetName)
                 Update.PreviousPreset
                 Update.NextPreset
-              --, a
-              --    [ class "information-bar__gh-link"
-              --    , href "https://github.com/pablobcb/elm-lead"
-              --    ]
-              --    []
-
             , div [ class "midi-indicator" ]
                 [ div [ class blinkerClass ] []
                 , div [ class midiIndicatorClass ] []
                 ]
+            , a
+                [ class "information-bar__gh-link"
+                , href "https://github.com/pablobcb/elm-lead"
+                ]
+                []
             ]
