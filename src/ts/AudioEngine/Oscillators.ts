@@ -216,7 +216,7 @@ export default class Oscillators {
 
 	setOscillator2Waveform =  (waveform: WaveformType) => {
 		const wf = waveform.toLowerCase()
-		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(wf)) {
+		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(wf) !== -1) {
 			this._setOscillator2Waveform(wf)
 		} else {
 			throw new Error(`Invalid Waveform Type ${wf}`)
