@@ -2,17 +2,17 @@ export type WaveformType = string
 
 export abstract class BaseOscillator {
 
-	public output : GainNode
-	public voiceGains : Array<GainNode>
-	public frequencyGains : Array<GainNode>
-	public kbdTrack : boolean
-	public voices : any
-	public fmGain : GainNode
-	public type : string
+	public output: GainNode
+	public voiceGains: Array<GainNode>
+	public frequencyGains: Array<GainNode>
+	public kbdTrack: boolean
+	public voices: any
+	public fmGain: GainNode
+	public type: string
 
-	protected context : AudioContext
+	protected context: AudioContext
 
-	constructor (context: AudioContext, waveformType: WaveformType) {
+	constructor(context: AudioContext, waveformType: WaveformType) {
 		this.context = context
 		this.output = this.context.createGain()
 		this.output.gain.value = .5
@@ -22,7 +22,7 @@ export abstract class BaseOscillator {
 		this.kbdTrack = true
 		this.type = waveformType
 
-		for (let i = 0; i <128; i++) {
+		for (let i = 0; i < 128; i++) {
 			//TODO: create FM osc and let it holdd the gains,
 			// instead of the modular like it is
 			this.frequencyGains[i] = this.context.createGain()
@@ -31,7 +31,7 @@ export abstract class BaseOscillator {
 		}
 	}
 
-	panic =	() => {
+	panic = () => {
 		for (let midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].stop()
@@ -83,25 +83,25 @@ export abstract class BaseOscillator {
 		osc.stop(releaseTime)
 	}
 
-	public setSemitone (semitone: number) : void {}
-	public setDetune (detune: number) : void {}
-	public setPulseWidth (pw: number) : void {}
-	public setWaveform (waveform: string) : void {}
+	public setSemitone(semitone: number): void { }
+	public setDetune(detune: number): void { }
+	public setPulseWidth(pw: number): void { }
+	public setWaveform(waveform: string): void { }
 
-	abstract _noteOn (midiNote: number) : void
-	protected _onended (voice: number) : void { }
+	abstract _noteOn(midiNote: number): void
+	protected _onended(voice: number): void { }
 
 
 	setKbdTrack = (state: boolean) => {
 		this.kbdTrack = state
 	}
 
-	connect (node: any) {
+	connect(node: any) {
 		this.output.connect(node)
 		return this
 	}
 
-	disconnect (node: any) {
+	disconnect(node: any) {
 		this.output.disconnect(node)
 		return this
 	}

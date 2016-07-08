@@ -4,6 +4,7 @@ import FMOscillator from './Oscillator/FMOscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 import { BaseOscillator } from './Oscillator/BaseOscillator'
+import DualMixer from './DualMixer'
 
 type WaveformType = string
 
@@ -34,31 +35,28 @@ export default class Oscillators {
 		osc1: {}, osc2: {}
 	} as OscillatorsState
 
-	public oscillator1Gain: GainNode
 	public oscillator1: FMOscillator
-	public oscillator2Gain: GainNode
 	public oscillator2: BaseOscillator
 	public fmGains: Array<GainNode>
+
+	public mixer:DualMixer
 
 	constructor (context: AudioContext) {
 		this.context = context
 
-/***************************/
-/* AudioNode graph routing */
-/***************************/
-		/* create oscillators gains */
-		this.oscillator1Gain = this.context.createGain()
-		this.oscillator2Gain = this.context.createGain()
+		/* AudioNode graph routing */
+
+		this.mixer = new DualMixer(context)
 
 		/* create oscillator nodes */
 		this.oscillator1 =
-			new FMOscillator(this.context, 'sine')
+			new FMOscillator(context, 'sine')
 
 		this.oscillator2 = this._newOscillator('sine')
 
 		/* connect oscs with the previously mixed gains */
-		this.oscillator1.connect(this.oscillator1Gain)
-		this.oscillator2.connect(this.oscillator2Gain)
+		this.oscillator1.connect(this.mixer.channel1)
+		this.oscillator2.connect(this.mixer.channel2)
 
 		/* create Frequency Modulation gains */
 		this.fmGains = []
@@ -70,7 +68,7 @@ export default class Oscillators {
 	}
 
 	public setState = (state: OscillatorsState) => {
-		this.setMix(state.mix)
+		this.mixer.setState(state.mix)
 		this.setFmAmount(state.osc1.fmGain)
 		this.setPulseWidth(state.pw)
 		this.setOscillator2Semitone(state.osc2.semitone)
@@ -81,18 +79,6 @@ export default class Oscillators {
 	}
 
 
-	public setMix = (mix_: number) => {
-		const mix = MIDI.normalizeValue(mix_)
-
-		/* calculate and set volume mix between oscillators */
-		this.state.mix = mix
-
-		const osc1GainValue = (1 - this.state.mix) / 2
-		this.oscillator1Gain.gain.value = osc1GainValue
-
-		const osc2GainValue = .5 - osc1GainValue
-		this.oscillator2Gain.gain.value = osc2GainValue
-	}
 
 	setPulseWidth = (pw_: number) => {
 		const pw = MIDI.logScaleToMax(pw_, .9)
@@ -116,7 +102,7 @@ export default class Oscillators {
 
 			if (waveform === CONSTANTS.WAVEFORM_TYPE.PULSE) {
 				this._swapOsc2(new PulseOscillator(this.context),
-					this.oscillator2Gain)
+					this.mixer.channel2)
 			} else {
 				this.oscillator2.setWaveform(waveform)
 			}
@@ -124,12 +110,12 @@ export default class Oscillators {
 			&& waveform === CONSTANTS.WAVEFORM_TYPE.NOISE) {
 
 			this._swapOsc2(new NoiseOscillator(this.context),
-				this.oscillator2Gain)
+				this.mixer.channel2)
 		} else if (this.oscillator2.type === CONSTANTS.WAVEFORM_TYPE.NOISE
 			&& waveform !== CONSTANTS.WAVEFORM_TYPE.NOISE) {
 			this._swapOsc2(
 				new FMOscillator(this.context, waveform),
-				this.oscillator2Gain
+				this.mixer.channel2
 			)
 		}
 		this.state.osc2.waveformType = waveform
@@ -207,13 +193,13 @@ export default class Oscillators {
 	}
 
 	connect = (node: any) => {
-		this.oscillator2Gain.connect(node)
-		this.oscillator1Gain.connect(node)
+		this.mixer.channel1.connect(node)
+		this.mixer.channel2.connect(node)
 	}
 
 	disconnect = (node: any) => {
-		this.oscillator2Gain.disconnect(node)
-		this.oscillator1Gain.disconnect(node)
+		this.mixer.channel1.disconnect(node)
+		this.mixer.channel2.disconnect(node)
 	}
 
 	panic = () => {
