@@ -17,7 +17,8 @@ export default class Synth {
 	constructor(state: any) {
 		this.context = new AudioContext
 
-		this.amplifier = new Amplifier(this.context, state.amp)
+		this.amplifier = new Amplifier(this.context)
+		this.amplifier.setState(state.amp)
 
 		this.overdrive = new Overdrive(this.context)
 		this.overdrive.setState(state.overdrive)
