@@ -23,88 +23,6 @@ interface Preset {
 	overdrive: boolean
 }
 
-const midiSettingsToSynthSettings = (preset: Preset) => {
-		let state = {
-			amp: { adsr: {} },
-			filter: { adsr: {} },
-			oscs: { osc1: {}, osc2: {} }
-		} as Preset
-		/* META */
-		//displayed name
-
-		/* AMP */
-		state.amp.adsr.attack =
-			scaleMidiValue(preset.amp.adsr.attack)
-
-		state.amp.adsr.decay =
-			scaleMidiValue(preset.amp.adsr.decay)
-
-		state.amp.adsr.sustain =
-			scaleMidiValue(preset.amp.adsr.sustain)
-
-		state.amp.adsr.release =
-			scaleMidiValue(preset.amp.adsr.release)
-
-		state.amp.masterVolume =
-			scaleMidiValue(preset.amp.masterVolume)
-
-		/* OVERDRIVE */
-		state.overdrive =
-			preset.overdrive
-
-		/* FILTER */
-		state.filter.type_ =
-			preset.filter.type_
-
-		state.filter.envelopeAmount =
-			scaleMidiValue(preset.filter.envelopeAmount)
-
-		state.filter.q =
-			MIDI.toFilterQAmount(preset.filter.q)
-
-		state.filter.frequency =
-			MIDI.toFilterCutoffFrequency(preset.filter.frequency)
-
-		state.filter.adsr.attack =
-			scaleMidiValue(preset.filter.adsr.attack)
-
-		state.filter.adsr.decay =
-			scaleMidiValue(preset.filter.adsr.decay)
-
-		state.filter.adsr.sustain =
-			scaleMidiValue(preset.filter.adsr.sustain)
-
-		state.filter.adsr.release =
-			scaleMidiValue(preset.filter.adsr.release)
-
-		/* OSC */
-		state.oscs.pw =
-			MIDI.logScaleToMax(preset.oscs.pw, .9)
-
-		state.oscs.mix =
-			MIDI.normalizeValue(preset.oscs.mix)
-
-		state.oscs.osc1.waveformType =
-			preset.oscs.osc1.waveformType
-
-		state.oscs.osc1.fmGain =
-			preset.oscs.osc1.fmGain
-
-		state.oscs.osc2.waveformType =
-			preset.oscs.osc2.waveformType
-
-		state.oscs.osc2.semitone =
-			preset.oscs.osc2.semitone
-
-		state.oscs.osc2.detune =
-			preset.oscs.osc2.detune
-
-		state.oscs.osc2.kbdTrack =
-			preset.oscs.osc2.kbdTrack
-
-		return state
-	}
-
 export default class Application {
 
 	private app: ElmComponent<any>
@@ -129,15 +47,13 @@ export default class Application {
 
 	nextPreset = () => {
 		const nextPreset = this.presetManager.next()
-		const synthState = midiSettingsToSynthSettings(nextPreset)
-		this.synth.setState(synthState)
+		this.synth.setState(nextPreset)
 		this.app.ports.presetChange.send(nextPreset)
 	}
 
 	previousPreset = () => {
 		const previousPreset = this.presetManager.previous()
-		const synthState = midiSettingsToSynthSettings(previousPreset)
-		this.synth.setState(synthState)
+		this.synth.setState(previousPreset)
 		this.app.ports.presetChange.send(previousPreset)
 	}
 

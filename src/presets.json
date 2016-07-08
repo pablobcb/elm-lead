@@ -70,7 +70,7 @@
             },
             "osc2": {
                 "waveformType": "sawtooth",
-                "semitone": 0,
+                "semitone": -20,
                 "detune": 0,
                 "kbdTrack": true
             },
