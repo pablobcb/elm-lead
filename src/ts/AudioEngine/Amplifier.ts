@@ -1,18 +1,18 @@
-import { ADSR,  ADSRState } from './ADSR'
+import { ADSR, ADSRState } from './ADSR'
 import MIDI from '../MIDI'
 
 export interface AmplifierState {
-	adsr : ADSRState
+	adsr: ADSRState
 	masterVolume: number
 }
 
 export class Amplifier {
-	public state : AmplifierState = {} as AmplifierState
-	public context : AudioContext
-	public adsr : ADSR
-	public output : GainNode
+	public state: AmplifierState = {} as AmplifierState
+	public context: AudioContext
+	public adsr: ADSR
+	public output: GainNode
 
-	constructor (context: AudioContext) {
+	constructor(context: AudioContext) {
 		this.context = context
 
 		/* amp adsr */
@@ -23,12 +23,11 @@ export class Amplifier {
 		this.output.connect(this.context.destination)
 	}
 
-	public setMasterVolumeGain (midiValue: number) {
+	public setMasterVolumeGain(midiValue: number) {
 		const vol = MIDI.logScaleToMax(midiValue, 1)
 		this.state.masterVolume = vol
 		this.output.gain.value = vol
 	}
-
 
 	public setState = (state: AmplifierState) => {
 		this.adsr.setState(state.adsr)
