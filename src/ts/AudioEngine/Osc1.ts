@@ -83,7 +83,7 @@ export default class Osc1 {
 		}
 	}
 
-	public connect(node: AudioParam) {
+	public connect = (node: AudioParam) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].connect(node)
@@ -99,7 +99,7 @@ export default class Osc1 {
 		}
 	}
 
-	public setWaveform(waveform: string) {
+	public setWaveform = (waveform: string) => {
 		const wf = waveform.toLowerCase()
 		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(wf) !== -1) {
 			this.state.waveformType = waveform
@@ -122,7 +122,7 @@ export default class Osc1 {
 		}
 	}
 
-	public setState(state: Osc1State) {
+	public setState = (state: Osc1State) => {
 		this.setFmAmount(state.fmAmount)
 		this.setWaveform(state.waveformType)
 	}
