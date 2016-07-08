@@ -27,7 +27,7 @@ export default class FMOscillator extends BaseOscillator {
 
 	setDetune (detune: number) {
 		this.detune = detune
-		for (const midiNote in this.voices) {
+		for (let midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].detune.value =
 					detune + this.semitone
@@ -37,7 +37,7 @@ export default class FMOscillator extends BaseOscillator {
 
 	setSemitone (semitone: number) {
 		this.semitone = semitone * 100
-		for (const midiNote in this.voices) {
+		for (let midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].detune.value =
 					this.detune + this.semitone
@@ -46,7 +46,7 @@ export default class FMOscillator extends BaseOscillator {
 	}
 
 	setWaveform (waveform: WaveformType) {
-		for (const midiNote in this.voices) {			
+		for (let midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].type = waveform
 			}

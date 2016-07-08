@@ -10,7 +10,7 @@ const manageMidiDevices =
 	(onMIDIMessage: any, midiAccess: any, midiPort: any, midiStateChangePort: any) => {
 		let midiConnection = false
 		// loop over all available inputs and listen for any MIDI input
-		for (const input of midiAccess.inputs.values()) {
+		for (let input of midiAccess.inputs.values()) {
 			input.onmidimessage = (midiMessage: any) => {
 				const data = midiMessage.data
 

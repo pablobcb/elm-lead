@@ -32,7 +32,7 @@ export abstract class BaseOscillator {
 	}
 
 	panic =	() => {
-		for (const midiNote in this.voices) {
+		for (let midiNote in this.voices) {
 			if (this.voices.hasOwnProperty(midiNote)) {
 				this.voices[midiNote].stop()
 			}

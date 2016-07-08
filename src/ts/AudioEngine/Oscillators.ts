@@ -138,7 +138,7 @@ export default class Oscillators {
 
 	_swapOsc2 = (osc: any, gainB: any) => {
 		const now = this.context.currentTime
-		for (const midiNote in this.oscillator2.voices) {
+		for (let midiNote in this.oscillator2.voices) {
 			if (this.oscillator2.voices.hasOwnProperty(midiNote)) {
 				this.oscillator2.noteOff(now, midiNote)
 				osc.noteOn(midiNote)
