@@ -3,16 +3,18 @@ import Oscillators from './Oscillators'
 import {Filter} from './Filter'
 import {Amplifier} from './Amplifier'
 import {Overdrive} from './Overdrive'
+import VCA from './VCA'
 import CONSTANTS from '../Constants'
 
 
 export default class Synth {
 
-	public context : AudioContext
-	public amplifier : Amplifier
-	public overdrive : Overdrive
-	public filter : Filter
-	public oscillators : Oscillators
+	public context: AudioContext
+	public amplifier: Amplifier
+	public overdrive: Overdrive
+	public filter: Filter
+	public oscillators: Oscillators
+	private vca: VCA
 
 	constructor(state: any) {
 		this.context = new AudioContext
@@ -28,8 +30,10 @@ export default class Synth {
 		this.filter.setState(state.filter)
 		this.filter.connect(this.overdrive.input)
 
+		//this.vca = new VCA(this.context)
 		this.oscillators = new Oscillators(this.context)
 		this.oscillators.setState(state.oscs)
+
 		this.oscillators.connect(this.filter.input)
 	}
 
