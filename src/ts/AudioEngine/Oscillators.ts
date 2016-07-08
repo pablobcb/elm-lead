@@ -2,6 +2,7 @@ import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import FMOscillator from './Oscillator/FMOscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
+import Osc1 from './Osc1'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 import { BaseOscillator } from './Oscillator/BaseOscillator'
 import DualMixer from './DualMixer'
@@ -35,7 +36,7 @@ export default class Oscillators {
 		osc1: {}, osc2: {}
 	} as OscillatorsState
 
-	public oscillator1: FMOscillator
+	public oscillator1: Osc1
 	public oscillator2: BaseOscillator
 	public fmGains: Array<GainNode>
 
@@ -50,7 +51,7 @@ export default class Oscillators {
 
 		/* create oscillator nodes */
 		this.oscillator1 =
-			new FMOscillator(context, 'sine')
+			new Osc1(context)
 
 		this.oscillator2 = this._newOscillator('sine')
 
@@ -63,7 +64,7 @@ export default class Oscillators {
 		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
 			this.oscillator2.voiceGains[i].connect(this.fmGains[i])
-			this.fmGains[i].connect(this.oscillator1.frequencyGains[i])
+			this.fmGains[i].connect(this.oscillator1.fmInputs[i])
 		}
 	}
 
