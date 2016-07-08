@@ -20,6 +20,11 @@ export default class FMOscillator extends BaseOscillator {
 		osc.detune.value = this.detune + this.semitone
 
 		osc.connect(this.voiceGains[midiNote])
+
+		//https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode/frequency
+		// https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/connect(AudioParam)
+		// acording to the docs the type is right
+		// make a PR to typings to fix this
 		this.frequencyGains[midiNote].connect(osc.frequency)
 
 		this.voices[midiNoteKey] = osc
