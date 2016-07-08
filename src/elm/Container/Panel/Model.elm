@@ -90,7 +90,7 @@ type alias Model =
 knobs : Preset.Preset -> List Knob.Model
 knobs preset =
     [ Knob.init Knob.OscMix preset.oscs.mix
-        0 127 1 "Mix" Port.oscsBalance
+        0 127 1 "Mix" Port.oscsMix
 
     , Knob.init Knob.PW preset.oscs.pw
         0 127 1 "Pulse width" Port.pulseWidth

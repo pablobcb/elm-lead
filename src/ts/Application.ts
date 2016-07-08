@@ -106,8 +106,8 @@ export default class Application {
 
 		// OSCILLATORS
 
-		this.app.ports.oscsBalance
-			.subscribe(this.synth.oscillators.setMix)
+		this.app.ports.oscsMix
+			.subscribe(this.synth.oscillators.mixer.setState)
 
 		this.app.ports.osc2Semitone
 			.subscribe(this.synth.oscillators.setOscillator2Semitone)

@@ -31,7 +31,7 @@ port osc2Detune : Int -> Cmd msg
 port osc2KbdTrack : Bool -> Cmd msg
 
 
-port oscsBalance : Int -> Cmd msg
+port oscsMix : Int -> Cmd msg
 
 
 port fmAmount : Int -> Cmd msg
