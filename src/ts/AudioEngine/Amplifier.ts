@@ -7,7 +7,7 @@ export interface AmplifierState {
 }
 
 export class Amplifier {
-	public state : AmplifierState = { } as AmplifierState
+	public state : AmplifierState = {} as AmplifierState
 	public context : AudioContext
 	public adsr : ADSR
 	public output : GainNode
@@ -25,14 +25,14 @@ export class Amplifier {
 		this.setState(state)
 	}
 
-	setMasterVolumeGain = (midiValue: number) => {
+	public setMasterVolumeGain (midiValue: number) {
 		const vol = MIDI.logScaleToMax(midiValue, 1)
 		this.state.masterVolume = vol
 		this.output.gain.value = vol
 	}
 
 
-	setState = (state: AmplifierState) => {
+	public setState = (state: AmplifierState) => {
 		this.adsr.setState(state.adsr)
 
 		this.setMasterVolumeGain(state.masterVolume)

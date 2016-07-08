@@ -30,16 +30,18 @@ export interface OscillatorsState {
 export default class Oscillators {
 
 	public context: AudioContext
-	public state: any
+	public state: OscillatorsState = {
+		osc1: {}, osc2: {}
+	} as OscillatorsState
+
 	public oscillator1Gain: GainNode
 	public oscillator1: FMOscillator
 	public oscillator2Gain: GainNode
 	public oscillator2: BaseOscillator
 	public fmGains: Array<GainNode>
 
-	constructor (context: AudioContext, state: OscillatorsState) {
+	constructor (context: AudioContext) {
 		this.context = context
-		this.state = state
 
 /***************************/
 /* AudioNode graph routing */
@@ -50,9 +52,9 @@ export default class Oscillators {
 
 		/* create oscillator nodes */
 		this.oscillator1 =
-			new FMOscillator(this.context, state.osc1.waveformType)
+			new FMOscillator(this.context, 'sine')
 
-		this.oscillator2 = this._newOscillator(state.osc2.waveformType)
+		this.oscillator2 = this._newOscillator('sine')
 
 		/* connect oscs with the previously mixed gains */
 		this.oscillator1.connect(this.oscillator1Gain)
@@ -62,30 +64,26 @@ export default class Oscillators {
 		this.fmGains = []
 		for (let i = 0; i < 128; i++) {
 			this.fmGains[i] = this.context.createGain()
-			this.fmGains[i].gain.value = state.osc1.fmGain
-
 			this.oscillator2.voiceGains[i].connect(this.fmGains[i])
 			this.fmGains[i].connect(this.oscillator1.frequencyGains[i])
 		}
-
-		this._setState(state)
 	}
 
-/***************************/
-/*     private methods     */
-/***************************/
-
-	_setState = (state: OscillatorsState) => {
-		this._setMix(state.mix)
+	public setState = (state: OscillatorsState) => {
+		this.setMix(state.mix)
 		this.setFmAmount(state.osc1.fmGain)
-
-		this._setPulseWidth(state.pw)
+		this.setPulseWidth(state.pw)
 		this.setOscillator2Semitone(state.osc2.semitone)
 		this.setOscillator2Detune(state.osc2.detune)
 		this.toggleOsc2KbdTrack(state.osc2.kbdTrack)
+		this.oscillator1.setWaveform(state.osc1.waveformType)
+		this.setOscillator2Waveform(state.osc2.waveformType)
 	}
 
-	_setMix = (mix: number) => {
+
+	public setMix = (mix_: number) => {
+		const mix = MIDI.normalizeValue(mix_)
+
 		/* calculate and set volume mix between oscillators */
 		this.state.mix = mix
 
@@ -96,7 +94,8 @@ export default class Oscillators {
 		this.oscillator2Gain.gain.value = osc2GainValue
 	}
 
-	_setPulseWidth = (pw: number) => {
+	setPulseWidth = (pw_: number) => {
+		const pw = MIDI.logScaleToMax(pw_, .9)
 		this.state.pw = pw
 		this.oscillator2.setPulseWidth(pw)
 	}
@@ -162,15 +161,6 @@ export default class Oscillators {
 		this.oscillator2.connect(gainB)
 	}
 
-	setState = (state: OscillatorsState) => {
-		this._setState(state)
-		this.oscillator1.setWaveform(state.osc1.waveformType)
-		this._setOscillator2Waveform(state.osc2.waveformType)
-	}
-
-	setMix = (mix: number) => {
-		this._setMix(MIDI.normalizeValue(mix))
-	}
 
 	setOscillator2Semitone = (oscillatorSemitone: number) => {
 		this.state.osc2.semitone = oscillatorSemitone
@@ -183,21 +173,14 @@ export default class Oscillators {
 	}
 
 	setFmAmount = (fmAmount: number) => {
-		const amount =
-			20 * MIDI.logScaleToMax(fmAmount , 100)
-			//10 * fmAmount
+		const amount = 10 * MIDI.logScaleToMax(fmAmount , 100)
 
 		this.state.osc1.fmGain = amount
-		console.log(fmAmount, amount)
+
 		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
 			this.fmGains[i].gain.value = amount
 		}
 	}
-
-	setPulseWidth = (midiValue: number) => {
-		this._setPulseWidth(MIDI.logScaleToMax(midiValue, .9))
-	}
-
 
 	setOscillator1Waveform = (waveform: WaveformType) => {
 		const wf = waveform.toLowerCase()

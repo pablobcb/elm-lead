@@ -151,8 +151,8 @@ export default class Application {
 			midiSupport: midiSupport
 		})
 
-		const synthSettings = midiSettingsToSynthSettings(preset)
-		this.synth = new Synth(synthSettings)
+		//const synthSettings = midiSettingsToSynthSettings(preset)
+		this.synth = new Synth(preset)
 
 		// MACRO
 		window.onblur = () => {

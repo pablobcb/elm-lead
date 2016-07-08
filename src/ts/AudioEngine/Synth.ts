@@ -26,7 +26,9 @@ export default class Synth {
 		this.filter = new Filter(this.context)
 		this.filter.setState(state.filter)
 		this.filter.connect(this.overdrive.input)
-		this.oscillators = new Oscillators(this.context, state.oscs)
+
+		this.oscillators = new Oscillators(this.context)
+		this.oscillators.setState(state.oscs)
 		this.oscillators.connect(this.filter.input)
 	}
 

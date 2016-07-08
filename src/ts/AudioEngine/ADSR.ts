@@ -11,7 +11,7 @@ export interface ADSRState {
 }
 
 export class ADSR {
-	public state: ADSRState
+	public state: ADSRState = {} as ADSRState
 	public startAmount: number
 	public sustainAmount: number
 	public endAmount: number
@@ -122,9 +122,9 @@ export class ADSR {
 	}
 
 	public setState = (state: ADSRState) => {
-		this.state = state
-		this.state.attack = this.state.attack || CONSTANTS.ONE_MILLISECOND
-		this.state.release = this.state.release || CONSTANTS.ONE_MILLISECOND
+		this.setAttack(state.attack)
+		this.setDecay(state.decay)
+		this.setSustain(state.sustain)
+		this.setRelease(state.release)
 	}
-
 }
