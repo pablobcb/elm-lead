@@ -9,7 +9,6 @@ import { BaseOscillator } from './Oscillator/BaseOscillator'
 const midiToFreq = (midiValue: number): number =>
 	440 * Math.pow(2, (midiValue - 69) / 12)
 
-
 interface Osc1State {
 	waveformType: string
 	fmAmount: number
@@ -18,7 +17,6 @@ export default class Osc1 {
 
 	private state = {} as Osc1State
 	private context: AudioContext
-	private waveform: string
 	private vcos = [] as Array<OscillatorNode>
 	public outputs = [] as Array<GainNode>
 	public fmInputs = [] as Array<GainNode>
@@ -51,7 +49,7 @@ export default class Osc1 {
 
 		vco = this.context.createOscillator()
 
-		vco.type = this.waveform
+		vco.type = this.state.waveformType
 		vco.frequency.value = midiToFreq(midiNote)
 		vco.connect(this.outputs[midiNote])
 		this.fmInputs[midiNote].connect(vco.frequency)

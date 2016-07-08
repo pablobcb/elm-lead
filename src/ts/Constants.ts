@@ -1,5 +1,6 @@
 export default {
 	MAX_NOTES: 128,
+	MAX_VOICES: 128,
 	ONE_MILLISECOND: 0.001,
 	FILTER_TYPE: {
 		HIGHPASS: 'highpass',

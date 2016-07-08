@@ -9,10 +9,7 @@ import DualMixer from './DualMixer'
 
 type WaveformType = string
 
-interface Oscillator1State {
-	waveformType: WaveformType
-	fmGain: number
-}
+
 
 interface Oscillator2State {
 	waveformType: WaveformType
@@ -155,30 +152,10 @@ export default class Oscillators {
 		this.oscillator2.setDetune(oscillatorDetune)
 	}
 
-	setFmAmount = (fmAmount: number) => {
-		const amount = 10 * MIDI.logScaleToMax(fmAmount , 100)
-
-		this.state.osc1.fmGain = amount
-
-		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
-			this.fmGains[i].gain.value = amount
-		}
-	}
-
-	setOscillator1Waveform = (waveform: WaveformType) => {
-		const wf = waveform.toLowerCase()
-		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(wf) !== -1) {
-			this.oscillator1.setWaveform(wf)
-		} else {
-			throw new Error(`Invalid Waveform Type ${wf}`)
-		}
-	}
-
 	toggleOsc2KbdTrack = (enabled: boolean) => {
 		this.state.osc2.kbdTrack = enabled
 		this.oscillator2.setKbdTrack(enabled)
 	}
-
 
 	setOscillator2Waveform =  (waveform: WaveformType) => {
 		const wf = waveform.toLowerCase()
