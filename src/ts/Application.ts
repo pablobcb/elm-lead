@@ -105,7 +105,6 @@ export default class Application {
 			.subscribe(this.synth.amplifier.adsr.setRelease)
 
 		// OSCILLATORS
-
 		this.app.ports.oscsMix
 			.subscribe(this.synth.oscillators.mixer.setState)
 
