@@ -1,4 +1,5 @@
 import MIDI from '../MIDI'
+import CONSTANTS from '../Constants'
 import FMOscillator from './Oscillator/FMOscillator'
 import PulseOscillator from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
@@ -25,13 +26,13 @@ export default class Osc1 {
 
 	constructor(context: AudioContext) {
 		this.context = context
-		this.waveform = 'sawtooth'
-		for (let i = 0; i < 128; i++) {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			this.fmInputs[i] = context.createGain()
 			this.outputs[i] = context.createGain()
 			this.vcos[i] = null
 		}
 	}
+
 
 	private kill = (midiNote: number) => {
 		this.fmInputs[midiNote].disconnect()
@@ -77,7 +78,7 @@ export default class Osc1 {
 	}
 
 	public panic = () => {
-		for (let i = 0; i < 128; i++) {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.vcos[i] !== null) {
 				this.vcos[i].stop()
 			}
@@ -85,7 +86,7 @@ export default class Osc1 {
 	}
 
 	public connect(node: AudioParam) {
-		for (let i = 0; i < 128; i++) {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].connect(node)
 			}
@@ -93,7 +94,7 @@ export default class Osc1 {
 	}
 
 	public disconnect(node: AudioParam) {
-		for (let i = 0; i < 128; i++) {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].disconnect(node)
 			}
