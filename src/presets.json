@@ -26,11 +26,11 @@
         "oscs": {
             "osc1": {
                 "waveformType": "sawtooth",
-                "fmGain": 0
+                "fmGain": 70
             },
             "osc2": {
                 "waveformType": "sawtooth",
-                "semitone": 0,
+                "semitone": -60,
                 "detune": 0,
                 "kbdTrack": true
             },
