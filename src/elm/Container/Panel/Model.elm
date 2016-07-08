@@ -101,7 +101,7 @@ knobs preset =
     , Knob.init Knob.Osc2Detune preset.oscs.osc2.detune
         -100 100 1 "Fine tune" Port.osc2Detune
 
-    , Knob.init Knob.FM preset.oscs.osc1.fmGain
+    , Knob.init Knob.FM preset.oscs.osc1.fmAmount
         0 127 1 "FM amount" Port.fmAmount
 
     , Knob.init Knob.AmpGain preset.amp.masterVolume

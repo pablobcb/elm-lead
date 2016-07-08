@@ -38,7 +38,7 @@ export default class Oscillators {
 
 	public oscillator1: Osc1
 	public oscillator2: BaseOscillator
-	public fmGains: Array<GainNode>
+	public fmAmount: Array<GainNode>
 
 	public mixer:DualMixer
 
@@ -60,26 +60,23 @@ export default class Oscillators {
 		this.oscillator2.connect(this.mixer.channel2)
 
 		/* create Frequency Modulation gains */
-		this.fmGains = []
+		this.fmAmount = []
 		for (let i = 0; i < 128; i++) {
-			this.fmGains[i] = this.context.createGain()
-			this.oscillator2.voiceGains[i].connect(this.fmGains[i])
-			this.fmGains[i].connect(this.oscillator1.fmInputs[i])
+			this.fmAmount[i] = this.context.createGain()
+			this.oscillator2.voiceGains[i].connect(this.fmAmount[i])
+			this.fmAmount[i].connect(this.oscillator1.fmInputs[i])
 		}
 	}
 
 	public setState = (state: OscillatorsState) => {
+		this.oscillator1.setState(state.osc1)
 		this.mixer.setState(state.mix)
-		this.setFmAmount(state.osc1.fmGain)
 		this.setPulseWidth(state.pw)
 		this.setOscillator2Semitone(state.osc2.semitone)
 		this.setOscillator2Detune(state.osc2.detune)
 		this.toggleOsc2KbdTrack(state.osc2.kbdTrack)
-		this.oscillator1.setWaveform(state.osc1.waveformType)
 		this.setOscillator2Waveform(state.osc2.waveformType)
 	}
-
-
 
 	setPulseWidth = (pw_: number) => {
 		const pw = MIDI.logScaleToMax(pw_, .9)

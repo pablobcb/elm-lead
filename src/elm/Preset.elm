@@ -30,7 +30,7 @@ type alias Preset =
     , oscs :
         { osc1 :
             { waveformType : String
-            , fmGain : MidiValue
+            , fmAmount : MidiValue
             }
         , osc2 :
             { waveformType : String
