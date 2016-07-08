@@ -89,125 +89,56 @@ type alias Model =
 
 knobs : Preset.Preset -> List Knob.Model
 knobs preset =
-    [ Knob.init Knob.OscMix
-        preset.oscs.mix
-        0
-        127
-        1
-        "OscMix"
-        Port.oscsBalance
-    , Knob.init Knob.PW
-        preset.oscs.pw
-        0
-        127
-        1
-        "PW"
-        Port.pulseWidth
-    , Knob.init Knob.Osc2Semitone
-        preset.oscs.osc2.semitone
-        -60
-        60
-        1
-        "semitone"
-        Port.osc2Semitone
-    , Knob.init Knob.Osc2Detune
-        preset.oscs.osc2.detune
-        -100
-        100
-        1
-        "detune"
-        Port.osc2Detune
-    , Knob.init Knob.FM
-        preset.oscs.osc1.fmGain
-        0
-        127
-        1
-        "FM"
-        Port.fmAmount
-    , Knob.init Knob.AmpGain
-        preset.amp.masterVolume
-        0
-        127
-        1
-        "gain"
-        Port.ampVolume
-    , Knob.init Knob.AmpAttack
-        preset.amp.adsr.attack
-        0
-        127
-        1
-        "attack"
-        Port.ampAttack
-    , Knob.init Knob.AmpDecay
-        preset.amp.adsr.decay
-        0
-        127
-        1
-        "decay"
-        Port.ampDecay
-    , Knob.init Knob.AmpSustain
-        preset.amp.adsr.sustain
-        0
-        127
-        1
-        "sustain"
-        Port.ampSustain
-    , Knob.init Knob.AmpRelease
-        preset.amp.adsr.release
-        0
-        127
-        1
-        "release"
-        Port.ampRelease
-    , Knob.init Knob.FilterCutoff
-        preset.filter.frequency
-        0
-        127
-        1
-        "frequency"
-        Port.filterCutoff
-    , Knob.init Knob.FilterQ
-        preset.filter.q
-        0
-        127
-        1
-        "resonance"
-        Port.filterQ
-    , Knob.init Knob.FilterAttack
-        preset.filter.adsr.attack
-        0
-        127
-        1
-        "attack"
-        Port.filterAttack
-    , Knob.init Knob.FilterDecay
-        preset.filter.adsr.decay
-        0
-        127
-        1
-        "decay"
-        Port.filterDecay
-    , Knob.init Knob.FilterSustain
-        preset.filter.adsr.sustain
-        0
-        127
-        1
-        "sustain"
-        Port.filterSustain
-    , Knob.init Knob.FilterRelease
-        preset.filter.adsr.release
-        0
-        127
-        1
-        "release"
-        Port.filterRelease
-    , Knob.init Knob.FilterEnvelopeAmount
-        preset.filter.envelopeAmount
-        0
-        127
-        1
-        "env amnt"
-        Port.filterEnvelopeAmount
+    [ Knob.init Knob.OscMix preset.oscs.mix
+        0 127 1 "OscMix" Port.oscsBalance
+
+    , Knob.init Knob.PW preset.oscs.pw
+        0 127 1 "PW" Port.pulseWidth
+
+    , Knob.init Knob.Osc2Semitone preset.oscs.osc2.semitone
+        -60 60 1 "semitone" Port.osc2Semitone
+
+    , Knob.init Knob.Osc2Detune preset.oscs.osc2.detune
+        -100 100 1 "detune" Port.osc2Detune
+
+    , Knob.init Knob.FM preset.oscs.osc1.fmGain
+        0 127 1 "FM" Port.fmAmount
+
+    , Knob.init Knob.AmpGain preset.amp.masterVolume
+        0 127 1 "gain" Port.ampVolume
+
+    , Knob.init Knob.AmpAttack preset.amp.adsr.attack
+        0 127 1 "attack" Port.ampAttack
+
+    , Knob.init Knob.AmpDecay preset.amp.adsr.decay
+        0 127 1 "decay" Port.ampDecay
+
+    , Knob.init Knob.AmpSustain preset.amp.adsr.sustain
+        0 127 1 "sustain" Port.ampSustain
+
+    , Knob.init Knob.AmpRelease preset.amp.adsr.release
+        0 127 1 "release" Port.ampRelease
+
+    , Knob.init Knob.FilterCutoff preset.filter.frequency
+        0 127 1 "frequency" Port.filterCutoff
+
+    , Knob.init Knob.FilterQ preset.filter.q
+        0 127 1 "resonance" Port.filterQ
+
+    , Knob.init Knob.FilterAttack preset.filter.adsr.attack
+        0 127 1 "attack" Port.filterAttack
+
+    , Knob.init Knob.FilterDecay preset.filter.adsr.decay
+        0 127 1 "decay" Port.filterDecay
+
+    , Knob.init Knob.FilterSustain preset.filter.adsr.sustain
+        0 127 1 "sustain" Port.filterSustain
+
+    , Knob.init Knob.FilterRelease preset.filter.adsr.release
+        0 127 1 "release" Port.filterRelease
+
+    , Knob.init Knob.FilterEnvelopeAmount preset.filter.envelopeAmount
+        0 127 1 "env amnt" Port.filterEnvelopeAmount
     ]
 
 
