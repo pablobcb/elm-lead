@@ -88,7 +88,7 @@ const midiSettingsToSynthSettings = (preset: Preset) => {
 			preset.oscs.osc1.waveformType
 
 		state.oscs.osc1.fmGain =
-			MIDI.normalizeValue(preset.oscs.osc1.fmGain)
+			preset.oscs.osc1.fmGain
 
 		state.oscs.osc2.waveformType =
 			preset.oscs.osc2.waveformType

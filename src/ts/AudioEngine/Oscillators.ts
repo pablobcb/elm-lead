@@ -183,9 +183,12 @@ export default class Oscillators {
 	}
 
 	setFmAmount = (fmAmount: number) => {
-		const amount = 10 * fmAmount
+		const amount =
+			20 * MIDI.logScaleToMax(fmAmount , 100)
+			//10 * fmAmount
 
 		this.state.osc1.fmGain = amount
+		console.log(fmAmount, amount)
 		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
 			this.fmGains[i].gain.value = amount
 		}
