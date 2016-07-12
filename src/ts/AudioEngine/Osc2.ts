@@ -1,7 +1,7 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import FMOscillator from './Oscillator/FMOscillator'
-import PulseOscillator from './Oscillator/PulseOscillator'
+import PulseOscillatorFactory from './Oscillator/PulseOscillator'
 import NoiseOscillator from './Oscillator/NoiseOscillator'
 import { BaseOscillator } from './Oscillator/BaseOscillator'
 
@@ -22,11 +22,8 @@ export default class Osc2 {
 	private state = {} as Osc2State
 	private vcos = [] as Array<any>
 	private context: AudioContext
+	public widthGains = [] as Array<GainNode>
 	public outputs = [] as Array<GainNode>
-
-	/* pulse wave stuff */
-	private widthGains = [] as Array<GainNode>
-	private pulseShaper: WaveShaperNode
 
 	constructor(context: AudioContext) {
 		this.context = context
@@ -52,15 +49,20 @@ export default class Osc2 {
 		}
 
 		if(this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.PULSE){
-
+			vco = PulseOscillatorFactory
+				.createPulseOscillator(this.context, this.widthGains[midiNote])
 		} else if (this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.NOISE) {
-
+			//vco = PulseOscillatorFactory
+			//	.createPulseOscillator(this.context)
 		} else {
+			debugger
 			vco = this.context.createOscillator()
 			vco.type = this.state.waveformType
-			vco.frequency.value = midiToFreq(midiNote)
-			vco.connect(this.outputs[midiNote])
 		}
+
+		vco.frequency.value = midiToFreq(midiNote)
+
+		vco.connect(this.outputs[midiNote])
 
 		this.vcos[midiNote] = vco
 
@@ -109,11 +111,11 @@ export default class Osc2 {
 
 	public setWaveform = (waveform: string) => {
 		const wf = waveform.toLowerCase()
-		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(wf) !== -1) {
-			this.state.waveformType = waveform
+		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(wf) !== -1) {
+			this.state.waveformType = wf
 			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 				if (this.vcos[i] !== null) {
-					this.vcos[i].type = waveform
+					this.vcos[i].type = wf
 				}
 			}
 		} else {
