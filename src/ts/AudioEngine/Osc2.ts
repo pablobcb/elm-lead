@@ -5,7 +5,7 @@ import NoiseOscillatorFactory from './Oscillator/NoiseOscillatorFactory'
 import BaseOscillator from './BaseOscillator'
 
 
-interface Osc2State {
+export interface Osc2State {
 	waveformType: string
 	semitone: number
 	detune: number
@@ -13,7 +13,7 @@ interface Osc2State {
 	pw: number
 }
 
-export default class Osc2 extends BaseOscillator {
+export class Osc2 extends BaseOscillator {
 
 	private state = {} as Osc2State
 	public widthGains = [] as Array<GainNode>

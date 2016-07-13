@@ -3,11 +3,11 @@ import CONSTANTS from '../Constants'
 import BaseOscillator from './BaseOscillator'
 
 
-interface Osc1State {
+export interface Osc1State {
 	waveformType: string
 	fmAmount: number
 }
-export default class Osc1 extends BaseOscillator {
+export class Osc1 extends BaseOscillator {
 
 	private state = {} as Osc1State
 	public fmInputs = [] as Array<GainNode>

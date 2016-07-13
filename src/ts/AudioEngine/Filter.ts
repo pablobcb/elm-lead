@@ -2,8 +2,6 @@ import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import {ADSR, ADSRState} from './ADSR'
 
-type FilterType = string
-
 export interface FilterState {
 	type_ : string
 	frequency: number
@@ -84,12 +82,12 @@ export class Filter {
 		this.setEnvelopeAmount(state.envelopeAmount)
 	}
 
-	public connect = (node: any) => {
+	public connect = (node: AudioParam) => {
 		this.output.connect(node)
 		return this
 	}
 
-	public disconnect = (node: any) => {
+	public disconnect = (node: AudioParam) => {
 		this.output.disconnect(node)
 		return this
 	}

@@ -1,12 +1,23 @@
 
-import Osc1 from './Osc1'
-import Osc2 from './Osc2'
-import {Filter} from './Filter'
-import {Amplifier} from './Amplifier'
+import {Osc1, Osc1State} from './Osc1'
+import {Osc2, Osc2State} from './Osc2'
+import {Filter, FilterState} from './Filter'
+import {Amplifier, AmplifierState} from './Amplifier'
 import {Overdrive} from './Overdrive'
 import VCA from './VCA'
 import CONSTANTS from '../Constants'
 import DualMixer from './DualMixer'
+
+interface SynthState {
+	overdrive: boolean
+	filter: FilterState
+	amp: AmplifierState
+	oscs: {
+		mix: number
+		osc1: Osc1State
+		osc2: Osc2State
+	}
+}
 
 export default class Synth {
 
@@ -44,7 +55,7 @@ export default class Synth {
 		this.vca.connect(this.filter.input)
 	}
 
-	setState = (state: any) => {
+	setState = (state: SynthState) => {
 		this.amplifier.setState(state.amp)
 		this.overdrive.setState(state.overdrive)
 		this.filter.setState(state.filter)
