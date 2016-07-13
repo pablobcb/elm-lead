@@ -91,6 +91,7 @@ export default class Osc1 {
 		}
 	}
 
+	// TODO: move this to osc 2 when refactor is done
 	public connectToFm = (nodes: Array<AudioNode>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			nodes[i].connect(this.fmInputs[i])

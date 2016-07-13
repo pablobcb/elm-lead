@@ -25,17 +25,17 @@
         },
         "oscs": {
             "osc1": {
-                "waveformType": "sawtooth",
+                "waveformType": "sine",
                 "fmAmount": 70
             },
             "osc2": {
                 "waveformType": "sawtooth",
-                "semitone": -60,
+                "semitone": 0,
                 "detune": 0,
                 "kbdTrack": true,
                 "pw": 0
             },
-            "mix": 0
+            "mix": 127
         },
         "overdrive": false
     },
