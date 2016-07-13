@@ -19,8 +19,6 @@ export default class BaseOscillator {
 		return 440 * Math.pow(2, (midiValue - 69) / 12)
 	}
 
-	//TODO: type alias at to seconds
-
 	public noteOff = (midiNote: number, releaseTime : number) => {
 		const midiNoteKey = midiNote.toString()
 		const vco = this.vcos[midiNote]
