@@ -32,9 +32,9 @@
                 "waveformType": "sawtooth",
                 "semitone": -60,
                 "detune": 0,
-                "kbdTrack": true
+                "kbdTrack": true,
+                "pw": 0
             },
-            "pw": 0,
             "mix": 0
         },
         "overdrive": false

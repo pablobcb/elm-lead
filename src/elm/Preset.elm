@@ -37,8 +37,8 @@ type alias Preset =
             , semitone : MidiValue
             , detune : MidiValue
             , kbdTrack : Bool
+            , pw : MidiValue
             }
-        , pw : MidiValue
         , mix : MidiValue
         }
     , overdrive : Bool

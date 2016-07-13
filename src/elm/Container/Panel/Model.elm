@@ -92,7 +92,7 @@ knobs preset =
     [ Knob.init Knob.OscMix preset.oscs.mix
         0 127 1 "Mix" Port.oscsMix
 
-    , Knob.init Knob.PW preset.oscs.pw
+    , Knob.init Knob.PW preset.oscs.osc2.pw
         0 127 1 "Pulse width" Port.pulseWidth
 
     , Knob.init Knob.Osc2Semitone preset.oscs.osc2.semitone
