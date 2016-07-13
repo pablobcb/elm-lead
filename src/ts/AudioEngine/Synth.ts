@@ -86,6 +86,7 @@ export class Synth {
 				this.filter.noteOn(note)
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
+
 				const releaseTime =
 					this.amplifier.adsr.off(this.vca.inputs[note].gain)
 				this.oscillator1.noteOff(note, releaseTime)

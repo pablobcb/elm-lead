@@ -57,7 +57,7 @@ export class ADSR {
 	}
 
 	private getValueAtTime = (now: number) => {
-		let valueAtTime = this.sustainAmount
+		let valueAtTime: number = this.sustainAmount
 
 		if (now >= this.state.attack && now < this.decayFrom) {
 			valueAtTime = this.getValue(this.startAmount, this.endAmount,
@@ -72,6 +72,8 @@ export class ADSR {
 
 	public on = (startAmount: number, endAmount: number) =>
 		(target: AudioParam) => {
+			console.log("range", startAmount, endAmount)
+
 			const now = this.context.currentTime
 			this.startedAt = now
 			this.decayFrom = this.startedAt + this.state.attack
@@ -80,7 +82,7 @@ export class ADSR {
 			this.endAmount = endAmount
 			this.sustainAmount = this.state.sustain *
 				(this.endAmount - this.startAmount) + this.startAmount
-			//debugger
+
 			target.cancelScheduledValues(now)
 			target.setValueAtTime(this.startAmount, now)
 			target.linearRampToValueAtTime(this.endAmount, this.decayFrom)
@@ -91,10 +93,11 @@ export class ADSR {
 		const now = this.context.currentTime
 		const valueAtTime = this.getValueAtTime(now)
 
+
 		target.cancelScheduledValues(now)
-		target.setValueAtTime(valueAtTime, now)
-		target.linearRampToValueAtTime(this.startAmount,
-			now + this.state.release)
+		//target.setValueAtTime(target.value, now)
+		//target.linearRampToValueAtTime(this.startAmount,
+		//	now + this.state.release)
 
 		return now + this.state.release
 	}

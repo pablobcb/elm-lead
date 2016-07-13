@@ -17,6 +17,7 @@ export class Filter {
 	public biquadFilters = [] as Array<BiquadFilterNode>
 	public adsr: ADSR
 	public envelopeAmount: number
+	private state = {} as FilterState
 
 	constructor(context: AudioContext) {
 		this.context = context
@@ -36,15 +37,24 @@ export class Filter {
 
 	/* triggers filter's attack, decay, and sustain envelope  */
 	public noteOn = (midiNote: number) => {
-		const filterMinFreq = this.biquadFilters[midiNote].frequency.value
-		let filterMaxFreq =
-			this.envelopeAmount * MIDI.toFilterCutoffFrequency(127)
+		let filterMinFreq = MIDI.toFilterCutoffFrequency(this.state.frequency)
+		//this.biquadFilters[midiNote].frequency.value
+		let filterMaxFreq: number =
+			MIDI.toFilterCutoffFrequency(this.envelopeAmount)
+			//(this.envelopeAmount * (MIDI.toFilterCutoffFrequency(127) - //MIDI.toFilterCutoffFrequency(0)) + MIDI.toFilterCutoffFrequency(0))
+
+		console.log("maxFreq",filterMaxFreq)
+		console.log("minFreq",filterMinFreq)
 
 		if (filterMaxFreq < filterMinFreq) {
 			filterMaxFreq = filterMinFreq
 		}
 
-		const filterMaxInCents = 1200 * Math.log2(filterMaxFreq / filterMinFreq)
+		filterMinFreq = MIDI.toFilterCutoffFrequency(0)
+		filterMaxFreq = MIDI.toFilterCutoffFrequency(127)
+
+		let filterMaxInCents = 1200 * Math.log2(filterMaxFreq / filterMinFreq)
+		console.log("INCENTS",filterMaxInCents)
 
 		this.adsr.on(0, filterMaxInCents)(this.biquadFilters[midiNote].detune)
 	}
@@ -55,6 +65,7 @@ export class Filter {
 	}
 
 	public setCutoff = (midiValue: number) => {
+		this.state.frequency = midiValue
 		this.biquadFilters.forEach(filter => {
 			filter.frequency.value =
 				MIDI.toFilterCutoffFrequency(midiValue)
@@ -78,7 +89,7 @@ export class Filter {
 	}
 
 	public setEnvelopeAmount = (midiValue: number) => {
-		this.envelopeAmount = MIDI.logScaleToMax(midiValue, 1)
+		this.envelopeAmount = midiValue//MIDI.logScaleToMax(midiValue, 1)
 	}
 
 	public setState = (state: FilterState) => {
