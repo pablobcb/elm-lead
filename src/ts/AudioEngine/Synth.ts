@@ -46,6 +46,10 @@ export default class Synth {
 		this.oscillator1 = new Osc1(this.context)
 		this.oscillator2 = new Osc2(this.context)
 
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
+			this.oscillator2.outputs[i].connect(this.oscillator1.fmInputs[i])
+		}
+
 		/* connect oscs with the previously mixed gains */
 		this.oscillator1.connect(this.mixer.channel1)
 		this.oscillator2.connect(this.mixer.channel2)

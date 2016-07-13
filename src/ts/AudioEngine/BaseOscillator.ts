@@ -3,7 +3,7 @@ import CONSTANTS from '../Constants'
 export default class BaseOscillator {
 
 	protected context: AudioContext
-	protected vcos = [] as Array<any>
+	public vcos = [] as Array<any>
 	public outputs = [] as Array<GainNode>
 
 	constructor(context: AudioContext) {
