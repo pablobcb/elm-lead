@@ -2,11 +2,8 @@ import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import PulseOscillatorFactory from './Oscillator/PulseOscillatorFactory'
 import NoiseOscillatorFactory from './Oscillator/NoiseOscillatorFactory'
-import { BaseOscillator } from './Oscillator/BaseOscillator'
+import BaseOscillator from './BaseOscillator'
 
-
-const midiToFreq = (midiValue: number): number =>
-	440 * Math.pow(2, (midiValue - 69) / 12)
 
 interface Osc2State {
 	waveformType: string
@@ -16,25 +13,20 @@ interface Osc2State {
 	pw: number
 }
 
-export default class Osc2 {
+export default class Osc2 extends BaseOscillator {
 
 	private state = {} as Osc2State
-	private vcos = [] as Array<any>
-	private context: AudioContext
 	public widthGains = [] as Array<GainNode>
-	public outputs = [] as Array<GainNode>
 
 	constructor(context: AudioContext) {
-		this.context = context
+		super(context)
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			this.outputs[i] = context.createGain()
-			this.vcos[i] = null
 			this.widthGains[i] = this.context.createGain()
 		}
 	}
 
 	private kill = (midiNote: number) => {
-		this.vcos[midiNote].disconnect(this.outputs[midiNote])
+		this.vcos[midiNote].disconnect()
 	}
 
 	public noteOn = (midiNote: number) => {
@@ -57,7 +49,7 @@ export default class Osc2 {
 			vco.type = this.state.waveformType
 		}
 
-		vco.frequency.value = midiToFreq(midiNote)
+		vco.frequency.value = this.midiToFreq(midiNote)
 		vco.detune.value = this.state.detune + this.state.semitone
 		vco.onended = () => this.kill(midiNote)
 
@@ -67,46 +59,12 @@ export default class Osc2 {
 		vco.start(now)
 	}
 
-	//TODO: type alias at to seconds
-	public noteOff = (midiNote: number, releaseTime : number) => {
-		const midiNoteKey = midiNote.toString()
-		const vco = this.vcos[midiNote]
-		if (!vco) {
-			return
-		}
-		vco.stop(releaseTime)
-	}
-
-	public panic = () => {
-		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			if (this.vcos[i] !== null) {
-				this.vcos[i].stop()
-			}
-		}
-	}
-
-	public connect = (nodes: Array<AudioParam>) => {
-		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			if (this.outputs[i] !== null) {
-				this.outputs[i].connect(nodes[i])
-			}
-		}
-	}
-
-	public disconnect = (node: Array<AudioParam>) => {
-		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			if (this.outputs[i] !== null) {
-				this.outputs[i].disconnect(nodes[i])
-			}
-		}
-	}
-
 	public setWaveform = (waveform: string) => {
 		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(waveform) !== -1) {
 			this.state.waveformType = waveform
-			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-				if (this.vcos[i] !== null) {
-					this.noteOn(i, null)
+			for (let voice = 0; voice < CONSTANTS.MAX_VOICES; voice++) {
+				if (this.vcos[voice] !== null) {
+					this.noteOn(voice)
 				}
 			}
 		} else {
@@ -124,14 +82,6 @@ export default class Osc2 {
 		this.widthGains.forEach(widthGain => {
 			widthGain.gain.value = pw
 		})
-	}
-
-	public setState = (state: Osc2State) => {
-		this.setWaveform(state.waveformType)
-		this.setPulseWidth(state.pw)
-		this.setDetune(state.detune)
-		this.toggleKbdTrack(state.kbdTrack)
-		this.setSemitone(state.semitone)
 	}
 
 	public setSemitone = (semitone: number) => {
@@ -152,5 +102,13 @@ export default class Osc2 {
 					detune + this.state.semitone
 			}
 		})
+	}
+
+	public setState = (state: Osc2State) => {
+		this.setWaveform(state.waveformType)
+		this.setPulseWidth(state.pw)
+		this.setDetune(state.detune)
+		this.toggleKbdTrack(state.kbdTrack)
+		this.setSemitone(state.semitone)
 	}
 }
