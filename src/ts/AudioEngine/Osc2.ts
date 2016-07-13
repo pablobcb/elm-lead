@@ -1,7 +1,7 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
 import PulseOscillatorFactory from './Oscillator/PulseOscillatorFactory'
-import NoiseOscillator from './Oscillator/NoiseOscillatorFactory'
+import NoiseOscillatorFactory from './Oscillator/NoiseOscillatorFactory'
 import { BaseOscillator } from './Oscillator/BaseOscillator'
 
 
@@ -51,8 +51,8 @@ export default class Osc2 {
 			vco = PulseOscillatorFactory
 				.createPulseOscillator(this.context, this.widthGains[midiNote])
 		} else if (this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.NOISE) {
-			//vco = PulseOscillatorFactory
-			//	.createPulseOscillator(this.context)
+			vco = NoiseOscillatorFactory
+				.createNoiseOscillator(this.context)
 		} else {
 			vco = this.context.createOscillator()
 			vco.type = this.state.waveformType
@@ -60,13 +60,11 @@ export default class Osc2 {
 
 		vco.frequency.value = midiToFreq(midiNote)
 		vco.detune.value = this.state.detune + this.state.semitone
-
-		vco.connect(this.outputs[midiNote])
+		vco.onended = () => this.kill(midiNote)
 
 		this.vcos[midiNote] = vco
 
-		vco.onended = () => this.kill(midiNote)
-
+		vco.connect(this.outputs[midiNote])
 		vco.start(now)
 
 		// When swapping oscillators no need to call new adsr cycle
