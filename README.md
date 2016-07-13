@@ -1,8 +1,10 @@
 # Web Lead
 
-browser-based polyphonic synthetizer with MIDI support 
+Browser-based polyphonic synthetizer with MIDI support.
 
-inspired on Clavia's Nord Lead series
+Inspired on Clavia's Nord Lead series.
+
+http://pablobcb.github.io/web-lead/
 
 ![alt tag](https://github.com/pablobcb/elm-lead/blob/master/nord-lead-2x.jpg)
 
