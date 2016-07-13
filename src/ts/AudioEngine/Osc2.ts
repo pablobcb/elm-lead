@@ -34,8 +34,7 @@ export default class Osc2 {
 	}
 
 	private kill = (midiNote: number) => {
-		this.vcos[midiNote].disconnect()
-		this.vcos[midiNote] = null
+		this.vcos[midiNote].disconnect(this.outputs[midiNote])
 	}
 
 	public noteOn = (midiNote: number, noteOnAmpCB: any) => {
@@ -44,7 +43,7 @@ export default class Osc2 {
 
 		if (vco !== null) {
 			vco.stop(now)
-			this.kill(midiNote)
+			this.vcos[midiNote].disconnect()
 		}
 
 		if(this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.PULSE){
@@ -111,8 +110,10 @@ export default class Osc2 {
 		const wf = waveform.toLowerCase()
 		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(wf) !== -1) {
 			this.state.waveformType = wf
+			console.log(wf)
 			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 				if (this.vcos[i] !== null) {
+					console.log("vaca", i)
 					this.noteOn(i, null)
 				}
 			}

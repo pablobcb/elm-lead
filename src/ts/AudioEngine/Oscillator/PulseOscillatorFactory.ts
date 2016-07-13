@@ -19,10 +19,6 @@ const pulseOscillatorFactory = {
 		pulseShaper.curve = pulseCurve
 		sawNode.connect(pulseShaper)
 
-		//widthGain.gain.value = pulseWidth
-
-		widthGain.connect(pulseShaper)
-
 		const constantOneShaper = context.createWaveShaper()
 		constantOneShaper.curve = constantOneCurve
 		sawNode.connect(constantOneShaper)
@@ -30,15 +26,19 @@ const pulseOscillatorFactory = {
 
 		sawNode.connect = (node : AudioParam) => {
 			pulseShaper.connect(node)
+			widthGain.connect(pulseShaper)
+			console.log("breno")
 		}
 
-		sawNode.disconnect = (node : AudioParam) => {
-			pulseShaper.disconnect(node)
-		}
-
-		sawNode.onended = () => {
+		sawNode.disconnect = () => {
 			pulseShaper.disconnect()
+			widthGain.disconnect()
+			constantOneShaper.disconnect()
 		}
+
+		//sawNode.onended = () => {
+		//	sawNode.disconnect()
+		//}
 
 		return sawNode
 	}
