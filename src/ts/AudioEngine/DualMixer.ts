@@ -16,13 +16,13 @@ export default class DualMixer {
 		}
 	}
 
-	public connect(node: AudioParam){
+	public connect = (nodes: Array<AudioParam>) => {
 		// https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/connect(AudioParam)
 		// acording to the docs the type is right
 		// make a PR to typings to fix this
 		for(let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			this.channel1[i].connect(node)
-			this.channel2[i].connect(node)
+			this.channel1[i].connect(nodes[i])
+			this.channel2[i].connect(nodes[i])
 		}
 	}
 

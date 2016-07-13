@@ -31,15 +31,17 @@ export default class Synth {
 		this.filter.connect(this.overdrive.input)
 
 		this.mixer = new DualMixer(this.context)
-		this.mixer.connect(this.filter.input)
 
-		//this.vca = new VCA(this.context)
 		this.oscillator1 = new Osc1(this.context)
 		this.oscillator2 = new Osc2(this.context)
 
 		/* connect oscs with the previously mixed gains */
 		this.oscillator1.connect(this.mixer.channel1)
 		this.oscillator2.connect(this.mixer.channel2)
+
+		this.vca = new VCA(this.context)
+		this.mixer.connect(this.vca.inputs)
+		this.vca.connect(this.filter.input)
 	}
 
 	setState = (state: any) => {
