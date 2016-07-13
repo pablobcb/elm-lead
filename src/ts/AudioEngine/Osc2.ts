@@ -90,35 +90,32 @@ export default class Osc2 {
 		}
 	}
 
-	public connect = (node: AudioParam) => {
+	public connect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
-				this.outputs[i].connect(node)
+				this.outputs[i].connect(nodes[i])
 			}
 		}
 	}
 
-	public disconnect = (node: AudioParam) => {
+	public disconnect = (node: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
-				this.outputs[i].disconnect(node)
+				this.outputs[i].disconnect(nodes[i])
 			}
 		}
 	}
 
 	public setWaveform = (waveform: string) => {
-		const wf = waveform.toLowerCase()
-		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(wf) !== -1) {
-			this.state.waveformType = wf
-			console.log(wf)
+		if (CONSTANTS.OSC2_WAVEFORM_TYPES.indexOf(waveform) !== -1) {
+			this.state.waveformType = waveform
 			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 				if (this.vcos[i] !== null) {
-					console.log("vaca", i)
 					this.noteOn(i, null)
 				}
 			}
 		} else {
-			throw new Error(`Invalid Waveform Type ${wf}`)
+			throw new Error(`Invalid Waveform Type ${waveform}`)
 		}
 	}
 

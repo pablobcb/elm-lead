@@ -12,6 +12,7 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 import Html.App
 import Lazy.List as Lazy
+import String
 
 
 type alias Model a =
@@ -128,5 +129,6 @@ update message model =
                 ( model'
                 , nextElem
                     |> toString
+                    |> String.toLower
                     |> model.cmdEmmiter
                 )

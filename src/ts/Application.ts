@@ -68,12 +68,14 @@ export default class Application {
 		})
 
 		//const synthSettings = midiSettingsToSynthSettings(preset)
-		this.synth = new Synth(preset)
+		this.synth = new Synth()
+		this.synth.setState(preset)
 
 		// MACRO
 		window.onblur = () => {
 			this.app.ports.panic.send()
-			this.synth.oscillators.panic()
+			this.synth.oscillator1.panic()
+			this.synth.oscillator2.panic()
 		}
 
 		window.oncontextmenu = () => false
@@ -106,28 +108,28 @@ export default class Application {
 
 		// OSCILLATORS
 		this.app.ports.oscsMix
-			.subscribe(this.synth.oscillators.mixer.setState)
+			.subscribe(this.synth.mixer.setState)
 
 		this.app.ports.osc2Semitone
-			.subscribe(this.synth.oscillators.oscillator2.setSemitone)
+			.subscribe(this.synth.oscillator2.setSemitone)
 
 		this.app.ports.osc2Detune
-			.subscribe(this.synth.oscillators.oscillator2.setDetune)
+			.subscribe(this.synth.oscillator2.setDetune)
 
 		this.app.ports.fmAmount
-			.subscribe(this.synth.oscillators.oscillator1.setFmAmount)
+			.subscribe(this.synth.oscillator1.setFmAmount)
 
 		this.app.ports.pulseWidth
-			.subscribe(this.synth.oscillators.oscillator2.setPulseWidth)
+			.subscribe(this.synth.oscillator2.setPulseWidth)
 
 		this.app.ports.osc1Waveform
-			.subscribe(this.synth.oscillators.oscillator1.setWaveform)
+			.subscribe(this.synth.oscillator1.setWaveform)
 
 		this.app.ports.osc2Waveform
-			.subscribe(this.synth.oscillators.oscillator2.setWaveform)
+			.subscribe(this.synth.oscillator2.setWaveform)
 
 		this.app.ports.osc2KbdTrack
-			.subscribe(this.synth.oscillators.oscillator2.toggleKbdTrack)
+			.subscribe(this.synth.oscillator2.toggleKbdTrack)
 
 		// FILTER
 		this.app.ports.filterEnvelopeAmount

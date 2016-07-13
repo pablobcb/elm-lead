@@ -64,9 +64,8 @@ export class Filter {
 	}
 
 	public setType = (filterType: string) => {
-		const ft = filterType.toLowerCase()
-		if (CONSTANTS.FILTER_TYPES.indexOf(ft) !== -1) {
-			this.biquadFilter.type = ft
+		if (CONSTANTS.FILTER_TYPES.indexOf(filterType) !== -1) {
+			this.biquadFilter.type = filterType
 		} else {
 			throw new Error('Invalid Filter Type')
 		}

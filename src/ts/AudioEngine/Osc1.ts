@@ -48,7 +48,6 @@ export default class Osc1 {
 		}
 
 		vco = this.context.createOscillator()
-
 		vco.type = this.state.waveformType
 		vco.frequency.value = midiToFreq(midiNote)
 		vco.connect(this.outputs[midiNote])
@@ -83,10 +82,10 @@ export default class Osc1 {
 		}
 	}
 
-	public connect = (node: AudioParam) => {
+	public connect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
-				this.outputs[i].connect(node)
+				this.outputs[i].connect(nodes[i])
 			}
 		}
 	}
@@ -98,17 +97,16 @@ export default class Osc1 {
 		}
 	}
 
-	public disconnect = (node: AudioParam) => {
+	public disconnect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
-				this.outputs[i].disconnect(node)
+				this.outputs[i].disconnect(nodes[i])
 			}
 		}
 	}
 
 	public setWaveform = (waveform: string) => {
-		const wf = waveform.toLowerCase()
-		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(wf) !== -1) {
+		if (CONSTANTS.OSC1_WAVEFORM_TYPES.indexOf(waveform) !== -1) {
 			this.state.waveformType = waveform
 			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 				if (this.vcos[i] !== null) {
@@ -116,7 +114,7 @@ export default class Osc1 {
 				}
 			}
 		} else {
-			throw new Error(`Invalid Waveform Type ${wf}`)
+			throw new Error(`Invalid Waveform Type ${waveform}`)
 		}
 	}
 

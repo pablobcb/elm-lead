@@ -1,11 +1,12 @@
 
-import Oscillators from './Oscillators'
+import Osc1 from './Osc1'
+import Osc2 from './Osc2'
 import {Filter} from './Filter'
 import {Amplifier} from './Amplifier'
 import {Overdrive} from './Overdrive'
 import VCA from './VCA'
 import CONSTANTS from '../Constants'
-
+import DualMixer from './DualMixer'
 
 export default class Synth {
 
@@ -13,35 +14,41 @@ export default class Synth {
 	public amplifier: Amplifier
 	public overdrive: Overdrive
 	public filter: Filter
-	public oscillators: Oscillators
-	private vca: VCA
+	public oscillator1: Osc1
+	public oscillator2: Osc2
+	public vca: VCA
+	public mixer: DualMixer
 
-	constructor(state: any) {
+	constructor() {
 		this.context = new AudioContext
 
 		this.amplifier = new Amplifier(this.context)
-		this.amplifier.setState(state.amp)
 
 		this.overdrive = new Overdrive(this.context)
-		this.overdrive.setState(state.overdrive)
 		this.overdrive.connect(this.amplifier.output)
 
 		this.filter = new Filter(this.context)
-		this.filter.setState(state.filter)
 		this.filter.connect(this.overdrive.input)
 
-		//this.vca = new VCA(this.context)
-		this.oscillators = new Oscillators(this.context)
-		this.oscillators.setState(state.oscs)
+		this.mixer = new DualMixer(this.context)
+		this.mixer.connect(this.filter.input)
 
-		this.oscillators.connect(this.filter.input)
+		//this.vca = new VCA(this.context)
+		this.oscillator1 = new Osc1(this.context)
+		this.oscillator2 = new Osc2(this.context)
+
+		/* connect oscs with the previously mixed gains */
+		this.oscillator1.connect(this.mixer.channel1)
+		this.oscillator2.connect(this.mixer.channel2)
 	}
 
 	setState = (state: any) => {
 		this.amplifier.setState(state.amp)
 		this.overdrive.setState(state.overdrive)
 		this.filter.setState(state.filter)
-		this.oscillators.setState(state.oscs)
+		this.oscillator1.setState(state.oscs.osc1)
+		this.oscillator2.setState(state.oscs.osc2)
+		this.mixer.setState(state.oscs.mix)
 	}
 
 	onMIDIMessage = (data: any) => {
@@ -55,11 +62,13 @@ export default class Synth {
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
-				this.oscillators.noteOn(note, this.amplifier.adsr.on(0, 1))
+				this.oscillator1.noteOn(note, this.amplifier.adsr.on(0, 1))
+				this.oscillator2.noteOn(note, this.amplifier.adsr.on(0, 1))
 				this.filter.noteOn()
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
-				this.oscillators.noteOff(note, this.amplifier.adsr.off)
+				this.oscillator1.noteOff(note, this.amplifier.adsr.off)
+				this.oscillator2.noteOff(note, this.amplifier.adsr.off)
 				this.filter.noteOff()
 				break
 		}

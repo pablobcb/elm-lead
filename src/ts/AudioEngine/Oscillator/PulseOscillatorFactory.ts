@@ -27,7 +27,6 @@ const pulseOscillatorFactory = {
 		sawNode.connect = (node : AudioParam) => {
 			pulseShaper.connect(node)
 			widthGain.connect(pulseShaper)
-			console.log("breno")
 		}
 
 		sawNode.disconnect = () => {
