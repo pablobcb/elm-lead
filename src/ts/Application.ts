@@ -1,9 +1,10 @@
-import Synth from './AudioEngine/Synth'
+import {Synth} from './AudioEngine/Synth'
 import MIDI from './MIDI'
 import PresetManager from './PresetManager'
-import { FilterState } from './AudioEngine/Filter'
-import { AmplifierState } from './AudioEngine/Amplifier'
-import { OscillatorsState } from './AudioEngine/Oscillators'
+import {FilterState} from './AudioEngine/Filter'
+import {AmplifierState} from './AudioEngine/Amplifier'
+import {Osc1State} from './AudioEngine/Osc1'
+import {Osc2State} from './AudioEngine/Osc2'
 
 const Elm: any = require('../elm/Main.elm')
 
@@ -19,7 +20,11 @@ interface Preset {
 	presetId: number
 	filter: FilterState
 	amp: AmplifierState
-	oscs: OscillatorsState
+	oscs: {
+		mix: number
+		osc1: Osc1State
+		osc2: Osc2State
+	}
 	overdrive: boolean
 }
 
