@@ -8,7 +8,7 @@ import VCA from './VCA'
 import CONSTANTS from '../Constants'
 import DualMixer from './DualMixer'
 
-interface SynthState {
+export interface SynthState {
 	overdrive: boolean
 	filter: FilterState
 	amp: AmplifierState
@@ -19,7 +19,7 @@ interface SynthState {
 	}
 }
 
-export default class Synth {
+export class Synth {
 
 	public context: AudioContext
 	public amplifier: Amplifier
@@ -56,7 +56,7 @@ export default class Synth {
 
 		this.vca = new VCA(this.context)
 		this.mixer.connect(this.vca.inputs)
-		this.vca.connect(this.filter.input)
+		this.vca.connect(this.filter.inputs)
 	}
 
 	setState = (state: SynthState) => {
@@ -82,14 +82,16 @@ export default class Synth {
 				this.oscillator1.noteOn(note)
 				this.oscillator2.noteOn(note)
 				this.amplifier.adsr.on(0, 1)(this.vca.inputs[note].gain)
-				this.filter.noteOn()
+
+				this.filter.noteOn(note)
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
 				const releaseTime =
 					this.amplifier.adsr.off(this.vca.inputs[note].gain)
 				this.oscillator1.noteOff(note, releaseTime)
 				this.oscillator2.noteOff(note, releaseTime)
-				this.filter.noteOff()
+
+				this.filter.noteOff(note)
 				break
 		}
 	}

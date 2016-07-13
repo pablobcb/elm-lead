@@ -44,7 +44,7 @@ export default class BaseOscillator {
 		}
 	}
 
-	public disconnect = (node: Array<AudioParam>) => {
+	public disconnect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].disconnect(nodes[i])

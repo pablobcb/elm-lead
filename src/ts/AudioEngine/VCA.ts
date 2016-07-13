@@ -1,6 +1,5 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import { BaseOscillator } from './Oscillator/BaseOscillator'
 
 export default class VCA {
 
@@ -15,24 +14,19 @@ export default class VCA {
 		}
 	}
 
-	//public connect = (nodes: Array<AudioParam>) => {
-	public connect = (node: AudioParam) => {
+	public connect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.inputs[i] !== null) {
-				this.inputs[i].connect(node)
+				this.inputs[i].connect(nodes[i])
 			}
 		}
 	}
 
-	public disconnect = (node: AudioParam) => {
+	public disconnect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.inputs[i] !== null) {
-				this.inputs[i].disconnect(node)
+				this.inputs[i].disconnect(nodes[i])
 			}
 		}
 	}
-	// TODO:
-	// linear & exponential controls switch
-	// mod input
-	// mod amount knob/gain
 }
