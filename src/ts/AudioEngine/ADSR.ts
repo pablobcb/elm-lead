@@ -93,11 +93,10 @@ export class ADSR {
 		const now = this.context.currentTime
 		const valueAtTime = this.getValueAtTime(now)
 
-
 		target.cancelScheduledValues(now)
-		//target.setValueAtTime(target.value, now)
-		//target.linearRampToValueAtTime(this.startAmount,
-		//	now + this.state.release)
+		target.setValueAtTime(target.value, now)
+		target.linearRampToValueAtTime(this.startAmount,
+			now + this.state.release)
 
 		return now + this.state.release
 	}

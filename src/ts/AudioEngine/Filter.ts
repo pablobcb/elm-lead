@@ -40,7 +40,7 @@ export class Filter {
 		let filterMinFreq = MIDI.toFilterCutoffFrequency(this.state.frequency)
 		//this.biquadFilters[midiNote].frequency.value
 		let filterMaxFreq: number =
-			MIDI.toFilterCutoffFrequency(this.envelopeAmount)
+			MIDI.toFilterCutoffFrequency(this.state.envelopeAmount)
 			//(this.envelopeAmount * (MIDI.toFilterCutoffFrequency(127) - //MIDI.toFilterCutoffFrequency(0)) + MIDI.toFilterCutoffFrequency(0))
 
 		console.log("maxFreq",filterMaxFreq)
@@ -89,7 +89,7 @@ export class Filter {
 	}
 
 	public setEnvelopeAmount = (midiValue: number) => {
-		this.envelopeAmount = midiValue//MIDI.logScaleToMax(midiValue, 1)
+		this.state.envelopeAmount = midiValue//MIDI.logScaleToMax(midiValue, 1)
 	}
 
 	public setState = (state: FilterState) => {
