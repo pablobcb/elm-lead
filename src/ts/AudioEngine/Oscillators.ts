@@ -23,7 +23,7 @@ export interface OscillatorsState {
 	mix: number
 	pw: number
 	osc1: any
-	osc2: Oscillator2State
+	osc2: any
 }
 
 // TODO: move set state to Oscillator.js
@@ -64,12 +64,8 @@ export default class Oscillators {
 
 	public setState = (state: OscillatorsState) => {
 		this.oscillator1.setState(state.osc1)
+		this.oscillator2.setState(state.osc2)
 		this.mixer.setState(state.mix)
-		this.oscillator2.setPulseWidth(state.pw)
-		this.oscillator2.setSemitone(state.osc2.semitone)
-		this.oscillator2.setDetune(state.osc2.detune)
-		this.oscillator2.toggleOsc2KbdTrack(state.osc2.kbdTrack)
-		this.oscillator2.setWaveform(state.osc2.waveformType)
 	}
 
 

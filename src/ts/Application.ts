@@ -127,7 +127,7 @@ export default class Application {
 			.subscribe(this.synth.oscillators.oscillator2.setWaveform)
 
 		this.app.ports.osc2KbdTrack
-			.subscribe(this.synth.oscillators.oscillator2.toggleOsc2KbdTrack)
+			.subscribe(this.synth.oscillators.oscillator2.toggleKbdTrack)
 
 		// FILTER
 		this.app.ports.filterEnvelopeAmount

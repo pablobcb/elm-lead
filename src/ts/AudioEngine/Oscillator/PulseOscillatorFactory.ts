@@ -1,4 +1,3 @@
-import FMOscillator from './FMOscillator'
 import CONSTANTS from '../../Constants'
 
 const pulseCurve = new Float32Array(256)
@@ -13,15 +12,10 @@ constantOneCurve[1] = 1
 
 const pulseOscillatorFactory = {
 	createPulseOscillator: (context: AudioContext, widthGain: GainNode) => {
-		let pulseShaper: WaveShaperNode
-		let frequency: { value: number }
-		let detune: { value: number }
-		let semitone: { value: number }
-
 		const sawNode: OscillatorNode = context.createOscillator()
 		sawNode.type = CONSTANTS.WAVEFORM_TYPE.SAWTOOTH
 
-		pulseShaper = context.createWaveShaper()
+		const pulseShaper: WaveShaperNode = context.createWaveShaper()
 		pulseShaper.curve = pulseCurve
 		sawNode.connect(pulseShaper)
 

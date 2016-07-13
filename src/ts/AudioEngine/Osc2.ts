@@ -1,8 +1,7 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import FMOscillator from './Oscillator/FMOscillator'
-import PulseOscillatorFactory from './Oscillator/PulseOscillator'
-import NoiseOscillator from './Oscillator/NoiseOscillator'
+import PulseOscillatorFactory from './Oscillator/PulseOscillatorFactory'
+import NoiseOscillator from './Oscillator/NoiseOscillatorFactory'
 import { BaseOscillator } from './Oscillator/BaseOscillator'
 
 
@@ -55,12 +54,12 @@ export default class Osc2 {
 			//vco = PulseOscillatorFactory
 			//	.createPulseOscillator(this.context)
 		} else {
-			debugger
 			vco = this.context.createOscillator()
 			vco.type = this.state.waveformType
 		}
 
 		vco.frequency.value = midiToFreq(midiNote)
+		vco.detune.value = this.state.detune + this.state.semitone
 
 		vco.connect(this.outputs[midiNote])
 
@@ -70,6 +69,7 @@ export default class Osc2 {
 
 		vco.start(now)
 
+		// When swapping oscillators no need to call new adsr cycle
 		if (noteOnAmpCB) {
 			noteOnAmpCB(this.outputs[midiNote].gain)
 		}
@@ -115,7 +115,7 @@ export default class Osc2 {
 			this.state.waveformType = wf
 			for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 				if (this.vcos[i] !== null) {
-					this.vcos[i].type = wf
+					this.noteOn(i, null)
 				}
 			}
 		} else {
@@ -123,7 +123,7 @@ export default class Osc2 {
 		}
 	}
 
-	public toggleOsc2KbdTrack = (enabled: boolean) => {
+	public toggleKbdTrack = (enabled: boolean) => {
 		this.state.kbdTrack = enabled
 	}
 
@@ -137,9 +137,13 @@ export default class Osc2 {
 
 	public setState = (state: Osc2State) => {
 		this.setWaveform(state.waveformType)
+		this.setPulseWidth(state.pw)
+		this.setDetune(state.detune)
+		this.toggleKbdTrack(state.kbdTrack)
+		this.setSemitone(state.semitone)
 	}
 
-	public setSemitone (semitone: number) {
+	public setSemitone = (semitone: number) => {
 		this.state.semitone = semitone * 100
 		this.vcos.forEach(vco => {
 			if (vco !== null){
@@ -147,7 +151,7 @@ export default class Osc2 {
 					this.state.detune + this.state.semitone
 			}
 		})
-	} // can setSetime call setDetune?
+	}
 
 	public setDetune = (detune: number) => {
 		this.state.detune = detune
