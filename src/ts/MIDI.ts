@@ -43,7 +43,7 @@ export default {
 	),
 
 	toFilterCutoffFrequency : (midiValue: number) => {
-		return Number((1.6 * midiToFreq(midiValue)).toFixed(3))
+		return 1.6 * midiToFreq(midiValue)
 		//midiValue / 127 *
 		//	(CONSTANTS.MAX_FILTER_FREQUENCY - CONSTANTS.MIN_FILTER_FREQUENCY) +
 		//	CONSTANTS.MIN_FILTER_FREQUENCY
