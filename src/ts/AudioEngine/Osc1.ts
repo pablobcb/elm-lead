@@ -38,7 +38,7 @@ export default class Osc1 {
 		this.vcos[midiNote] = null
 	}
 
-	public noteOn = (midiNote: number, noteOnAmpCB: any) => {
+	public noteOn = (midiNote: number) => {
 		const now = this.context.currentTime
 		let vco = this.vcos[midiNote]
 
@@ -58,19 +58,14 @@ export default class Osc1 {
 		vco.onended = () => this.kill(midiNote)
 
 		vco.start(now)
-
-		if (noteOnAmpCB) {
-			noteOnAmpCB(this.outputs[midiNote].gain)
-		}
 	}
 
-	public noteOff = (midiNote: number, noteOffAmpCB: any) => {
+	public noteOff = (midiNote: number, releaseTime: number) => {
 		const midiNoteKey = midiNote.toString()
 		const vco = this.vcos[midiNote]
 		if (!vco) {
 			return
 		}
-		const releaseTime = noteOffAmpCB(this.outputs[midiNote].gain)
 		vco.stop(releaseTime)
 	}
 

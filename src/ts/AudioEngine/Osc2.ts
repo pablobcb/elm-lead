@@ -37,7 +37,7 @@ export default class Osc2 {
 		this.vcos[midiNote].disconnect(this.outputs[midiNote])
 	}
 
-	public noteOn = (midiNote: number, noteOnAmpCB: any) => {
+	public noteOn = (midiNote: number) => {
 		const now = this.context.currentTime
 		let vco = this.vcos[midiNote]
 
@@ -65,20 +65,15 @@ export default class Osc2 {
 
 		vco.connect(this.outputs[midiNote])
 		vco.start(now)
-
-		// When swapping oscillators no need to call new adsr cycle
-		if (noteOnAmpCB) {
-			noteOnAmpCB(this.outputs[midiNote].gain)
-		}
 	}
 
-	public noteOff = (midiNote: number, noteOffAmpCB: any) => {
+	//TODO: type alias at to seconds
+	public noteOff = (midiNote: number, releaseTime : number) => {
 		const midiNoteKey = midiNote.toString()
 		const vco = this.vcos[midiNote]
 		if (!vco) {
 			return
 		}
-		const releaseTime = noteOffAmpCB(this.outputs[midiNote].gain)
 		vco.stop(releaseTime)
 	}
 

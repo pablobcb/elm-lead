@@ -6,7 +6,7 @@ export default class VCA {
 
 	public context: AudioContext
 
-	private inputs = [] as Array<GainNode>
+	public inputs = [] as Array<GainNode>
 
 	constructor (context: AudioContext) {
 		this.context = context

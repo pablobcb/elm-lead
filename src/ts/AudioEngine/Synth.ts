@@ -64,13 +64,16 @@ export default class Synth {
 
 		switch (type) {
 			case CONSTANTS.MIDI_EVENT.NOTE_ON:
-				this.oscillator1.noteOn(note, this.amplifier.adsr.on(0, 1))
-				this.oscillator2.noteOn(note, this.amplifier.adsr.on(0, 1))
+				this.oscillator1.noteOn(note)
+				this.oscillator2.noteOn(note)
+				this.amplifier.adsr.on(0, 1)(this.vca.inputs[note].gain)
 				this.filter.noteOn()
 				break
 			case CONSTANTS.MIDI_EVENT.NOTE_OFF:
-				this.oscillator1.noteOff(note, this.amplifier.adsr.off)
-				this.oscillator2.noteOff(note, this.amplifier.adsr.off)
+				const releaseTime =
+					this.amplifier.adsr.off(this.vca.inputs[note].gain)
+				this.oscillator1.noteOff(note, releaseTime)
+				this.oscillator2.noteOff(note, releaseTime)
 				this.filter.noteOff()
 				break
 		}
