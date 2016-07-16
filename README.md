@@ -8,14 +8,19 @@ Inspired on Clavia's Nord Lead series.
 
 ![alt tag](https://github.com/pablobcb/elm-lead/blob/master/nord-lead-2x.jpg)
 
-## Hacking
+## Requirements
 
 - Install Node and NPM
 - Install Webpack
 - Install Elm 0.17
 - Fetch this repo `git clone git@github.com:pablobcb/elm-lead.git`
 - Run `npm install`
+
+## Developing
 - Develop with `npm run dev`
+
+## Testing
+- Run tests with `npm test`
 
 ## Build Instructions
 
