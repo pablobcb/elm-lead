@@ -10,7 +10,8 @@ export interface Osc1State {
 export class Osc1 extends BaseOscillator {
 
 	public state = {} as Osc1State
-	public fmInputs = [] as Array<GainNode>
+	//public fmInputs = [] as Array<GainNode>
+	public fmInputs = [] as Array<any>
 
 	constructor(context: AudioContext) {
 		super(context)

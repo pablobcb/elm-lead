@@ -12,7 +12,7 @@ describe('ADSR', () => {
 	})
 
 	it('constructor should set an AudioContext', () => {
-		expect(adsr.context).to.exist
+		expect(adsr.context).to.be.instanceOf(AudioContext)
 	})
 
 	it('constructor should set an empty state object', () => {
@@ -129,5 +129,14 @@ describe('ADSR', () => {
 		expect(adsr.decayFrom).to.be.at.least(0)
 		expect(adsr.decayTo).to.be.equal(3.7011251268803638)
 		expect(adsr.sustainAmount).to.be.at.least(0)
+	})
+
+	it('off should return a positive value', () => {
+		const startAmout = 0
+		const endAmount = 1
+
+		adsr.setState({ attack: 0, decay: 120, sustain: 127, release: 127 })
+		expect(adsr.off(context.createOscillator().frequency))
+			.to.be.at.least(0)
 	})
 })

@@ -4,7 +4,8 @@ export default class BaseOscillator {
 
 	public context: AudioContext
 	public vcos = [] as Array<any>
-	public outputs = [] as Array<GainNode>
+	//public outputs = [] as Array<GainNode>
+	public outputs = [] as Array<any>
 
 	constructor(context: AudioContext) {
 		this.context = context
@@ -15,12 +16,14 @@ export default class BaseOscillator {
 		}
 	}
 
-	public noteOff = (midiNote: number, releaseTime : number) => {
+	public noteOff (midiNote: number, releaseTime : number) {
 		const midiNoteKey = midiNote.toString()
 		const vco = this.vcos[midiNote]
+
 		if (!vco) {
 			return
 		}
+
 		vco.stop(releaseTime)
 	}
 
@@ -28,6 +31,7 @@ export default class BaseOscillator {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.vcos[i] !== null) {
 				this.vcos[i].stop()
+				this.vcos[i] = null
 			}
 		}
 	}
