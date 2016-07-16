@@ -10,11 +10,11 @@ describe('ADSR', () => {
 		adsr = new ADSR(context)
 	})
 
-	it('constructor should assign an AudioContext', () => {
+	it('constructor should set an AudioContext', () => {
 		expect(adsr.context).to.exist
 	})
 
-	it('constructor should assign an empty state object', () => {
+	it('constructor should set an empty state object', () => {
 		expect(adsr.state).to.be.empty
 	})
 
@@ -37,6 +37,16 @@ describe('ADSR', () => {
 		expect(adsr.state.attack).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 
+	it('setAttack should throw if value greater than 127', () => {
+		expect(adsr.setAttack.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
+	it('setAttack should throw if value smaller than 0', () => {
+		expect(adsr.setAttack.bind(adsr, -1))
+			.to.throw(Error)
+	})
+
 	it('setDecay should be able to set decay to zero', () => {
 		adsr.setDecay(0)
 		expect(adsr.state.decay).to.be.equal(0)
@@ -47,7 +57,17 @@ describe('ADSR', () => {
 		expect(adsr.state.decay).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 
-	it('setSustain should be able to set sustain to zero', () => {
+	it('setDecay should throw if value greater than 127', () => {
+		expect(adsr.setDecay.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
+	it('setDecay should throw if value smaller than 0', () => {
+		expect(adsr.setDecay.bind(adsr, -1))
+			.to.throw(Error)
+	})
+
+	it('setSustain should able to set sustain to zero', () => {
 		adsr.setSustain(0)
 		expect(adsr.state.sustain).to.be.equal(0)
 	})
@@ -55,6 +75,16 @@ describe('ADSR', () => {
 	it('setSustain should never set release greater than 1', () => {
 		adsr.setSustain(CONSTANTS.MIDI_MAX_VALUE)
 		expect(adsr.state.sustain).to.be.equal(1)
+	})
+
+	it('setSustain should throw if value greater than 127', () => {
+		expect(adsr.setSustain.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
+	it('setSustain should throw if value smaller than 0', () => {
+		expect(adsr.setSustain.bind(adsr, -1))
+			.to.throw(Error)
 	})
 
 	it('setRelease should never set release to zero', () => {
@@ -65,5 +95,15 @@ describe('ADSR', () => {
 	it('setRelease should never set attack greater than max time', () => {
 		adsr.setRelease(CONSTANTS.MIDI_MAX_VALUE)
 		expect(adsr.state.release).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
+	})
+
+	it('setRelease should throw if value greater than 127', () => {
+		expect(adsr.setRelease.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
+	it('setRelease should throw if value smaller than 0', () => {
+		expect(adsr.setRelease.bind(adsr, -1))
+			.to.throw(Error)
 	})
 })
