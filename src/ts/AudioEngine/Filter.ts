@@ -67,14 +67,14 @@ export class Filter {
 	public setCutoff = (midiValue: number) => {
 		this.state.frequency = midiValue
 		this.biquadFilters.forEach(filter => {
-			filter.frequency.value =
-				MIDI.toFilterCutoffFrequency(midiValue)
+			filter.frequency.value = 1.6 *
+				MIDI.toFrequency(midiValue)
 		})
 	}
 
 	public setQ = (midiValue: number) => {
 		this.biquadFilters.forEach(filter => {
-			filter.Q.value = MIDI.toFilterQAmount(midiValue)
+			filter.Q.value = 20 * MIDI.normalizeValue(midiValue)
 		})
 	}
 

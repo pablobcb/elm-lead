@@ -43,10 +43,6 @@ export default {
 
 	toFrequency: midiToFreq,
 
-	toFilterQAmount: (midiValue: number) => (
-		20 * (midiValue / MIDI_MAX_VALUE)
-	),
-
 	toFilterCutoffFrequency: (midiValue: number) => {
 		return 1.6 * midiToFreq(midiValue)
 		//midiValue / 127 *
