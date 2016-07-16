@@ -1,7 +1,47 @@
 [
     {
-        "name": "Test 1",
+        "name": "PURE SAW",
         "presetId": 1,
+        "filter": {
+            "type_": "lowpass",
+            "frequency": 127,
+            "q": 10,
+            "envelopeAmount": 0,
+            "adsr": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 0,
+                "release": 0
+            }
+        },
+        "amp": {
+            "adsr": {
+                "attack": 0,
+                "decay": 0,
+                "sustain": 127,
+                "release": 0
+            },
+            "masterVolume": 20
+        },
+        "oscs": {
+            "osc1": {
+                "waveformType": "sawtooth",
+                "fmAmount": 70
+            },
+            "osc2": {
+                "waveformType": "sawtooth",
+                "semitone": 0,
+                "detune": 0,
+                "kbdTrack": true,
+                "pw": 0
+            },
+            "mix": 127
+        },
+        "overdrive": false
+    },
+    {
+        "name": "PURE SINE",
+        "presetId": 2,
         "filter": {
             "type_": "lowpass",
             "frequency": 127,
@@ -35,55 +75,15 @@
                 "kbdTrack": true,
                 "pw": 0
             },
-            "mix": 127
-        },
-        "overdrive": false
-    },
-    {
-        "name": "Test 2",
-        "presetId": 2,
-        "filter": {
-            "type_": "bandpass",
-            "frequency": 70,
-            "q": 10,
-            "envelopeAmount": 0,
-            "adsr": {
-                "attack": 0,
-                "decay": 0,
-                "sustain": 0,
-                "release": 0
-            }
-        },
-        "amp": {
-            "adsr": {
-                "attack": 0,
-                "decay": 0,
-                "sustain": 127,
-                "release": 0
-            },
-            "masterVolume": 20
-        },
-        "oscs": {
-            "osc1": {
-                "waveformType": "square",
-                "fmAmount": 60
-            },
-            "osc2": {
-                "waveformType": "sawtooth",
-                "semitone": -20,
-                "detune": 0,
-                "kbdTrack": true
-            },
-            "pw": 0,
             "mix": 0
         },
         "overdrive": false
     },
-     {
-        "name": "snd",
+    {
+        "name": "FOO BAR",
         "presetId": 3,
         "filter": {
-            "type_": "bandpass",
+            "type_": "highpass",
             "frequency": 70,
             "q": 30,
             "envelopeAmount": 0,
@@ -112,9 +112,9 @@
                 "waveformType": "whitenoise",
                 "semitone": 0,
                 "detune": 0,
+                "pw": 0,
                 "kbdTrack": true
             },
-            "pw": 0,
             "mix": 0
         },
         "overdrive": false
