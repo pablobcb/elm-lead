@@ -106,4 +106,13 @@ describe('ADSR', () => {
 		expect(adsr.setRelease.bind(adsr, -1))
 			.to.throw(Error)
 	})
+
+	it('setState should populate state', () => {
+		adsr.setState({ attack: 0, decay: 0, sustain: 127, release: 127 })
+		expect(adsr.state.attack).to.be.equal(CONSTANTS.ONE_MILLISECOND)
+		expect(adsr.state.decay).to.be.equal(0)
+		expect(adsr.state.sustain).to.be.equal(1)
+		expect(adsr.state.release).to.be.equal(4)
+	})
+
 })
