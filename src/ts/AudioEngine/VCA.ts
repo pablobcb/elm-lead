@@ -5,7 +5,8 @@ export default class VCA {
 
 	public context: AudioContext
 
-	public inputs = [] as Array<GainNode>
+	//public inputs = [] as Array<GainNode>
+	public inputs = [] as Array<any>
 
 	constructor (context: AudioContext) {
 		this.context = context
@@ -14,6 +15,7 @@ export default class VCA {
 		}
 	}
 
+	//public connect = (nodes: Array<AudioParam>) => {
 	public connect = (nodes: Array<AudioParam>) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.inputs[i] !== null) {

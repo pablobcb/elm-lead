@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import { Osc1, Osc1State } from '../../src/ts/AudioEngine/Osc1'
 import CONSTANTS from '../../src/ts/Constants'
-import "web-audio-test-api"
+import 'web-audio-test-api'
 
 describe('Osc1', () => {
-	const context: AudioContext = new AudioContext()
+	const context: AudioContext = new AudioContext
 	let osc1: Osc1
 
 	beforeEach(() => {

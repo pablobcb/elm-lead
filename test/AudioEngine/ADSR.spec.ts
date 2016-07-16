@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import { ADSR, ADSRState } from '../../src/ts/AudioEngine/ADSR'
 import CONSTANTS from '../../src/ts/Constants'
-import "web-audio-test-api"
+import 'web-audio-test-api'
 
 describe('ADSR', () => {
-	const context: AudioContext = new AudioContext()
+	const context: AudioContext = new AudioContext
 	let adsr: ADSR
 
 	beforeEach(() => {
