@@ -37,12 +37,12 @@ describe('ADSR', () => {
 		expect(adsr.state.attack).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 
-	it('setAttack should throw if value greater than 127', () => {
+	it('setAttack should throw if value is greater than 127', () => {
 		expect(adsr.setAttack.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
 			.to.throw(Error)
 	})
 
-	it('setAttack should throw if value smaller than 0', () => {
+	it('setAttack should throw if value is smaller than 0', () => {
 		expect(adsr.setAttack.bind(adsr, -1))
 			.to.throw(Error)
 	})
@@ -57,12 +57,12 @@ describe('ADSR', () => {
 		expect(adsr.state.decay).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 
-	it('setDecay should throw if value greater than 127', () => {
+	it('setDecay should throw if value is greater than 127', () => {
 		expect(adsr.setDecay.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
 			.to.throw(Error)
 	})
 
-	it('setDecay should throw if value smaller than 0', () => {
+	it('setDecay should throw if value is smaller than 0', () => {
 		expect(adsr.setDecay.bind(adsr, -1))
 			.to.throw(Error)
 	})
@@ -77,12 +77,12 @@ describe('ADSR', () => {
 		expect(adsr.state.sustain).to.be.equal(1)
 	})
 
-	it('setSustain should throw if value greater than 127', () => {
+	it('setSustain should throw if value is greater than 127', () => {
 		expect(adsr.setSustain.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
 			.to.throw(Error)
 	})
 
-	it('setSustain should throw if value smaller than 0', () => {
+	it('setSustain should throw if value is smaller than 0', () => {
 		expect(adsr.setSustain.bind(adsr, -1))
 			.to.throw(Error)
 	})
@@ -97,12 +97,12 @@ describe('ADSR', () => {
 		expect(adsr.state.release).to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 
-	it('setRelease should throw if value greater than 127', () => {
+	it('setRelease should throw if value is greater than 127', () => {
 		expect(adsr.setRelease.bind(adsr, CONSTANTS.MIDI_MAX_VALUE + 1))
 			.to.throw(Error)
 	})
 
-	it('setRelease should throw if value smaller than 0', () => {
+	it('setRelease should throw if value is smaller than 0', () => {
 		expect(adsr.setRelease.bind(adsr, -1))
 			.to.throw(Error)
 	})
