@@ -71,9 +71,8 @@ export class ADSR {
 	}
 
 	public on = (startAmount: number, endAmount: number) =>
-		(target: AudioParam) => {
-			console.log("range", startAmount, endAmount)
-
+		//(target: AudioParam) => {
+		(target: any) => {
 			const now = this.context.currentTime
 			this.startedAt = now
 			this.decayFrom = this.startedAt + this.state.attack

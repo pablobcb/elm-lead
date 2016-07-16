@@ -116,4 +116,18 @@ describe('ADSR', () => {
 		expect(adsr.state.release).to.be.equal(4)
 	})
 
+	it('on should populate interpolation values', () => {
+		const startAmout = 0
+		const endAmount = 1
+
+		adsr.setState({ attack: 0, decay: 120, sustain: 127, release: 127 })
+		adsr.on(startAmout, endAmount)(context.createOscillator().frequency)
+
+		expect(adsr.startAmount).to.be.equal(0)
+		expect(adsr.endAmount).to.be.equal(1)
+		expect(adsr.startedAt).to.be.at.least(0)
+		expect(adsr.decayFrom).to.be.at.least(0)
+		expect(adsr.decayTo).to.be.equal(3.7011251268803638)
+		expect(adsr.sustainAmount).to.be.at.least(0)
+	})
 })
