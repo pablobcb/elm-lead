@@ -21,9 +21,9 @@ export class ADSR {
 	public decayTo: number
 
 	constructor(context: AudioContext) {
+		this.context = context
 		this.startAmount = 0
 		this.sustainAmount = 0
-		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
 		this.decayTo = 0
