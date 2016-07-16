@@ -15,7 +15,7 @@ const noiseOscillatorFactory = {
 			}
 		}
 
-		const noiseOsc : AudioBufferSourceNode = context.createBufferSource()
+		const noiseOsc = context.createBufferSource()
 		noiseOsc.buffer = myArrayBuffer
 		noiseOsc.loop = true
 		noiseOsc.frequency = { value: null }

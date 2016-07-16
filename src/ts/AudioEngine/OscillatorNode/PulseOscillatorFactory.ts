@@ -11,7 +11,8 @@ constantOneCurve[0] = 1
 constantOneCurve[1] = 1
 
 const pulseOscillatorFactory = {
-	createPulseOscillator: (context: AudioContext, widthGain: GainNode) => {
+	createPulseOscillator: (context: AudioContext, widthGain: any) => {
+	//createPulseOscillator: (context: AudioContext, widthGain: GainNode) => {
 		const sawNode: OscillatorNode = context.createOscillator()
 		sawNode.type = CONSTANTS.WAVEFORM_TYPE.SAWTOOTH
 
@@ -24,8 +25,9 @@ const pulseOscillatorFactory = {
 		sawNode.connect(constantOneShaper)
 		constantOneShaper.connect(widthGain)
 
-		sawNode.connect = (node : AudioParam) => {
-			pulseShaper.connect(node)
+		//sawNode.connect = (node : AudioParam) => {
+		sawNode.connect = (destination : any) => {
+			pulseShaper.connect(destination)
 			widthGain.connect(pulseShaper)
 		}
 

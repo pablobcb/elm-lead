@@ -12,8 +12,10 @@ export interface FilterState {
 
 export class Filter {
 	public context: AudioContext
-	public inputs = [] as Array<GainNode>
-	public outputs = [] as Array<GainNode>
+	//public inputs = [] as Array<GainNode>
+	//public outputs = [] as Array<GainNode>
+	public inputs = [] as Array<any>
+	public outputs = [] as Array<any>
 	public biquadFilters = [] as Array<BiquadFilterNode>
 	public adsr: ADSR
 	public envelopeAmount: number

@@ -1,7 +1,7 @@
 import MIDI from '../MIDI'
 import CONSTANTS from '../Constants'
-import PulseOscillatorFactory from './Oscillator/PulseOscillatorFactory'
-import NoiseOscillatorFactory from './Oscillator/NoiseOscillatorFactory'
+import PulseOscillatorFactory from './OscillatorNode/PulseOscillatorFactory'
+import NoiseOscillatorFactory from './OscillatorNode/NoiseOscillatorFactory'
 import BaseOscillator from './BaseOscillator'
 
 
