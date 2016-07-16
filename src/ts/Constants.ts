@@ -1,6 +1,6 @@
 export default {
-	MAX_NOTES: 128,
 	MAX_VOICES: 128,
+	MIDI_MAX_VALUE: 127,
 	ONE_MILLISECOND: 0.001,
 	FILTER_TYPE: {
 		HIGHPASS: 'highpass',

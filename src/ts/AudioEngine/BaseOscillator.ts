@@ -9,7 +9,7 @@ export default class BaseOscillator {
 	constructor(context: AudioContext) {
 		this.context = context
 
-		for (let i = 0; i < CONSTANTS.MAX_NOTES; i++) {
+		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			this.vcos[i] = null
 			this.outputs[i] = this.context.createGain()
 		}

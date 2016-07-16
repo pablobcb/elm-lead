@@ -12,10 +12,10 @@ export interface ADSRState {
 
 export class ADSR {
 	public state: ADSRState = {} as ADSRState
+	public context: AudioContext
 	public startAmount: number
 	public sustainAmount: number
 	public endAmount: number
-	public context: AudioContext
 	public startedAt: number
 	public decayFrom: number
 	public decayTo: number
@@ -24,6 +24,7 @@ export class ADSR {
 		this.context = context
 		this.startAmount = 0
 		this.sustainAmount = 0
+		this.endAmount = 0
 		this.startedAt = 0
 		this.decayFrom = 0
 		this.decayTo = 0
@@ -102,21 +103,25 @@ export class ADSR {
 
 
 	public setAttack = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		this.state.attack = midiValue != 0 ?
 			MIDI.logScaleToMax(midiValue, CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
 	}
 
 	public setDecay = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		this.state.decay = MIDI.logScaleToMax(midiValue,
 			CONSTANTS.MAX_ENVELOPE_TIME)
 	}
 
 	public setSustain = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		this.state.sustain = MIDI.logScaleToMax(midiValue, 1)
 	}
 
 	public setRelease = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		this.state.release = midiValue != 0 ?
 			MIDI.logScaleToMax(midiValue, CONSTANTS.MAX_ENVELOPE_TIME) :
 			CONSTANTS.ONE_MILLISECOND
