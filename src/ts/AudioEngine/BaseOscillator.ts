@@ -2,7 +2,7 @@ import CONSTANTS from '../Constants'
 
 export default class BaseOscillator {
 
-	protected context: AudioContext
+	public context: AudioContext
 	public vcos = [] as Array<any>
 	public outputs = [] as Array<GainNode>
 
@@ -32,7 +32,8 @@ export default class BaseOscillator {
 		}
 	}
 
-	public connect = (nodes: Array<AudioParam>) => {
+	//public connect = (nodes: Array<AudioParam>) => {
+	public connect = (nodes: any) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].connect(nodes[i])
@@ -40,7 +41,8 @@ export default class BaseOscillator {
 		}
 	}
 
-	public disconnect = (nodes: Array<AudioParam>) => {
+	//public disconnect = (nodes: Array<AudioParam>) => {
+	public disconnect = (nodes: any) => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			if (this.outputs[i] !== null) {
 				this.outputs[i].disconnect(nodes[i])

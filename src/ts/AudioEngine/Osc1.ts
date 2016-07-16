@@ -9,7 +9,7 @@ export interface Osc1State {
 }
 export class Osc1 extends BaseOscillator {
 
-	private state = {} as Osc1State
+	public state = {} as Osc1State
 	public fmInputs = [] as Array<GainNode>
 
 	constructor(context: AudioContext) {

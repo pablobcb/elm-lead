@@ -13,6 +13,4 @@ describe('VCA', () => {
 	it('constructor should set an AudioContext', () => {
 		//expect(vca.context).to.exist
 	})
-
-
 })
