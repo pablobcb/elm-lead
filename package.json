@@ -10,7 +10,7 @@
     "elm": "rm -rf elm-stuff/build-artifacts && elm-make src/elm/Main.elm --warn --output=dist/bundle.js",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers ts:typescript:require"
   },
   "repository": {
     "type": "git",

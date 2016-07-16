@@ -5,3 +5,4 @@
 /// <reference path="globals/webmidi/index.d.ts" />
 /// <reference path="globals/webpack-env/index.d.ts" />
 /// <reference path="globals/webpack/index.d.ts" />
+/// <reference path="../typings/mocha/mocha.d.ts" />
