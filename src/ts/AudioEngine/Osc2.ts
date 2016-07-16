@@ -38,7 +38,7 @@ export class Osc2 extends BaseOscillator {
 			this.vcos[midiNote].disconnect()
 		}
 
-		if(this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.PULSE){
+		if (this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.PULSE) {
 			vco = PulseOscillatorFactory
 				.createPulseOscillator(this.context, this.widthGains[midiNote])
 		} else if (this.state.waveformType === CONSTANTS.WAVEFORM_TYPE.NOISE) {
@@ -49,7 +49,11 @@ export class Osc2 extends BaseOscillator {
 			vco.type = this.state.waveformType
 		}
 
-		vco.frequency.value = this.midiToFreq(midiNote)
+		vco.frequency.value = MIDI.toFrequency(this.state.kbdTrack
+			? midiNote
+			: 60
+		)
+
 		vco.detune.value = this.state.detune + this.state.semitone
 		vco.onended = () => this.kill(midiNote)
 
@@ -87,7 +91,7 @@ export class Osc2 extends BaseOscillator {
 	public setSemitone = (semitone: number) => {
 		this.state.semitone = semitone * 100
 		this.vcos.forEach(vco => {
-			if (vco !== null){
+			if (vco !== null) {
 				vco.detune.value =
 					this.state.detune + this.state.semitone
 			}
@@ -97,7 +101,7 @@ export class Osc2 extends BaseOscillator {
 	public setDetune = (detune: number) => {
 		this.state.detune = detune
 		this.vcos.forEach(vco => {
-			if (vco !== null){
+			if (vco !== null) {
 				vco.detune.value =
 					detune + this.state.semitone
 			}
