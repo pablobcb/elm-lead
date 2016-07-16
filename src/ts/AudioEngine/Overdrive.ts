@@ -2,20 +2,24 @@ import CONSTANTS from '../Constants'
 
 
 /* code copied from https://github.com/web-audio-components/overdrive */
-export class Overdrive {
+export default class Overdrive {
 
-	public input: GainNode
-	public output: GainNode
+	public input: any
+	public output: any
+	//public input: GainNode
+	//public output: GainNode
 
 	public enabled: boolean
 
 	private _bandpass: BiquadFilterNode
-	private _bpWet: GainNode
-	private _bpDry: GainNode
+	//private _bpWet: GainNode
+	private _bpWet: any
+	//private _bpDry: GainNode
+	private _bpDry: any
 	private _ws: WaveShaperNode
 	private _lowpass: BiquadFilterNode
 	private _drive: number
-	private context: AudioContext
+	public context: AudioContext
 
 	public params: any
 
@@ -56,6 +60,8 @@ export class Overdrive {
 
 		// Inverted preBand value
 		this._bpDry.gain.value = params.preBand
+
+		this.enabled = false
 	}
 
 	get preBand() {
@@ -101,15 +107,15 @@ export class Overdrive {
 		this._lowpass.frequency.setValueAtTime(value, 0)
 	}
 
-	connect = (node: any) => {
+	public connect = (node: any) => {
 		this.output.connect(node.input ? node.input : node)
 	}
 
-	disconnect = () => {
+	public disconnect = () => {
 		this.output.disconnect()
 	}
 
-	setState = (enabled: boolean) => {
+	public setState = (enabled: boolean) => {
 		this.enabled = enabled
 		this.input.disconnect()
 		if (enabled) {
