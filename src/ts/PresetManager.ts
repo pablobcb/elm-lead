@@ -1,9 +1,13 @@
 export default class PresetManager<T> {
 
-	private currentPresetIndex: number
-	private presets: Array<T>
+	public currentPresetIndex: number
+	public presets: Array<T>
 
 	constructor(presets: Array<T>) {
+		if(presets.length === 0){
+			throw new Error('preset list should not be empty')
+		}
+
 		this.presets = presets
 		this.currentPresetIndex = 0
 	}
