@@ -61,6 +61,7 @@ export class Osc1 extends BaseOscillator {
 	}
 
 	public setFmAmount = (fmAmount: number) => {
+		MIDI.validateValue(fmAmount)
 		const amount = 10 * MIDI.logScaleToMax(fmAmount, 100)
 		this.state.fmAmount = amount
 

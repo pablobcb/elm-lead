@@ -10,7 +10,7 @@ export class Amplifier {
 	public state: AmplifierState = {} as AmplifierState
 	public context: AudioContext
 	public adsr: ADSR
-	public output: GainNode
+	public output: any
 
 	constructor(context: AudioContext) {
 		this.context = context

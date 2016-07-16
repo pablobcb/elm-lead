@@ -12,7 +12,7 @@ describe('ADSR', () => {
 	})
 
 	it('constructor should set an AudioContext', () => {
-		expect(adsr.context).to.be.instanceOf(AudioContext)
+		expect(adsr.context).to.be.an.instanceOf(AudioContext)
 	})
 
 	it('constructor should set an empty state object', () => {

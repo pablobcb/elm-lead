@@ -12,7 +12,7 @@ describe('Osc1', () => {
 	})
 
 	it('constructor should set an AudioContext', () => {
-		expect(osc1.context).to.be.instanceOf(AudioContext)
+		expect(osc1.context).to.be.an.instanceOf(AudioContext)
 	})
 
 	it('constructor should set an empty state object', () => {
@@ -55,6 +55,11 @@ describe('Osc1', () => {
 		expect(osc1.state.waveformType).to.be.equal(waveform)
 	})
 
+	it('setWaveform should throw if waveform name is invalid', () => {
+		expect(osc1.setWaveform.bind(osc1, 'wave of babies'))
+			.to.throw(Error)
+	})
+
 	it('setFmAmout should change all fm gain values', () => {
 		const fmMaxAmout = 1000
 		osc1.setFmAmount(CONSTANTS.MIDI_MAX_VALUE)
@@ -64,6 +69,11 @@ describe('Osc1', () => {
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
 			expect(osc1.fmInputs[i].gain.value).to.be.equal(fmMaxAmout)
 		}
+	})
+
+	it('setFmAmount should throw if value is smaller than 0', () => {
+		expect(osc1.setFmAmount.bind(osc1, -1))
+			.to.throw(Error)
 	})
 
 	it('setState should populate state', () => {
@@ -89,7 +99,7 @@ describe('Osc1', () => {
 
 		osc1.noteOn(midiNote)
 
-		expect(osc1.vcos[midiNote]).to.be.instanceof(OscillatorNode)
+		expect(osc1.vcos[midiNote]).to.be.an.instanceOf(OscillatorNode)
 		expect(osc1.vcos[midiNote].type).to.be.equal(waveform)
 		expect(osc1.vcos[midiNote].frequency.value).to.be.equal(440)
 	})
@@ -101,7 +111,7 @@ describe('Osc1', () => {
 
 		osc1.noteOn(midiNote)
 
-		expect(osc1.vcos[midiNote]).to.be.instanceof(OscillatorNode)
+		expect(osc1.vcos[midiNote]).to.be.an.instanceOf(OscillatorNode)
 		expect(osc1.vcos[midiNote].type).to.be.equal(waveform)
 		expect(osc1.vcos[midiNote].frequency.value).to.be.equal(440)
 	})
