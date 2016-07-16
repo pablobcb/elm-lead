@@ -76,6 +76,11 @@ describe('Osc1', () => {
 			.to.throw(Error)
 	})
 
+	it('setFmAmount should throw if value is greater than max', () => {
+		expect(osc1.setFmAmount.bind(osc1, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
 	it('setState should populate state', () => {
 		const fmMaxAmout = 1000
 		const waveform = 'sine'
@@ -104,21 +109,29 @@ describe('Osc1', () => {
 		expect(osc1.vcos[midiNote].frequency.value).to.be.equal(440)
 	})
 
-	it('noteOn should create voice', () => {
-		const waveform = 'triangle'
-		const midiNote = 69
-		osc1.setWaveform(waveform)
+	it('noteOn should throw if midi note is greater than max', () => {
+		expect(osc1.noteOn.bind(osc1, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
 
-		osc1.noteOn(midiNote)
-
-		expect(osc1.vcos[midiNote]).to.be.an.instanceOf(OscillatorNode)
-		expect(osc1.vcos[midiNote].type).to.be.equal(waveform)
-		expect(osc1.vcos[midiNote].frequency.value).to.be.equal(440)
+	it('noteOn should throw if midi note is lower than 0', () => {
+		expect(osc1.noteOn.bind(osc1, -1))
+			.to.throw(Error)
 	})
 
 	it('noteOff before noteOn should do nothing', () => {
 		const midiNote = 69
 
 		expect(osc1.noteOff(midiNote, 1)).to.be.undefined
+	})
+
+	it('noteOff should throw if midi note is greater than max', () => {
+		expect(osc1.noteOff.bind(osc1, CONSTANTS.MIDI_MAX_VALUE + 1))
+			.to.throw(Error)
+	})
+
+	it('noteOff should throw if midi note is lower than 0', () => {
+		expect(osc1.noteOff.bind(osc1, -1))
+			.to.throw(Error)
 	})
 })

@@ -26,6 +26,7 @@ export class Osc1 extends BaseOscillator {
 	}
 
 	public noteOn = (midiNote: number) => {
+		MIDI.validateValue(midiNote)
 		const now = this.context.currentTime
 		let vco = this.vcos[midiNote]
 

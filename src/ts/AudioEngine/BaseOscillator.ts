@@ -1,4 +1,5 @@
 import CONSTANTS from '../Constants'
+import MIDI from '../MIDI'
 
 export default class BaseOscillator {
 
@@ -17,7 +18,7 @@ export default class BaseOscillator {
 	}
 
 	public noteOff (midiNote: number, releaseTime : number) {
-		const midiNoteKey = midiNote.toString()
+		MIDI.validateValue(midiNote)
 		const vco = this.vcos[midiNote]
 
 		if (!vco) {

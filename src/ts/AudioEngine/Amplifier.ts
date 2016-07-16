@@ -24,6 +24,7 @@ export class Amplifier {
 	}
 
 	public setMasterVolumeGain = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		const vol = MIDI.logScaleToMax(midiValue, 1)
 		this.state.masterVolume = vol
 		this.output.gain.value = vol

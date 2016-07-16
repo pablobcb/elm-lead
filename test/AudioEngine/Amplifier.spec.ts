@@ -32,9 +32,19 @@ describe('Amplifier', () => {
 		expect(amplifier.adsr).to.be.an.instanceOf(ADSR)
 	})
 
-	it('setMasterVolumeGain should be at maximum 1', () => {
+	it('setMasterVolumeGain should set volume at maximum to 1', () => {
 		amplifier.setMasterVolumeGain(CONSTANTS.MIDI_MAX_VALUE)
 		expect(amplifier.state.masterVolume).to.be.equal(1)
+	})
+
+	it('setMasterVolumeGain should throw if value is smaller than 0', () => {
+		expect(amplifier.setMasterVolumeGain.bind(amplifier, -1))
+			.to.throw(Error)
+	})
+
+	it('setMasterVolumeGain should throw if value is greater than max', () => {
+		expect(amplifier.setMasterVolumeGain
+			.bind(amplifier, CONSTANTS.MIDI_MAX_VALUE + 1)).to.throw(Error)
 	})
 
 	it('setState should populate amp state ', () => {
