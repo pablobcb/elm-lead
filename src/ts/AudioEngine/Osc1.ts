@@ -35,7 +35,7 @@ export class Osc1 extends BaseOscillator {
 
 		vco = this.context.createOscillator()
 		vco.type = this.state.waveformType
-		vco.frequency.value = this.midiToFreq(midiNote)
+		vco.frequency.value = MIDI.toFrequency(midiNote)
 		vco.connect(this.outputs[midiNote])
 		this.fmInputs[midiNote].connect(vco.frequency)
 

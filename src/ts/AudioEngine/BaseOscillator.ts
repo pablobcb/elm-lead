@@ -15,10 +15,6 @@ export default class BaseOscillator {
 		}
 	}
 
-	protected midiToFreq = (midiValue: number): number => {
-		return 440 * Math.pow(2, (midiValue - 69) / 12)
-	}
-
 	public noteOff = (midiNote: number, releaseTime : number) => {
 		const midiNoteKey = midiNote.toString()
 		const vco = this.vcos[midiNote]
