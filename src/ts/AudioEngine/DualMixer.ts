@@ -3,10 +3,12 @@ import CONSTANTS from '../Constants'
 
 export default class DualMixer {
 
-	public channel1 = [] as Array<GainNode>
-	public channel2 = [] as Array<GainNode>
-	private mix: number // from 0 to 1
-	private context: AudioContext
+	public channel1 = [] as Array<any>
+	public channel2 = [] as Array<any>
+	//public channel1 = [] as Array<GainNode>
+	//public channel2 = [] as Array<GainNode>
+	public mix: number // from 0 to 1
+	public context: AudioContext
 
 	constructor(context: AudioContext) {
 		this.context = context
@@ -16,7 +18,8 @@ export default class DualMixer {
 		}
 	}
 
-	public connect = (nodes: Array<AudioParam>) => {
+	//public connect = (nodes: Array<AudioParam>) => {
+	public connect = (nodes: Array<any>) => {
 		// https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/connect(AudioParam)
 		// acording to the docs the type is right
 		// make a PR to typings to fix this
@@ -27,6 +30,7 @@ export default class DualMixer {
 	}
 
 	public setState = (midiValue: number) => {
+		MIDI.validateValue(midiValue)
 		const mix = MIDI.normalizeValue(midiValue)
 		this.mix = mix
 

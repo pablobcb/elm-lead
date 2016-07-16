@@ -52,7 +52,7 @@ describe('Osc1', () => {
 
 		osc1.setWaveform(waveform)
 
-		expect(osc1.state.waveformType).to.be.equal(waveform)
+		expect(osc1.state.waveformType).to.be.eql(waveform)
 	})
 
 	it('setWaveform should throw if waveform name is invalid', () => {
@@ -64,10 +64,10 @@ describe('Osc1', () => {
 		const fmMaxAmout = 1000
 		osc1.setFmAmount(CONSTANTS.MIDI_MAX_VALUE)
 
-		expect(osc1.state.fmAmount).to.be.equal(fmMaxAmout)
+		expect(osc1.state.fmAmount).to.be.eql(fmMaxAmout)
 
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			expect(osc1.fmInputs[i].gain.value).to.be.equal(fmMaxAmout)
+			expect(osc1.fmInputs[i].gain.value).to.be.eql(fmMaxAmout)
 		}
 	})
 
@@ -89,11 +89,11 @@ describe('Osc1', () => {
 			fmAmount: CONSTANTS.MIDI_MAX_VALUE, waveformType: waveform
 		})
 
-		expect(osc1.state.fmAmount).to.be.equal(fmMaxAmout)
-		expect(osc1.state.waveformType).to.be.equal(waveform)
+		expect(osc1.state.fmAmount).to.be.eql(fmMaxAmout)
+		expect(osc1.state.waveformType).to.be.eql(waveform)
 
 		for (let i = 0; i < CONSTANTS.MAX_VOICES; i++) {
-			expect(osc1.fmInputs[i].gain.value).to.be.equal(fmMaxAmout)
+			expect(osc1.fmInputs[i].gain.value).to.be.eql(fmMaxAmout)
 		}
 	})
 
@@ -105,8 +105,8 @@ describe('Osc1', () => {
 		osc1.noteOn(midiNote)
 
 		expect(osc1.vcos[midiNote]).to.be.an.instanceOf(OscillatorNode)
-		expect(osc1.vcos[midiNote].type).to.be.equal(waveform)
-		expect(osc1.vcos[midiNote].frequency.value).to.be.equal(440)
+		expect(osc1.vcos[midiNote].type).to.be.eql(waveform)
+		expect(osc1.vcos[midiNote].frequency.value).to.be.eql(440)
 	})
 
 	it('noteOn should throw if midi note is greater than max', () => {

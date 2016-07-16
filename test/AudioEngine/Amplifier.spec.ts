@@ -34,7 +34,7 @@ describe('Amplifier', () => {
 
 	it('setMasterVolumeGain should set volume at maximum to 1', () => {
 		amplifier.setMasterVolumeGain(CONSTANTS.MIDI_MAX_VALUE)
-		expect(amplifier.state.masterVolume).to.be.equal(1)
+		expect(amplifier.state.masterVolume).to.be.eql(1)
 	})
 
 	it('setMasterVolumeGain should throw if value is smaller than 0', () => {
@@ -58,17 +58,17 @@ describe('Amplifier', () => {
 			}
 		})
 
-		expect(amplifier.state.masterVolume).to.be.equal(1)
+		expect(amplifier.state.masterVolume).to.be.eql(1)
 
 		expect(amplifier.adsr.state.attack)
-			.to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
+			.to.be.eql(CONSTANTS.MAX_ENVELOPE_TIME)
 
 		expect(amplifier.adsr.state.decay)
-			.to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
+			.to.be.eql(CONSTANTS.MAX_ENVELOPE_TIME)
 
-		expect(amplifier.adsr.state.sustain).to.be.equal(1)
+		expect(amplifier.adsr.state.sustain).to.be.eql(1)
 
 		expect(amplifier.adsr.state.release)
-			.to.be.equal(CONSTANTS.MAX_ENVELOPE_TIME)
+			.to.be.eql(CONSTANTS.MAX_ENVELOPE_TIME)
 	})
 })
