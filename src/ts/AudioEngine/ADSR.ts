@@ -23,7 +23,6 @@ export class ADSR {
 	constructor(context: AudioContext) {
 		this.startAmount = 0
 		this.sustainAmount = 0
-		this.endAmount = 1
 		this.context = context
 		this.startedAt = 0
 		this.decayFrom = 0
