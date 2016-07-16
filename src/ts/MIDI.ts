@@ -41,7 +41,7 @@ export default {
 		}
 	},
 
-	toOscPitch: midiToFreq,
+	toFrequency: midiToFreq,
 
 	toFilterQAmount: (midiValue: number) => (
 		20 * (midiValue / MIDI_MAX_VALUE)

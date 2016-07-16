@@ -12,4 +12,8 @@ describe('MIDI', () => {
 		expect(MIDI.validateValue.bind(MIDI, -1))
 			.to.throw(Error)
 	})
+
+	it('toFreq should return 440 given A4', () => {
+		expect(MIDI.toFrequency(69)).to.be.equal(440)
+	})
 })
