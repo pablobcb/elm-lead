@@ -163,6 +163,12 @@ export default class Application {
 		this.app.ports.overdrive
 			.subscribe(this.synth.overdrive.setState)
 
+		// LFO1
+		this.app.ports.lfo1Rate
+			.subscribe(()=> console.log("lfo1Rate")
+
+		this.app.ports.lfo1Amount
+			.subscribe(()=> console.log("lfo1Amount")
 
 		// MIDI
 		if (this.midiAccess) {

@@ -79,6 +79,12 @@ port filterRelease : Int -> Cmd msg
 port filterEnvelopeAmount : Int -> Cmd msg
 
 
+port lfo1Rate : Int -> Cmd msg
+
+
+port lfo1Amount : Int -> Cmd msg
+
+
 port overdrive : Bool -> Cmd msg
 
 
