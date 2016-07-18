@@ -67,6 +67,14 @@ amplifier model =
         , nordKnob model Knob.AmpGain
         ]
 
+lfo1 : Model -> Html Msg
+lfo1 model =
+    section WithoutBevel
+        "lfo 1"
+        [ nordKnob model Knob.Lfo1Rate
+        , nordKnob model Knob.Lfo1Amount
+        ]
+
 
 filter : Model -> Html Msg
 filter model =
@@ -115,7 +123,6 @@ osc2 model =
             model.osc2KbdTrackSwitch
         ]
 
-
 oscillatorSection : Model -> Html Msg
 oscillatorSection model =
     section WithBevel
@@ -132,7 +139,8 @@ oscillatorSection model =
 view : Model -> Html Msg
 view model =
     div [ class "panel-controls" ]
-        [ column [ oscillatorSection model ]
+        [ column [ lfo1 model ]
+        , column [ oscillatorSection model ]
         , column
             [ amplifier model
             , filter model
@@ -150,48 +158,15 @@ panel panelMsg model =
 instructions : Html a
 instructions =
     let
-        hotKeys =
-            [ "Z"
-            , "X"
-            , "C"
-            , "V"
-            , "A"
-            , "W"
-            , "S"
-            , "E"
-            , "D"
-            , "F"
-            , "T"
-            , "G"
-            , "Y"
-            , "H"
-            , "U"
-            , "J"
-            , "K"
-            , "O"
-            , "L"
-            , "P"
-            ]
+        hotKeys = [ "Z" , "X" , "C" , "V" , "A" , "W" , "S" , "E" , "D" , "F"
+            , "T" , "G" , "Y" , "H" , "U" , "J" , "K" , "O" , "L" , "P" ]
 
         instructions =
             [ "octave down", "octave up", "velocity down", "velocity up" ]
                 ++ (List.map ((++) "play ")
-                        [ "C"
-                        , "C#"
-                        , "D"
-                        , "D#"
-                        , "E"
-                        , "F"
-                        , "F#"
-                        , "G"
-                        , "G#"
-                        , "A"
-                        , "A#"
-                        , "B"
-                        , "C 8va"
-                        , "C# 8va"
-                        , "D 8va"
-                        , "D# 8va"
+                        [ "C" , "C#" , "D" , "D#" , "E" , "F"
+                        , "F#" , "G" , "G#" , "A" , "A#" , "B"
+                        , "C 8va" , "C# 8va" , "D 8va" , "D# 8va"
                         ]
                    )
     in

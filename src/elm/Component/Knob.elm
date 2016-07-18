@@ -8,16 +8,11 @@ module Component.Knob
         , update
         )
 
---where
-
 import Html exposing (Html, button, div, text, img)
 import Html.Events exposing (onClick, on, onWithOptions)
 import Html.App exposing (map)
 import Html.Attributes exposing (draggable, style, class, alt, src, attribute)
 import Json.Decode as Json exposing (succeed, int, (:=))
-
-
--- MODEL
 
 
 type alias YPos =
@@ -88,6 +83,8 @@ type KnobInstance
     | FilterSustain
     | FilterRelease
     | FilterEnvelopeAmount
+    | Lfo1Rate
+    | Lfo1Amount
 
 
 

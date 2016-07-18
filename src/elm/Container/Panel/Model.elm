@@ -139,6 +139,12 @@ knobs preset =
 
     , Knob.init Knob.FilterEnvelopeAmount preset.filter.envelopeAmount
         0 127 1 "Env amount" Port.filterEnvelopeAmount
+
+    , Knob.init Knob.Lfo1Rate 127
+        0 127 1 "Rate" Port.lfo1Rate
+
+    , Knob.init Knob.Lfo1Amount 127
+        0 127 1 "Amount" Port.lfo1Amount
     ]
 
 
