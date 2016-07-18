@@ -2,6 +2,12 @@
     {
         "name": "PURE SAW",
         "presetId": 1,
+        "lfo1": {
+            "destination": "fm",
+            "waveformType": "sine",
+            "rate": 0,
+            "amount": 0
+        },
         "filter": {
             "type_": "lowpass",
             "frequency": 127,
@@ -42,6 +48,12 @@
     {
         "name": "PURE SINE",
         "presetId": 2,
+        "lfo1": {
+            "destination": "fm",
+            "waveformType": "sine",
+            "rate": 0,
+            "amount": 0
+        },
         "filter": {
             "type_": "lowpass",
             "frequency": 127,
@@ -82,6 +94,12 @@
     {
         "name": "FOO BAR",
         "presetId": 3,
+        "lfo1": {
+            "destination": "fm",
+            "waveformType": "sine",
+            "rate": 0,
+            "amount": 0
+        },
         "filter": {
             "type_": "highpass",
             "frequency": 70,

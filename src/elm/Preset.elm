@@ -6,6 +6,12 @@ import Midi exposing (..)
 type alias Preset =
     { name : String
     , presetId : Int
+    , lfo1 :
+        { destination : String
+        , waveformType : String
+        , rate : MidiValue
+        , amount : MidiValue
+        }
     , filter :
         { type_ : String
         , frequency : MidiValue
