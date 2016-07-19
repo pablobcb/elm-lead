@@ -2,16 +2,16 @@ module Container.Panel.Model
     exposing
         ( FilterType(..)
         , Model
-        , OscillatorWaveform(..)
+        , Waveform(..)
         , init
         , updateOverdriveSwitch
         , updateOsc2KbdTrack
         , updateFilterTypeBtn
         , updateOsc2WaveformBtn
         , updateOsc1WaveformBtn
+        , updateLfo1DestinationBtn
+        , updateLfo1WaveformBtn
         )
-
--- where
 
 import Component.Knob as Knob
 import Component.Switch as Switch
@@ -20,7 +20,7 @@ import Port
 import Preset
 
 
-type OscillatorWaveform
+type Waveform
     = Sawtooth
     | Triangle
     | Sine
@@ -29,8 +29,8 @@ type OscillatorWaveform
     | WhiteNoise
 
 
-createOscillatorWaveform : String -> OscillatorWaveform
-createOscillatorWaveform name =
+createWaveform : String -> Waveform
+createWaveform name =
     case name of
         "sawtooth" ->
             Sawtooth
@@ -79,9 +79,11 @@ createFilterType name =
 
 type alias Model =
     { knobs : List Knob.Model
+    , lfo1DestinationBtn : OptionPicker.Model Destination
+    , lfo1WaveformBtn : OptionPicker.Model Waveform
     , filterTypeBtn : OptionPicker.Model FilterType
-    , osc2WaveformBtn : OptionPicker.Model OscillatorWaveform
-    , osc1WaveformBtn : OptionPicker.Model OscillatorWaveform
+    , osc2WaveformBtn : OptionPicker.Model Waveform
+    , osc1WaveformBtn : OptionPicker.Model Waveform
     , osc2KbdTrackSwitch : Switch.Model
     , overdriveSwitch : Switch.Model
     }
@@ -140,12 +142,21 @@ knobs preset =
     , Knob.init Knob.FilterEnvelopeAmount preset.filter.envelopeAmount
         0 127 1 "Env amount" Port.filterEnvelopeAmount
 
-    , Knob.init Knob.Lfo1Rate 127
+    , Knob.init Knob.Lfo1Rate preset.lfo1.rate
         0 127 1 "Rate" Port.lfo1Rate
 
-    , Knob.init Knob.Lfo1Amount 127
+    , Knob.init Knob.Lfo1Amount preset.lfo1.amount
         0 127 1 "Amount" Port.lfo1Amount
     ]
+
+type Destination
+    = FM
+    | Osc1
+    | Osc2
+    | Oscs
+    | Filter
+    | PW
+    | Amp
 
 
 init : Preset.Preset -> Model
@@ -165,7 +176,7 @@ init preset =
             ]
     , osc1WaveformBtn =
         OptionPicker.init Port.osc1Waveform
-            (createOscillatorWaveform preset.oscs.osc1.waveformType)
+            (createWaveform preset.oscs.osc1.waveformType)
             [ ( "sin", Sine )
             , ( "tri", Triangle )
             , ( "saw", Sawtooth )
@@ -173,11 +184,28 @@ init preset =
             ]
     , osc2WaveformBtn =
         OptionPicker.init Port.osc2Waveform
-            (createOscillatorWaveform preset.oscs.osc2.waveformType)
+            (createWaveform preset.oscs.osc2.waveformType)
             [ ( "tri", Triangle )
             , ( "saw", Sawtooth )
             , ( "pulse", Pulse )
             , ( "noise", WhiteNoise )
+            ]
+    , lfo1DestinationBtn =
+        OptionPicker.init Port.lfo1Destination
+            Filter
+            [ ( "Osc2", Osc2 )
+            , ( "Oscs", Oscs )
+            , ( "Filter", Filter )
+            , ( "FM", FM )
+            , ( "PW", PW )
+            ]
+    , lfo1WaveformBtn =
+        OptionPicker.init Port.lfo1Waveform
+            Sine
+            [ ( "sin", Sine )
+            , ( "tri", Triangle )
+            , ( "saw", Sawtooth )
+            , ( "sqr", Square )
             ]
     }
 
@@ -198,12 +226,12 @@ findKnob model knobInstance =
                 knobModel
 
 
-updateOsc1WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
+updateOsc1WaveformBtn : OptionPicker.Model Waveform -> Model -> Model
 updateOsc1WaveformBtn btn model =
     { model | osc1WaveformBtn = btn }
 
 
-updateOsc2WaveformBtn : OptionPicker.Model OscillatorWaveform -> Model -> Model
+updateOsc2WaveformBtn : OptionPicker.Model Waveform -> Model -> Model
 updateOsc2WaveformBtn btn model =
     { model | osc2WaveformBtn = btn }
 
@@ -221,3 +249,13 @@ updateFilterTypeBtn btn model =
 updateOverdriveSwitch : Switch.Model -> Model -> Model
 updateOverdriveSwitch switch model =
     { model | overdriveSwitch = switch }
+
+
+updateLfo1DestinationBtn : OptionPicker.Model Destination -> Model -> Model
+updateLfo1DestinationBtn  btn model =
+    { model | lfo1DestinationBtn = btn }
+
+
+updateLfo1WaveformBtn : OptionPicker.Model Waveform -> Model -> Model
+updateLfo1WaveformBtn  btn model =
+    { model | lfo1WaveformBtn = btn }

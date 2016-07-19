@@ -24,7 +24,7 @@
 		font-size 10px
 		user-select none
 		margin-left 5px
-		
+
 .option-picker__id--pulse
 	background  url('../images/pulse.svg')
 
@@ -76,19 +76,49 @@
 .option-picker__id--HP,
 .option-picker__id--BP,
 .option-picker__id--notch
+.option-picker__id--FM,
+.option-picker__id--Filter,
+.option-picker__id--Osc1,
+.option-picker__id--Osc2,
+.option-picker__id--Oscs,
+.option-picker__id--PW
 	font-size 10px
 	user-select none
 	margin-left 5px
-	
-.option-picker__id--HP	
+
+.option-picker__id--FM
+	&::before
+		content 'FM'
+
+.option-picker__id--Filter
+	&::before
+		content 'Fiter'
+
+.option-picker__id--Osc1
+	&::before
+		content 'Osc1'
+
+.option-picker__id--Osc2
+	&::before
+		content 'Osc2'
+
+.option-picker__id--Oscs
+	&::before
+		content 'Oscs'
+
+.option-picker__id--PW
+	&::before
+		content 'PW'
+
+.option-picker__id--HP
 	&::before
 		content 'HP'
 
-.option-picker__id--BP	
+.option-picker__id--BP
 	&::before
 		content 'BP'
 
-.option-picker__id--LP	
+.option-picker__id--LP
 	&::before
 		content 'LP'
 

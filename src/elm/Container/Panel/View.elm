@@ -72,6 +72,12 @@ lfo1 model =
     section WithoutBevel
         "lfo 1"
         [ nordKnob model Knob.Lfo1Rate
+        , OptionPicker.optionPicker "Destination"
+            Update.Lfo1DestinationChange
+            model.lfo1DestinationBtn
+        , OptionPicker.optionPicker "Waveform"
+            Update.Lfo1WaveformChange
+            model.lfo1WaveformBtn
         , nordKnob model Knob.Lfo1Amount
         ]
 

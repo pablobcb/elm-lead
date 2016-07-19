@@ -170,6 +170,12 @@ export default class Application {
 		this.app.ports.lfo1Amount
 			.subscribe(()=> console.log("lfo1Amount"))
 
+		this.app.ports.lfo1Destination
+			.subscribe(()=> console.log("lfo1Destination"))
+
+		this.app.ports.lfo1Waveform
+			.subscribe(()=> console.log("lfo1Waveform"))
+
 		// MIDI
 		if (this.midiAccess) {
 			MIDI.manageMidiDevices(

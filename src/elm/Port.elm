@@ -85,6 +85,12 @@ port lfo1Rate : Int -> Cmd msg
 port lfo1Amount : Int -> Cmd msg
 
 
+port lfo1Destination : String -> Cmd msg
+
+
+port lfo1Waveform : String -> Cmd msg
+
+
 port overdrive : Bool -> Cmd msg
 
 

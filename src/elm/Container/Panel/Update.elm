@@ -14,7 +14,10 @@ type Msg
     | Osc2KbdTrackToggle Switch.Msg
     | OverdriveToggle Switch.Msg
     | FilterTypeChange OptionPicker.Msg
+    | Lfo1DestinationChange OptionPicker.Msg
+    | Lfo1WaveformChange OptionPicker.Msg
     | KnobMsg Knob.Msg
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -63,6 +66,20 @@ update msg model =
                     .filterTypeBtn
                     Model.updateFilterTypeBtn
                     FilterTypeChange
+
+            Lfo1DestinationChange subMsg ->
+                updateMap OptionPicker.update
+                    subMsg
+                    .lfo1DestinationBtn
+                    Model.updateLfo1DestinationBtn
+                    Lfo1DestinationChange
+
+            Lfo1WaveformChange subMsg ->
+                updateMap OptionPicker.update
+                    subMsg
+                    .lfo1WaveformBtn
+                    Model.updateLfo1WaveformBtn
+                    Lfo1WaveformChange
 
             Osc2KbdTrackToggle subMsg ->
                 updateMap Switch.update
