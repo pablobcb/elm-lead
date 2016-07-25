@@ -1,6 +1,6 @@
 [
     {
-        "name": "PURE SAW",
+        "name": "FM LEAD",
         "presetId": 1,
         "filter": {
             "type_": "lowpass",
@@ -31,11 +31,11 @@
             "osc2": {
                 "waveformType": "sawtooth",
                 "semitone": 0,
-                "detune": 0,
+                "detune": -60,
                 "kbdTrack": true,
                 "pw": 0
             },
-            "mix": 127
+            "mix": 0
         },
         "overdrive": false
     },
