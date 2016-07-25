@@ -14,7 +14,7 @@ Inspired on Clavia's Nord Lead series.
 - Install Webpack
 - Install Elm 0.17
 - Fetch this repo `git clone git@github.com:pablobcb/elm-lead.git`
-- Run `npm install`
+- Run `cd elm-lead && npm install`
 
 ## Developing
 - Develop with `npm run dev`
